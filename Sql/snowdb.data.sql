@@ -105,7 +105,16 @@ INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pix
 (44, 'ACH_GiftReceiver', 'social', 8, 100, 10, 240),
 (45, 'ACH_GiftReceiver', 'social', 9, 100, 10, 480),
 (46, 'ACH_GiftReceiver', 'social', 10, 100, 10, 500),
-(47, 'ACH_Spr', 'room_builder', 1, 100, 35, 1);
+(47, 'ACH_Spr', 'room_builder', 1, 100, 35, 1),
+(48, 'ACH_Spr', 'room_builder', 2, 100, 35, 3),
+(49, 'ACH_Spr', 'room_builder', 3, 100, 35, 6),
+(50, 'ACH_Spr', 'room_builder', 4, 100, 35, 10),
+(51, 'ACH_Spr', 'room_builder', 5, 100, 35, 15),
+(52, 'ACH_Spr', 'room_builder', 6, 100, 35, 21),
+(53, 'ACH_Spr', 'room_builder', 7, 100, 35, 28),
+(54, 'ACH_Spr', 'room_builder', 8, 100, 35, 36),
+(55, 'ACH_Spr', 'room_builder', 9, 100, 35, 45),
+(56, 'ACH_Spr', 'room_builder', 10, 100, 35, 55);
 
 -- --------------------------------------------------------
 
@@ -226,7 +235,17 @@ INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
 (52, 'ACH_GiftReceiver8', ''),
 (53, 'ACH_GiftReceiver9', ''),
 (54, 'ACH_GiftReceiver10', ''),
-(55, 'ACH_Spr1', '');
+(55, 'ACH_Spr1', ''),
+(56, 'ACH_Spr2', ''),
+(57, 'ACH_Spr3', ''),
+(58, 'ACH_Spr4', ''),
+(59, 'ACH_Spr5', ''),
+(60, 'ACH_Spr6', ''),
+(61, 'ACH_Spr7', ''),
+(62, 'ACH_Spr8', ''),
+(63, 'ACH_Spr9', ''),
+(64, 'ACH_Spr10', '');
+
 
 -- --------------------------------------------------------
 
