@@ -172,24 +172,6 @@ namespace Snowlight
             MySqlClient.ExecuteNonQuery("UPDATE room_visits SET timestamp_left = @timestamp WHERE timestamp_left = 0");
             MySqlClient.ExecuteNonQuery("UPDATE characters SET auth_ticket = ''");
         }
-        public static string FilterInjectionChars(string Input)
-        {
-            return FilterInjectionChars(Input, false);
-        }
-        public static string FilterInjectionChars(string Input, bool AllowLinebreaks)
-        {
-            Input = Input.Replace(Convert.ToChar(1), ' ');
-            Input = Input.Replace(Convert.ToChar(2), ' ');
-            Input = Input.Replace(Convert.ToChar(3), ' ');
-            Input = Input.Replace(Convert.ToChar(9), ' ');
-
-            if (!AllowLinebreaks)
-            {
-                Input = Input.Replace(Convert.ToChar(13), ' ');
-            }
-
-            return Input;
-        }
         public static void HandleFatalError(string Message)
         {
             Output.WriteLine(Message, OutputLevel.CriticalError);

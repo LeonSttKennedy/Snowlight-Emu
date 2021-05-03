@@ -627,8 +627,8 @@ namespace Snowlight.Game.Catalog
             int PageId = Message.PopWiredInt32();
             uint ItemId = Message.PopWiredUInt32();
             string ExtraData = Message.PopString();
-            string GiftUser = Program.FilterInjectionChars(Message.PopString());
-            string GiftMessage = Program.FilterInjectionChars(Message.PopString());
+            string GiftUser = UserInputFilter.FilterString(Message.PopString());
+            string GiftMessage = UserInputFilter.FilterString(Message.PopString());
             int SpriteId = Message.PopWiredInt32();
             int Ribbon = Message.PopWiredInt32();
             int Colour = Message.PopWiredInt32();

@@ -1342,6 +1342,7 @@ namespace Snowlight.Game.Rooms
 
                     if (TargetSession != null)
                     {
+                        TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
                         AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, "ACH_Spr", 1);
                     }
 
