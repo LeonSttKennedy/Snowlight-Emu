@@ -1,0 +1,14 @@
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csprojAssemblyReference.cache
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.CoreCompileInputs.cache
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe.config
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe.manifest
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.application
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.pdb
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\MySql.Data.dll
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.TrustInfo.xml
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.exe.manifest
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.application
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.CopyComplete
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.exe
+D:\Arquivos\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.pdb
