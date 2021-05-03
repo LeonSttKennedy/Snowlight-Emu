@@ -123,7 +123,7 @@ namespace Snowlight
             Lines.Add("   _________                    .__  .__       .__     __   ");
             Lines.Add("  /   _____/ ____   ______  _  _|  | |__| ____ |  |___/  |_   "          + "Snowlight " + Constants.ServerVersion);
             Lines.Add("  \\_____  \\ /    \\ /  _ \\ \\/ \\/ /  | |  |/ ___\\|  |  \\   __\\  " + "Development version");
-            Lines.Add("  /        \\   |  (  <_> )     /|  |_|  / /_/  >   Y  \\  |    "        + "Edited by Souza");
+            Lines.Add("  /        \\   |  (  <_> )     /|  |_|  / /_/  >   Y  \\  |    "        + "Edited by LeonSttKennedy");
             Lines.Add(" /_______  /___|  /\\____/ \\/\\_/ |____/__\\___  /|___|  /__|    ");
             Lines.Add("         \\/     \\/                     /_____/      \\/      ");
 
