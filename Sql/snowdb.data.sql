@@ -104,7 +104,8 @@ INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pix
 (43, 'ACH_GiftReceiver', 'social', 7, 100, 10, 120),
 (44, 'ACH_GiftReceiver', 'social', 8, 100, 10, 240),
 (45, 'ACH_GiftReceiver', 'social', 9, 100, 10, 480),
-(46, 'ACH_GiftReceiver', 'social', 10, 100, 10, 500);
+(46, 'ACH_GiftReceiver', 'social', 10, 100, 10, 500),
+(47, 'ACH_Spr', 'room_builder', 1, 100, 35, 1);
 
 -- --------------------------------------------------------
 
@@ -224,7 +225,8 @@ INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
 (51, 'ACH_GiftReceiver7', ''),
 (52, 'ACH_GiftReceiver8', ''),
 (53, 'ACH_GiftReceiver9', ''),
-(54, 'ACH_GiftReceiver10', '');
+(54, 'ACH_GiftReceiver10', ''),
+(55, 'ACH_Spr1', '');
 
 -- --------------------------------------------------------
 
