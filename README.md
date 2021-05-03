@@ -33,4 +33,3 @@ Project information:		http://www.meth0d.org/snowlight
 Forum & support:			http://www.retrodev.org/forum
 Official releases:			http://www.retrodev.org/forum/forums/snowlight-releases/
 Development repository:		https://github.com/Meth0d/Snowlight
- 
