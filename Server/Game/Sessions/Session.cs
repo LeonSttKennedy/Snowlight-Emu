@@ -463,6 +463,7 @@ namespace Snowlight.Game.Sessions
                 }
 
                 MessengerHandler.MarkUpdateNeeded(this, 0, true);
+                AchievementManager.VerifyProgressUserAchievement(MySqlClient, this);
             }
         }
 

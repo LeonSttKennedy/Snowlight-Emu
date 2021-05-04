@@ -119,6 +119,24 @@ INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pix
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `achievements_to_unlock` 
+--
+
+CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `group_id` varchar(255) NOT NULL DEFAULT '',
+  `progress` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Extraindo dados da tabela `achievements_to_unlock`
+--
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `avatar_effects`
 --
 

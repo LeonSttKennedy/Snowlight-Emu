@@ -1335,7 +1335,6 @@ namespace Snowlight.Game.Rooms
                 Navigator.AddRoomToStaffPicked(Instance.RoomId);
                 Session.SendData(NotificationMessageComposer.Compose("This room has been added to the staff picked rooms successfully."));
 
-                // todo: unlock achievement for room owner
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
                     Session TargetSession = SessionManager.GetSessionByCharacterId(Instance.Info.OwnerId);
@@ -1345,9 +1344,10 @@ namespace Snowlight.Game.Rooms
                         TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
                         AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, "ACH_Spr", 1);
                     }
-
-                    // todo: need a way to save achievement progress in the database so it can be applied on user login
-                    //       right now it's impossible to progress an user's achievement if they're not logged in
+                    else
+                    {
+                        AchievementManager.OfflineProgressUserAchievement(MySqlClient, Instance.Info.OwnerId, "ACH_Spr", 1);
+                    }
                 }
             }
             else

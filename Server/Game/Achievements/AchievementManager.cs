@@ -177,6 +177,34 @@ namespace Snowlight.Game.Achievements
             return false;
         }
 
+
+        public static void OfflineProgressUserAchievement(SqlDatabaseClient MySqlClient, uint UserId, string AchievementGroup, int ProgressAmount)
+        {
+            DataRow Row = null;
+            if (!mAchievements.ContainsKey(AchievementGroup)) return;
+
+            Row = MySqlClient.ExecuteQueryRow("SELECT * FROM achievements_to_unlock WHERE user_id = " + UserId + " AND group_id = '" + AchievementGroup + "' LIMIT 1;");
+
+            if (Row != null)
+            {
+                MySqlClient.ExecuteQueryTable("UPDATE achievements_to_unlock SET progress = progress + " + ProgressAmount + " WHERE user_id = " + UserId + " AND group_id = '" + AchievementGroup + "'");
+            }
+            else
+            {
+                MySqlClient.ExecuteQueryTable("INSERT INTO achievements_to_unlock (user_id,group_id,progress) VALUES (" + UserId + ",'" + AchievementGroup + "'," + ProgressAmount + ")");
+            }
+        }
+        public static void VerifyProgressUserAchievement(SqlDatabaseClient MySqlClient, Session Session) 
+        {
+            DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM achievements_to_unlock WHERE user_id = " + Session.CharacterInfo.Id + ";");
+
+            foreach (DataRow Row in Table.Rows)
+            {
+                ProgressUserAchievement(MySqlClient, Session, (string)Row["group_id"], (int)Row["progress"]);
+                MySqlClient.ExecuteNonQuery("DELETE FROM achievements_to_unlock WHERE user_id = " + (uint)Row["user_id"] + " AND group_id = '" + (string)Row["group_id"] + "' LIMIT 1");
+            }
+        }
+
         public static Achievement GetAchievement(string AchievementGroup)
         {
             lock (mSyncRoot)
