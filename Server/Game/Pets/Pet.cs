@@ -281,7 +281,6 @@ namespace Snowlight.Game.Pets
             mRoomId = RoomId;
             mRoomPosition = RoomPosition;
         }
-
         public void SynchronizeDatabase(SqlDatabaseClient MySqlClient)
         {
             MySqlClient.SetParameter("id", mId);

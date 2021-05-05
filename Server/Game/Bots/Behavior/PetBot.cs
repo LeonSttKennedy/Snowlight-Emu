@@ -232,9 +232,15 @@ namespace Snowlight.Game.Bots.Behavior
                         Vector2 Target = new Vector2(RandomGenerator.GetNext(0, Instance.Model.Heightmap.SizeX),
                             RandomGenerator.GetNext(0, Instance.Model.Heightmap.SizeY));
                         
-                        if (Target.X != Instance.Model.DoorPosition.X || Target.Y != Instance.Model.DoorPosition.Y)
+                        if ((Target.X != Instance.Model.DoorPosition.X || Target.Y != Instance.Model.DoorPosition.Y) && Instance.IsValidPosition(Target))
                         {
                             mSelfActor.MoveTo(Target);
+                            Vector3 ToDb = new Vector3(Target.X, Target.Y, Instance.GetUserStepHeight(Target));
+                            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                            {
+                                Pet.MoveToRoom(Pet.RoomId, ToDb);
+                                Pet.SynchronizeDatabase(MySqlClient);
+                            }
                         }
 
                         mActionData = 1;

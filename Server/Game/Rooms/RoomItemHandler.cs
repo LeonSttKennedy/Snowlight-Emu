@@ -555,26 +555,15 @@ namespace Snowlight.Game.Rooms
         private static void GetPetInfo(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-
-            if (Instance == null)
-            {
-                return;
-            }
+            if (Instance == null) return;
 
             uint ActorRefId = Message.PopWiredUInt32();
-            RoomActor Actor = Instance.GetActorByReferenceId(ActorRefId, RoomActorType.AiBot);
 
-            if (Actor == null)
-            {
-                return;
-            }
+            RoomActor Actor = Instance.GetActorByReferenceId(ActorRefId, RoomActorType.AiBot);
+            if (Actor == null) return;
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-
-            if (PetData == null)
-            {
-                return;
-            }
+            if (PetData == null) return;
 
             Session.SendData(PetInfoComposer.Compose(Actor.ReferenceId, PetData));
         }
@@ -582,25 +571,14 @@ namespace Snowlight.Game.Rooms
         private static void TakePet(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+            if (Instance == null) return;
 
-            if (Instance == null)
-            {
-                return;
-            }
-
-            RoomActor Actor = Instance.GetActorByReferenceId(Message.PopWiredUInt32(), RoomActorType.AiBot);
-
-            if (Actor == null)
-            {
-                return;
-            }
+            uint PetId = Message.PopWiredUInt32();
+            RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
+            if (Actor == null) return;
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-
-            if (PetData == null || (PetData.OwnerId != Session.CharacterId && !Session.HasRight("hotel_admin")))
-            {
-                return;
-            }
+            if (PetData == null || (PetData.OwnerId != Session.CharacterId && !Session.HasRight("hotel_admin"))) return;
 
             Instance.RemoveActorFromRoom(Actor.Id);
 
@@ -613,55 +591,34 @@ namespace Snowlight.Game.Rooms
             Session.PetInventoryCache.Add(PetData);
             Session.SendData(InventoryPetAddedComposer.Compose(PetData));
         }
-        private static void PetTrainerPanel(Session Session, ClientMessage CMessage)
+        private static void PetTrainerPanel(Session Session, ClientMessage Message)
         {
-            uint PetId = CMessage.PopWiredUInt32();
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+            if (Instance == null) return;
+
+            uint PetId = Message.PopWiredUInt32();
             RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
+            if (Actor == null) return;
+
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-
-            if (Instance == null || Actor == null || PetData == null)
-            {
-                return;
-            }
-
-            if (Session.HasRight("hotel_admin"))
-            {
-                Session.SendData(PetTrainingPanelComposer.Compose(PetId, PetData.Level));
-            }
-            else 
-            {
-                Session.SendData(NotificationMessageComposer.Compose("Coming Soon"));
-            }
+            if (PetData == null) return;
+            
+            Session.SendData(PetTrainingPanelComposer.Compose(Actor.ReferenceId, PetData.Level));
         }
 
         private static void RespectPet(Session Session, ClientMessage Message)
         {
-            if (Session.CharacterInfo.RespectCreditPets <= 0)
-            {
-                return;
-            }
+            if (Session.CharacterInfo.RespectCreditPets <= 0) return;
 
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+            if (Instance == null) return;
 
-            if (Instance == null)
-            {
-                return;
-            }
-
-            RoomActor Actor = Instance.GetActorByReferenceId(Message.PopWiredUInt32(), RoomActorType.AiBot);
-
-            if (Actor == null)
-            {
-                return;
-            }
+            uint PetId = Message.PopFixedUInt32();
+            RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
+            if (Actor == null) return;
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-
-            if (PetData == null)
-            {
-                return;
-            }
+            if (PetData == null) return;
 
             Session.CharacterInfo.RespectCreditPets--;
             PetData.Score++;
