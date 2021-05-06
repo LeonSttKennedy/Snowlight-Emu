@@ -558,7 +558,6 @@ namespace Snowlight.Game.Rooms
             if (Instance == null) return;
 
             uint ActorRefId = Message.PopWiredUInt32();
-
             RoomActor Actor = Instance.GetActorByReferenceId(ActorRefId, RoomActorType.AiBot);
             if (Actor == null) return;
 
@@ -630,6 +629,7 @@ namespace Snowlight.Game.Rooms
             }
 
             Instance.BroadcastMessage(RoomPetUpdateComposer.Compose(Actor.ReferenceId, PetData));
+            // Todo: Unlock Achievement ACH_PetRespectReceiver ACH_PetRespectGiver
         }
     }
 }

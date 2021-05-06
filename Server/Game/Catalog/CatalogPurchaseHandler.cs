@@ -32,11 +32,11 @@ namespace Snowlight.Game.Catalog
 
         #region Purchase handling and delivering
         public static void HandlePurchase(SqlDatabaseClient MySqlClient, Session Session, CatalogItem Item,
-            string ItemFlags, bool MarketplaceTakeBack = false, bool IsMarketPrice = false, int MarketPrice = 0)
+            string ItemFlags)
         {
             lock (mPurchaseSyncRoot)
             {
-                int TotalCreditCost = (IsMarketPrice && MarketPrice > 0 ? MarketPrice : Item.CostCredits);
+                int TotalCreditCost = Item.CostCredits;
                 int TotalApCost = Item.CostActivityPoints;
 
                 if (Session.CharacterInfo.CreditsBalance < TotalCreditCost || Session.CharacterInfo.ActivityPointsBalance
@@ -109,19 +109,16 @@ namespace Snowlight.Game.Catalog
                     }
                 }
 
-                if (MarketplaceTakeBack == false)
+                if (TotalCreditCost > 0)
                 {
-                    if (TotalCreditCost > 0)
-                    {
-                        Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, -TotalCreditCost);
-                        Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                    }
+                    Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, -TotalCreditCost);
+                    Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
+                }
 
-                    if (TotalApCost > 0)
-                    {
-                        Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, -TotalApCost);
-                        Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, -TotalApCost));
-                    }
+                if (TotalApCost > 0)
+                {
+                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, -TotalApCost);
+                    Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, -TotalApCost));
                 }
 
                 Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
@@ -214,13 +211,13 @@ namespace Snowlight.Game.Catalog
 
                             NewItems[3].Add(Pet.Id);
 
+                            Session.BadgeCache.ReloadCache(MySqlClient, Session.AchievementCache);
+                            AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_PetLover", 1);
                             break;
                     }
                 }
-                if (MarketplaceTakeBack == false)
-                {
-                    Session.SendData(CatalogPurchaseResultComposer.Compose(Item));
-                }
+
+                Session.SendData(CatalogPurchaseResultComposer.Compose(Item));
                 Session.SendData(InventoryRefreshComposer.Compose());
 
                 foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
