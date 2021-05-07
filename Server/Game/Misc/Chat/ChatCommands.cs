@@ -17,6 +17,7 @@ using Microsoft.VisualBasic;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Snowlight.Communication;
+using System.Data;
 
 namespace Snowlight.Game.Misc
 {
