@@ -123,7 +123,7 @@ namespace Snowlight.Game.Rooms
             mTemporaryStickieRights = new Dictionary<uint, uint>();
             mTradeManager = new TradeManager();
             mRollerItems = new List<Item>[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
-            mRoomTiggers = new Dictionary<uint, RoomTiggers>();
+            mRoomTriggers = new Dictionary<uint, RoomTriggers>();
 
             foreach (Bot Bot in BotManager.GenerateBotInstancesForRoom(RoomId))
             {
@@ -178,7 +178,7 @@ namespace Snowlight.Game.Rooms
 
                 // Tiles Tigger
                 MySqlClient.SetParameter("id", RoomId);
-                DataTable TiggersTable = MySqlClient.ExecuteQueryTable("SELECT * FROM room_tiggers WHERE room_id = @id");
+                DataTable TiggersTable = MySqlClient.ExecuteQueryTable("SELECT * FROM room_triggers WHERE room_id = @id");
 
                 foreach(DataRow Row in TiggersTable.Rows)
                 {
@@ -194,7 +194,7 @@ namespace Snowlight.Game.Rooms
                             break;
                     }
 
-                    mRoomTiggers.Add((uint)Row["id"], new RoomTiggers((uint)Row["id"], (uint)Row["room_id"],
+                    mRoomTriggers.Add((uint)Row["id"], new RoomTriggers((uint)Row["id"], (uint)Row["room_id"],
                         Vector3.FromString((string)Row["room_pos"]), Tigger, (uint)Row["to_room_id"],
                         Vector3.FromString((string)Row["to_room_pos"])));
                 }

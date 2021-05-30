@@ -12,7 +12,7 @@ namespace Snowlight.Game.Rooms
         ROLLER = 1,
         TELEPORT = 2
     }
-    public class RoomTiggers
+    public class RoomTriggers
     {
         private uint mId;
         private uint mRoomId;
@@ -64,7 +64,7 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public RoomTiggers(uint Id, uint RoomId, Vector3 RoomPosition, RoomTiggerList Action, uint ToRoomId, Vector3 ToRoomPosition)
+        public RoomTriggers(uint Id, uint RoomId, Vector3 RoomPosition, RoomTiggerList Action, uint ToRoomId, Vector3 ToRoomPosition)
         {
             mId = Id;
             mRoomId = RoomId;

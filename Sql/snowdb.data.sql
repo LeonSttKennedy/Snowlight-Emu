@@ -8014,10 +8014,10 @@ CREATE TABLE IF NOT EXISTS `room_rights` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `room_tiggers`
+-- Estrutura da tabela `room_triggers`
 --
 
-CREATE TABLE IF NOT EXISTS `room_tiggers` (
+CREATE TABLE IF NOT EXISTS `room_triggers` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `room_id` int(10) unsigned NOT NULL,
   `room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
@@ -8028,7 +8028,7 @@ CREATE TABLE IF NOT EXISTS `room_tiggers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `room_tiggers`
+-- Extraindo dados da tabela `room_triggers`
 --
 
 

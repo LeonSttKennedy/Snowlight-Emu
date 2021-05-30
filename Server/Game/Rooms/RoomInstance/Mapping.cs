@@ -229,7 +229,7 @@ namespace Snowlight.Game.Rooms
                     }
                 }
 
-                foreach(RoomTiggers Tiggers in mRoomTiggers.Values)
+                foreach(RoomTriggers Tiggers in mRoomTriggers.Values)
                 {
                     
                 }
