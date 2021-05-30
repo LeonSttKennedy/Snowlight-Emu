@@ -505,28 +505,15 @@ namespace Snowlight.Game.Rooms
         private static void PlacePet(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-
-            if (Instance == null || (!Instance.CheckUserRights(Session, true) && !Instance.Info.AllowPets))
-            {
-                return;
-            }
+            if (Instance == null || (!Instance.CheckUserRights(Session, true) && !Instance.Info.AllowPets)) return;
 
             Pet Pet = Session.PetInventoryCache.GetPet(Message.PopWiredUInt32());
-
-            if (Pet == null)
-            {
-                return;
-            }
+            if (Pet == null) return;
 
             Vector2 DesiredPosition = new Vector2(Message.PopWiredInt32(), Message.PopWiredInt32());
-
-            if (!Instance.IsValidPosition(DesiredPosition))
-            {
-                return;
-            }
+            if (!Instance.IsValidPosition(DesiredPosition)) return;
 
             Bot BotDefinition = BotManager.GetHandlerDefinitionForPetType(Pet.Type);
-
             if (BotDefinition == null)
             {
                 Session.SendData(NotificationMessageComposer.Compose("This pet cannot be placed right now. Please try again later."));
@@ -626,10 +613,26 @@ namespace Snowlight.Game.Rooms
             {
                 Session.CharacterInfo.SynchronizeRespectData(MySqlClient);
                 PetData.SynchronizeDatabase(MySqlClient);
-            }
 
+                Session TargetSession = SessionManager.GetSessionByCharacterId(PetData.OwnerId);
+                if (TargetSession != null) 
+                {
+                    if (TargetSession.CharacterInfo.Id != Session.CharacterInfo.Id)
+                    {
+                        AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, "ACH_PetRespectReceiver", 1);
+                    }
+                }
+                else
+                {
+                    AchievementManager.OfflineProgressUserAchievement(MySqlClient, PetData.OwnerId, "ACH_PetRespectReceiver", 1);
+                }
+
+                if (Session.CharacterInfo.Id != PetData.OwnerId)
+                {
+                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_PetRespectGiver", 1);
+                }
+            }
             Instance.BroadcastMessage(RoomPetUpdateComposer.Compose(Actor.ReferenceId, PetData));
-            // Todo: Unlock Achievement ACH_PetRespectReceiver ACH_PetRespectGiver
         }
     }
 }
