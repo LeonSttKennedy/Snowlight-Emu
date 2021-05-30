@@ -225,7 +225,7 @@ namespace Snowlight.Game.Rooms
 
                     if (Object.IsSeat)
                     {
-                        mTileEffects[Object.Position.X, Object.Position.Y] = new RoomTileEffect(RoomTileEffectType.Sit, Object.Rotation, Object.Position, 1.0);
+                        mTileEffects[Object.Position.X, Object.Position.Y] = new RoomTileEffect(RoomTileEffectType.Sit, Object.Rotation, Object.Position.GetVector2(), 1.0);
                     }
                 }
 

@@ -17,11 +17,11 @@ namespace Snowlight.Communication.Outgoing
             {
                 Message.AppendInt32(0);                                     // ?? no effect
                 Message.AppendStringWithBreak("SNW");                       // ?? No appearent effect
-                Message.AppendStringWithBreak(Object.Name);              // Name
-                Message.AppendInt32(Object.Position.X);                                     // X
-                Message.AppendInt32(Object.Position.Y);                                     // Y
-                Message.AppendInt32(Object.Height);                                     // Z(??)
-                Message.AppendInt32(Object.Rotation);                                     // rot??? Has no effect
+                Message.AppendStringWithBreak(Object.Name);                 // Name
+                Message.AppendInt32(Object.Position.X);                     // X
+                Message.AppendInt32(Object.Position.Y);                     // Y
+                Message.AppendInt32((int)Object.Position.Z);                // Z
+                Message.AppendInt32(Object.Rotation);                       // rot??? Has no effect
             }
 
             return Message;
