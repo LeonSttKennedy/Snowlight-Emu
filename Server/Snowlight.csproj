@@ -333,7 +333,7 @@
     <Compile Include="Game\Misc\DrinkSetManager.cs" />
     <Compile Include="Game\Misc\Items\MoodlightData.cs" />
     <Compile Include="Game\Misc\Items\TeleporterLinkFinder.cs" />
-    <Compile Include="Game\Rooms\RoomTiggers.cs" />
+    <Compile Include="Game\Rooms\RoomTriggers.cs" />
     <Compile Include="Game\Sessions\SingleSignOnAuthenticator.cs" />
     <Compile Include="Game\Misc\Vouchers\VoucherManager.cs" />
     <Compile Include="Game\Misc\Vouchers\VoucherValueData.cs" />

@@ -177,7 +177,6 @@ namespace Snowlight.Game.Achievements
             return false;
         }
 
-
         public static void OfflineProgressUserAchievement(SqlDatabaseClient MySqlClient, uint UserId, string AchievementGroup, int ProgressAmount)
         {
             DataRow Row = null;
