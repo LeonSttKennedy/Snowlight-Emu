@@ -11,6 +11,7 @@ using Snowlight.Communication;
 
 using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
+using Snowlight.Config;
 
 namespace Snowlight.Game.Moderation
 {
@@ -148,14 +149,9 @@ namespace Snowlight.Game.Moderation
         private static void CallGuideBot(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+            if (Instance == null || !Instance.CheckUserRights(Session, true)) return;
 
-            if (Instance == null || !Instance.CheckUserRights(Session, true))
-            {
-                return;
-            }
-
-            Bot Guide = BotManager.GetBotDefinition(15);
-
+            Bot Guide = BotManager.GetBotDefinition((uint)(int)ConfigManager.GetValue("bot.guide.id"));
             if (Guide == null)
             {
                 Session.SendData(NotificationMessageComposer.Compose("There are not Guide Bots in the database!"));
