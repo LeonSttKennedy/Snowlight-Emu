@@ -54,3 +54,9 @@ dkms.conf
 .vs/
 obj/
 bin/
+Server/obj/x86/Debug/Snowlight.exe.manifest
+Server/obj/x86/Debug/Snowlight.csproj.CoreCompileInputs.cache
+Server/obj/x86/Debug/Snowlight.csproj.CoreCompileInputs.cache
+Server/obj/x86/Debug/Snowlight.csprojAssemblyReference.cache
+Server/obj/x86/Debug/Snowlight.exe.manifest
+Server/obj/x86/Debug/Snowlight.application
