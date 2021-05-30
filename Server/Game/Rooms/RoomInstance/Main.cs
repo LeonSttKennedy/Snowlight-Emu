@@ -123,6 +123,7 @@ namespace Snowlight.Game.Rooms
             mTemporaryStickieRights = new Dictionary<uint, uint>();
             mTradeManager = new TradeManager();
             mRollerItems = new List<Item>[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
+            mRoomTiggers = new Dictionary<uint, RoomTiggers>();
 
             foreach (Bot Bot in BotManager.GenerateBotInstancesForRoom(RoomId))
             {
@@ -173,6 +174,29 @@ namespace Snowlight.Game.Rooms
                 foreach (DataRow Row in RightsTable.Rows)
                 {
                     mUsersWithRights.Add((uint)Row["user_id"]);
+                }
+
+                // Tiles Tigger
+                MySqlClient.SetParameter("id", RoomId);
+                DataTable TiggersTable = MySqlClient.ExecuteQueryTable("SELECT * FROM room_tiggers WHERE room_id = @id");
+
+                foreach(DataRow Row in TiggersTable.Rows)
+                {
+                    RoomTiggerList Tigger = RoomTiggerList.DEFAULT;
+                    switch ((string)Row["action"])
+                    {
+                        case "roller":
+                            Tigger = RoomTiggerList.ROLLER;
+                            break;
+
+                        case "teleport":
+                            Tigger = RoomTiggerList.TELEPORT;
+                            break;
+                    }
+
+                    mRoomTiggers.Add((uint)Row["id"], new RoomTiggers((uint)Row["id"], (uint)Row["room_id"],
+                        Vector3.FromString((string)Row["room_pos"]), Tigger, (uint)Row["to_room_id"],
+                        Vector3.FromString((string)Row["to_room_pos"])));
                 }
 
                 // Pets

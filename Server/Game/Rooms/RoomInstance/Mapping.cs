@@ -229,6 +229,11 @@ namespace Snowlight.Game.Rooms
                     }
                 }
 
+                foreach(RoomTiggers Tiggers in mRoomTiggers.Values)
+                {
+                    
+                }
+
                 lock (mTileStates)
                 {
                     StringBuilder RelativeHeightmap = new StringBuilder();
