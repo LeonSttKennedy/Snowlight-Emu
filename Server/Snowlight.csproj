@@ -119,8 +119,8 @@
     <Compile Include="Communication\Outgoing\Furni\JukeboxPlaylistComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\MoodlightDataComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\MusicPlayingComposer.cs" />
-    <Compile Include="Communication\Outgoing\Furni\PetInfoComposer.cs" />
-    <Compile Include="Communication\Outgoing\Furni\PetInventoryComposer.cs" />
+    <Compile Include="Communication\Outgoing\Pets\PetInfoComposer.cs" />
+    <Compile Include="Communication\Outgoing\Pets\PetInventoryComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\RemoveFloorItemComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\RollerEventComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\SongDataComposer.cs" />
@@ -333,6 +333,7 @@
     <Compile Include="Game\Misc\DrinkSetManager.cs" />
     <Compile Include="Game\Misc\Items\MoodlightData.cs" />
     <Compile Include="Game\Misc\Items\TeleporterLinkFinder.cs" />
+    <Compile Include="Game\Rooms\RoomTiggers.cs" />
     <Compile Include="Game\Sessions\SingleSignOnAuthenticator.cs" />
     <Compile Include="Game\Misc\Vouchers\VoucherManager.cs" />
     <Compile Include="Game\Misc\Vouchers\VoucherValueData.cs" />
