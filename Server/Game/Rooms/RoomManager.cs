@@ -171,7 +171,7 @@ namespace Snowlight.Game.Rooms
                             if (mRoomInstances.ContainsKey(UnloadId))
                             {
                                 mRoomInstances[UnloadId].Unload();
-                                Output.WriteLine("[RoomMgr] Unloaded room instance " + UnloadId + ".", OutputLevel.DebugInformation);
+                                Output.WriteLine("[RoomMgr] Request -> Unload idle room instance: "+ UnloadId + ". (RoomID: " + mRoomInstances[UnloadId].RoomId + ")", OutputLevel.Notification);
                             }
                         }
 
@@ -179,10 +179,10 @@ namespace Snowlight.Game.Rooms
                         {
                             if (mRoomInstances.ContainsKey(DisposeId))
                             {
+                                Output.WriteLine("[RoomMgr] Instance " + DisposeId + " -> Unloaded Room: \"" + mRoomInstances[DisposeId].Info.Name + "\". (RoomID: " + mRoomInstances[DisposeId].RoomId + ")", OutputLevel.Notification);
                                 mRoomInstances[DisposeId].Dispose();
                                 mRoomInstances[DisposeId] = null;
                                 mRoomInstances.Remove(DisposeId);
-                                Output.WriteLine("[RoomMgr] Disposed of room instance " + DisposeId + " and associated resources.", OutputLevel.DebugInformation);
                             }
                         }
                     }
@@ -360,7 +360,7 @@ namespace Snowlight.Game.Rooms
                     mRoomInstances.Add(NewInstanceId, Instance);
                 }
 
-                Output.WriteLine("[RoomMgr] Room instance " + NewInstanceId + " has been loaded for room " + RoomId + ".", OutputLevel.DebugInformation);
+                Output.WriteLine("[RoomMgr] Instance " + NewInstanceId + " -> Loaded Room: \"" + Instance.Info.Name + "\". (RoomID: " + RoomId + ")", OutputLevel.Notification);
             }
             return true;
         }

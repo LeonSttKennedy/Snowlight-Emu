@@ -125,7 +125,7 @@ namespace Snowlight.Game.Sessions
                 }
 
                 // Mark as a successful login and continue
-                Output.WriteLine("User " + LogName + " (ID " + UserId + ") has logged in from " + RemoteAddress + ".");
+                Output.WriteLine("User " + LogName + " (ID " + UserId + ") has logged in from " + RemoteAddress + ".", OutputLevel.Informational);
 
                 mSuccessfulLoginCount++;
                 return UserId;
