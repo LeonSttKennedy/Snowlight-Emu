@@ -155,7 +155,7 @@ namespace Snowlight.Game.Bots.Behavior
 
         public override void PerformUpdate(RoomInstance Instance)
         {
-            Pet Pet = SessionManager.GetSessionByCharacterId(mSelfBot.PetData.OwnerId).PetInventoryCache.GetPet(mSelfBot.PetData.Id);
+            Pet Pet = ((Bot)mSelfActor.ReferenceObject).PetData;
             switch (mCurrentAction)
             {
                 default:
@@ -230,20 +230,22 @@ namespace Snowlight.Game.Bots.Behavior
                     if (mActionData == 0)
                     {
                         Vector2 Target = new Vector2(RandomGenerator.GetNext(0, Instance.Model.Heightmap.SizeX),
-                            RandomGenerator.GetNext(0, Instance.Model.Heightmap.SizeY));
-                        
-                        if ((Target.X != Instance.Model.DoorPosition.X || Target.Y != Instance.Model.DoorPosition.Y) && Instance.IsValidPosition(Target))
-                        {
-                            mSelfActor.MoveTo(Target);
-                            Vector3 ToDb = new Vector3(Target.X, Target.Y, Instance.GetUserStepHeight(Target));
-                            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                            {
-                                Pet.MoveToRoom(Pet.RoomId, ToDb);
-                                Pet.SynchronizeDatabase(MySqlClient);
-                            }
-                        }
+                                    RandomGenerator.GetNext(0, Instance.Model.Heightmap.SizeY));
+
+                        if (!Instance.CanInitiateMoveToPosition(Target)) break;
+                        if (Target.X == Instance.Model.DoorPosition.X) break;
+                        if (Target.Y == Instance.Model.DoorPosition.Y) break;
+
+                        mSelfActor.MoveTo(Target);
 
                         mActionData = 1;
+
+                        Vector3 ToDb = new Vector3(Target.X, Target.Y, Instance.GetUserStepHeight(Target));
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            Pet.SynchronizeDatabase(MySqlClient);
+                            Pet.MoveToRoom(Pet.RoomId, ToDb);
+                        }
                     }
                     else if (!mSelfActor.IsMoving)
                     {
