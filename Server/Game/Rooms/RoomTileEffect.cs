@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Snowlight.Specialized;
 
 namespace Snowlight.Game.Rooms
@@ -16,6 +17,7 @@ namespace Snowlight.Game.Rooms
 
     public class RoomTileEffect
     {
+        // Tile Effects
         private RoomTileEffectType mType;
         private int mEffectId;
         private Vector2 mRootPosition;
@@ -23,6 +25,13 @@ namespace Snowlight.Game.Rooms
         private double mInteractionHeight;
         private uint mQuestData;
 
+        // Trigger Actions
+        private Vector3 mRoomPos;
+        private RoomTriggerList mAction;
+        private Vector3 mToRoomPos;
+        private uint mToRoomId;
+
+        // Tile Effects
         public RoomTileEffectType Type
         {
             get
@@ -71,6 +80,36 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        // Trigger Actions
+        public Vector3 RoomPosition
+        {
+            get
+            {
+                return mRoomPos;
+            }
+        }
+        public RoomTriggerList Action
+        {
+            get
+            {
+                return mAction;
+            }
+        }
+        public uint ToRoomId
+        {
+            get
+            {
+                return mToRoomId;
+            }
+        }
+        public Vector3 ToRoomPosition
+        {
+            get
+            {
+                return mToRoomPos;
+            }
+        }
+
         public RoomTileEffect()
         {
             mType = RoomTileEffectType.None;
@@ -90,6 +129,15 @@ namespace Snowlight.Game.Rooms
             mEffectId = EffectId;
             mInteractionHeight = InteractionHeight;
             mQuestData = QuestData;
+        }
+
+        public RoomTileEffect(Vector3 RoomPos, RoomTriggerList Action, Vector3 ToRoomPos, uint ToRoomId)
+        {
+            // TODO: SEND THE ACTIONS TO A PERFORM UPDATE!!
+            mRoomPos = RoomPos;
+            mAction = Action;
+            mToRoomPos = ToRoomPos;
+            mToRoomId = ToRoomId;
         }
     }
 }

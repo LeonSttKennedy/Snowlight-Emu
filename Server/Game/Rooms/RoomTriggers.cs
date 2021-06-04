@@ -1,12 +1,13 @@
-﻿using Snowlight.Specialized;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Snowlight.Specialized;
+
 namespace Snowlight.Game.Rooms
 {
-    public enum RoomTiggerList
+    public enum RoomTriggerList
     {
         DEFAULT = 0,
         ROLLER = 1,
@@ -14,27 +15,11 @@ namespace Snowlight.Game.Rooms
     }
     public class RoomTriggers
     {
-        private uint mId;
-        private uint mRoomId;
         private Vector3 mRoomPos;
-        private RoomTiggerList mAction;
+        private RoomTriggerList mAction;
         private uint mToRoomId;
         private Vector3 mToRoomPos;
 
-        public uint Id
-        {
-            get
-            {
-                return mId;
-            }
-        }
-        public uint RoomId
-        {
-            get
-            {
-                return mRoomId;
-            }
-        }
         public Vector3 RoomPosition
         {
             get
@@ -42,7 +27,7 @@ namespace Snowlight.Game.Rooms
                 return mRoomPos;
             }
         }
-        public RoomTiggerList Action
+        public RoomTriggerList Action
         {
             get 
             {
@@ -64,10 +49,8 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public RoomTriggers(uint Id, uint RoomId, Vector3 RoomPosition, RoomTiggerList Action, uint ToRoomId, Vector3 ToRoomPosition)
+        public RoomTriggers(Vector3 RoomPosition, RoomTriggerList Action, uint ToRoomId, Vector3 ToRoomPosition)
         {
-            mId = Id;
-            mRoomId = RoomId;
             mRoomPos = RoomPosition;
             mAction = Action;
             mToRoomId = ToRoomId;

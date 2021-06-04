@@ -9,6 +9,7 @@ using Snowlight.Game.Items;
 using Snowlight.Game.Pathfinding;
 using Snowlight.Game.Bots;
 using Snowlight.Game.Achievements;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Rooms
 {
@@ -181,6 +182,9 @@ namespace Snowlight.Game.Rooms
                 // Update status (apply any sit/lay/effect)
                 UpdateActorStatus(Actor);
 
+                // Execute the triggers
+                ExecuteTriggers(Actor);
+
                 // Add this actor to the update list if this has been requested
                 if (Actor.UpdateNeeded)
                 {
@@ -245,6 +249,78 @@ namespace Snowlight.Game.Rooms
             if (mMusicController != null && mMusicController.IsPlaying)
             {
                 mMusicController.Update(this);
+            }
+        }
+        
+        public void ExecuteTriggers(RoomActor Actor)
+        {
+            Vector2 Redirect = mRedirectGrid[Actor.Position.X, Actor.Position.Y];
+            if (Redirect != null) 
+            {
+                Actor.Position = new Vector3(Redirect.X, Redirect.Y, GetUserStepHeight(Redirect));
+            }
+
+            RoomTileEffect Action = mTileEffects[Actor.Position.X, Actor.Position.Y];
+            if (Action == null) return;
+            if (Action.RoomPosition == null) return;
+
+            Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+
+            if (Actor.Position.X == Action.RoomPosition.X && Actor.Position.Y == Action.RoomPosition.Y)
+            {
+                switch (Action.Action)
+                {
+                    case RoomTriggerList.DEFAULT:
+                        /* This a default action this will be used to gave badges to users or another bonuses.
+                         * Maybe needs a database verification to execute a single time. 
+                         */
+                        break;
+
+                    case RoomTriggerList.ROLLER:
+                        if (Action.ToRoomId != 0) break;
+
+                        Actor.MoveTo(Action.ToRoomPosition.GetVector2());
+
+                        Vector2 NextStep = Actor.GetNextStep();
+                        if (NextStep == null) break;
+
+                        Actor.SetStatus("mv", NextStep.X + "," + NextStep.Y + "," + (Math.Round(GetUserStepHeight(NextStep), 1)).ToString().Replace(',', '.'));
+                        Actor.PositionToSet = NextStep;
+
+                        // Remove any "sit" statusses
+                        if (Actor.UserStatusses.ContainsKey("sit"))
+                        {
+                            Actor.RemoveStatus("sit");
+                        }
+
+                        // Remove any "lay" statusses
+                        if (Actor.UserStatusses.ContainsKey("lay"))
+                        {
+                            Actor.RemoveStatus("lay");
+                        }
+
+                        // Update rotation
+                        Actor.BodyRotation = Rotation.Calculate(Actor.Position.GetVector2(), NextStep);
+                        Actor.HeadRotation = Actor.BodyRotation;
+
+                        // Request update for next @B cycle
+                        Actor.UpdateNeeded = true;
+                        break;
+
+                    case RoomTriggerList.TELEPORT:
+                        if (Action.ToRoomId == 0 || Action.ToRoomId == Session.CurrentRoomId)
+                        {
+                            Actor.PositionToSet = Action.ToRoomPosition.GetVector2();
+                            Actor.MoveTo(Actor.PositionToSet);
+                            Actor.UpdateNeeded = true;
+                        }
+                        else if (Action.ToRoomId != Session.CurrentRoomId)
+                        {
+                            // Todo: Loads the predefined room and put the user in requested position and redirect him.
+                        }
+                        break;
+                }
             }
         }
 

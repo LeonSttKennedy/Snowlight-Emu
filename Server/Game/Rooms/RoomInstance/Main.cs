@@ -123,7 +123,7 @@ namespace Snowlight.Game.Rooms
             mTemporaryStickieRights = new Dictionary<uint, uint>();
             mTradeManager = new TradeManager();
             mRollerItems = new List<Item>[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
-            mRoomTriggers = new Dictionary<uint, RoomTriggers>();
+            mRoomTriggers = new List<RoomTriggers>();
 
             foreach (Bot Bot in BotManager.GenerateBotInstancesForRoom(RoomId))
             {
@@ -182,20 +182,20 @@ namespace Snowlight.Game.Rooms
 
                 foreach(DataRow Row in TiggersTable.Rows)
                 {
-                    RoomTiggerList Tigger = RoomTiggerList.DEFAULT;
+                    RoomTriggerList Trigger = RoomTriggerList.DEFAULT;
                     switch ((string)Row["action"])
                     {
                         case "roller":
-                            Tigger = RoomTiggerList.ROLLER;
+                            Trigger = RoomTriggerList.ROLLER;
                             break;
 
                         case "teleport":
-                            Tigger = RoomTiggerList.TELEPORT;
+                            Trigger = RoomTriggerList.TELEPORT;
                             break;
                     }
 
-                    mRoomTriggers.Add((uint)Row["id"], new RoomTriggers((uint)Row["id"], (uint)Row["room_id"],
-                        Vector3.FromString((string)Row["room_pos"]), Tigger, (uint)Row["to_room_id"],
+                    mRoomTriggers.Add(new RoomTriggers(
+                        Vector3.FromString((string)Row["room_pos"]), Trigger, (uint)Row["to_room_id"],
                         Vector3.FromString((string)Row["to_room_pos"])));
                 }
 

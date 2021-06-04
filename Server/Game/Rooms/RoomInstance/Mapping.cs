@@ -229,9 +229,9 @@ namespace Snowlight.Game.Rooms
                     }
                 }
 
-                foreach(RoomTriggers Tiggers in mRoomTriggers.Values)
+                foreach (RoomTriggers Triggers in mRoomTriggers)
                 {
-                    
+                    mTileEffects[Triggers.RoomPosition.X, Triggers.RoomPosition.Y] = new RoomTileEffect(Triggers.RoomPosition, Triggers.Action, Triggers.ToRoomPosition, Triggers.ToRoomId);
                 }
 
                 lock (mTileStates)

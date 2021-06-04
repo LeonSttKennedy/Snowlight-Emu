@@ -124,7 +124,7 @@ namespace Snowlight.Game.Sessions
                             {
                                 continue;
                             }
-
+                            
                             if (Session.Stopped)
                             {
                                 if (Session.TimeStopped > 15)
