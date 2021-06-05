@@ -547,33 +547,33 @@ namespace Snowlight.Game.Misc
                             {
                                 CommandsBuilder.Append(string.Concat(new object[]
                                     {
-                                        "\n:ha <message>",
-                                        "\n:aha <message>",
-                                        "\n:hal <link> <message>",
-                                        "\n:msgstaff <message>",
-                                        "\n:superkick <message>",
-                                        "\n:clipping",
-                                        "\n:t",
-                                        "\n:update_catalog",
-                                        "\n:update_items"
+                                        "\n:ha <message> - Sends a global alert.",
+                                        "\n:aha <message> - Sends anonimate a global alert.",
+                                        "\n:hal <link> <message> - Sends a global alert with link.",
+                                        "\n:msgstaff <message> - Sends a staff users alert.",
+                                        "\n:superkick <message> - Kicks a user from hotel.",
+                                        "\n:clipping - Walk wherever you want.",
+                                        "\n:t - Shows the coords to you.",
+                                        "\n:update_catalog - Update catalog.",
+                                        "\n:update_items - Update items definitions."
                                     }));
                             }
                             if (Session.HasRight("moderation_tool"))
                             {
                                 CommandsBuilder.Append(string.Concat(new object[]
                                     {
-                                        "\n:roomalert <message>",
-                                        "\n:kick <username>"
+                                        "\n:roomalert <message> - Sends an alert to all users in current room.",
+                                        "\n:kick <username> - Kicks an user from current room."
                                     }));
                             }
                             if (Session.HasRight("mute"))
                             {
                                 CommandsBuilder.Append(string.Concat(new object[]
                                     {
-                                        "\n:mute <username> <seconds>",
-                                        "\n:unmute <username>",
-                                        "\n:roommute",
-                                        "\n:roomunmute"
+                                        "\n:mute <username> <seconds> - Makes a user mute for time determined.",
+                                        "\n:unmute <username> - Unmute the user.",
+                                        "\n:roommute - Mutes the current room.",
+                                        "\n:roomunmute - Unmutes the current room."
                                     }));
                             }
                             CommandsBuilder.Append("\n\n");
@@ -584,10 +584,10 @@ namespace Snowlight.Game.Misc
                             CommandsBuilder.Append(string.Concat(new object[]
                                 { 
                                     "The following commands are available to vip users:\n",
-                                    "\n:emptypets <yes>",
-                                    "\n:emptyinv <yes>",
-                                    "\n:online",
-                                    "\n:status",
+                                    "\n:emptypets <yes> - Empty your pets inventory.",
+                                    "\n:emptyinv <yes> - Empty your items inventory.",
+                                    "\n:online - Shows who are online.",
+                                    "\n:status - Shows to you the stats from the server.",
                                 }));
                             CommandsBuilder.Append("\n\n");
                         }
@@ -597,8 +597,8 @@ namespace Snowlight.Game.Misc
                             CommandsBuilder.Append(string.Concat(new object[]
                                 {
                                     "The following commands are available to club users:\n",
-                                    "\n:chooser",
-                                    "\n:furni",
+                                    "\n:chooser - Show all users on current room.",
+                                    "\n:furni - Show all furnitures on current room.",
                                 }));
                             CommandsBuilder.Append("\n\n");
                         }
@@ -606,19 +606,27 @@ namespace Snowlight.Game.Misc
                         CommandsBuilder.Append(string.Concat(new object[] 
                         { 
                             "The following commands are available to regular users:\n",
-                            "\n:commands",
-                            "\n:about",
-                            "\n:pickall"
+                            "\n:commands - Shows which commands are available to you.",
+                            "\n:about - Shows you which server is behind this retro.",
+                            "\n:pickall - Picks up all furniture from your room."
                         }));
 
-                        Session.SendData(MessageOfTheDayComposer.Compose(CommandsBuilder.ToString()));
+                        if (Session.HasRight("hotel_admin") || Session.HasRight("moderation_tool") || Session.HasRight("mute") || Session.HasRight("club_vip"))
+                        {
+                            Session.SendData(MessageOfTheDayComposer.Compose(CommandsBuilder.ToString()));
+                        }
+                        else
+                        {
+                            Session.SendData(NotificationMessageComposer.Compose(CommandsBuilder.ToString()));    
+                        }
+
                         return true;
                     }
                 #endregion
                 #region :about
                 case "about":
                     {
-                        Session.SendData(UserAlertModernComposer.Compose("Powered by Snowlight", "This hotel is proudly powered by Snowlight, the premium open-source Habbo Hotel emulator.\n\nhttp://www.meth0d.org/snowlight"));
+                        Session.SendData(UserAlertModernComposer.Compose("Powered by Snowlight", "This hotel is proudly powered by Snowlight, the premium open-source Habbo Hotel emulator."));
                         return true;
                     }
                 #endregion
