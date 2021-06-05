@@ -175,6 +175,7 @@
     <Compile Include="Communication\Outgoing\Navigator\NavigatorPopularTagListComposer.cs" />
     <Compile Include="Communication\Outgoing\Navigator\NavigatorRoomListComposer.cs" />
     <Compile Include="Communication\Outgoing\Pets\PetTrainingPanelComposer.cs" />
+    <Compile Include="Communication\Outgoing\Rooms\PublicRoomData.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomCanCreateEventComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomCanCreateResult.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomChatComposer.cs" />

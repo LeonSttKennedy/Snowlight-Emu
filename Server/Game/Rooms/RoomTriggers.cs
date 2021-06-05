@@ -15,11 +15,20 @@ namespace Snowlight.Game.Rooms
     }
     public class RoomTriggers
     {
+        private uint mId;
         private Vector3 mRoomPos;
         private RoomTriggerList mAction;
         private uint mToRoomId;
         private Vector3 mToRoomPos;
+        private int mToRoomRotation;
 
+        public uint Id
+        {
+            get
+            {
+                return mId;
+            }
+        }
         public Vector3 RoomPosition
         {
             get
@@ -48,13 +57,22 @@ namespace Snowlight.Game.Rooms
                 return mToRoomPos;
             }
         }
-
-        public RoomTriggers(Vector3 RoomPosition, RoomTriggerList Action, uint ToRoomId, Vector3 ToRoomPosition)
+        public int ToRoomRotation
         {
+            get
+            {
+                return mToRoomRotation;
+            }
+        }
+
+        public RoomTriggers(uint Id, Vector3 RoomPosition, RoomTriggerList Action, uint ToRoomId, Vector3 ToRoomPosition, int ToRoomRotation)
+        {
+            mId = Id;
             mRoomPos = RoomPosition;
             mAction = Action;
             mToRoomId = ToRoomId;
             mToRoomPos = ToRoomPosition;
+            mToRoomRotation = ToRoomRotation;
         }
     }
 }

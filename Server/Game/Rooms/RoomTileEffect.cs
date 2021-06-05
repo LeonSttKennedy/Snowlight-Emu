@@ -26,10 +26,12 @@ namespace Snowlight.Game.Rooms
         private uint mQuestData;
 
         // Trigger Actions
+        private uint mId;
         private Vector3 mRoomPos;
         private RoomTriggerList mAction;
         private Vector3 mToRoomPos;
         private uint mToRoomId;
+        private int mToRoomRotation;
 
         // Tile Effects
         public RoomTileEffectType Type
@@ -81,35 +83,48 @@ namespace Snowlight.Game.Rooms
         }
 
         // Trigger Actions
-        public Vector3 RoomPosition
+        public uint TriggerId
+        {
+            get
+            {
+                return mId;
+            }
+        }
+        public Vector3 TriggerRoomPosition
         {
             get
             {
                 return mRoomPos;
             }
         }
-        public RoomTriggerList Action
+        public RoomTriggerList TriggerAction
         {
             get
             {
                 return mAction;
             }
         }
-        public uint ToRoomId
+        public uint TriggerToRoomId
         {
             get
             {
                 return mToRoomId;
             }
         }
-        public Vector3 ToRoomPosition
+        public Vector3 TriggerToRoomPosition
         {
             get
             {
                 return mToRoomPos;
             }
         }
-
+        public int TriggerToRoomRotation
+        {
+            get
+            {
+                return mToRoomRotation;
+            }
+        }
         public RoomTileEffect()
         {
             mType = RoomTileEffectType.None;
@@ -131,13 +146,15 @@ namespace Snowlight.Game.Rooms
             mQuestData = QuestData;
         }
 
-        public RoomTileEffect(Vector3 RoomPos, RoomTriggerList Action, Vector3 ToRoomPos, uint ToRoomId)
+        public RoomTileEffect(uint TriggerId, Vector3 TriggerRoomPos, RoomTriggerList TriggerAction, 
+                        Vector3 TriggerToRoomPos, uint TriggerToRoomId, int TriggerRoomRotation)
         {
-            // TODO: SEND THE ACTIONS TO A PERFORM UPDATE!!
-            mRoomPos = RoomPos;
-            mAction = Action;
-            mToRoomPos = ToRoomPos;
-            mToRoomId = ToRoomId;
+            mId = TriggerId;
+            mRoomPos = TriggerRoomPos;
+            mAction = TriggerAction;
+            mToRoomPos = TriggerToRoomPos;
+            mToRoomId = TriggerToRoomId;
+            mToRoomRotation = TriggerRoomRotation;
         }
     }
 }

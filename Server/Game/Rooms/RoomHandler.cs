@@ -130,16 +130,9 @@ namespace Snowlight.Game.Rooms
             uint RoomId = Message.PopWiredUInt32();
             RoomInfo Info = RoomInfoLoader.GetRoomInfo(RoomId);
 
-            if (Info == null)
-            {
-                return;
-            }
+            if (Info == null) return;
 
-            ServerMessage PubRoomData = new ServerMessage(OpcodesOut.ROOM_PUBLIC_MODELDATA);
-            PubRoomData.AppendUInt32(Info.Id); // Unknown.
-            PubRoomData.AppendStringWithBreak(Info.SWFs);
-            PubRoomData.AppendUInt32(Info.Id);
-            Session.SendData(PubRoomData);
+            Session.SendData(PublicRoomData.Compose(Info.Id, Info.SWFs));
         }
 
         private static void OpenPublicConnection(Session Session, ClientMessage Message)

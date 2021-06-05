@@ -194,9 +194,9 @@ namespace Snowlight.Game.Rooms
                             break;
                     }
 
-                    mRoomTriggers.Add(new RoomTriggers(
+                    mRoomTriggers.Add(new RoomTriggers((uint)Row["id"],
                         Vector3.FromString((string)Row["room_pos"]), Trigger, (uint)Row["to_room_id"],
-                        Vector3.FromString((string)Row["to_room_pos"])));
+                        Vector3.FromString((string)Row["to_room_pos"]), (int)Row["to_room_dir"]));
                 }
 
                 // Pets

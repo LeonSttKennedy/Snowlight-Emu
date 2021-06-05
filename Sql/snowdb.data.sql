@@ -8018,14 +8018,15 @@ CREATE TABLE IF NOT EXISTS `room_rights` (
 --
 
 CREATE TABLE IF NOT EXISTS `room_triggers` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `room_id` int(10) unsigned NOT NULL,
   `room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
   `action` enum('default','roller','teleport') CHARACTER SET utf8 NOT NULL DEFAULT 'default',
   `to_room_id` int(10) unsigned NOT NULL,
   `to_room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
+  `to_room_dir` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `room_triggers`
