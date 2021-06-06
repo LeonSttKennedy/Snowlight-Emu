@@ -159,12 +159,12 @@ namespace Snowlight.Game.Rooms
 
                 // Static objects
                 MySqlClient.SetParameter("id", RoomId);
-                DataTable StaticObjectTable = MySqlClient.ExecuteQueryTable("SELECT name,position,rotation,is_seat FROM static_objects WHERE room_id = @id");
+                DataTable StaticObjectTable = MySqlClient.ExecuteQueryTable("SELECT name,position,rotation,height,walkable,is_seat FROM static_objects WHERE room_id = @id");
 
                 foreach (DataRow Row in StaticObjectTable.Rows)
                 {
                     mStaticObjects.Add(new StaticObject((string)Row["name"], Vector3.FromString((string)Row["position"]),
-                        (int)Row["rotation"], (Row["is_seat"].ToString() == "1")));
+                        (int)Row["rotation"], (float)Row["height"], (Row["walkable"].ToString() == "1"), (Row["is_seat"].ToString() == "1")));
                 }
             
                 // Rights

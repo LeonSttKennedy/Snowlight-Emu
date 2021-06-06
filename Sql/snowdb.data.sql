@@ -2,10 +2,10 @@
 -- version 3.3.9.2
 -- http://www.phpmyadmin.net
 --
--- Servidor: localhost
--- Tempo de Geração: Mai 30, 2021 as 02:29 PM
--- Versão do Servidor: 5.5.10
--- Versão do PHP: 5.3.6
+-- Host: localhost
+-- Generation Time: Jun 05, 2021 at 09:24 PM
+-- Server version: 5.5.10
+-- PHP Version: 5.3.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,13 +16,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Banco de Dados: `snowdb`
+-- Database: `snowdb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `achievements`
+-- Table structure for table `achievements`
 --
 
 CREATE TABLE IF NOT EXISTS `achievements` (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `achievements` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
 
 --
--- Extraindo dados da tabela `achievements`
+-- Dumping data for table `achievements`
 --
 
 INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pixels`, `reward_points`, `progress_needed`) VALUES
@@ -141,7 +141,7 @@ INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pix
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `achievements_to_unlock`
+-- Table structure for table `achievements_to_unlock`
 --
 
 CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
@@ -153,15 +153,13 @@ CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `achievements_to_unlock`
+-- Dumping data for table `achievements_to_unlock`
 --
-
 
 -- --------------------------------------------------------
 
-
 --
--- Estrutura da tabela `avatar_effects`
+-- Table structure for table `avatar_effects`
 --
 
 CREATE TABLE IF NOT EXISTS `avatar_effects` (
@@ -177,14 +175,14 @@ CREATE TABLE IF NOT EXISTS `avatar_effects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `avatar_effects`
+-- Dumping data for table `avatar_effects`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `badges`
+-- Table structure for table `badges`
 --
 
 CREATE TABLE IF NOT EXISTS `badges` (
@@ -199,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `badges` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Extraindo dados da tabela `badges`
+-- Dumping data for table `badges`
 --
 
 INSERT INTO `badges` (`id`, `user_id`, `badge_id`, `source_type`, `source_data`, `slot_id`) VALUES
@@ -208,7 +206,7 @@ INSERT INTO `badges` (`id`, `user_id`, `badge_id`, `source_type`, `source_data`,
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `badge_definitions`
+-- Table structure for table `badge_definitions`
 --
 
 CREATE TABLE IF NOT EXISTS `badge_definitions` (
@@ -219,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `badge_definitions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=105 ;
 
 --
--- Extraindo dados da tabela `badge_definitions`
+-- Dumping data for table `badge_definitions`
 --
 
 INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
@@ -331,7 +329,7 @@ INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `bans`
+-- Table structure for table `bans`
 --
 
 CREATE TABLE IF NOT EXISTS `bans` (
@@ -346,14 +344,14 @@ CREATE TABLE IF NOT EXISTS `bans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `bans`
+-- Dumping data for table `bans`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `bots`
+-- Table structure for table `bots`
 --
 
 CREATE TABLE IF NOT EXISTS `bots` (
@@ -377,7 +375,7 @@ CREATE TABLE IF NOT EXISTS `bots` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
--- Extraindo dados da tabela `bots`
+-- Dumping data for table `bots`
 --
 
 INSERT INTO `bots` (`id`, `ai_type`, `name`, `look`, `motto`, `room_id`, `pos_start`, `pos_serve`, `pos_defined_range`, `walk_mode`, `enabled`, `kickable`, `rotation`, `effect`, `response_distance`, `pet_type_handler_id`) VALUES
@@ -413,7 +411,7 @@ INSERT INTO `bots` (`id`, `ai_type`, `name`, `look`, `motto`, `room_id`, `pos_st
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `bots_speech`
+-- Table structure for table `bots_speech`
 --
 
 CREATE TABLE IF NOT EXISTS `bots_speech` (
@@ -424,14 +422,14 @@ CREATE TABLE IF NOT EXISTS `bots_speech` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `bots_speech`
+-- Dumping data for table `bots_speech`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `bot_responses`
+-- Table structure for table `bot_responses`
 --
 
 CREATE TABLE IF NOT EXISTS `bot_responses` (
@@ -444,14 +442,14 @@ CREATE TABLE IF NOT EXISTS `bot_responses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `bot_responses`
+-- Dumping data for table `bot_responses`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `catalog`
+-- Table structure for table `catalog`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog` (
@@ -473,7 +471,7 @@ CREATE TABLE IF NOT EXISTS `catalog` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=152 ;
 
 --
--- Extraindo dados da tabela `catalog`
+-- Dumping data for table `catalog`
 --
 
 INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon`, `color`, `required_right`, `visible`, `dummy_page`, `coming_soon`, `template`, `page_strings_1`, `page_strings_2`) VALUES
@@ -544,7 +542,7 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (79, 2, 68, '1', 'Urban', 26, 0, '', '1', '0', '0', 'default_3x3', 'urban_header_en|urban_teaser_en', 'An extentsion of ''Grunge'' this range ties in perfectly for your streets, cities and council estates. Chain link fences are the future of modern British schools in rough areas - stock up before they''ve all gone I tell you!|Click on an item for more details.'),
 (80, 2, 58, '1', 'Runway', 74, 0, '', '1', '0', '0', 'default_3x3', 'runway_header_en|runway_teaser_en', 'Set up a cat walk, fashion show or boutique with the Runway range. It has everything a budding designer needs to create some new threads. You could even use this range in a salon or hairdressers!|Click on an item for more details.'),
 (81, 2, 49, '1', 'Orgie', 235, 0, '', '1', '0', '0', 'default_3x3', 'orgierange|', 'The latest range from Ann Summers, the Orgie line. Made of soft, wipe clean plastic, its perfect for any three, four or fivesome!|Click on an item for more details.'),
-(82, 27, 4, '1', 'Pixel Collectable', 3, 0, '', '1', '0', '0', 'default_3x3', 'pixel1|catalog_pxl_teaser2_en|catalog_special_txtbg2_en', 'The Pixel Collectable is the ultimate collectors.|Click on an item for more details.|Items that require 7500 pixels to purchase!'),
+(82, 5, 4, '1', 'Pixel Collectable', 3, 0, '', '1', '0', '0', 'default_3x3', 'pixel1|catalog_pxl_teaser2_en|catalog_special_txtbg2_en', 'The Pixel Collectable is the ultimate collectors.|Click on an item for more details.|Items that require 7500 pixels to purchase!'),
 (83, 2, 8, '1', 'Asian', 15, 0, '', '1', '0', '0', 'default_3x3', 'catalog_asian_headline1|catalog_asian_teaser1', 'Chinese New Year or Chinese takeaway? Who cares when you can have a Chinese themed room every day and any day you want! Please do not disturb other guests or block the corridors with oversized Chinese dragons, thankyou.|Click on an item for more details.'),
 (84, 2, 38, '1', 'Japan', 36, 0, '', '1', '0', '0', 'default_3x3', 'catalog_jap_headline1|catalog_jap_teaser3_en', 'You''ll always feel calm, collected and very slightly fishy with this range. You can line your floors with mats, light the room with lanterns and eat sushi until your little heart is content with this authentic collection of orignal Japanese furniture exported straight to the hotel.|Click on an item for more details.'),
 (85, 2, 3, '1', 'Alhambra', 12, 0, '', '1', '0', '0', 'default_3x3', 'catalog_alh_headline1_en|dining_area_illustration', 'For those Arabian nights in some far off country with lots of sand, choose Alhambra, atleast it has a tea tray and a pile of deserts to take with you. All our windows come with shutters and are guaranteed for 3 years under our warranty policy.|Click on an item for more details.'),
@@ -553,7 +551,7 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (88, 2, 60, '1', 'Shalimar', 54, 0, '', '1', '0', '0', 'default_3x3', 'catalog_shal_header1_en|catalog_shal_teaser_en', 'This oddly royal collection features stunning floors, beautiful water features and silky soft drapes. If you want to feel like a Bollywood prince or princess just for a day dress up your palace with some Shalimar accessories.|Click on an item for more details.'),
 (89, 2, 10, '1', 'Bensalem', 18, 0, '', '1', '0', '0', 'default_3x3', 'catalog_lc_headline2_en|catalog_lc_teaser1_en_001', 'Looking to meet Spongebob, Patrick or maybe even Squidward? You''ll need to plan an appropriate room for them to come and stay in - they''re sea creatures, stupid, they can''t live in the air! The Bensalem range and a moodlight should achieve this effect nicely!|Click on an item for more details.'),
 (90, 2, 43, '1', 'Lost Tribe', 38, 0, '', '1', '0', '0', 'default_3x3', 'LT_header_en|LT_teaser_en', 'A forgotten land, a timeless island, an overlooked, ancient city. Recreate the feel of a Lost Tribe cut off from humanity and left to develop secret traditions and rituals. Enter the land that civilisation and time forgot with this collection of unique items.|Click on an item for more details.'),
-(91, 27, 2, '1', 'Collectables', 3, 0, '', '1', '0', '0', 'default_3x3', 'collectibles_2|catalog_cltbs_teaser_en', 'Collect your way to the riches! Collectables are special furniture sold only for a limited period of time. They cost wee bit more, but make up with amazing trade value.|Click on an item for more details.'),
+(91, 5, 2, '1', 'Collectables', 3, 0, '', '1', '0', '0', 'default_3x3', 'collectibles_2|catalog_cltbs_teaser_en', 'Collect your way to the riches! Collectables are special furniture sold only for a limited period of time. They cost wee bit more, but make up with amazing trade value.|Click on an item for more details.'),
 (92, 2, 62, '1', 'Sports', 56, 0, '', '1', '0', '0', 'default_3x3', 'catalog_sports_headline1|catalog_sports_teaser1', 'Starting a new excersice program? Planning to go the GYM? Why don''t you build a fitness centre in your own home?! With the sports collection you can do exactly that - get fit without everyone laughing at you on the rowing machine!|Click on an item for more details.'),
 (93, 2, 35, '1', 'Hollywood', 33, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_habbowood_headline1_en|ctlg_habbowood_teaser1_en', '3... 2... 1... You can be the star of the show when you buy a piece from this collection! Your friends will be amazed and it will look spectacular in your room just like those stunning celebrities on the big screen! The end.|Click on an item for more details.'),
 (94, 5, 3, '1', 'Promotional Items', 28, 0, '', '1', '0', '0', 'default_3x3', 'catalog_rares_headline1', 'These items may not all be functional - if you need an item setting please contact an administrator. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click an item for more details.'),
@@ -613,7 +611,7 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `catalog_items`
+-- Table structure for table `catalog_items`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_items` (
@@ -631,7 +629,7 @@ CREATE TABLE IF NOT EXISTS `catalog_items` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50283 ;
 
 --
--- Extraindo dados da tabela `catalog_items`
+-- Dumping data for table `catalog_items`
 --
 
 INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`, `cost_credits`, `cost_pixels`, `enabled`, `amount`, `club_restriction`) VALUES
@@ -3961,7 +3959,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `catalog_marketplace_data`
+-- Table structure for table `catalog_marketplace_data`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
@@ -3974,14 +3972,14 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `catalog_marketplace_data`
+-- Dumping data for table `catalog_marketplace_data`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `catalog_marketplace_offers`
+-- Table structure for table `catalog_marketplace_offers`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
@@ -4003,14 +4001,14 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `catalog_marketplace_offers`
+-- Dumping data for table `catalog_marketplace_offers`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `catalog_subscriptions`
+-- Table structure for table `catalog_subscriptions`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_subscriptions` (
@@ -4023,7 +4021,7 @@ CREATE TABLE IF NOT EXISTS `catalog_subscriptions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Extraindo dados da tabela `catalog_subscriptions`
+-- Dumping data for table `catalog_subscriptions`
 --
 
 INSERT INTO `catalog_subscriptions` (`id`, `name`, `type`, `cost_credits`, `length_days`) VALUES
@@ -4037,7 +4035,7 @@ INSERT INTO `catalog_subscriptions` (`id`, `name`, `type`, `cost_credits`, `leng
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `catalog_subscriptions_gifts`
+-- Table structure for table `catalog_subscriptions_gifts`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
@@ -4050,7 +4048,7 @@ CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Extraindo dados da tabela `catalog_subscriptions_gifts`
+-- Dumping data for table `catalog_subscriptions_gifts`
 --
 
 INSERT INTO `catalog_subscriptions_gifts` (`item_id`, `item_name`, `sprite_id`, `days_need`, `isvip`) VALUES
@@ -4059,7 +4057,7 @@ INSERT INTO `catalog_subscriptions_gifts` (`item_id`, `item_name`, `sprite_id`, 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `characters`
+-- Table structure for table `characters`
 --
 
 CREATE TABLE IF NOT EXISTS `characters` (
@@ -4096,14 +4094,13 @@ CREATE TABLE IF NOT EXISTS `characters` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `characters`
+-- Dumping data for table `characters`
 --
-
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `drink_sets`
+-- Table structure for table `drink_sets`
 --
 
 CREATE TABLE IF NOT EXISTS `drink_sets` (
@@ -4114,7 +4111,7 @@ CREATE TABLE IF NOT EXISTS `drink_sets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=8 ;
 
 --
--- Extraindo dados da tabela `drink_sets`
+-- Dumping data for table `drink_sets`
 --
 
 INSERT INTO `drink_sets` (`id`, `drinks`, `internal_comment`) VALUES
@@ -4129,7 +4126,7 @@ INSERT INTO `drink_sets` (`id`, `drinks`, `internal_comment`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `favorites`
+-- Table structure for table `favorites`
 --
 
 CREATE TABLE IF NOT EXISTS `favorites` (
@@ -4141,14 +4138,14 @@ CREATE TABLE IF NOT EXISTS `favorites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `favorites`
+-- Dumping data for table `favorites`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `flat_categories`
+-- Table structure for table `flat_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `flat_categories` (
@@ -4162,7 +4159,7 @@ CREATE TABLE IF NOT EXISTS `flat_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
--- Extraindo dados da tabela `flat_categories`
+-- Dumping data for table `flat_categories`
 --
 
 INSERT INTO `flat_categories` (`id`, `title`, `order_num`, `visible`, `enabled`, `allow_trading`) VALUES
@@ -4177,7 +4174,7 @@ INSERT INTO `flat_categories` (`id`, `title`, `order_num`, `visible`, `enabled`,
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `help_categories`
+-- Table structure for table `help_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `help_categories` (
@@ -4188,7 +4185,7 @@ CREATE TABLE IF NOT EXISTS `help_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Extraindo dados da tabela `help_categories`
+-- Dumping data for table `help_categories`
 --
 
 INSERT INTO `help_categories` (`id`, `name`, `visible`) VALUES
@@ -4202,7 +4199,7 @@ INSERT INTO `help_categories` (`id`, `name`, `visible`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `help_topics`
+-- Table structure for table `help_topics`
 --
 
 CREATE TABLE IF NOT EXISTS `help_topics` (
@@ -4215,7 +4212,7 @@ CREATE TABLE IF NOT EXISTS `help_topics` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Extraindo dados da tabela `help_topics`
+-- Dumping data for table `help_topics`
 --
 
 INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
@@ -4229,7 +4226,7 @@ INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `ignores`
+-- Table structure for table `ignores`
 --
 
 CREATE TABLE IF NOT EXISTS `ignores` (
@@ -4241,14 +4238,14 @@ CREATE TABLE IF NOT EXISTS `ignores` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `ignores`
+-- Dumping data for table `ignores`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `interstitials`
+-- Table structure for table `interstitials`
 --
 
 CREATE TABLE IF NOT EXISTS `interstitials` (
@@ -4261,7 +4258,7 @@ CREATE TABLE IF NOT EXISTS `interstitials` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Extraindo dados da tabela `interstitials`
+-- Dumping data for table `interstitials`
 --
 
 INSERT INTO `interstitials` (`id`, `url`, `image`, `views`, `enabled`) VALUES
@@ -4273,7 +4270,7 @@ INSERT INTO `interstitials` (`id`, `url`, `image`, `views`, `enabled`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `items`
+-- Table structure for table `items`
 --
 
 CREATE TABLE IF NOT EXISTS `items` (
@@ -4296,14 +4293,14 @@ CREATE TABLE IF NOT EXISTS `items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `items`
+-- Dumping data for table `items`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `item_definitions`
+-- Table structure for table `item_definitions`
 --
 
 CREATE TABLE IF NOT EXISTS `item_definitions` (
@@ -4328,7 +4325,7 @@ CREATE TABLE IF NOT EXISTS `item_definitions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2911 ;
 
 --
--- Extraindo dados da tabela `item_definitions`
+-- Dumping data for table `item_definitions`
 --
 
 INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `behavior_data`, `stacking_behavior`, `size_x`, `size_y`, `height`, `allow_recycling`, `allow_trading`, `allow_selling`, `allow_gifting`, `allow_inventory_stacking`, `walkable`, `room_limit`) VALUES
@@ -7242,7 +7239,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `messenger_friendships`
+-- Table structure for table `messenger_friendships`
 --
 
 CREATE TABLE IF NOT EXISTS `messenger_friendships` (
@@ -7252,17 +7249,16 @@ CREATE TABLE IF NOT EXISTS `messenger_friendships` (
   `confirmed` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_1_id` (`user_1_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `messenger_friendships`
+-- Dumping data for table `messenger_friendships`
 --
-
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `moderation_action_log`
+-- Table structure for table `moderation_action_log`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_action_log` (
@@ -7273,17 +7269,16 @@ CREATE TABLE IF NOT EXISTS `moderation_action_log` (
   `action_detail` text NOT NULL,
   `timestamp` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Extraindo dados da tabela `moderation_action_log`
+-- Dumping data for table `moderation_action_log`
 --
-
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `moderation_chatlogs`
+-- Table structure for table `moderation_chatlogs`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
@@ -7296,14 +7291,13 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `moderation_chatlogs`
+-- Dumping data for table `moderation_chatlogs`
 --
-
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `moderation_presets`
+-- Table structure for table `moderation_presets`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_presets` (
@@ -7314,7 +7308,7 @@ CREATE TABLE IF NOT EXISTS `moderation_presets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Extraindo dados da tabela `moderation_presets`
+-- Dumping data for table `moderation_presets`
 --
 
 INSERT INTO `moderation_presets` (`id`, `type`, `message`) VALUES
@@ -7323,7 +7317,7 @@ INSERT INTO `moderation_presets` (`id`, `type`, `message`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `moderation_preset_action_categories`
+-- Table structure for table `moderation_preset_action_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_preset_action_categories` (
@@ -7333,7 +7327,7 @@ CREATE TABLE IF NOT EXISTS `moderation_preset_action_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Extraindo dados da tabela `moderation_preset_action_categories`
+-- Dumping data for table `moderation_preset_action_categories`
 --
 
 INSERT INTO `moderation_preset_action_categories` (`id`, `caption`) VALUES
@@ -7347,7 +7341,7 @@ INSERT INTO `moderation_preset_action_categories` (`id`, `caption`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `moderation_preset_action_messages`
+-- Table structure for table `moderation_preset_action_messages`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_preset_action_messages` (
@@ -7359,7 +7353,7 @@ CREATE TABLE IF NOT EXISTS `moderation_preset_action_messages` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
--- Extraindo dados da tabela `moderation_preset_action_messages`
+-- Dumping data for table `moderation_preset_action_messages`
 --
 
 INSERT INTO `moderation_preset_action_messages` (`id`, `parent_id`, `caption`, `message_text`) VALUES
@@ -7381,7 +7375,7 @@ INSERT INTO `moderation_preset_action_messages` (`id`, `parent_id`, `caption`, `
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `moderation_tickets`
+-- Table structure for table `moderation_tickets`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_tickets` (
@@ -7398,14 +7392,14 @@ CREATE TABLE IF NOT EXISTS `moderation_tickets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `moderation_tickets`
+-- Dumping data for table `moderation_tickets`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `navigator_event_search_categories`
+-- Table structure for table `navigator_event_search_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `navigator_event_search_categories` (
@@ -7415,7 +7409,7 @@ CREATE TABLE IF NOT EXISTS `navigator_event_search_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Extraindo dados da tabela `navigator_event_search_categories`
+-- Dumping data for table `navigator_event_search_categories`
 --
 
 INSERT INTO `navigator_event_search_categories` (`query`, `category_id`) VALUES
@@ -7434,7 +7428,7 @@ INSERT INTO `navigator_event_search_categories` (`query`, `category_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `navigator_frontpage`
+-- Table structure for table `navigator_frontpage`
 --
 
 CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
@@ -7455,31 +7449,31 @@ CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- Extraindo dados da tabela `navigator_frontpage`
+-- Dumping data for table `navigator_frontpage`
 --
 
 INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `is_category`, `category_autoexpand`, `display_type`, `name`, `descr`, `image_type`, `image_src`, `banner_label`, `order_num`, `enabled`) VALUES
 (1, 0, 0, '1', '1', 'details', 'Staff Picks', '', 'external', 'officialrooms_hq/staffpickfolder.gif', '', 100, '1'),
 (2, 0, 1, '0', '0', 'banner', 'Welcome Lounge', 'Get a warm welcome to the hotel and meet new people.', 'internal', '', 'Welcome Lounge', 1, '1'),
 (3, 0, 2, '0', '0', 'banner', 'Theatredrome', 'For mass assemblies and gatherings.', 'internal', '', 'Theatredrome', 2, '1'),
-(4, 0, 3, '0', '0', 'details', 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'internal', '', '', 4, '1'),
-(5, 0, 4, '0', '0', 'details', 'Star Lounge', 'Celebrities favourite hangout', 'internal', '', '', 5, '1'),
-(6, 0, 5, '0', '0', 'details', 'The Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'internal', '', '', 6, '1'),
-(7, 0, 6, '0', '0', 'details', 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'internal', '', '', 7, '1'),
-(8, 0, 7, '0', '0', 'details', 'Oriental Tearoom', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'internal', '', '', 8, '1'),
-(9, 0, 8, '0', '0', 'details', 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'internal', '', '', 9, '1'),
-(10, 0, 9, '0', '0', 'details', 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'internal', '', '', 10, '1'),
-(11, 0, 10, '0', '0', 'details', 'Club Orient', 'Tres chic with an eastern twist.', 'internal', '', '', 11, '1'),
-(12, 0, 11, '0', '0', 'details', 'Pizzeria', 'The best pizza in town!', 'internal', '', '', 12, '1'),
-(13, 0, 12, '0', '0', 'details', 'The Park', 'Follow the path...', 'internal', '', '', 13, '1'),
-(14, 0, 14, '0', '0', 'details', 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'internal', '', '', 14, '1'),
-(15, 0, 15, '0', '0', 'details', 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'internal', '', '', 15, '1'),
-(16, 0, 16, '0', '0', 'banner', 'Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'internal', '', 'Library', 3, '1');
+(4, 0, 16, '0', '0', 'banner', 'Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'internal', '', 'Library', 3, '1'),
+(5, 0, 3, '0', '0', 'details', 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'internal', '', '', 4, '1'),
+(6, 0, 4, '0', '0', 'details', 'Star Lounge', 'Celebrities favourite hangout', 'internal', '', '', 5, '1'),
+(7, 0, 5, '0', '0', 'details', 'The Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'internal', '', '', 6, '1'),
+(8, 0, 6, '0', '0', 'details', 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'internal', '', '', 7, '1'),
+(9, 0, 7, '0', '0', 'details', 'Oriental Tearoom', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'internal', '', '', 8, '1'),
+(10, 0, 8, '0', '0', 'details', 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'internal', '', '', 9, '1'),
+(11, 0, 9, '0', '0', 'details', 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'internal', '', '', 10, '1'),
+(12, 0, 10, '0', '0', 'details', 'Club Orient', 'Tres chic with an eastern twist.', 'internal', '', '', 11, '1'),
+(13, 0, 11, '0', '0', 'details', 'Pizzeria', 'The best pizza in town!', 'internal', '', '', 12, '1'),
+(14, 0, 12, '0', '0', 'details', 'The Park', 'Follow the path...', 'internal', '', '', 13, '1'),
+(15, 0, 14, '0', '0', 'details', 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'internal', '', '', 14, '1'),
+(16, 0, 15, '0', '0', 'details', 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'internal', '', '', 15, '1');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `new_items`
+-- Table structure for table `new_items`
 --
 
 CREATE TABLE IF NOT EXISTS `new_items` (
@@ -7492,14 +7486,14 @@ CREATE TABLE IF NOT EXISTS `new_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `new_items`
+-- Dumping data for table `new_items`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `pets`
+-- Table structure for table `pets`
 --
 
 CREATE TABLE IF NOT EXISTS `pets` (
@@ -7522,14 +7516,13 @@ CREATE TABLE IF NOT EXISTS `pets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `pets`
+-- Dumping data for table `pets`
 --
-
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `pet_races`
+-- Table structure for table `pet_races`
 --
 
 CREATE TABLE IF NOT EXISTS `pet_races` (
@@ -7543,7 +7536,7 @@ CREATE TABLE IF NOT EXISTS `pet_races` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=160 ;
 
 --
--- Extraindo dados da tabela `pet_races`
+-- Dumping data for table `pet_races`
 --
 
 INSERT INTO `pet_races` (`id`, `pet_type`, `data1`, `data2`, `data3`) VALUES
@@ -7699,7 +7692,7 @@ INSERT INTO `pet_races` (`id`, `pet_type`, `data1`, `data2`, `data3`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `pet_tricks`
+-- Table structure for table `pet_tricks`
 --
 
 CREATE TABLE IF NOT EXISTS `pet_tricks` (
@@ -7709,7 +7702,7 @@ CREATE TABLE IF NOT EXISTS `pet_tricks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Extraindo dados da tabela `pet_tricks`
+-- Dumping data for table `pet_tricks`
 --
 
 INSERT INTO `pet_tricks` (`type`, `trick`) VALUES
@@ -7731,7 +7724,7 @@ INSERT INTO `pet_tricks` (`type`, `trick`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `quests`
+-- Table structure for table `quests`
 --
 
 CREATE TABLE IF NOT EXISTS `quests` (
@@ -7747,7 +7740,7 @@ CREATE TABLE IF NOT EXISTS `quests` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
 
 --
--- Extraindo dados da tabela `quests`
+-- Dumping data for table `quests`
 --
 
 INSERT INTO `quests` (`id`, `category`, `series_number`, `goal_type`, `goal_data`, `name`, `reward`, `data_bit`) VALUES
@@ -7788,7 +7781,7 @@ INSERT INTO `quests` (`id`, `category`, `series_number`, `goal_type`, `goal_data
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `recycler_rewards`
+-- Table structure for table `recycler_rewards`
 --
 
 CREATE TABLE IF NOT EXISTS `recycler_rewards` (
@@ -7799,7 +7792,7 @@ CREATE TABLE IF NOT EXISTS `recycler_rewards` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
--- Extraindo dados da tabela `recycler_rewards`
+-- Dumping data for table `recycler_rewards`
 --
 
 INSERT INTO `recycler_rewards` (`id`, `chance_level`, `item_id`) VALUES
@@ -7835,7 +7828,7 @@ INSERT INTO `recycler_rewards` (`id`, `chance_level`, `item_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `rights`
+-- Table structure for table `rights`
 --
 
 CREATE TABLE IF NOT EXISTS `rights` (
@@ -7846,7 +7839,7 @@ CREATE TABLE IF NOT EXISTS `rights` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
--- Extraindo dados da tabela `rights`
+-- Dumping data for table `rights`
 --
 
 INSERT INTO `rights` (`id`, `set_id`, `right_id`) VALUES
@@ -7867,7 +7860,7 @@ INSERT INTO `rights` (`id`, `set_id`, `right_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `rooms`
+-- Table structure for table `rooms`
 --
 
 CREATE TABLE IF NOT EXISTS `rooms` (
@@ -7895,14 +7888,14 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `thickness_floor` int(11) NOT NULL DEFAULT '0',
   `decorations` varchar(128) NOT NULL DEFAULT 'landscape=0.0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
--- Extraindo dados da tabela `rooms`
+-- Dumping data for table `rooms`
 --
 
 INSERT INTO `rooms` (`id`, `type`, `owner_id`, `name`, `description`, `pub_internal_name`, `tags`, `access_type`, `password`, `category`, `current_users`, `max_users`, `swfs`, `score`, `icon`, `model`, `allow_pets`, `allow_pet_eating`, `disable_blocking`, `hide_walls`, `thickness_wall`, `thickness_floor`, `decorations`) VALUES
-(1, 'public', 0, 'Hotel Reception', 'Where we give you a warm welcome to the hotel!', 'welcome_lounge', '', 'open', '', 0, 0, 50, 'hh_room_nlobby', 0, '0|0|0|0', 'newbie_lobby', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
+(1, 'public', 0, 'Hotel Reception', 'Where we give you a warm welcome to the hotel!', 'welcome_lounge', '', 'open', '', 0, 1, 50, 'hh_room_nlobby', 0, '0|0|0|0', 'newbie_lobby', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
 (2, 'public', 0, 'Theatredrome', 'For mass assemblies and gatherings.', 'theatredrome', '', 'open', '', 0, 0, 50, 'hh_room_theater', 0, '0|0|0|0', 'theater', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
 (3, 'public', 0, 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'netcafe', '', 'open', '', 0, 0, 50, 'hh_room_netcafe', 0, '0|0|0|0', 'netcafe', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
 (4, 'public', 0, 'Star Lounge', 'Celebrities favourite hangout', 'star_lounge', '', 'open', '', 0, 0, 50, 'hh_room_starlounge', 0, '0|0|0|0', 'star_lounge', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
@@ -7917,12 +7910,12 @@ INSERT INTO `rooms` (`id`, `type`, `owner_id`, `name`, `description`, `pub_inter
 (13, 'public', 0, 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'rooftop', '', 'open', '', 0, 0, 50, 'hh_room_rooftop', 0, '0|0|0|0', 'rooftop', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
 (14, 'public', 0, 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'rooftop', '', 'open', '', 0, 0, 50, 'hh_room_rooftop', 0, '0|0|0|0', 'rooftop_2', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
 (15, 'public', 0, 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'floatinggarden', '', 'open', '', 0, 0, 50, 'hh_room_floatinggarden', 0, '0|0|0|0', 'floatinggarden', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(16, 'public', 0, 'The Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'library', '', 'open', '', 0, 0, 50, 'hh_room_library', 0, '0|0|0|0', 'library', '0', '0', '0', '0', 0, 0, 'landscape=0.0');
-
+(16, 'public', 0, 'The Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'library', '', 'open', '', 0, 0, 50, 'hh_room_library', 0, '0|0|0|0', 'library', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
+(17, 'public', 0, 'The Infobus', 'Get into infobus', 'park', '', 'open', '', 1, 0, 50, 'hh_room_park,hh_room_park_general', 0, '0|0|0|0', 'park_b', '0', '0', '0', '0', 0, 0, 'landscape=0.0');
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `room_models`
+-- Table structure for table `room_models`
 --
 
 CREATE TABLE IF NOT EXISTS `room_models` (
@@ -7940,7 +7933,7 @@ CREATE TABLE IF NOT EXISTS `room_models` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Extraindo dados da tabela `room_models`
+-- Dumping data for table `room_models`
 --
 
 INSERT INTO `room_models` (`id`, `type`, `heightmap`, `enabled`, `door_x`, `door_y`, `door_z`, `door_dir`, `subscription_requirement`, `max_users`) VALUES
@@ -7995,7 +7988,7 @@ INSERT INTO `room_models` (`id`, `type`, `heightmap`, `enabled`, `door_x`, `door
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `room_rights`
+-- Table structure for table `room_rights`
 --
 
 CREATE TABLE IF NOT EXISTS `room_rights` (
@@ -8007,14 +8000,14 @@ CREATE TABLE IF NOT EXISTS `room_rights` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `room_rights`
+-- Dumping data for table `room_rights`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `room_triggers`
+-- Table structure for table `room_triggers`
 --
 
 CREATE TABLE IF NOT EXISTS `room_triggers` (
@@ -8026,17 +8019,48 @@ CREATE TABLE IF NOT EXISTS `room_triggers` (
   `to_room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
   `to_room_dir` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
 
 --
--- Extraindo dados da tabela `room_triggers`
+-- Dumping data for table `room_triggers`
 --
 
+INSERT INTO `room_triggers` (`id`, `room_id`, `room_pos`, `action`, `to_room_id`, `to_room_pos`, `to_room_dir`) VALUES
+(1, 12, '18|7|0', 'roller', 0, '18|8|0', 0),
+(2, 12, '18|8|0', 'roller', 0, '18|9|0', 0),
+(3, 12, '18|9|0', 'roller', 0, '18|10|0', 0),
+(4, 12, '18|10|0', 'roller', 0, '19|10|0', 0),
+(5, 12, '19|10|0', 'roller', 0, '20|10|0', 0),
+(6, 12, '20|10|0', 'roller', 0, '20|9|0', 0),
+(7, 12, '20|9|0', 'roller', 0, '20|8|0', 0),
+(8, 12, '20|8|0', 'roller', 0, '20|7|0', 0),
+(9, 12, '20|7|0', 'roller', 0, '21|7|0', 0),
+(10, 12, '21|7|0', 'roller', 0, '22|7|0', 0),
+(11, 12, '22|7|0', 'roller', 0, '22|8|0', 0),
+(12, 12, '22|8|0', 'roller', 0, '22|9|0', 0),
+(13, 12, '22|9|0', 'roller', 0, '22|10|0', 0),
+(14, 12, '22|10|0', 'roller', 0, '23|10|0', 0),
+(15, 12, '23|10|0', 'roller', 0, '24|10|0', 0),
+(16, 12, '24|10|0', 'roller', 0, '24|9|0', 0),
+(17, 12, '24|9|0', 'roller', 0, '24|8|0', 0),
+(18, 12, '24|8|0', 'roller', 0, '24|7|0', 0),
+(19, 12, '24|7|0', 'roller', 0, '25|7|0', 0),
+(20, 12, '25|7|0', 'roller', 0, '26|7|0', 0),
+(21, 12, '26|7|0', 'roller', 0, '26|8|0', 0),
+(22, 12, '26|8|0', 'roller', 0, '26|9|0', 0),
+(23, 12, '26|9|0', 'roller', 0, '26|10|0', 0),
+(24, 12, '26|10|0', 'roller', 0, '27|10|0', 0),
+(25, 12, '27|10|0', 'roller', 0, '28|10|0', 0),
+(26, 12, '28|10|0', 'roller', 0, '28|9|0', 0),
+(27, 12, '28|9|0', 'roller', 0, '28|8|0', 0),
+(28, 12, '28|8|0', 'roller', 0, '28|7|0', 0),
+(29, 12, '28|7|0', 'roller', 0, '28|6|0', 0),
+(30, 12, '28|6|0', 'roller', 0, '28|5|0', 0);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `room_visits`
+-- Table structure for table `room_visits`
 --
 
 CREATE TABLE IF NOT EXISTS `room_visits` (
@@ -8049,14 +8073,13 @@ CREATE TABLE IF NOT EXISTS `room_visits` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `room_visits`
+-- Dumping data for table `room_visits`
 --
-
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `server_statistics`
+-- Table structure for table `server_statistics`
 --
 
 CREATE TABLE IF NOT EXISTS `server_statistics` (
@@ -8066,7 +8089,7 @@ CREATE TABLE IF NOT EXISTS `server_statistics` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Extraindo dados da tabela `server_statistics`
+-- Dumping data for table `server_statistics`
 --
 
 INSERT INTO `server_statistics` (`skey`, `sval`) VALUES
@@ -8075,7 +8098,7 @@ INSERT INTO `server_statistics` (`skey`, `sval`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `songs`
+-- Table structure for table `songs`
 --
 
 CREATE TABLE IF NOT EXISTS `songs` (
@@ -8088,7 +8111,7 @@ CREATE TABLE IF NOT EXISTS `songs` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- Extraindo dados da tabela `songs`
+-- Dumping data for table `songs`
 --
 
 INSERT INTO `songs` (`id`, `name`, `artist`, `song_data`, `length`) VALUES
@@ -8112,7 +8135,7 @@ INSERT INTO `songs` (`id`, `name`, `artist`, `song_data`, `length`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `static_objects`
+-- Table structure for table `static_objects`
 --
 
 CREATE TABLE IF NOT EXISTS `static_objects` (
@@ -8121,969 +8144,1019 @@ CREATE TABLE IF NOT EXISTS `static_objects` (
   `name` varchar(64) NOT NULL DEFAULT '',
   `position` varchar(16) NOT NULL DEFAULT '0|0|0',
   `rotation` int(11) DEFAULT '0',
+  `height` float NOT NULL DEFAULT '1',
+  `walkable` enum('0','1') DEFAULT '0',
   `is_seat` enum('0','1') DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=950 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=998 ;
 
 --
--- Extraindo dados da tabela `static_objects`
+-- Dumping data for table `static_objects`
 --
 
-INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `rotation`, `is_seat`) VALUES
-(1, 1, 'crl_lamp', '16|0|0', 0, '0'),
-(2, 1, 'crl_sofa2c', '17|0|0', 4, '1'),
-(3, 1, 'crl_sofa2b', '18|0|0', 4, '1'),
-(4, 1, 'crl_sofa2a', '19|0|0', 4, '1'),
-(5, 1, 'crl_lamp', '20|0|0', 0, '0'),
-(6, 1, 'crl_chair', '16|1|0', 2, '1'),
-(7, 1, 'crl_lamp', '7|2|0', 0, '0'),
-(8, 1, 'crl_lamp', '11|2|0', 0, '0'),
-(9, 1, 'crl_chair', '16|2|0', 2, '1'),
-(10, 1, 'crl_pillar', '5|3|0', 0, '0'),
-(11, 1, 'crl_chair', '7|3|0', 2, '1'),
-(12, 1, 'crl_table1b', '9|3|0', 0, '0'),
-(13, 1, 'crl_sofa1c', '11|3|0', 6, '1'),
-(14, 1, 'crl_chair', '16|3|0', 2, '1'),
-(15, 1, 'crl_table2b', '19|3|0', 0, '0'),
-(16, 1, 'crl_table2a', '20|3|0', 0, '0'),
-(17, 1, 'crl_lamp', '0|4|0', 0, '0'),
-(18, 1, 'crl_sofa2c', '1|4|0', 4, '1'),
-(19, 1, 'crl_sofa2b', '2|4|0', 4, '1'),
-(20, 1, 'crl_sofa2a', '3|4|0', 4, '1'),
-(21, 1, 'crl_lamp', '4|4|0', 0, '0'),
-(22, 1, 'crl_table1a', '9|4|0', 0, '0'),
-(23, 1, 'crl_sofa1b', '11|4|0', 6, '1'),
-(24, 1, 'crl_wall2a', '15|4|0', 0, '0'),
-(25, 1, 'crl_lamp', '16|4|0', 0, '0'),
-(26, 1, 'crl_chair', '0|5|0', 2, '1'),
-(27, 1, 'crl_chair', '7|5|0', 2, '1'),
-(28, 1, 'crl_sofa1a', '11|5|0', 6, '1'),
-(29, 1, 'crl_table2b', '2|6|0', 0, '0'),
-(30, 1, 'crl_table2a', '3|6|0', 0, '0'),
-(31, 1, 'crl_lamp', '11|6|0', 0, '0'),
-(32, 1, 'crl_chair', '0|7|0', 2, '1'),
-(33, 1, 'crl_lamp', '0|8|0', 0, '0'),
-(34, 1, 'crl_sofa3c', '1|8|0', 0, '1'),
-(35, 1, 'crl_sofa3b', '2|8|0', 0, '1'),
-(36, 1, 'crl_sofa3a', '3|8|0', 0, '1'),
-(37, 1, 'crl_lamp', '4|8|0', 0, '0'),
-(38, 1, 'crl_barchair2', '19|8|0', 0, '1'),
-(39, 1, 'crl_tablebar', '20|8|0', 0, '0'),
-(40, 1, 'crl_barchair2', '21|8|0', 0, '1'),
-(41, 1, 'crl_pillar2', '5|9|0', 0, '0'),
-(42, 1, 'crl_pillar', '9|9|0', 0, '0'),
-(43, 1, 'crl_desk1a', '8|15|0', 0, '0'),
-(44, 1, 'crl_deski', '9|15|0', 0, '0'),
-(45, 1, 'crl_deskh', '10|15|0', 0, '0'),
-(46, 1, 'crl_deskg', '10|16|0', 0, '0'),
-(47, 1, 'crl_deskf', '10|17|0', 0, '0'),
-(48, 1, 'crl_deske', '10|18|0', 0, '0'),
-(49, 1, 'crl_deske', '10|19|0', 0, '0'),
-(50, 1, 'crl_deske', '10|20|0', 0, '0'),
-(51, 1, 'crl_deske', '10|21|0', 0, '0'),
-(52, 1, 'crl_deske', '10|22|0', 0, '0'),
-(53, 1, 'crl_deske', '10|23|0', 0, '0'),
-(54, 1, 'crl_wallb', '7|24|0', 0, '0'),
-(55, 1, 'crl_deske', '10|24|0', 0, '0'),
-(56, 1, 'crl_walla', '7|25|0', 0, '0'),
-(57, 1, 'crl_desk1b', '8|25|0', 0, '0'),
-(58, 1, 'crl_desk1c', '9|25|0', 0, '0'),
-(59, 1, 'crl_desk1d', '10|25|0', 0, '0'),
-(60, 1, 'crl_lamp2', '12|27|0', 0, '0'),
-(61, 1, 'crl_cabinet2', '13|27|0', 0, '0'),
-(62, 1, 'crl_cabinet1', '14|27|0', 0, '0'),
-(63, 1, 'crl_lamp2', '15|27|0', 0, '0'),
-(64, 2, 'mic', '11|10|1', 0, '0'),
-(65, 2, 'thchair2', '2|11|4', 2, '1'),
-(66, 2, 'thchair2', '2|12|4', 2, '1'),
-(67, 2, 'thchair2', '2|15|4', 2, '1'),
-(68, 2, 'thchair1', '6|15|0', 0, '1'),
-(69, 2, 'thchair1', '7|15|0', 0, '1'),
-(70, 2, 'thchair1', '8|15|0', 0, '1'),
-(71, 2, 'thchair1', '9|15|0', 0, '1'),
-(72, 2, 'thchair1', '10|15|0', 0, '1'),
-(73, 2, 'thchair1', '12|15|0', 0, '1'),
-(74, 2, 'thchair1', '13|15|0', 0, '1'),
-(75, 2, 'thchair1', '14|15|0', 0, '1'),
-(76, 2, 'thchair1', '15|15|0', 0, '1'),
-(77, 2, 'thchair1', '16|15|0', 0, '1'),
-(78, 2, 'thchair2', '2|16|4', 2, '1'),
-(79, 2, 'thchair1', '6|20|1', 0, '1'),
-(80, 2, 'thchair1', '7|20|1', 0, '1'),
-(81, 2, 'thchair1', '8|20|1', 0, '1'),
-(82, 2, 'thchair1', '9|20|1', 0, '1'),
-(83, 2, 'thchair1', '10|20|1', 0, '1'),
-(84, 2, 'thchair1', '12|20|1', 0, '1'),
-(85, 2, 'thchair1', '13|20|1', 0, '1'),
-(86, 2, 'thchair1', '14|20|1', 0, '1'),
-(87, 2, 'thchair1', '15|20|1', 0, '1'),
-(88, 2, 'thchair1', '16|20|1', 0, '1'),
-(89, 2, 'thchair1', '6|23|1', 0, '1'),
-(90, 2, 'thchair1', '7|23|1', 0, '1'),
-(91, 2, 'thchair1', '8|23|1', 0, '1'),
-(92, 2, 'thchair1', '9|23|1', 0, '1'),
-(93, 2, 'thchair1', '10|23|1', 0, '1'),
-(94, 2, 'thchair1', '12|23|1', 0, '1'),
-(95, 2, 'thchair1', '13|23|1', 0, '1'),
-(96, 2, 'thchair1', '14|23|1', 0, '1'),
-(97, 2, 'thchair1', '15|23|1', 0, '1'),
-(98, 2, 'thchair1', '16|23|1', 0, '1'),
-(99, 2, 'thchair1', '6|26|1', 0, '1'),
-(100, 2, 'thchair1', '7|26|1', 0, '1'),
-(101, 2, 'thchair1', '8|26|1', 0, '1'),
-(102, 2, 'thchair1', '9|26|1', 0, '1'),
-(103, 2, 'thchair1', '10|26|1', 0, '1'),
-(104, 2, 'thchair1', '12|26|1', 0, '1'),
-(105, 2, 'thchair1', '13|26|1', 0, '1'),
-(106, 2, 'thchair1', '14|26|1', 0, '1'),
-(107, 2, 'thchair1', '15|26|1', 0, '1'),
-(108, 2, 'thchair1', '16|26|1', 0, '1'),
-(109, 3, 'shift1', '6|0|1', 4, '1'),
-(110, 3, 'shift2', '7|0|1', 4, '1'),
-(111, 3, 'kukat6', '5|3|1', 0, '0'),
-(112, 3, 'kukat5', '6|3|1', 0, '0'),
-(113, 3, 'kukat2', '12|3|1', 0, '0'),
-(114, 3, 'kukat1', '13|3|1', 0, '0'),
-(115, 3, 'kukat2', '19|3|1', 0, '0'),
-(116, 3, 'kukat1', '20|3|1', 0, '0'),
-(117, 3, 'shift1', '12|4|0', 4, '1'),
-(118, 3, 'shift2', '13|4|0', 4, '1'),
-(119, 3, 'shift1', '19|4|0', 4, '1'),
-(120, 3, 'shift2', '20|4|0', 4, '1'),
-(121, 3, 'shift1', '0|5|1', 4, '1'),
-(122, 3, 'shift2', '1|5|1', 4, '1'),
-(123, 3, 'shift1', '2|5|1', 4, '1'),
-(124, 3, 'shift2', '3|5|1', 4, '1'),
-(125, 3, 'table2', '16|7|0', 6, '0'),
-(126, 3, 'tablecorner', '17|7|0', 0, '0'),
-(127, 3, 'table2', '16|8|0', 4, '0'),
-(128, 3, 'table3', '10|9|0', 6, '0'),
-(129, 3, 'tablecorner', '11|9|0', 0, '0'),
-(130, 3, 'table2', '16|9|0', 2, '0'),
-(131, 3, 'table3', '10|10|0', 4, '0'),
-(132, 3, 'table2', '16|10|0', 0, '0'),
-(133, 3, 'table3', '10|11|0', 2, '0'),
-(134, 3, 'table3', '10|12|0', 0, '0'),
-(135, 3, 'kukat2', '5|16|1', 0, '0'),
-(136, 3, 'kukat1', '6|16|1', 0, '0'),
-(137, 3, 'kukat2', '7|16|1', 0, '0'),
-(138, 3, 'kukat1', '8|16|1', 0, '0'),
-(139, 3, 'kukat3', '9|16|1', 0, '0'),
-(140, 3, 'kukka2', '15|16|1', 0, '0'),
-(141, 3, 'kukat4', '9|17|1', 0, '0'),
-(142, 3, 'kukat3', '9|18|1', 0, '0'),
-(143, 3, 'sofabig3', '20|18|1', 6, '1'),
-(144, 3, 'kukat4', '9|19|1', 0, '0'),
-(145, 3, 'table1', '17|19|1', 4, '0'),
-(146, 3, 'tablecorner', '18|19|1', 0, '0'),
-(147, 3, 'sofabig2', '20|19|1', 6, '1'),
-(148, 3, 'table1', '17|20|1', 2, '0'),
-(149, 3, 'sofabig2', '20|20|1', 6, '1'),
-(150, 3, 'table1', '17|21|1', 0, '0'),
-(151, 3, 'sofabig1', '20|21|1', 6, '1'),
-(152, 3, 'sofalittle3', '16|23|1', 0, '1'),
-(153, 3, 'sofalittle2', '17|23|1', 0, '1'),
-(154, 3, 'sofalittle1', '18|23|1', 0, '1'),
-(155, 3, 'kukka', '20|23|1', 0, '0'),
-(156, 3, 'l', '13|1|1', 0, '1'),
-(157, 3, 'k', '16|1|1', 0, '1'),
-(158, 3, 'k', '19|1|1', 0, '1'),
-(159, 3, 'k', '15|7|0', 2, '1'),
-(160, 3, 'l', '15|8|0', 2, '1'),
-(161, 3, 'l', '18|8|0', 6, '1'),
-(162, 3, 'k', '9|9|0', 2, '1'),
-(163, 3, 'k', '15|9|0', 2, '1'),
-(164, 3, 'k', '18|9|0', 6, '1'),
-(165, 3, 'k', '4|10|1', 6, '1'),
-(166, 3, 'k', '18|10|0', 6, '1'),
-(167, 3, 'l', '4|11|1', 6, '1'),
-(168, 3, 'l', '9|11|0', 2, '1'),
-(169, 3, 'l', '12|11|0', 6, '1'),
-(170, 3, 'k', '4|12|1', 6, '1'),
-(171, 3, 'l', '9|12|0', 2, '1'),
-(172, 3, 'k', '12|12|0', 6, '1'),
-(173, 3, 'k', '6|18|1', 6, '1'),
-(174, 3, 'm', '10|1|1', 0, '1'),
-(175, 3, 'm', '18|7|0', 6, '1'),
-(176, 3, 'm', '4|9|1', 6, '1'),
-(177, 3, 'm', '12|9|0', 6, '1'),
-(178, 3, 'm', '9|10|0', 2, '1'),
-(179, 3, 'm', '12|10|0', 6, '1'),
-(180, 3, 'm', '15|10|0', 2, '1'),
-(181, 3, 'm', '4|13|1', 6, '1'),
-(182, 3, 'm', '6|21|1', 6, '1'),
-(183, 4, 'star_table', '21|15|2', 0, '0'),
-(184, 4, 'star_sofa', '22|15|2', 4, '1'),
-(185, 4, 'star_sofa2', '23|15|2', 4, '1'),
-(186, 4, 'star_sofa2', '21|16|2', 2, '1'),
-(187, 4, 'star_sofa', '21|17|2', 2, '1'),
-(188, 4, 'star_microphone', '28|17|4', 0, '0'),
-(189, 4, 'star_sofa2', '21|18|2', 2, '1'),
-(190, 4, 'star_sofa', '35|18|2', 6, '1'),
-(191, 4, 'star_sofa', '21|19|2', 2, '1'),
-(192, 4, 'star_sofa2', '35|19|2', 6, '1'),
-(193, 4, 'star_sofa2', '21|20|2', 2, '1'),
-(194, 4, 'star_sofa2', '24|20|2', 2, '1'),
-(195, 4, 'star_sofa', '32|20|2', 6, '1'),
-(196, 4, 'star_sofa', '35|20|2', 6, '1'),
-(197, 4, 'star_sofa', '21|21|2', 2, '1'),
-(198, 4, 'star_sofa', '24|21|2', 2, '1'),
-(199, 4, 'star_sofa2', '32|21|2', 6, '1'),
-(200, 4, 'star_sofa2', '35|21|2', 6, '1'),
-(201, 4, 'star_sofachair', '21|22|2', 2, '1'),
-(202, 4, 'star_table', '24|22|2', 0, '0'),
-(203, 4, 'star_sofa2', '25|22|2', 0, '1'),
-(204, 4, 'star_sofa', '26|22|2', 0, '1'),
-(205, 4, 'star_sofa2', '30|22|2', 0, '1'),
-(206, 4, 'star_sofa', '31|22|2', 0, '1'),
-(207, 4, 'star_table', '32|22|2', 0, '0'),
-(208, 4, 'star_table', '35|22|2', 0, '0'),
-(209, 4, 'star_sofa', '35|23|2', 6, '1'),
-(210, 4, 'bar10', '22|24|2', 0, '0'),
-(211, 4, 'star_sofa2', '35|24|2', 6, '1'),
-(212, 4, 'star_sofa', '37|24|1', 4, '1'),
-(213, 4, 'star_sofa2', '38|24|1', 4, '1'),
-(214, 4, 'star_sofa', '39|24|1', 4, '1'),
-(215, 4, 'star_sofa2', '40|24|1', 4, '1'),
-(216, 4, 'bar9', '22|25|2', 0, '0'),
-(217, 4, 'star_sofa2', '25|25|2', 0, '1'),
-(218, 4, 'star_sofa', '26|25|2', 0, '1'),
-(219, 4, 'star_sofa2', '30|25|2', 0, '1'),
-(220, 4, 'star_sofa', '31|25|2', 0, '1'),
-(221, 4, 'star_sofa', '35|25|2', 6, '1'),
-(222, 4, 'star_sofa2', '36|25|1', 2, '1'),
-(223, 4, 'bar8', '22|26|2', 0, '0'),
-(224, 4, 'star_sofa2', '35|26|2', 6, '1'),
-(225, 4, 'star_sofa', '36|26|1', 2, '1'),
-(226, 4, 'star_table', '39|26|1', 0, '0'),
-(227, 4, 'star_table', '40|26|1', 0, '0'),
-(228, 4, 'bar7', '22|27|2', 0, '0'),
-(229, 4, 'star_sofa', '25|27|2', 4, '1'),
-(230, 4, 'star_sofa2', '26|27|2', 4, '1'),
-(231, 4, 'star_sofa', '30|27|2', 4, '1'),
-(232, 4, 'star_sofa2', '31|27|2', 4, '1'),
-(233, 4, 'star_table', '35|27|2', 0, '0'),
-(234, 4, 'star_table', '37|27|1', 0, '0'),
-(235, 4, 'bar6', '22|28|2', 0, '0'),
-(236, 4, 'bar5', '22|29|2', 0, '0'),
-(237, 4, 'star_table', '25|29|2', 0, '0'),
-(238, 4, 'star_table', '26|29|2', 0, '0'),
-(239, 4, 'star_table', '16|30|3', 0, '0'),
-(240, 4, 'bar4', '22|30|2', 0, '0'),
-(241, 4, 'star_sofa2', '16|31|3', 2, '1'),
-(242, 4, 'bar3', '22|31|2', 0, '0'),
-(243, 4, 'star_sofa2', '25|31|2', 0, '1'),
-(244, 4, 'star_sofa', '26|31|2', 0, '1'),
-(245, 4, 'star_sofa', '30|31|2', 6, '1'),
-(246, 4, 'star_sofa', '16|32|3', 2, '1'),
-(247, 4, 'bar2', '22|32|2', 0, '0'),
-(248, 4, 'star_sofa2', '30|32|2', 6, '1'),
-(249, 4, 'star_sofa2', '16|33|3', 2, '1'),
-(250, 4, 'bar1', '22|33|2', 0, '0'),
-(251, 4, 'star_sofa', '25|33|2', 4, '1'),
-(252, 4, 'star_sofa2', '26|33|2', 4, '1'),
-(253, 4, 'star_sofa', '30|33|2', 6, '1'),
-(254, 4, 'star_sofa', '16|34|3', 2, '1'),
-(255, 4, 'star_sofa2', '30|34|2', 6, '1'),
-(256, 4, 'star_table', '16|35|3', 0, '0'),
-(257, 4, 'star_sofa', '30|35|2', 6, '1'),
-(258, 4, 'star_sofa2', '30|36|2', 6, '1'),
-(259, 4, 'star_sofachair', '25|37|2', 0, '1'),
-(260, 4, 'star_sofa2', '26|37|2', 0, '1'),
-(261, 4, 'star_sofa', '27|37|2', 0, '1'),
-(262, 4, 'star_sofa2', '28|37|2', 0, '1'),
-(263, 4, 'star_sofa', '29|37|2', 0, '1'),
-(264, 4, 'star_table', '30|37|2', 0, '0'),
-(265, 4, 'palm', '24|15|2', 0, '0'),
-(266, 4, 'palm', '21|23|2', 0, '0'),
-(267, 4, 'palm1', '25|26|2', 0, '0'),
-(268, 4, 'palm3', '26|26|2', 0, '0'),
-(269, 4, 'palm2', '30|26|2', 0, '0'),
-(270, 4, 'palm4', '31|26|2', 0, '0'),
-(271, 4, 'palm', '36|27|1', 0, '0'),
-(272, 4, 'palm4', '25|32|2', 0, '0'),
-(273, 4, 'palm1', '26|32|2', 0, '0'),
-(274, 4, 'palm3', '35|34|0', 0, '0'),
-(275, 4, 'palm2', '36|34|0', 0, '0'),
-(276, 5, 'pub_sofa2', '19|1|1', 4, '1'),
-(277, 5, 'pub_sofa', '20|1|1', 4, '1'),
-(278, 5, 'pub_sofa', '21|1|1', 4, '1'),
-(279, 5, 'bardesk1', '11|2|2', 0, '0'),
-(280, 5, 'pub_chair', '12|2|2', 6, '1'),
-(281, 5, 'bardesk2', '11|3|2', 0, '0'),
-(282, 5, 'bardesk1', '11|4|2', 0, '0'),
-(283, 5, 'pub_chair', '12|4|2', 6, '1'),
-(284, 5, 'bardesk2', '11|5|2', 0, '0'),
-(285, 5, 'pub_fence', '18|5|2', 1, '0'),
-(286, 5, 'bardesk1', '11|6|2', 0, '0'),
-(287, 5, 'pub_chair', '12|6|2', 6, '1'),
-(288, 5, 'pub_fence', '18|6|2', 0, '0'),
-(289, 5, 'bardesk2', '11|7|2', 0, '0'),
-(290, 5, 'pub_fence', '18|7|2', 0, '0'),
-(291, 5, 'bardesk1', '11|8|2', 0, '0'),
-(292, 5, 'pub_chair', '12|8|2', 6, '1'),
-(293, 5, 'pub_fence', '18|8|2', 0, '0'),
-(294, 5, 'bardesk4', '10|9|2', 0, '0'),
-(295, 5, 'bardesk3', '11|9|2', 0, '0'),
-(296, 5, 'pub_fence', '18|9|2', 0, '0'),
-(297, 5, 'pub_fence', '18|10|2', 0, '0'),
-(298, 5, 'pub_chair2', '2|11|3', 4, '1'),
-(299, 5, 'pub_chair2', '3|11|3', 4, '1'),
-(300, 5, 'pub_chair2', '5|11|3', 4, '1'),
-(301, 5, 'pub_chair2', '6|11|3', 4, '1'),
-(302, 5, 'pub_fence', '8|11|3', 1, '0'),
-(303, 5, 'pub_fence', '18|11|2', 0, '0'),
-(304, 5, 'pub_fence', '8|12|3', 0, '0'),
-(305, 5, 'pub_fence', '18|12|2', 0, '0'),
-(306, 5, 'pub_fence', '8|13|3', 0, '0'),
-(307, 5, 'pub_chair2', '9|13|2', 2, '1'),
-(308, 5, 'pub_chair3', '14|13|2', 2, '1'),
-(309, 5, 'pub_table2', '15|13|2', 1, '0'),
-(310, 5, 'pub_chair3', '16|13|2', 6, '1'),
-(311, 5, 'pub_fence', '18|13|2', 0, '0'),
-(312, 5, 'pub_fence', '8|14|3', 2, '0'),
-(313, 5, 'pub_chair2', '9|14|2', 2, '1'),
-(314, 5, 'pub_chair3', '14|14|2', 2, '1'),
-(315, 5, 'pub_table2', '15|14|2', 2, '0'),
-(316, 5, 'pub_chair3', '16|14|2', 6, '1'),
-(317, 5, 'pub_fence', '18|14|2', 0, '0'),
-(318, 5, 'pub_table', '1|15|3', 0, '0'),
-(319, 5, 'pub_fence', '5|15|3', 1, '0'),
-(320, 5, 'pub_fence', '18|15|2', 0, '0'),
-(321, 5, 'pub_sofa2', '1|16|3', 2, '1'),
-(322, 5, 'pub_fence', '5|16|3', 0, '0'),
-(323, 5, 'pub_fence', '18|16|2', 0, '0'),
-(324, 5, 'pub_sofa', '1|17|3', 2, '1'),
-(325, 5, 'pub_fence', '5|17|3', 0, '0'),
-(326, 5, 'pub_chair3', '13|17|2', 4, '1'),
-(327, 5, 'pub_chair3', '14|17|2', 4, '1'),
-(328, 5, 'pub_chair3', '15|17|2', 4, '1'),
-(329, 5, 'pub_chair3', '16|17|2', 4, '1'),
-(330, 5, 'pub_fence', '18|17|2', 0, '0'),
-(331, 5, 'pub_sofa', '1|18|3', 2, '1'),
-(332, 5, 'pub_fence', '5|18|3', 0, '0'),
-(333, 5, 'pub_table2', '13|18|2', 5, '0'),
-(334, 5, 'pub_table2', '14|18|2', 6, '0'),
-(335, 5, 'pub_table2', '15|18|2', 6, '0'),
-(336, 5, 'pub_table2', '16|18|2', 4, '0'),
-(337, 5, 'pub_fence', '18|18|2', 0, '0'),
-(338, 5, 'pub_sofa', '2|19|3', 0, '1'),
-(339, 5, 'pub_sofa2', '3|19|3', 0, '1'),
-(340, 5, 'pub_fence', '5|19|3', 0, '0'),
-(341, 5, 'pub_chair3', '13|19|2', 0, '1'),
-(342, 5, 'pub_chair3', '14|19|2', 0, '1'),
-(343, 5, 'pub_chair3', '15|19|2', 0, '1'),
-(344, 5, 'pub_chair3', '16|19|2', 0, '1'),
-(345, 5, 'pub_fence', '18|19|2', 0, '0'),
-(346, 5, 'pub_fence', '1|20|3', 5, '0'),
-(347, 5, 'pub_fence', '2|20|3', 6, '0'),
-(348, 5, 'pub_fence', '3|20|3', 6, '0'),
-(349, 5, 'pub_fence', '4|20|3', 6, '0'),
-(350, 5, 'pub_fence', '5|20|3', 3, '0'),
-(351, 5, 'pub_fence', '18|20|2', 0, '0'),
-(352, 5, 'pub_sofa2', '7|21|1', 4, '1'),
-(353, 5, 'pub_sofa', '8|21|1', 4, '1'),
-(354, 5, 'pub_fence', '12|21|2', 5, '0'),
-(355, 5, 'pub_fence', '13|21|2', 6, '0'),
-(356, 5, 'pub_fence', '14|21|2', 6, '0'),
-(357, 5, 'pub_fence', '15|21|2', 6, '0'),
-(358, 5, 'pub_fence', '16|21|2', 6, '0'),
-(359, 5, 'pub_fence', '17|21|2', 6, '0'),
-(360, 5, 'pub_fence', '18|21|2', 3, '0'),
-(361, 5, 'pub_sofa2', '6|22|1', 2, '1'),
-(362, 5, 'pub_table', '15|22|0', 0, '0'),
-(363, 5, 'pub_chair2', '16|22|0', 4, '1'),
-(364, 5, 'pub_chair2', '17|22|0', 4, '1'),
-(365, 5, 'pub_sofa', '6|23|1', 2, '1'),
-(366, 5, 'pub_table2', '8|23|1', 1, '0'),
-(367, 5, 'pub_sofa', '6|24|1', 2, '1'),
-(368, 5, 'pub_table2', '8|24|1', 0, '0'),
-(369, 5, 'pub_sofa', '6|25|1', 2, '1'),
-(370, 5, 'pub_table2', '8|25|1', 2, '0'),
-(371, 6, 'orange', '2|4|3', 0, '0'),
-(372, 6, 'loungey_chair', '7|4|3', 2, '1'),
-(373, 6, 'loungey_tablebigb', '8|4|3', 0, '0'),
-(374, 6, 'loungey_chair', '9|4|3', 6, '1'),
-(375, 6, 'loungey_chair', '2|5|3', 4, '1'),
-(376, 6, 'loungey_chair', '7|5|3', 2, '1'),
-(377, 6, 'loungey_tablebiga', '8|5|3', 0, '0'),
-(378, 6, 'loungey_chair', '9|5|3', 6, '1'),
-(379, 6, 'loungey_table', '2|6|3', 0, '0'),
-(380, 6, 'loungey_chair', '2|7|3', 0, '1'),
-(381, 6, 'theater_chair', '13|7|1', 0, '1'),
-(382, 6, 'theater_chair', '14|7|1', 0, '1'),
-(383, 6, 'theater_chair', '15|7|1', 0, '1'),
-(384, 6, 'theater_chair', '16|7|1', 0, '1'),
-(385, 6, 'theater_chair', '17|7|1', 0, '1'),
-(386, 6, 'theater_chair', '18|7|1', 0, '1'),
-(387, 6, 'stair', '21|7|1', 0, '0'),
-(388, 6, 'lightpole', '9|8|3', 0, '0'),
-(389, 6, 'pomomaski', '13|8|2', 2, '0'),
-(390, 6, 'pomomaski', '14|8|2', 0, '0'),
-(391, 6, 'pomomaski', '15|8|2', 0, '0'),
-(392, 6, 'pomomaski', '16|8|2', 0, '0'),
-(393, 6, 'pomomaski', '17|8|2', 0, '0'),
-(394, 6, 'pomomaski', '18|8|2', 0, '0'),
-(395, 6, 'pomomaski', '19|8|2', 1, '0'),
-(396, 6, 'stair', '21|8|1', 0, '0'),
-(397, 6, 'orange', '2|9|3', 0, '0'),
-(398, 6, 'theater_chair', '13|9|2', 0, '1'),
-(399, 6, 'theater_chair', '14|9|2', 0, '1'),
-(400, 6, 'theater_chair', '15|9|2', 0, '1'),
-(401, 6, 'theater_chair', '16|9|2', 0, '1'),
-(402, 6, 'theater_chair', '17|9|2', 0, '1'),
-(403, 6, 'theater_chair', '18|9|2', 0, '1'),
-(404, 6, 'theater_chair', '19|9|2', 0, '1'),
-(405, 6, 'theater_chair', '20|9|2', 0, '1'),
-(406, 6, 'stair', '21|9|1', 0, '0'),
-(407, 6, 'loungey_chair', '2|10|3', 4, '1'),
-(408, 6, 'loungey_chair', '9|10|3', 4, '1'),
-(409, 6, 'loungey_table', '2|11|3', 0, '0'),
-(410, 6, 'loungey_table', '9|11|3', 0, '0'),
-(411, 6, 'loungey_chair', '2|12|3', 0, '1'),
-(412, 6, 'loungey_chair', '9|12|3', 0, '1'),
-(413, 6, 'cubicb_chair', '17|12|1', 6, '1'),
-(414, 6, 'cubico_chair', '19|12|1', 2, '1'),
-(415, 6, 'cubicb_chair', '15|13|1', 2, '1'),
-(416, 6, 'lightpole', '19|13|1', 0, '0'),
-(417, 6, 'cubicb_chair', '20|13|1', 6, '1'),
-(418, 6, 'lightpole', '9|14|3', 0, '0'),
-(419, 6, 'loungey_chair', '2|15|3', 4, '1'),
-(420, 6, 'cubicb_chair', '14|15|1', 4, '1'),
-(421, 6, 'cubico_chair', '19|15|1', 4, '1'),
-(422, 6, 'loungey_table', '2|16|3', 0, '0'),
-(423, 6, 'loungey_chair', '7|16|3', 2, '1'),
-(424, 6, 'loungey_table', '8|16|3', 2, '0'),
-(425, 6, 'loungey_chair', '9|16|3', 6, '1'),
-(426, 6, 'cubicb_chair', '13|16|1', 2, '1'),
-(427, 6, 'cubicb_chair', '14|16|1', 6, '1'),
-(428, 6, 'orange', '19|16|1', 0, '0'),
-(429, 6, 'loungey_chair', '2|17|3', 0, '1'),
-(430, 6, 'loungey_chair', '7|17|3', 2, '1'),
-(431, 6, 'loungey_table', '8|17|3', 2, '0'),
-(432, 6, 'loungey_chair', '9|17|3', 6, '1'),
-(433, 6, 'cubicb_chair', '19|17|1', 2, '1'),
-(434, 6, 'orange', '2|18|3', 0, '0'),
-(435, 6, 'cubicb_chair', '14|18|1', 4, '1'),
-(436, 6, 'bardesque', '2|19|3', 0, '0'),
-(437, 6, 'bardesque', '2|20|3', 1, '0'),
-(438, 6, 'bar_chair', '3|20|3', 6, '1'),
-(439, 6, 'lightpole', '9|20|3', 0, '0'),
-(440, 6, 'cubicb_chair', '14|20|1', 0, '1'),
-(441, 6, 'cubicb_chair', '19|20|1', 2, '1'),
-(442, 6, 'cubico_chair', '20|20|1', 6, '1'),
-(443, 6, 'bardesque', '2|21|3', 1, '0'),
-(444, 6, 'bar_chair', '3|21|3', 6, '1'),
-(445, 6, 'cubicb_chair', '19|21|1', 0, '1'),
-(446, 6, 'bardesque', '2|22|3', 1, '0'),
-(447, 6, 'bar_chair', '3|22|3', 6, '1'),
-(448, 6, 'lightpole', '16|22|1', 0, '0'),
-(449, 6, 'cubico_chair', '18|22|1', 0, '1'),
-(450, 6, 'bardesque', '2|23|3', 1, '0'),
-(451, 6, 'bar_chair', '3|23|3', 6, '1'),
-(452, 6, 'bardesque', '2|24|3', 1, '0'),
-(453, 6, 'bar_chair', '3|24|3', 6, '1'),
-(454, 6, 'bardesque', '2|25|3', 2, '0'),
-(455, 7, 'hardwoodsofa1', '13|1|3', 4, '1'),
-(456, 7, 'hardwoodsofa2', '14|1|3', 4, '1'),
-(457, 7, 'hardwoodsofa3', '15|1|3', 4, '1'),
-(458, 7, 'teabamboo', '16|1|3', 0, '0'),
-(459, 7, 'hardwoodsofa1', '18|1|3', 4, '1'),
-(460, 7, 'hardwoodsofa2', '19|1|3', 4, '1'),
-(461, 7, 'hardwoodsofa3', '20|1|3', 4, '1'),
-(462, 7, 'teasmalltable1', '13|3|3', 0, '0'),
-(463, 7, 'teasmalltable2', '15|3|3', 0, '0'),
-(464, 7, 'teasmalltable1', '18|3|3', 0, '0'),
-(465, 7, 'teasmalltable2', '20|3|3', 0, '0'),
-(466, 7, 'teastool', '2|6|3', 4, '1'),
-(467, 7, 'teastool', '3|6|3', 4, '1'),
-(468, 7, 'chinastoolred', '8|6|3', 0, '1'),
-(469, 7, 'chinastoolred', '9|6|3', 0, '1'),
-(470, 7, 'chinastoolred', '10|6|3', 0, '1'),
-(471, 7, 'chinastoolred', '11|6|3', 0, '1'),
-(472, 7, 'teatable1', '2|8|3', 0, '0'),
-(473, 7, 'teatable2', '3|8|3', 0, '0'),
-(474, 7, 'teastool2', '2|9|3', 0, '1'),
-(475, 7, 'teastool2', '3|9|3', 0, '1'),
-(476, 7, 'teastool', '16|9|3', 4, '1'),
-(477, 7, 'teastool', '17|9|3', 4, '1'),
-(478, 7, 'teatable1', '16|11|3', 0, '0'),
-(479, 7, 'teatable2', '17|11|3', 0, '0'),
-(480, 7, 'teastool', '2|12|3', 4, '1'),
-(481, 7, 'teastool', '3|12|3', 4, '1'),
-(482, 7, 'teastool2', '16|12|3', 0, '1'),
-(483, 7, 'teastool2', '17|12|3', 0, '1'),
-(484, 7, 'teatable1', '2|14|3', 0, '0'),
-(485, 7, 'teatable2', '3|14|3', 0, '0'),
-(486, 7, 'teastool2', '2|15|3', 0, '1'),
-(487, 7, 'teastool2', '3|15|3', 0, '1'),
-(488, 7, 'teavase', '0|18|1', 0, '0'),
-(489, 7, 'chinastoolgreen', '0|19|1', 2, '1'),
-(490, 7, 'chinastoolgreen', '0|20|1', 2, '1'),
-(491, 7, 'teavase', '0|21|1', 0, '0'),
-(492, 8, 'hedge7', '10|7|2', 4, '0'),
-(493, 8, 'hedge7', '11|7|2', 4, '0'),
-(494, 8, 'hedge7', '12|7|2', 4, '0'),
-(495, 8, 'hedge7', '13|7|2', 4, '0'),
-(496, 8, 'hedge8', '14|7|2', 4, '0'),
-(497, 8, 'hedge2', '18|7|2', 4, '0'),
-(498, 8, 'hedge7', '19|7|2', 4, '0'),
-(499, 8, 'hedge7', '20|7|2', 4, '0'),
-(500, 8, 'hedge7', '21|7|2', 4, '0'),
-(501, 8, 'hedge9', '14|8|2', 4, '0'),
-(502, 8, 'hedge9', '18|8|2', 4, '0'),
-(503, 8, 'hedge5', '3|9|2', 4, '0'),
-(504, 8, 'hedge9', '3|10|2', 4, '0'),
-(505, 8, 'picnic_dummychair1', '12|11|3', 4, '1'),
-(506, 8, 'picnic_dummychair1', '13|11|3', 4, '1'),
-(507, 8, 'picnic_dummychair1', '14|11|100000', 4, '1'),
-(508, 8, 'picnic_dummychair1', '10|13|3', 2, '1'),
-(509, 8, 'picnic_dummychair1', '15|13|3', 6, '1'),
-(510, 8, 'picnic_ground', '21|13|2', 4, '1'),
-(511, 8, 'picnic_ground', '7|14|2', 4, '1'),
-(512, 8, 'picnic_dummychair1', '10|14|3', 2, '1'),
-(513, 8, 'picnic_dummychair1', '15|14|3', 6, '1'),
-(514, 8, 'picnic_ground', '19|15|2', 2, '1'),
-(515, 8, 'picnic_ground', '23|15|2', 6, '1'),
-(516, 8, 'picnic_ground', '5|16|2', 2, '1'),
-(517, 8, 'picnic_ground', '9|16|2', 6, '1'),
-(518, 8, 'picnic_cloth1', '20|16|2', 2, '0'),
-(519, 8, 'picnic_cloth1', '6|17|2', 2, '0'),
-(520, 8, 'picnic_ground', '21|17|2', 0, '1'),
-(521, 8, 'picnic_ground', '7|18|2', 0, '1'),
-(522, 8, 'picnic_redbench2', '0|19|2', 2, '1'),
-(523, 8, 'picnic_redbench1', '0|20|2', 2, '1'),
-(524, 8, 'hedge6', '11|20|2', 4, '0'),
-(525, 8, 'hedge7', '12|20|2', 4, '0'),
-(526, 8, 'hedge7', '13|20|2', 4, '0'),
-(527, 8, 'hedge3', '14|20|2', 4, '0'),
-(528, 8, 'hedge4', '17|20|2', 4, '0'),
-(529, 8, 'hedge7', '18|20|2', 4, '0'),
-(530, 8, 'hedge7', '19|20|2', 4, '0'),
-(531, 8, 'hedge8', '20|20|2', 4, '0'),
-(532, 8, 'hedge5', '11|21|2', 4, '0'),
-(533, 8, 'picnic_bench1', '12|21|2', 4, '1'),
-(534, 8, 'picnic_bench2', '13|21|2', 4, '1'),
-(535, 8, 'picnic_bench3', '14|21|2', 4, '1'),
-(536, 8, 'picnic_bench1', '17|21|2', 4, '1'),
-(537, 8, 'picnic_bench2', '18|21|2', 4, '1'),
-(538, 8, 'picnic_bench3', '19|21|2', 4, '1'),
-(539, 8, 'hedge5', '20|21|2', 4, '0'),
-(540, 8, 'picnic_redbench2', '0|22|2', 2, '1'),
-(541, 8, 'hedge5', '11|22|2', 4, '0'),
-(542, 8, 'hedge5', '20|22|2', 4, '0'),
-(543, 8, 'picnic_ground', '25|22|2', 4, '1'),
-(544, 8, 'picnic_redbench1', '0|23|2', 2, '1'),
-(545, 8, 'hedge5', '11|23|2', 4, '0'),
-(546, 8, 'picnic_bench1', '12|23|2', 2, '1'),
-(547, 8, 'picnic_bench1', '19|23|2', 6, '1'),
-(548, 8, 'hedge5', '20|23|2', 4, '0'),
-(549, 8, 'picnic_dummychair1', '6|24|2', 4, '1'),
-(550, 8, 'picnic_dummychair4', '7|24|2', 4, '1'),
-(551, 8, 'picnic_dummychair6', '8|24|2', 4, '1'),
-(552, 8, 'hedge5', '11|24|2', 4, '0'),
-(553, 8, 'picnic_bench2', '12|24|2', 2, '1'),
-(554, 8, 'picnic_bench2', '19|24|2', 6, '1'),
-(555, 8, 'hedge5', '20|24|2', 4, '0'),
-(556, 8, 'picnic_ground', '23|24|2', 2, '1'),
-(557, 8, 'picnic_ground', '27|24|2', 6, '1'),
-(558, 8, 'picnic_stump', '5|25|2', 2, '1'),
-(559, 8, 'hedge5', '11|25|2', 4, '0'),
-(560, 8, 'picnic_bench2', '12|25|2', 2, '1'),
-(561, 8, 'picnic_bench2', '19|25|2', 6, '1'),
-(562, 8, 'hedge5', '20|25|2', 4, '0'),
-(563, 8, 'picnic_cloth2', '24|25|2', 2, '0'),
-(564, 8, 'picnic_stump', '7|26|2', 0, '1'),
-(565, 8, 'hedge5', '11|26|2', 4, '0'),
-(566, 8, 'picnic_bench3', '12|26|2', 2, '1'),
-(567, 8, 'picnic_fireplace1', '14|26|2', 0, '0'),
-(568, 8, 'picnic_fireplace2', '16|26|2', 2, '0'),
-(569, 8, 'picnic_bench3', '19|26|2', 6, '1'),
-(570, 8, 'hedge5', '20|26|2', 4, '0'),
-(571, 8, 'picnic_ground', '25|26|2', 0, '1'),
-(572, 8, 'hedge9', '11|27|2', 4, '0'),
-(573, 8, 'picnic_lemonade', '12|27|2', 4, '0'),
-(574, 8, 'hedge9', '20|27|2', 4, '0'),
-(575, 8, 'picnic_firewood2', '8|29|2', 0, '0'),
-(576, 8, 'picnic_redbench2', '0|30|2', 2, '1'),
-(577, 8, 'picnic_firewood1', '8|30|2', 0, '0'),
-(578, 8, 'picnic_redbench1', '0|31|2', 2, '1'),
-(579, 8, 'picnic_firewood1', '8|31|2', 0, '0'),
-(580, 8, 'picnic_bench1', '12|31|2', 4, '1'),
-(581, 8, 'picnic_bench2', '13|31|2', 4, '1'),
-(582, 8, 'picnic_bench3', '14|31|2', 4, '1'),
-(583, 8, 'picnic_bench1', '18|31|2', 4, '1'),
-(584, 8, 'picnic_bench2', '19|31|2', 4, '1'),
-(585, 8, 'picnic_bench3', '20|31|2', 4, '1'),
-(586, 8, 'picnic_carrot', '27|31|2', 0, '0'),
-(587, 8, 'picnic_carrot', '28|31|2', 0, '0'),
-(588, 8, 'picnic_carrot', '29|31|2', 0, '0'),
-(589, 8, 'picnic_carrot', '30|31|2', 0, '0'),
-(590, 8, 'picnic_carrot', '31|31|2', 0, '0'),
-(591, 8, 'picnic_firewood1', '8|32|2', 0, '0'),
-(592, 8, 'picnic_table2', '12|32|2', 2, '0'),
-(593, 8, 'picnic_table', '14|32|2', 2, '0'),
-(594, 8, 'picnic_table2', '18|32|2', 2, '0'),
-(595, 8, 'picnic_table', '20|32|2', 2, '0'),
-(596, 8, 'hedge1', '3|33|2', 4, '0'),
-(597, 8, 'picnic_firewood1', '8|33|2', 0, '0'),
-(598, 8, 'picnic_bench1', '12|33|2', 0, '1'),
-(599, 8, 'picnic_bench2', '13|33|2', 0, '1'),
-(600, 8, 'picnic_bench3', '14|33|2', 0, '1'),
-(601, 8, 'picnic_bench1', '18|33|2', 0, '1'),
-(602, 8, 'picnic_bench2', '19|33|2', 0, '1'),
-(603, 8, 'picnic_bench3', '20|33|2', 0, '1'),
-(604, 8, 'picnic_cabbage', '27|33|2', 0, '0'),
-(605, 8, 'picnic_cabbage', '28|33|2', 0, '0'),
-(606, 8, 'picnic_cabbage', '29|33|2', 0, '0'),
-(607, 8, 'hedge5', '3|34|2', 4, '0'),
-(608, 8, 'picnic_firewood1', '8|34|2', 0, '0'),
-(609, 8, 'hedge5', '3|35|2', 4, '0'),
-(610, 8, 'picnic_firewood1', '8|35|2', 0, '0'),
-(611, 8, 'hedge5', '3|36|2', 4, '0'),
-(612, 8, 'picnic_firewood1', '8|36|2', 0, '0'),
-(613, 8, 'picnic_firewood1', '8|37|2', 0, '0'),
-(614, 8, 'picnic_bench1', '12|37|2', 4, '1'),
-(615, 8, 'picnic_bench2', '13|37|2', 4, '1'),
-(616, 8, 'picnic_bench3', '14|37|2', 4, '1'),
-(617, 8, 'picnic_bench1', '18|37|2', 4, '1'),
-(618, 8, 'picnic_bench2', '19|37|2', 4, '1'),
-(619, 8, 'picnic_bench3', '20|37|2', 4, '1'),
-(620, 8, 'picnic_firewood1', '8|38|2', 0, '0'),
-(621, 8, 'picnic_table2', '12|38|2', 2, '0'),
-(622, 8, 'picnic_table', '14|38|2', 2, '0'),
-(623, 8, 'picnic_table2', '18|38|2', 2, '0'),
-(624, 8, 'picnic_table', '20|38|2', 2, '0'),
-(625, 8, 'picnic_firewood3', '8|39|2', 0, '0'),
-(626, 8, 'picnic_bench1', '12|39|2', 0, '1'),
-(627, 8, 'picnic_bench2', '13|39|2', 0, '1'),
-(628, 8, 'picnic_bench3', '14|39|2', 0, '1'),
-(629, 8, 'picnic_bench1', '18|39|2', 0, '1'),
-(630, 8, 'picnic_bench2', '19|39|2', 0, '1'),
-(631, 8, 'picnic_bench3', '20|39|2', 0, '1'),
-(632, 9, 'greenchair2', '8|4|3', 4, '1'),
-(633, 9, 'greenchair1', '9|4|3', 4, '1'),
-(634, 9, 'greenchair2', '8|6|3', 0, '1'),
-(635, 9, 'greenchair1', '9|6|3', 0, '1'),
-(636, 9, 'dustylamp', '20|6|3', 2, '0'),
-(637, 9, 'dustylamp', '28|6|3', 2, '0'),
-(638, 9, 'greenchair2', '3|7|1', 4, '1'),
-(639, 9, 'greenchair1', '4|7|1', 4, '1'),
-(640, 9, 'greenchair2', '3|9|1', 0, '1'),
-(641, 9, 'greenchair1', '4|9|1', 0, '1'),
-(642, 9, 'yellowchair', '21|10|3', 2, '1'),
-(643, 9, 'yellowchair', '23|10|3', 6, '1'),
-(644, 9, 'yellowchair', '26|10|3', 2, '1'),
-(645, 9, 'yellowchair', '28|10|3', 6, '1'),
-(646, 9, 'greenchair2', '11|12|1', 2, '1'),
-(647, 9, 'greenchair2', '3|13|1', 4, '1'),
-(648, 9, 'greenchair1', '4|13|1', 4, '1'),
-(649, 9, 'greenchair1', '11|13|1', 2, '1'),
-(650, 9, 'dustylamp', '11|14|1', 2, '0'),
-(651, 9, 'greenchair2', '3|15|1', 0, '1'),
-(652, 9, 'greenchair1', '4|15|1', 0, '1'),
-(653, 9, 'greenchair2', '11|15|1', 2, '1'),
-(654, 9, 'yellowchair', '24|15|1', 4, '1'),
-(655, 9, 'greenchair1', '11|16|1', 2, '1'),
-(656, 9, 'yellowchair', '22|17|1', 2, '1'),
-(657, 9, 'dustylamp', '24|17|1', 2, '0'),
-(658, 9, 'yellowchair', '26|17|1', 6, '1'),
-(659, 9, 'dustylamp', '11|19|1', 2, '0'),
-(660, 9, 'yellowchair', '24|19|1', 0, '1'),
-(661, 9, 'greenchair2', '12|23|1', 2, '1'),
-(662, 9, 'greenchair2', '14|23|1', 6, '1'),
-(663, 9, 'greenchair1', '12|24|1', 2, '1'),
-(664, 9, 'greenchair1', '14|24|1', 6, '1'),
-(665, 10, 'bench', '17|10|0', 2, '1'),
-(666, 10, 'bench', '19|10|0', 6, '1'),
-(667, 10, 'bench', '21|10|0', 2, '1'),
-(668, 10, 'bench', '23|10|0', 6, '1'),
-(669, 10, 'bench', '17|11|0', 2, '1'),
-(670, 10, 'bench', '19|11|0', 6, '1'),
-(671, 10, 'bench', '21|11|0', 2, '1'),
-(672, 10, 'bench', '23|11|0', 6, '1'),
-(673, 10, 'koc_chair', '32|11|1', 4, '1'),
-(674, 10, 'bench', '17|12|0', 2, '1'),
-(675, 10, 'bench', '19|12|0', 6, '1'),
-(676, 10, 'bench', '21|12|0', 2, '1'),
-(677, 10, 'bench', '23|12|0', 6, '1'),
-(678, 10, 'koc_chair', '31|12|1', 2, '1'),
-(679, 10, 'koc_table', '32|12|1', 0, '0'),
-(680, 10, 'koc_chair', '33|12|1', 6, '1'),
-(681, 10, 'bench', '17|13|0', 2, '1'),
-(682, 10, 'bench', '19|13|0', 6, '1'),
-(683, 10, 'bench', '21|13|0', 2, '1'),
-(684, 10, 'bench', '23|13|0', 6, '1'),
-(685, 10, 'koc_chair', '25|13|1', 4, '1'),
-(686, 10, 'koc_chair', '32|13|1', 0, '1'),
-(687, 10, 'bench', '17|14|0', 2, '1'),
-(688, 10, 'bench', '19|14|0', 6, '1'),
-(689, 10, 'bench', '21|14|0', 2, '1'),
-(690, 10, 'bench', '23|14|0', 6, '1'),
-(691, 10, 'koc_table', '25|14|1', 0, '0'),
-(692, 10, 'koc_chair', '26|14|1', 6, '1'),
-(693, 10, 'bench', '17|15|0', 2, '1'),
-(694, 10, 'bench', '19|15|0', 6, '1'),
-(695, 10, 'bench', '21|15|0', 2, '1'),
-(696, 10, 'bench', '23|15|0', 6, '1'),
-(697, 10, 'koc_chair', '25|15|1', 0, '1'),
-(698, 10, 'koc_chair', '29|15|1', 2, '1'),
-(699, 10, 'koc_table', '30|15|1', 0, '0'),
-(700, 10, 'koc_chair', '31|15|1', 6, '1'),
-(701, 10, 'koc_chair', '30|16|1', 0, '1'),
-(702, 10, 'chairf1', '25|24|1', 2, '1'),
-(703, 10, 'chairf1', '33|24|1', 6, '1'),
-(704, 10, 'bench', '17|25|0', 2, '1'),
-(705, 10, 'bench', '19|25|0', 6, '1'),
-(706, 10, 'bench', '21|25|0', 2, '1'),
-(707, 10, 'bench', '23|25|0', 6, '1'),
-(708, 10, 'chairf1', '25|25|1', 2, '1'),
-(709, 10, 'chairf1', '33|25|1', 6, '1'),
-(710, 10, 'bench', '17|26|0', 2, '1'),
-(711, 10, 'bench', '19|26|0', 6, '1'),
-(712, 10, 'bench', '21|26|0', 2, '1'),
-(713, 10, 'bench', '23|26|0', 6, '1'),
-(714, 10, 'chairf1', '25|26|1', 2, '1'),
-(715, 10, 'chairf1', '33|26|1', 6, '1'),
-(716, 10, 'bench', '17|27|0', 2, '1'),
-(717, 10, 'bench', '19|27|0', 6, '1'),
-(718, 10, 'bench', '21|27|0', 2, '1'),
-(719, 10, 'bench', '23|27|0', 6, '1'),
-(720, 10, 'bench', '17|28|0', 2, '1'),
-(721, 10, 'bench', '19|28|0', 6, '1'),
-(722, 10, 'bench', '21|28|0', 2, '1'),
-(723, 10, 'bench', '23|28|0', 6, '1'),
-(724, 10, 'bench', '17|29|0', 2, '1'),
-(725, 10, 'bench', '19|29|0', 6, '1'),
-(726, 10, 'bench', '21|29|0', 2, '1'),
-(727, 10, 'bench', '23|29|100000', 6, '1'),
-(728, 10, 'bench', '9|9|0', 4, '1'),
-(729, 10, 'bench', '7|12|0', 2, '1'),
-(730, 10, 'bench', '28|18|0', 4, '1'),
-(731, 10, 'bench', '25|20|0', 2, '1'),
-(732, 10, 'bench', '26|29|0', 4, '1'),
-(733, 11, 'pizza_plant1', '15|0|0', 2, '0'),
-(734, 11, 'pizza_sofa1', '14|3|0', 4, '1'),
-(735, 11, 'pizza_sofa2', '15|3|0', 4, '1'),
-(736, 11, 'pizza_table', '15|5|0', 2, '0'),
-(737, 11, 'pizza_plant2', '0|6|1', 2, '0'),
-(738, 11, 'pizza_sofa3', '14|6|0', 0, '1'),
-(739, 11, 'pizza_sofa4', '15|6|0', 0, '1'),
-(740, 11, 'pizza_chair', '1|8|1', 4, '1'),
-(741, 11, 'pizza_chair', '2|8|1', 4, '1'),
-(742, 11, 'pizza_table', '2|10|1', 2, '0'),
-(743, 11, 'pizza_sofa1', '14|10|0', 4, '1'),
-(744, 11, 'pizza_sofa2', '15|10|0', 4, '1'),
-(745, 11, 'pizza_chair', '1|11|1', 0, '1'),
-(746, 11, 'pizza_chair', '2|11|1', 0, '1'),
-(747, 11, 'pizza_table', '15|12|0', 2, '0'),
-(748, 11, 'pizza_sofa3', '14|13|0', 0, '1'),
-(749, 11, 'pizza_sofa4', '15|13|0', 0, '1'),
-(750, 11, 'pizza_chair', '1|16|1', 4, '1'),
-(751, 11, 'pizza_chair', '2|16|1', 4, '1'),
-(752, 11, 'pizza_table', '2|18|1', 2, '0'),
-(753, 11, 'pizza_chair', '1|19|1', 0, '1'),
-(754, 11, 'pizza_chair', '2|19|1', 0, '1'),
-(755, 11, 'pizza_chair', '11|21|1', 2, '1'),
-(756, 11, 'pizza_chair', '14|21|1', 6, '1'),
-(757, 11, 'pizza_chair', '11|22|1', 2, '1'),
-(758, 11, 'pizza_table', '13|22|1', 0, '0'),
-(759, 11, 'pizza_chair', '14|22|1', 6, '1'),
-(760, 11, 'pizza_plant1', '0|25|1', 2, '0'),
-(761, 11, 'pizza_plant1', '15|25|1', 2, '0'),
-(762, 12, 'parkfence2', '27|5|0', 0, '0'),
-(763, 12, 'parkfence2', '29|5|0', 0, '0'),
-(764, 12, 'parkfence1', '19|6|0', 0, '0'),
-(765, 12, 'parkfence3', '20|6|0', 4, '0'),
-(766, 12, 'parkfence3', '21|6|0', 4, '0'),
-(767, 12, 'parkfence3', '22|6|0', 4, '0'),
-(768, 12, 'parkfence2', '23|6|0', 4, '0'),
-(769, 12, 'parkfence3', '24|6|0', 4, '0'),
-(770, 12, 'parkfence3', '25|6|0', 4, '0'),
-(771, 12, 'parkfence3', '26|6|0', 4, '0'),
-(772, 12, 'parkfence1', '27|6|0', 2, '0'),
-(773, 12, 'parkfence3', '29|6|0', 2, '0'),
-(774, 12, 'parkfence2', '17|7|0', 0, '0'),
-(775, 12, 'parkfence3', '19|7|0', 2, '0'),
-(776, 12, 'parkfence3', '23|7|0', 2, '0'),
-(777, 12, 'parkfence3', '27|7|0', 2, '0'),
-(778, 12, 'parkfence3', '29|7|0', 2, '0'),
-(779, 12, 'parkfence3', '17|8|0', 2, '0'),
-(780, 12, 'parkfence3', '19|8|0', 2, '0'),
-(781, 12, 'parkfence2', '21|8|0', 0, '0'),
-(782, 12, 'parkfence3', '23|8|0', 2, '0'),
-(783, 12, 'parkfence2', '25|8|0', 0, '0'),
-(784, 12, 'parkfence3', '27|8|0', 2, '0'),
-(785, 12, 'parkfence3', '29|8|0', 2, '0'),
-(786, 12, 'bench2', '8|9|0', 4, '1'),
-(787, 12, 'bench', '9|9|0', 4, '1'),
-(788, 12, 'parkfence3', '17|9|0', 2, '0'),
-(789, 12, 'parkfence2', '19|9|0', 6, '0'),
-(790, 12, 'parkfence3', '21|9|0', 2, '0'),
-(791, 12, 'parkfence2', '23|9|0', 6, '0'),
-(792, 12, 'parkfence3', '25|9|0', 2, '0'),
-(793, 12, 'parkfence2', '27|9|0', 6, '0'),
-(794, 12, 'parkfence3', '29|9|0', 2, '0'),
-(795, 12, 'parkfence3', '17|10|0', 2, '0'),
-(796, 12, 'parkfence3', '21|10|0', 2, '0'),
-(797, 12, 'parkfence3', '25|10|0', 2, '0'),
-(798, 12, 'parkfence3', '29|10|0', 2, '0'),
-(799, 12, 'bench2', '7|11|0', 2, '1'),
-(800, 12, 'parkfence1', '17|11|0', 4, '0'),
-(801, 12, 'parkfence3', '18|11|0', 4, '0'),
-(802, 12, 'parkfence3', '19|11|0', 4, '0'),
-(803, 12, 'parkfence3', '20|11|0', 4, '0'),
-(804, 12, 'parkfence2', '21|11|0', 2, '0'),
-(805, 12, 'parkfence3', '22|11|0', 4, '0'),
-(806, 12, 'parkfence3', '23|11|0', 4, '0'),
-(807, 12, 'parkfence3', '24|11|0', 4, '0'),
-(808, 12, 'parkfence2', '25|11|0', 2, '0'),
-(809, 12, 'parkfence3', '26|11|0', 4, '0'),
-(810, 12, 'parkfence3', '27|11|0', 4, '0'),
-(811, 12, 'parkfence3', '28|11|0', 4, '0'),
-(812, 12, 'parkfence1', '29|11|0', 6, '0'),
-(813, 12, 'bench', '7|12|0', 2, '1'),
-(814, 12, 'bench2', '35|16|0', 2, '1'),
-(815, 12, 'bench2', '37|16|0', 4, '1'),
-(816, 12, 'bench', '38|16|0', 4, '1'),
-(817, 12, 'bench', '35|17|0', 2, '1'),
-(818, 12, 'bench2', '27|18|0', 4, '1'),
-(819, 12, 'bench', '28|18|0', 4, '1'),
-(820, 12, 'bench2', '35|18|0', 2, '1'),
-(821, 12, 'bench2', '25|19|0', 2, '1'),
-(822, 12, 'bench', '35|19|0', 2, '1'),
-(823, 12, 'bench', '25|20|0', 2, '1'),
-(824, 12, 'bench2', '25|29|0', 4, '1'),
-(825, 12, 'bench', '26|29|0', 4, '1'),
-(826, 12, 'bench2', '23|30|0', 2, '1'),
-(827, 12, 'bench', '23|31|0', 2, '1'),
-(828, 13, 'rooftop_minichair', '0|1|4', 4, '1'),
-(829, 13, 'rooftop_flatcurb', '16|1|4', 4, '0'),
-(830, 13, 'rooftop_flatcurb2', '17|1|4', 4, '0'),
-(831, 13, 'rooftop_rodtable', '0|2|4', 0, '0'),
-(832, 13, 'rooftop_minichair', '1|2|4', 6, '1'),
-(833, 13, 'rooftop_minichair', '0|3|4', 0, '1'),
-(834, 13, 'rooftop_flatcurb', '16|4|4', 0, '0'),
-(835, 13, 'rooftop_flatcurb2', '17|4|4', 0, '0'),
-(836, 13, 'rooftop_minichair', '2|6|4', 4, '1'),
-(837, 13, 'rooftop_minichair', '1|7|4', 2, '1'),
-(838, 13, 'rooftop_rodtable', '2|7|4', 0, '0'),
-(839, 13, 'rooftop_minichair', '3|7|4', 6, '1'),
-(840, 13, 'rooftop_minichair', '2|8|4', 0, '1'),
-(841, 13, 'rooftop_minichair', '0|9|4', 4, '1'),
-(842, 13, 'rooftop_emptytable', '0|10|4', 0, '0'),
-(843, 13, 'rooftop_minichair', '0|11|4', 0, '1'),
-(844, 13, 'rooftop_flatcurb', '1|13|4', 2, '0'),
-(845, 13, 'rooftop_flatcurb', '6|13|4', 6, '0'),
-(846, 13, 'rooftop_flatcurb', '8|13|4', 2, '0'),
-(847, 13, 'rooftop_flatcurb', '13|13|4', 6, '0'),
-(848, 13, 'rooftop_flatcurb3', '1|14|4', 2, '0'),
-(849, 13, 'rooftop_flatcurb3', '6|14|4', 6, '0'),
-(850, 13, 'rooftop_flatcurb3', '8|14|4', 2, '0'),
-(851, 13, 'rooftop_flatcurb3', '13|14|4', 6, '0'),
-(852, 13, 'rooftop_flatcurb3', '1|15|4', 2, '0'),
-(853, 13, 'rooftop_flatcurb3', '6|15|4', 6, '0'),
-(854, 13, 'rooftop_flatcurb3', '8|15|4', 2, '0'),
-(855, 13, 'rooftop_flatcurb3', '13|15|4', 6, '0'),
-(856, 13, 'rooftop_flatcurb3', '1|16|4', 2, '0'),
-(857, 13, 'rooftop_flatcurb3', '6|16|4', 6, '0'),
-(858, 13, 'rooftop_flatcurb3', '8|16|4', 2, '0'),
-(859, 13, 'rooftop_flatcurb3', '13|16|4', 6, '0'),
-(860, 13, 'rooftop_flatcurb4', '1|17|4', 0, '0'),
-(861, 13, 'rooftop_flatcurb3', '2|17|4', 0, '0'),
-(862, 13, 'rooftop_flatcurb3', '3|17|4', 0, '0'),
-(863, 13, 'rooftop_flatcurb3', '4|17|4', 0, '0'),
-(864, 13, 'rooftop_flatcurb3', '5|17|4', 0, '0'),
-(865, 13, 'rooftop_flatcurb5', '6|17|4', 0, '0'),
-(866, 13, 'rooftop_flatcurb4', '8|17|4', 0, '0'),
-(867, 13, 'rooftop_flatcurb3', '9|17|4', 0, '0'),
-(868, 13, 'rooftop_flatcurb3', '10|17|4', 0, '0'),
-(869, 13, 'rooftop_flatcurb3', '11|17|4', 0, '0'),
-(870, 13, 'rooftop_flatcurb3', '12|17|4', 0, '0'),
-(871, 13, 'rooftop_flatcurb5', '13|17|4', 0, '0'),
-(872, 14, 'rooftop_bigchair', '8|0|0', 4, '1'),
-(873, 14, 'rooftop_bigtable', '8|1|0', 0, '0'),
-(874, 14, 'rooftop_sofab', '0|2|0', 4, '1'),
-(875, 14, 'rooftop_sofa', '1|2|0', 4, '1'),
-(876, 14, 'rooftop_bigchair', '8|2|0', 0, '1'),
-(877, 14, 'rooftop_bigchair', '8|3|0', 4, '1'),
-(878, 14, 'rooftop_bigtable', '8|4|0', 0, '0'),
-(879, 14, 'rooftop_sofab', '0|5|0', 0, '1'),
-(880, 14, 'rooftop_sofa', '1|5|0', 0, '1'),
-(881, 14, 'rooftop_bigchair', '8|5|0', 0, '1'),
-(882, 14, 'rooftop_sofab', '0|6|0', 4, '1'),
-(883, 14, 'rooftop_sofa', '1|6|0', 4, '1'),
-(884, 14, 'rooftop_sofab', '7|6|0', 4, '1'),
-(885, 14, 'rooftop_sofa', '8|6|0', 4, '1'),
-(886, 14, 'rooftop_sofab', '0|9|0', 0, '1'),
-(887, 14, 'rooftop_sofa', '1|9|0', 0, '1'),
-(888, 14, 'rooftop_sofab', '7|9|0', 0, '1'),
-(889, 14, 'rooftop_sofa', '8|9|0', 0, '1'),
-(890, 15, 'float_dummychair', '24|9|3', 4, '1'),
-(891, 15, 'float_dummychair', '25|9|3', 4, '1'),
-(892, 15, 'float_dummychair2', '28|13|3', 4, '1'),
-(893, 15, 'float_dummychair2', '29|13|3', 4, '1'),
-(894, 15, 'floatbench2', '17|17|3', 2, '1'),
-(895, 15, 'floatbench2', '19|17|3', 6, '1'),
-(896, 15, 'floatbench2', '21|17|3', 2, '1'),
-(897, 15, 'floatbench2', '23|17|3', 6, '1'),
-(898, 15, 'floatbench2', '27|17|1', 4, '1'),
-(899, 15, 'floatbench1', '28|17|1', 4, '1'),
-(900, 15, 'floatbench1', '17|18|3', 2, '1'),
-(901, 15, 'floatbench1', '19|18|3', 6, '1'),
-(902, 15, 'floatbench1', '21|18|3', 2, '1'),
-(903, 15, 'floatbench1', '23|18|3', 6, '1'),
-(904, 15, 'floatbench2', '27|19|1', 0, '1'),
-(905, 15, 'floatbench1', '28|19|1', 0, '1'),
-(906, 15, 'floatbench2', '17|23|3', 2, '1'),
-(907, 15, 'floatbench2', '19|23|3', 6, '1'),
-(908, 15, 'floatbench2', '21|23|3', 2, '1'),
-(909, 15, 'floatbench2', '23|23|3', 6, '1'),
-(910, 15, 'floatbench2', '27|23|1', 4, '1'),
-(911, 15, 'floatbench1', '28|23|1', 4, '1'),
-(912, 15, 'floatbench1', '17|24|100000', 2, '1'),
-(913, 15, 'floatbench1', '19|24|3', 6, '1'),
-(914, 15, 'floatbench1', '21|24|3', 2, '1'),
-(915, 15, 'floatbench1', '23|24|3', 6, '1'),
-(916, 15, 'floatbench2', '27|25|1', 0, '1'),
-(917, 15, 'floatbench1', '28|25|1', 0, '1'),
-(918, 15, 'float_dummychair', '0|29|1', 2, '1'),
-(919, 15, 'float_dummychair', '17|30|1', 2, '1'),
-(920, 15, 'float_dummychair', '17|31|1', 2, '1'),
-(921, 15, 'float_dummychair', '21|33|1', 2, '1'),
-(922, 15, 'float_dummychair', '26|33|1', 6, '1'),
-(923, 15, 'float_dummychair', '21|34|1', 2, '1'),
-(924, 15, 'float_dummychair', '26|34|1', 6, '1'),
-(925, 15, 'float_dummychair', '17|35|1', 2, '1'),
-(926, 15, 'float_dummychair', '21|35|1', 2, '1'),
-(927, 15, 'float_dummychair', '26|35|1', 6, '1'),
-(928, 15, 'float_dummychair', '17|36|1', 2, '1'),
-(929, 15, 'float_dummychair', '21|36|1', 2, '1'),
-(930, 15, 'float_dummychair', '26|36|1', 6, '1'),
-(931, 15, 'float_dummychair', '15|37|100000', 4, '1'),
-(932, 15, 'float_dummychair', '16|37|1', 4, '1'),
-(933, 16, 'libchair', '14|2|1', 4, '1'),
-(934, 16, 'libchair', '16|2|1', 4, '1'),
-(935, 16, 'libchair', '26|2|1', 4, '1'),
-(936, 16, 'libchair', '24|3|1', 2, '1'),
-(937, 16, 'libchair', '12|4|1', 2, '1'),
-(938, 16, 'libchair', '12|6|1', 2, '1'),
-(939, 16, 'libstool', '13|14|1', 6, '1'),
-(940, 16, 'libstool', '13|15|1', 6, '1'),
-(941, 16, 'libstool', '13|16|1', 6, '1'),
-(942, 16, 'libchair', '28|27|0', 4, '1'),
-(943, 16, 'libchair', '27|29|0', 2, '1'),
-(944, 16, 'libstool', '24|33|2', 6, '1'),
-(945, 16, 'libstool', '24|34|2', 6, '1'),
-(946, 16, 'libstool', '24|35|2', 6, '1'),
-(947, 16, 'libstool', '21|36|2', 0, '1'),
-(948, 16, 'libstool', '22|36|2', 0, '1'),
-(949, 16, 'libstool', '23|36|2', 0, '1');
+INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `rotation`, `height`, `walkable`, `is_seat`) VALUES
+(1, 1, 'crl_lamp', '16|0|0', 0, 1, '0', '0'),
+(2, 1, 'crl_sofa2c', '17|0|0', 4, 1, '0', '1'),
+(3, 1, 'crl_sofa2b', '18|0|0', 4, 1, '0', '1'),
+(4, 1, 'crl_sofa2a', '19|0|0', 4, 1, '0', '1'),
+(5, 1, 'crl_lamp', '20|0|0', 0, 1, '0', '0'),
+(6, 1, 'crl_chair', '16|1|0', 2, 1, '0', '1'),
+(7, 1, 'crl_lamp', '7|2|0', 0, 1, '0', '0'),
+(8, 1, 'crl_lamp', '11|2|0', 0, 1, '0', '0'),
+(9, 1, 'crl_chair', '16|2|0', 2, 1, '0', '1'),
+(10, 1, 'crl_pillar', '5|3|0', 0, 1, '0', '0'),
+(11, 1, 'crl_chair', '7|3|0', 2, 1, '0', '1'),
+(12, 1, 'crl_table1b', '9|3|0', 0, 1, '0', '0'),
+(13, 1, 'crl_sofa1c', '11|3|0', 6, 1, '0', '1'),
+(14, 1, 'crl_chair', '16|3|0', 2, 1, '0', '1'),
+(15, 1, 'crl_table2b', '19|3|0', 0, 1, '0', '0'),
+(16, 1, 'crl_table2a', '20|3|0', 0, 1, '0', '0'),
+(17, 1, 'crl_lamp', '0|4|0', 0, 1, '0', '0'),
+(18, 1, 'crl_sofa2c', '1|4|0', 4, 1, '0', '1'),
+(19, 1, 'crl_sofa2b', '2|4|0', 4, 1, '0', '1'),
+(20, 1, 'crl_sofa2a', '3|4|0', 4, 1, '0', '1'),
+(21, 1, 'crl_lamp', '4|4|0', 0, 1, '0', '0'),
+(22, 1, 'crl_table1a', '9|4|0', 0, 1, '0', '0'),
+(23, 1, 'crl_sofa1b', '11|4|0', 6, 1, '0', '1'),
+(24, 1, 'crl_wall2a', '15|4|0', 0, 1, '0', '0'),
+(25, 1, 'crl_lamp', '16|4|0', 0, 1, '0', '0'),
+(26, 1, 'crl_chair', '0|5|0', 2, 1, '0', '1'),
+(27, 1, 'crl_chair', '7|5|0', 2, 1, '0', '1'),
+(28, 1, 'crl_sofa1a', '11|5|0', 6, 1, '0', '1'),
+(29, 1, 'crl_table2b', '2|6|0', 0, 1, '0', '0'),
+(30, 1, 'crl_table2a', '3|6|0', 0, 1, '0', '0'),
+(31, 1, 'crl_lamp', '11|6|0', 0, 1, '0', '0'),
+(32, 1, 'crl_chair', '0|7|0', 2, 1, '0', '1'),
+(33, 1, 'crl_lamp', '0|8|0', 0, 1, '0', '0'),
+(34, 1, 'crl_sofa3c', '1|8|0', 0, 1, '0', '1'),
+(35, 1, 'crl_sofa3b', '2|8|0', 0, 1, '0', '1'),
+(36, 1, 'crl_sofa3a', '3|8|0', 0, 1, '0', '1'),
+(37, 1, 'crl_lamp', '4|8|0', 0, 1, '0', '0'),
+(38, 1, 'crl_barchair2', '19|8|0', 0, 1, '0', '1'),
+(39, 1, 'crl_tablebar', '20|8|0', 0, 1, '0', '0'),
+(40, 1, 'crl_barchair2', '21|8|0', 0, 1, '0', '1'),
+(41, 1, 'crl_pillar2', '5|9|0', 0, 1, '0', '0'),
+(42, 1, 'crl_pillar', '9|9|0', 0, 1, '0', '0'),
+(43, 1, 'crl_desk1a', '8|15|0', 0, 1, '0', '0'),
+(44, 1, 'crl_deski', '9|15|0', 0, 1, '0', '0'),
+(45, 1, 'crl_deskh', '10|15|0', 0, 1, '0', '0'),
+(46, 1, 'crl_deskg', '10|16|0', 0, 1, '0', '0'),
+(47, 1, 'crl_deskf', '10|17|0', 0, 1, '0', '0'),
+(48, 1, 'crl_deske', '10|18|0', 0, 1, '0', '0'),
+(49, 1, 'crl_deske', '10|19|0', 0, 1, '0', '0'),
+(50, 1, 'crl_deske', '10|20|0', 0, 1, '0', '0'),
+(51, 1, 'crl_deske', '10|21|0', 0, 1, '0', '0'),
+(52, 1, 'crl_deske', '10|22|0', 0, 1, '0', '0'),
+(53, 1, 'crl_deske', '10|23|0', 0, 1, '0', '0'),
+(54, 1, 'crl_wallb', '7|24|0', 0, 1, '0', '0'),
+(55, 1, 'crl_deske', '10|24|0', 0, 1, '0', '0'),
+(56, 1, 'crl_walla', '7|25|0', 0, 1, '0', '0'),
+(57, 1, 'crl_desk1b', '8|25|0', 0, 1, '0', '0'),
+(58, 1, 'crl_desk1c', '9|25|0', 0, 1, '0', '0'),
+(59, 1, 'crl_desk1d', '10|25|0', 0, 1, '0', '0'),
+(60, 1, 'crl_lamp2', '12|27|0', 0, 1, '0', '0'),
+(61, 1, 'crl_cabinet2', '13|27|0', 0, 1, '0', '0'),
+(62, 1, 'crl_cabinet1', '14|27|0', 0, 1, '0', '0'),
+(63, 1, 'crl_lamp2', '15|27|0', 0, 1, '0', '0'),
+(64, 2, 'mic', '11|10|1', 0, 1, '0', '0'),
+(65, 2, 'thchair2', '2|11|4', 2, 1, '0', '1'),
+(66, 2, 'thchair2', '2|12|4', 2, 1, '0', '1'),
+(67, 2, 'thchair2', '2|15|4', 2, 1, '0', '1'),
+(68, 2, 'thchair1', '6|15|0', 0, 1, '0', '1'),
+(69, 2, 'thchair1', '7|15|0', 0, 1, '0', '1'),
+(70, 2, 'thchair1', '8|15|0', 0, 1, '0', '1'),
+(71, 2, 'thchair1', '9|15|0', 0, 1, '0', '1'),
+(72, 2, 'thchair1', '10|15|0', 0, 1, '0', '1'),
+(73, 2, 'thchair1', '12|15|0', 0, 1, '0', '1'),
+(74, 2, 'thchair1', '13|15|0', 0, 1, '0', '1'),
+(75, 2, 'thchair1', '14|15|0', 0, 1, '0', '1'),
+(76, 2, 'thchair1', '15|15|0', 0, 1, '0', '1'),
+(77, 2, 'thchair1', '16|15|0', 0, 1, '0', '1'),
+(78, 2, 'thchair2', '2|16|4', 2, 1, '0', '1'),
+(79, 2, 'thchair1', '6|20|1', 0, 1, '0', '1'),
+(80, 2, 'thchair1', '7|20|1', 0, 1, '0', '1'),
+(81, 2, 'thchair1', '8|20|1', 0, 1, '0', '1'),
+(82, 2, 'thchair1', '9|20|1', 0, 1, '0', '1'),
+(83, 2, 'thchair1', '10|20|1', 0, 1, '0', '1'),
+(84, 2, 'thchair1', '12|20|1', 0, 1, '0', '1'),
+(85, 2, 'thchair1', '13|20|1', 0, 1, '0', '1'),
+(86, 2, 'thchair1', '14|20|1', 0, 1, '0', '1'),
+(87, 2, 'thchair1', '15|20|1', 0, 1, '0', '1'),
+(88, 2, 'thchair1', '16|20|1', 0, 1, '0', '1'),
+(89, 2, 'thchair1', '6|23|1', 0, 1, '0', '1'),
+(90, 2, 'thchair1', '7|23|1', 0, 1, '0', '1'),
+(91, 2, 'thchair1', '8|23|1', 0, 1, '0', '1'),
+(92, 2, 'thchair1', '9|23|1', 0, 1, '0', '1'),
+(93, 2, 'thchair1', '10|23|1', 0, 1, '0', '1'),
+(94, 2, 'thchair1', '12|23|1', 0, 1, '0', '1'),
+(95, 2, 'thchair1', '13|23|1', 0, 1, '0', '1'),
+(96, 2, 'thchair1', '14|23|1', 0, 1, '0', '1'),
+(97, 2, 'thchair1', '15|23|1', 0, 1, '0', '1'),
+(98, 2, 'thchair1', '16|23|1', 0, 1, '0', '1'),
+(99, 2, 'thchair1', '6|26|1', 0, 1, '0', '1'),
+(100, 2, 'thchair1', '7|26|1', 0, 1, '0', '1'),
+(101, 2, 'thchair1', '8|26|1', 0, 1, '0', '1'),
+(102, 2, 'thchair1', '9|26|1', 0, 1, '0', '1'),
+(103, 2, 'thchair1', '10|26|1', 0, 1, '0', '1'),
+(104, 2, 'thchair1', '12|26|1', 0, 1, '0', '1'),
+(105, 2, 'thchair1', '13|26|1', 0, 1, '0', '1'),
+(106, 2, 'thchair1', '14|26|1', 0, 1, '0', '1'),
+(107, 2, 'thchair1', '15|26|1', 0, 1, '0', '1'),
+(108, 2, 'thchair1', '16|26|1', 0, 1, '0', '1'),
+(109, 3, 'shift1', '6|0|1', 4, 1, '0', '1'),
+(110, 3, 'shift2', '7|0|1', 4, 1, '0', '1'),
+(111, 3, 'kukat6', '5|3|1', 0, 1, '0', '0'),
+(112, 3, 'kukat5', '6|3|1', 0, 1, '0', '0'),
+(113, 3, 'kukat2', '12|3|1', 0, 1, '0', '0'),
+(114, 3, 'kukat1', '13|3|1', 0, 1, '0', '0'),
+(115, 3, 'kukat2', '19|3|1', 0, 1, '0', '0'),
+(116, 3, 'kukat1', '20|3|1', 0, 1, '0', '0'),
+(117, 3, 'shift1', '12|4|0', 4, 1, '0', '1'),
+(118, 3, 'shift2', '13|4|0', 4, 1, '0', '1'),
+(119, 3, 'shift1', '19|4|0', 4, 1, '0', '1'),
+(120, 3, 'shift2', '20|4|0', 4, 1, '0', '1'),
+(121, 3, 'shift1', '0|5|1', 4, 1, '0', '1'),
+(122, 3, 'shift2', '1|5|1', 4, 1, '0', '1'),
+(123, 3, 'shift1', '2|5|1', 4, 1, '0', '1'),
+(124, 3, 'shift2', '3|5|1', 4, 1, '0', '1'),
+(125, 3, 'table2', '16|7|0', 6, 1, '0', '0'),
+(126, 3, 'tablecorner', '17|7|0', 0, 1, '0', '0'),
+(127, 3, 'table2', '16|8|0', 4, 1, '0', '0'),
+(128, 3, 'table3', '10|9|0', 6, 1, '0', '0'),
+(129, 3, 'tablecorner', '11|9|0', 0, 1, '0', '0'),
+(130, 3, 'table2', '16|9|0', 2, 1, '0', '0'),
+(131, 3, 'table3', '10|10|0', 4, 1, '0', '0'),
+(132, 3, 'table2', '16|10|0', 0, 1, '0', '0'),
+(133, 3, 'table3', '10|11|0', 2, 1, '0', '0'),
+(134, 3, 'table3', '10|12|0', 0, 1, '0', '0'),
+(135, 3, 'kukat2', '5|16|1', 0, 1, '0', '0'),
+(136, 3, 'kukat1', '6|16|1', 0, 1, '0', '0'),
+(137, 3, 'kukat2', '7|16|1', 0, 1, '0', '0'),
+(138, 3, 'kukat1', '8|16|1', 0, 1, '0', '0'),
+(139, 3, 'kukat3', '9|16|1', 0, 1, '0', '0'),
+(140, 3, 'kukka2', '15|16|1', 0, 1, '0', '0'),
+(141, 3, 'kukat4', '9|17|1', 0, 1, '0', '0'),
+(142, 3, 'kukat3', '9|18|1', 0, 1, '0', '0'),
+(143, 3, 'sofabig3', '20|18|1', 6, 1, '0', '1'),
+(144, 3, 'kukat4', '9|19|1', 0, 1, '0', '0'),
+(145, 3, 'table1', '17|19|1', 4, 1, '0', '0'),
+(146, 3, 'tablecorner', '18|19|1', 0, 1, '0', '0'),
+(147, 3, 'sofabig2', '20|19|1', 6, 1, '0', '1'),
+(148, 3, 'table1', '17|20|1', 2, 1, '0', '0'),
+(149, 3, 'sofabig2', '20|20|1', 6, 1, '0', '1'),
+(150, 3, 'table1', '17|21|1', 0, 1, '0', '0'),
+(151, 3, 'sofabig1', '20|21|1', 6, 1, '0', '1'),
+(152, 3, 'sofalittle3', '16|23|1', 0, 1, '0', '1'),
+(153, 3, 'sofalittle2', '17|23|1', 0, 1, '0', '1'),
+(154, 3, 'sofalittle1', '18|23|1', 0, 1, '0', '1'),
+(155, 3, 'kukka', '20|23|1', 0, 1, '0', '0'),
+(156, 3, 'l', '13|1|1', 0, 1, '0', '1'),
+(157, 3, 'k', '16|1|1', 0, 1, '0', '1'),
+(158, 3, 'k', '19|1|1', 0, 1, '0', '1'),
+(159, 3, 'k', '15|7|0', 2, 1, '0', '1'),
+(160, 3, 'l', '15|8|0', 2, 1, '0', '1'),
+(161, 3, 'l', '18|8|0', 6, 1, '0', '1'),
+(162, 3, 'k', '9|9|0', 2, 1, '0', '1'),
+(163, 3, 'k', '15|9|0', 2, 1, '0', '1'),
+(164, 3, 'k', '18|9|0', 6, 1, '0', '1'),
+(165, 3, 'k', '4|10|1', 6, 1, '0', '1'),
+(166, 3, 'k', '18|10|0', 6, 1, '0', '1'),
+(167, 3, 'l', '4|11|1', 6, 1, '0', '1'),
+(168, 3, 'l', '9|11|0', 2, 1, '0', '1'),
+(169, 3, 'l', '12|11|0', 6, 1, '0', '1'),
+(170, 3, 'k', '4|12|1', 6, 1, '0', '1'),
+(171, 3, 'l', '9|12|0', 2, 1, '0', '1'),
+(172, 3, 'k', '12|12|0', 6, 1, '0', '1'),
+(173, 3, 'k', '6|18|1', 6, 1, '0', '1'),
+(174, 3, 'm', '10|1|1', 0, 1, '0', '1'),
+(175, 3, 'm', '18|7|0', 6, 1, '0', '1'),
+(176, 3, 'm', '4|9|1', 6, 1, '0', '1'),
+(177, 3, 'm', '12|9|0', 6, 1, '0', '1'),
+(178, 3, 'm', '9|10|0', 2, 1, '0', '1'),
+(179, 3, 'm', '12|10|0', 6, 1, '0', '1'),
+(180, 3, 'm', '15|10|0', 2, 1, '0', '1'),
+(181, 3, 'm', '4|13|1', 6, 1, '0', '1'),
+(182, 3, 'm', '6|21|1', 6, 1, '0', '1'),
+(183, 4, 'star_table', '21|15|2', 0, 1, '0', '0'),
+(184, 4, 'star_sofa', '22|15|2', 4, 1, '0', '1'),
+(185, 4, 'star_sofa2', '23|15|2', 4, 1, '0', '1'),
+(186, 4, 'star_sofa2', '21|16|2', 2, 1, '0', '1'),
+(187, 4, 'star_sofa', '21|17|2', 2, 1, '0', '1'),
+(188, 4, 'star_microphone', '28|17|4', 0, 1, '0', '0'),
+(189, 4, 'star_sofa2', '21|18|2', 2, 1, '0', '1'),
+(190, 4, 'star_sofa', '35|18|2', 6, 1, '0', '1'),
+(191, 4, 'star_sofa', '21|19|2', 2, 1, '0', '1'),
+(192, 4, 'star_sofa2', '35|19|2', 6, 1, '0', '1'),
+(193, 4, 'star_sofa2', '21|20|2', 2, 1, '0', '1'),
+(194, 4, 'star_sofa2', '24|20|2', 2, 1, '0', '1'),
+(195, 4, 'star_sofa', '32|20|2', 6, 1, '0', '1'),
+(196, 4, 'star_sofa', '35|20|2', 6, 1, '0', '1'),
+(197, 4, 'star_sofa', '21|21|2', 2, 1, '0', '1'),
+(198, 4, 'star_sofa', '24|21|2', 2, 1, '0', '1'),
+(199, 4, 'star_sofa2', '32|21|2', 6, 1, '0', '1'),
+(200, 4, 'star_sofa2', '35|21|2', 6, 1, '0', '1'),
+(201, 4, 'star_sofachair', '21|22|2', 2, 1, '0', '1'),
+(202, 4, 'star_table', '24|22|2', 0, 1, '0', '0'),
+(203, 4, 'star_sofa2', '25|22|2', 0, 1, '0', '1'),
+(204, 4, 'star_sofa', '26|22|2', 0, 1, '0', '1'),
+(205, 4, 'star_sofa2', '30|22|2', 0, 1, '0', '1'),
+(206, 4, 'star_sofa', '31|22|2', 0, 1, '0', '1'),
+(207, 4, 'star_table', '32|22|2', 0, 1, '0', '0'),
+(208, 4, 'star_table', '35|22|2', 0, 1, '0', '0'),
+(209, 4, 'star_sofa', '35|23|2', 6, 1, '0', '1'),
+(210, 4, 'bar10', '22|24|2', 0, 1, '0', '0'),
+(211, 4, 'star_sofa2', '35|24|2', 6, 1, '0', '1'),
+(212, 4, 'star_sofa', '37|24|1', 4, 1, '0', '1'),
+(213, 4, 'star_sofa2', '38|24|1', 4, 1, '0', '1'),
+(214, 4, 'star_sofa', '39|24|1', 4, 1, '0', '1'),
+(215, 4, 'star_sofa2', '40|24|1', 4, 1, '0', '1'),
+(216, 4, 'bar9', '22|25|2', 0, 1, '0', '0'),
+(217, 4, 'star_sofa2', '25|25|2', 0, 1, '0', '1'),
+(218, 4, 'star_sofa', '26|25|2', 0, 1, '0', '1'),
+(219, 4, 'star_sofa2', '30|25|2', 0, 1, '0', '1'),
+(220, 4, 'star_sofa', '31|25|2', 0, 1, '0', '1'),
+(221, 4, 'star_sofa', '35|25|2', 6, 1, '0', '1'),
+(222, 4, 'star_sofa2', '36|25|1', 2, 1, '0', '1'),
+(223, 4, 'bar8', '22|26|2', 0, 1, '0', '0'),
+(224, 4, 'star_sofa2', '35|26|2', 6, 1, '0', '1'),
+(225, 4, 'star_sofa', '36|26|1', 2, 1, '0', '1'),
+(226, 4, 'star_table', '39|26|1', 0, 1, '0', '0'),
+(227, 4, 'star_table', '40|26|1', 0, 1, '0', '0'),
+(228, 4, 'bar7', '22|27|2', 0, 1, '0', '0'),
+(229, 4, 'star_sofa', '25|27|2', 4, 1, '0', '1'),
+(230, 4, 'star_sofa2', '26|27|2', 4, 1, '0', '1'),
+(231, 4, 'star_sofa', '30|27|2', 4, 1, '0', '1'),
+(232, 4, 'star_sofa2', '31|27|2', 4, 1, '0', '1'),
+(233, 4, 'star_table', '35|27|2', 0, 1, '0', '0'),
+(234, 4, 'star_table', '37|27|1', 0, 1, '0', '0'),
+(235, 4, 'bar6', '22|28|2', 0, 1, '0', '0'),
+(236, 4, 'bar5', '22|29|2', 0, 1, '0', '0'),
+(237, 4, 'star_table', '25|29|2', 0, 1, '0', '0'),
+(238, 4, 'star_table', '26|29|2', 0, 1, '0', '0'),
+(239, 4, 'star_table', '16|30|3', 0, 1, '0', '0'),
+(240, 4, 'bar4', '22|30|2', 0, 1, '0', '0'),
+(241, 4, 'star_sofa2', '16|31|3', 2, 1, '0', '1'),
+(242, 4, 'bar3', '22|31|2', 0, 1, '0', '0'),
+(243, 4, 'star_sofa2', '25|31|2', 0, 1, '0', '1'),
+(244, 4, 'star_sofa', '26|31|2', 0, 1, '0', '1'),
+(245, 4, 'star_sofa', '30|31|2', 6, 1, '0', '1'),
+(246, 4, 'star_sofa', '16|32|3', 2, 1, '0', '1'),
+(247, 4, 'bar2', '22|32|2', 0, 1, '0', '0'),
+(248, 4, 'star_sofa2', '30|32|2', 6, 1, '0', '1'),
+(249, 4, 'star_sofa2', '16|33|3', 2, 1, '0', '1'),
+(250, 4, 'bar1', '22|33|2', 0, 1, '0', '0'),
+(251, 4, 'star_sofa', '25|33|2', 4, 1, '0', '1'),
+(252, 4, 'star_sofa2', '26|33|2', 4, 1, '0', '1'),
+(253, 4, 'star_sofa', '30|33|2', 6, 1, '0', '1'),
+(254, 4, 'star_sofa', '16|34|3', 2, 1, '0', '1'),
+(255, 4, 'star_sofa2', '30|34|2', 6, 1, '0', '1'),
+(256, 4, 'star_table', '16|35|3', 0, 1, '0', '0'),
+(257, 4, 'star_sofa', '30|35|2', 6, 1, '0', '1'),
+(258, 4, 'star_sofa2', '30|36|2', 6, 1, '0', '1'),
+(259, 4, 'star_sofachair', '25|37|2', 0, 1, '0', '1'),
+(260, 4, 'star_sofa2', '26|37|2', 0, 1, '0', '1'),
+(261, 4, 'star_sofa', '27|37|2', 0, 1, '0', '1'),
+(262, 4, 'star_sofa2', '28|37|2', 0, 1, '0', '1'),
+(263, 4, 'star_sofa', '29|37|2', 0, 1, '0', '1'),
+(264, 4, 'star_table', '30|37|2', 0, 1, '0', '0'),
+(265, 4, 'palm', '24|15|2', 0, 1, '0', '0'),
+(266, 4, 'palm', '21|23|2', 0, 1, '0', '0'),
+(267, 4, 'palm1', '25|26|2', 0, 1, '0', '0'),
+(268, 4, 'palm3', '26|26|2', 0, 1, '0', '0'),
+(269, 4, 'palm2', '30|26|2', 0, 1, '0', '0'),
+(270, 4, 'palm4', '31|26|2', 0, 1, '0', '0'),
+(271, 4, 'palm', '36|27|1', 0, 1, '0', '0'),
+(272, 4, 'palm4', '25|32|2', 0, 1, '0', '0'),
+(273, 4, 'palm1', '26|32|2', 0, 1, '0', '0'),
+(274, 4, 'palm3', '35|34|0', 0, 1, '0', '0'),
+(275, 4, 'palm2', '36|34|0', 0, 1, '0', '0'),
+(276, 5, 'pub_sofa2', '19|1|1', 4, 1, '0', '1'),
+(277, 5, 'pub_sofa', '20|1|1', 4, 1, '0', '1'),
+(278, 5, 'pub_sofa', '21|1|1', 4, 1, '0', '1'),
+(279, 5, 'bardesk1', '11|2|2', 0, 1, '0', '0'),
+(280, 5, 'pub_chair', '12|2|2', 6, 1, '0', '1'),
+(281, 5, 'bardesk2', '11|3|2', 0, 1, '0', '0'),
+(282, 5, 'bardesk1', '11|4|2', 0, 1, '0', '0'),
+(283, 5, 'pub_chair', '12|4|2', 6, 1, '0', '1'),
+(284, 5, 'bardesk2', '11|5|2', 0, 1, '0', '0'),
+(285, 5, 'pub_fence', '18|5|2', 1, 1, '0', '0'),
+(286, 5, 'bardesk1', '11|6|2', 0, 1, '0', '0'),
+(287, 5, 'pub_chair', '12|6|2', 6, 1, '0', '1'),
+(288, 5, 'pub_fence', '18|6|2', 0, 1, '0', '0'),
+(289, 5, 'bardesk2', '11|7|2', 0, 1, '0', '0'),
+(290, 5, 'pub_fence', '18|7|2', 0, 1, '0', '0'),
+(291, 5, 'bardesk1', '11|8|2', 0, 1, '0', '0'),
+(292, 5, 'pub_chair', '12|8|2', 6, 1, '0', '1'),
+(293, 5, 'pub_fence', '18|8|2', 0, 1, '0', '0'),
+(294, 5, 'bardesk4', '10|9|2', 0, 1, '0', '0'),
+(295, 5, 'bardesk3', '11|9|2', 0, 1, '0', '0'),
+(296, 5, 'pub_fence', '18|9|2', 0, 1, '0', '0'),
+(297, 5, 'pub_fence', '18|10|2', 0, 1, '0', '0'),
+(298, 5, 'pub_chair2', '2|11|3', 4, 1, '0', '1'),
+(299, 5, 'pub_chair2', '3|11|3', 4, 1, '0', '1'),
+(300, 5, 'pub_chair2', '5|11|3', 4, 1, '0', '1'),
+(301, 5, 'pub_chair2', '6|11|3', 4, 1, '0', '1'),
+(302, 5, 'pub_fence', '8|11|3', 1, 1, '0', '0'),
+(303, 5, 'pub_fence', '18|11|2', 0, 1, '0', '0'),
+(304, 5, 'pub_fence', '8|12|3', 0, 1, '0', '0'),
+(305, 5, 'pub_fence', '18|12|2', 0, 1, '0', '0'),
+(306, 5, 'pub_fence', '8|13|3', 0, 1, '0', '0'),
+(307, 5, 'pub_chair2', '9|13|2', 2, 1, '0', '1'),
+(308, 5, 'pub_chair3', '14|13|2', 2, 1, '0', '1'),
+(309, 5, 'pub_table2', '15|13|2', 1, 1, '0', '0'),
+(310, 5, 'pub_chair3', '16|13|2', 6, 1, '0', '1'),
+(311, 5, 'pub_fence', '18|13|2', 0, 1, '0', '0'),
+(312, 5, 'pub_fence', '8|14|3', 2, 1, '0', '0'),
+(313, 5, 'pub_chair2', '9|14|2', 2, 1, '0', '1'),
+(314, 5, 'pub_chair3', '14|14|2', 2, 1, '0', '1'),
+(315, 5, 'pub_table2', '15|14|2', 2, 1, '0', '0'),
+(316, 5, 'pub_chair3', '16|14|2', 6, 1, '0', '1'),
+(317, 5, 'pub_fence', '18|14|2', 0, 1, '0', '0'),
+(318, 5, 'pub_table', '1|15|3', 0, 1, '0', '0'),
+(319, 5, 'pub_fence', '5|15|3', 1, 1, '0', '0'),
+(320, 5, 'pub_fence', '18|15|2', 0, 1, '0', '0'),
+(321, 5, 'pub_sofa2', '1|16|3', 2, 1, '0', '1'),
+(322, 5, 'pub_fence', '5|16|3', 0, 1, '0', '0'),
+(323, 5, 'pub_fence', '18|16|2', 0, 1, '0', '0'),
+(324, 5, 'pub_sofa', '1|17|3', 2, 1, '0', '1'),
+(325, 5, 'pub_fence', '5|17|3', 0, 1, '0', '0'),
+(326, 5, 'pub_chair3', '13|17|2', 4, 1, '0', '1'),
+(327, 5, 'pub_chair3', '14|17|2', 4, 1, '0', '1'),
+(328, 5, 'pub_chair3', '15|17|2', 4, 1, '0', '1'),
+(329, 5, 'pub_chair3', '16|17|2', 4, 1, '0', '1'),
+(330, 5, 'pub_fence', '18|17|2', 0, 1, '0', '0'),
+(331, 5, 'pub_sofa', '1|18|3', 2, 1, '0', '1'),
+(332, 5, 'pub_fence', '5|18|3', 0, 1, '0', '0'),
+(333, 5, 'pub_table2', '13|18|2', 5, 1, '0', '0'),
+(334, 5, 'pub_table2', '14|18|2', 6, 1, '0', '0'),
+(335, 5, 'pub_table2', '15|18|2', 6, 1, '0', '0'),
+(336, 5, 'pub_table2', '16|18|2', 4, 1, '0', '0'),
+(337, 5, 'pub_fence', '18|18|2', 0, 1, '0', '0'),
+(338, 5, 'pub_sofa', '2|19|3', 0, 1, '0', '1'),
+(339, 5, 'pub_sofa2', '3|19|3', 0, 1, '0', '1'),
+(340, 5, 'pub_fence', '5|19|3', 0, 1, '0', '0'),
+(341, 5, 'pub_chair3', '13|19|2', 0, 1, '0', '1'),
+(342, 5, 'pub_chair3', '14|19|2', 0, 1, '0', '1'),
+(343, 5, 'pub_chair3', '15|19|2', 0, 1, '0', '1'),
+(344, 5, 'pub_chair3', '16|19|2', 0, 1, '0', '1'),
+(345, 5, 'pub_fence', '18|19|2', 0, 1, '0', '0'),
+(346, 5, 'pub_fence', '1|20|3', 5, 1, '0', '0'),
+(347, 5, 'pub_fence', '2|20|3', 6, 1, '0', '0'),
+(348, 5, 'pub_fence', '3|20|3', 6, 1, '0', '0'),
+(349, 5, 'pub_fence', '4|20|3', 6, 1, '0', '0'),
+(350, 5, 'pub_fence', '5|20|3', 3, 1, '0', '0'),
+(351, 5, 'pub_fence', '18|20|2', 0, 1, '0', '0'),
+(352, 5, 'pub_sofa2', '7|21|1', 4, 1, '0', '1'),
+(353, 5, 'pub_sofa', '8|21|1', 4, 1, '0', '1'),
+(354, 5, 'pub_fence', '12|21|2', 5, 1, '0', '0'),
+(355, 5, 'pub_fence', '13|21|2', 6, 1, '0', '0'),
+(356, 5, 'pub_fence', '14|21|2', 6, 1, '0', '0'),
+(357, 5, 'pub_fence', '15|21|2', 6, 1, '0', '0'),
+(358, 5, 'pub_fence', '16|21|2', 6, 1, '0', '0'),
+(359, 5, 'pub_fence', '17|21|2', 6, 1, '0', '0'),
+(360, 5, 'pub_fence', '18|21|2', 3, 1, '0', '0'),
+(361, 5, 'pub_sofa2', '6|22|1', 2, 1, '0', '1'),
+(362, 5, 'pub_table', '15|22|0', 0, 1, '0', '0'),
+(363, 5, 'pub_chair2', '16|22|0', 4, 1, '0', '1'),
+(364, 5, 'pub_chair2', '17|22|0', 4, 1, '0', '1'),
+(365, 5, 'pub_sofa', '6|23|1', 2, 1, '0', '1'),
+(366, 5, 'pub_table2', '8|23|1', 1, 1, '0', '0'),
+(367, 5, 'pub_sofa', '6|24|1', 2, 1, '0', '1'),
+(368, 5, 'pub_table2', '8|24|1', 0, 1, '0', '0'),
+(369, 5, 'pub_sofa', '6|25|1', 2, 1, '0', '1'),
+(370, 5, 'pub_table2', '8|25|1', 2, 1, '0', '0'),
+(371, 6, 'orange', '2|4|3', 0, 1, '0', '0'),
+(372, 6, 'loungey_chair', '7|4|3', 2, 1, '0', '1'),
+(373, 6, 'loungey_tablebigb', '8|4|3', 0, 1, '0', '0'),
+(374, 6, 'loungey_chair', '9|4|3', 6, 1, '0', '1'),
+(375, 6, 'loungey_chair', '2|5|3', 4, 1, '0', '1'),
+(376, 6, 'loungey_chair', '7|5|3', 2, 1, '0', '1'),
+(377, 6, 'loungey_tablebiga', '8|5|3', 0, 1, '0', '0'),
+(378, 6, 'loungey_chair', '9|5|3', 6, 1, '0', '1'),
+(379, 6, 'loungey_table', '2|6|3', 0, 1, '0', '0'),
+(380, 6, 'loungey_chair', '2|7|3', 0, 1, '0', '1'),
+(381, 6, 'theater_chair', '13|7|1', 0, 1, '0', '1'),
+(382, 6, 'theater_chair', '14|7|1', 0, 1, '0', '1'),
+(383, 6, 'theater_chair', '15|7|1', 0, 1, '0', '1'),
+(384, 6, 'theater_chair', '16|7|1', 0, 1, '0', '1'),
+(385, 6, 'theater_chair', '17|7|1', 0, 1, '0', '1'),
+(386, 6, 'theater_chair', '18|7|1', 0, 1, '0', '1'),
+(387, 6, 'stair', '21|7|1', 0, 1, '0', '0'),
+(388, 6, 'lightpole', '9|8|3', 0, 1, '0', '0'),
+(389, 6, 'pomomaski', '13|8|2', 2, 1, '0', '0'),
+(390, 6, 'pomomaski', '14|8|2', 0, 1, '0', '0'),
+(391, 6, 'pomomaski', '15|8|2', 0, 1, '0', '0'),
+(392, 6, 'pomomaski', '16|8|2', 0, 1, '0', '0'),
+(393, 6, 'pomomaski', '17|8|2', 0, 1, '0', '0'),
+(394, 6, 'pomomaski', '18|8|2', 0, 1, '0', '0'),
+(395, 6, 'pomomaski', '19|8|2', 1, 1, '0', '0'),
+(396, 6, 'stair', '21|8|1', 0, 1, '0', '0'),
+(397, 6, 'orange', '2|9|3', 0, 1, '0', '0'),
+(398, 6, 'theater_chair', '13|9|2', 0, 1, '0', '1'),
+(399, 6, 'theater_chair', '14|9|2', 0, 1, '0', '1'),
+(400, 6, 'theater_chair', '15|9|2', 0, 1, '0', '1'),
+(401, 6, 'theater_chair', '16|9|2', 0, 1, '0', '1'),
+(402, 6, 'theater_chair', '17|9|2', 0, 1, '0', '1'),
+(403, 6, 'theater_chair', '18|9|2', 0, 1, '0', '1'),
+(404, 6, 'theater_chair', '19|9|2', 0, 1, '0', '1'),
+(405, 6, 'theater_chair', '20|9|2', 0, 1, '0', '1'),
+(406, 6, 'stair', '21|9|1', 0, 1, '0', '0'),
+(407, 6, 'loungey_chair', '2|10|3', 4, 1, '0', '1'),
+(408, 6, 'loungey_chair', '9|10|3', 4, 1, '0', '1'),
+(409, 6, 'loungey_table', '2|11|3', 0, 1, '0', '0'),
+(410, 6, 'loungey_table', '9|11|3', 0, 1, '0', '0'),
+(411, 6, 'loungey_chair', '2|12|3', 0, 1, '0', '1'),
+(412, 6, 'loungey_chair', '9|12|3', 0, 1, '0', '1'),
+(413, 6, 'cubicb_chair', '17|12|1', 6, 1, '0', '1'),
+(414, 6, 'cubico_chair', '19|12|1', 2, 1, '0', '1'),
+(415, 6, 'cubicb_chair', '15|13|1', 2, 1, '0', '1'),
+(416, 6, 'lightpole', '19|13|1', 0, 1, '0', '0'),
+(417, 6, 'cubicb_chair', '20|13|1', 6, 1, '0', '1'),
+(418, 6, 'lightpole', '9|14|3', 0, 1, '0', '0'),
+(419, 6, 'loungey_chair', '2|15|3', 4, 1, '0', '1'),
+(420, 6, 'cubicb_chair', '14|15|1', 4, 1, '0', '1'),
+(421, 6, 'cubico_chair', '19|15|1', 4, 1, '0', '1'),
+(422, 6, 'loungey_table', '2|16|3', 0, 1, '0', '0'),
+(423, 6, 'loungey_chair', '7|16|3', 2, 1, '0', '1'),
+(424, 6, 'loungey_table', '8|16|3', 2, 1, '0', '0'),
+(425, 6, 'loungey_chair', '9|16|3', 6, 1, '0', '1'),
+(426, 6, 'cubicb_chair', '13|16|1', 2, 1, '0', '1'),
+(427, 6, 'cubicb_chair', '14|16|1', 6, 1, '0', '1'),
+(428, 6, 'orange', '19|16|1', 0, 1, '0', '0'),
+(429, 6, 'loungey_chair', '2|17|3', 0, 1, '0', '1'),
+(430, 6, 'loungey_chair', '7|17|3', 2, 1, '0', '1'),
+(431, 6, 'loungey_table', '8|17|3', 2, 1, '0', '0'),
+(432, 6, 'loungey_chair', '9|17|3', 6, 1, '0', '1'),
+(433, 6, 'cubicb_chair', '19|17|1', 2, 1, '0', '1'),
+(434, 6, 'orange', '2|18|3', 0, 1, '0', '0'),
+(435, 6, 'cubicb_chair', '14|18|1', 4, 1, '0', '1'),
+(436, 6, 'bardesque', '2|19|3', 0, 1, '0', '0'),
+(437, 6, 'bardesque', '2|20|3', 1, 1, '0', '0'),
+(438, 6, 'bar_chair', '3|20|3', 6, 1, '0', '1'),
+(439, 6, 'lightpole', '9|20|3', 0, 1, '0', '0'),
+(440, 6, 'cubicb_chair', '14|20|1', 0, 1, '0', '1'),
+(441, 6, 'cubicb_chair', '19|20|1', 2, 1, '0', '1'),
+(442, 6, 'cubico_chair', '20|20|1', 6, 1, '0', '1'),
+(443, 6, 'bardesque', '2|21|3', 1, 1, '0', '0'),
+(444, 6, 'bar_chair', '3|21|3', 6, 1, '0', '1'),
+(445, 6, 'cubicb_chair', '19|21|1', 0, 1, '0', '1'),
+(446, 6, 'bardesque', '2|22|3', 1, 1, '0', '0'),
+(447, 6, 'bar_chair', '3|22|3', 6, 1, '0', '1'),
+(448, 6, 'lightpole', '16|22|1', 0, 1, '0', '0'),
+(449, 6, 'cubico_chair', '18|22|1', 0, 1, '0', '1'),
+(450, 6, 'bardesque', '2|23|3', 1, 1, '0', '0'),
+(451, 6, 'bar_chair', '3|23|3', 6, 1, '0', '1'),
+(452, 6, 'bardesque', '2|24|3', 1, 1, '0', '0'),
+(453, 6, 'bar_chair', '3|24|3', 6, 1, '0', '1'),
+(454, 6, 'bardesque', '2|25|3', 2, 1, '0', '0'),
+(455, 7, 'hardwoodsofa1', '13|1|3', 4, 1, '0', '1'),
+(456, 7, 'hardwoodsofa2', '14|1|3', 4, 1, '0', '1'),
+(457, 7, 'hardwoodsofa3', '15|1|3', 4, 1, '0', '1'),
+(458, 7, 'teabamboo', '16|1|3', 0, 1, '0', '0'),
+(459, 7, 'hardwoodsofa1', '18|1|3', 4, 1, '0', '1'),
+(460, 7, 'hardwoodsofa2', '19|1|3', 4, 1, '0', '1'),
+(461, 7, 'hardwoodsofa3', '20|1|3', 4, 1, '0', '1'),
+(462, 7, 'teasmalltable1', '13|3|3', 0, 1, '0', '0'),
+(463, 7, 'teasmalltable2', '15|3|3', 0, 1, '0', '0'),
+(464, 7, 'teasmalltable1', '18|3|3', 0, 1, '0', '0'),
+(465, 7, 'teasmalltable2', '20|3|3', 0, 1, '0', '0'),
+(466, 7, 'teastool', '2|6|3', 4, 1, '0', '1'),
+(467, 7, 'teastool', '3|6|3', 4, 1, '0', '1'),
+(468, 7, 'chinastoolred', '8|6|3', 0, 1, '0', '1'),
+(469, 7, 'chinastoolred', '9|6|3', 0, 1, '0', '1'),
+(470, 7, 'chinastoolred', '10|6|3', 0, 1, '0', '1'),
+(471, 7, 'chinastoolred', '11|6|3', 0, 1, '0', '1'),
+(472, 7, 'teatable1', '2|8|3', 0, 1, '0', '0'),
+(473, 7, 'teatable2', '3|8|3', 0, 1, '0', '0'),
+(474, 7, 'teastool2', '2|9|3', 0, 1, '0', '1'),
+(475, 7, 'teastool2', '3|9|3', 0, 1, '0', '1'),
+(476, 7, 'teastool', '16|9|3', 4, 1, '0', '1'),
+(477, 7, 'teastool', '17|9|3', 4, 1, '0', '1'),
+(478, 7, 'teatable1', '16|11|3', 0, 1, '0', '0'),
+(479, 7, 'teatable2', '17|11|3', 0, 1, '0', '0'),
+(480, 7, 'teastool', '2|12|3', 4, 1, '0', '1'),
+(481, 7, 'teastool', '3|12|3', 4, 1, '0', '1'),
+(482, 7, 'teastool2', '16|12|3', 0, 1, '0', '1'),
+(483, 7, 'teastool2', '17|12|3', 0, 1, '0', '1'),
+(484, 7, 'teatable1', '2|14|3', 0, 1, '0', '0'),
+(485, 7, 'teatable2', '3|14|3', 0, 1, '0', '0'),
+(486, 7, 'teastool2', '2|15|3', 0, 1, '0', '1'),
+(487, 7, 'teastool2', '3|15|3', 0, 1, '0', '1'),
+(488, 7, 'teavase', '0|18|1', 0, 1, '0', '0'),
+(489, 7, 'chinastoolgreen', '0|19|1', 2, 1, '0', '1'),
+(490, 7, 'chinastoolgreen', '0|20|1', 2, 1, '0', '1'),
+(491, 7, 'teavase', '0|21|1', 0, 1, '0', '0'),
+(492, 8, 'hedge7', '10|7|2', 4, 1, '0', '0'),
+(493, 8, 'hedge7', '11|7|2', 4, 1, '0', '0'),
+(494, 8, 'hedge7', '12|7|2', 4, 1, '0', '0'),
+(495, 8, 'hedge7', '13|7|2', 4, 1, '0', '0'),
+(496, 8, 'hedge8', '14|7|2', 4, 1, '0', '0'),
+(497, 8, 'hedge2', '18|7|2', 4, 1, '0', '0'),
+(498, 8, 'hedge7', '19|7|2', 4, 1, '0', '0'),
+(499, 8, 'hedge7', '20|7|2', 4, 1, '0', '0'),
+(500, 8, 'hedge7', '21|7|2', 4, 1, '0', '0'),
+(501, 8, 'hedge9', '14|8|2', 4, 1, '0', '0'),
+(502, 8, 'hedge9', '18|8|2', 4, 1, '0', '0'),
+(503, 8, 'hedge5', '3|9|2', 4, 1, '0', '0'),
+(504, 8, 'hedge9', '3|10|2', 4, 1, '0', '0'),
+(505, 8, 'picnic_dummychair1', '12|11|3', 4, 1, '0', '1'),
+(506, 8, 'picnic_dummychair1', '13|11|3', 4, 1, '0', '1'),
+(507, 8, 'picnic_dummychair1', '14|11|100000', 4, 1, '0', '1'),
+(508, 8, 'picnic_dummychair1', '10|13|3', 2, 1, '0', '1'),
+(509, 8, 'picnic_dummychair1', '15|13|3', 6, 1, '0', '1'),
+(510, 8, 'picnic_ground', '21|13|2', 4, 1, '0', '1'),
+(511, 8, 'picnic_ground', '7|14|2', 4, 1, '0', '1'),
+(512, 8, 'picnic_dummychair1', '10|14|3', 2, 1, '0', '1'),
+(513, 8, 'picnic_dummychair1', '15|14|3', 6, 1, '0', '1'),
+(514, 8, 'picnic_ground', '19|15|2', 2, 1, '0', '1'),
+(515, 8, 'picnic_ground', '23|15|2', 6, 1, '0', '1'),
+(516, 8, 'picnic_ground', '5|16|2', 2, 1, '0', '1'),
+(517, 8, 'picnic_ground', '9|16|2', 6, 1, '0', '1'),
+(518, 8, 'picnic_cloth1', '20|16|2', 2, 1, '0', '0'),
+(519, 8, 'picnic_cloth1', '6|17|2', 2, 1, '0', '0'),
+(520, 8, 'picnic_ground', '21|17|2', 0, 1, '0', '1'),
+(521, 8, 'picnic_ground', '7|18|2', 0, 1, '0', '1'),
+(522, 8, 'picnic_redbench2', '0|19|2', 2, 1, '0', '1'),
+(523, 8, 'picnic_redbench1', '0|20|2', 2, 1, '0', '1'),
+(524, 8, 'hedge6', '11|20|2', 4, 1, '0', '0'),
+(525, 8, 'hedge7', '12|20|2', 4, 1, '0', '0'),
+(526, 8, 'hedge7', '13|20|2', 4, 1, '0', '0'),
+(527, 8, 'hedge3', '14|20|2', 4, 1, '0', '0'),
+(528, 8, 'hedge4', '17|20|2', 4, 1, '0', '0'),
+(529, 8, 'hedge7', '18|20|2', 4, 1, '0', '0'),
+(530, 8, 'hedge7', '19|20|2', 4, 1, '0', '0'),
+(531, 8, 'hedge8', '20|20|2', 4, 1, '0', '0'),
+(532, 8, 'hedge5', '11|21|2', 4, 1, '0', '0'),
+(533, 8, 'picnic_bench1', '12|21|2', 4, 1, '0', '1'),
+(534, 8, 'picnic_bench2', '13|21|2', 4, 1, '0', '1'),
+(535, 8, 'picnic_bench3', '14|21|2', 4, 1, '0', '1'),
+(536, 8, 'picnic_bench1', '17|21|2', 4, 1, '0', '1'),
+(537, 8, 'picnic_bench2', '18|21|2', 4, 1, '0', '1'),
+(538, 8, 'picnic_bench3', '19|21|2', 4, 1, '0', '1'),
+(539, 8, 'hedge5', '20|21|2', 4, 1, '0', '0'),
+(540, 8, 'picnic_redbench2', '0|22|2', 2, 1, '0', '1'),
+(541, 8, 'hedge5', '11|22|2', 4, 1, '0', '0'),
+(542, 8, 'hedge5', '20|22|2', 4, 1, '0', '0'),
+(543, 8, 'picnic_ground', '25|22|2', 4, 1, '0', '1'),
+(544, 8, 'picnic_redbench1', '0|23|2', 2, 1, '0', '1'),
+(545, 8, 'hedge5', '11|23|2', 4, 1, '0', '0'),
+(546, 8, 'picnic_bench1', '12|23|2', 2, 1, '0', '1'),
+(547, 8, 'picnic_bench1', '19|23|2', 6, 1, '0', '1'),
+(548, 8, 'hedge5', '20|23|2', 4, 1, '0', '0'),
+(549, 8, 'picnic_dummychair1', '6|24|2', 4, 1, '0', '1'),
+(550, 8, 'picnic_dummychair4', '7|24|2', 4, 1, '0', '1'),
+(551, 8, 'picnic_dummychair6', '8|24|2', 4, 1, '0', '1'),
+(552, 8, 'hedge5', '11|24|2', 4, 1, '0', '0'),
+(553, 8, 'picnic_bench2', '12|24|2', 2, 1, '0', '1'),
+(554, 8, 'picnic_bench2', '19|24|2', 6, 1, '0', '1'),
+(555, 8, 'hedge5', '20|24|2', 4, 1, '0', '0'),
+(556, 8, 'picnic_ground', '23|24|2', 2, 1, '0', '1'),
+(557, 8, 'picnic_ground', '27|24|2', 6, 1, '0', '1'),
+(558, 8, 'picnic_stump', '5|25|2', 2, 1, '0', '1'),
+(559, 8, 'hedge5', '11|25|2', 4, 1, '0', '0'),
+(560, 8, 'picnic_bench2', '12|25|2', 2, 1, '0', '1'),
+(561, 8, 'picnic_bench2', '19|25|2', 6, 1, '0', '1'),
+(562, 8, 'hedge5', '20|25|2', 4, 1, '0', '0'),
+(563, 8, 'picnic_cloth2', '24|25|2', 2, 1, '0', '0'),
+(564, 8, 'picnic_stump', '7|26|2', 0, 1, '0', '1'),
+(565, 8, 'hedge5', '11|26|2', 4, 1, '0', '0'),
+(566, 8, 'picnic_bench3', '12|26|2', 2, 1, '0', '1'),
+(567, 8, 'picnic_fireplace1', '14|26|2', 0, 1, '0', '0'),
+(568, 8, 'picnic_fireplace2', '16|26|2', 2, 1, '0', '0'),
+(569, 8, 'picnic_bench3', '19|26|2', 6, 1, '0', '1'),
+(570, 8, 'hedge5', '20|26|2', 4, 1, '0', '0'),
+(571, 8, 'picnic_ground', '25|26|2', 0, 1, '0', '1'),
+(572, 8, 'hedge9', '11|27|2', 4, 1, '0', '0'),
+(573, 8, 'picnic_lemonade', '12|27|2', 4, 1, '0', '0'),
+(574, 8, 'hedge9', '20|27|2', 4, 1, '0', '0'),
+(575, 8, 'picnic_firewood2', '8|29|2', 0, 1, '0', '0'),
+(576, 8, 'picnic_redbench2', '0|30|2', 2, 1, '0', '1'),
+(577, 8, 'picnic_firewood1', '8|30|2', 0, 1, '0', '0'),
+(578, 8, 'picnic_redbench1', '0|31|2', 2, 1, '0', '1'),
+(579, 8, 'picnic_firewood1', '8|31|2', 0, 1, '0', '0'),
+(580, 8, 'picnic_bench1', '12|31|2', 4, 1, '0', '1'),
+(581, 8, 'picnic_bench2', '13|31|2', 4, 1, '0', '1'),
+(582, 8, 'picnic_bench3', '14|31|2', 4, 1, '0', '1'),
+(583, 8, 'picnic_bench1', '18|31|2', 4, 1, '0', '1'),
+(584, 8, 'picnic_bench2', '19|31|2', 4, 1, '0', '1'),
+(585, 8, 'picnic_bench3', '20|31|2', 4, 1, '0', '1'),
+(586, 8, 'picnic_carrot', '27|31|2', 0, 1, '0', '0'),
+(587, 8, 'picnic_carrot', '28|31|2', 0, 1, '0', '0'),
+(588, 8, 'picnic_carrot', '29|31|2', 0, 1, '0', '0'),
+(589, 8, 'picnic_carrot', '30|31|2', 0, 1, '0', '0'),
+(590, 8, 'picnic_carrot', '31|31|2', 0, 1, '0', '0'),
+(591, 8, 'picnic_firewood1', '8|32|2', 0, 1, '0', '0'),
+(592, 8, 'picnic_table2', '12|32|2', 2, 1, '0', '0'),
+(593, 8, 'picnic_table', '14|32|2', 2, 1, '0', '0'),
+(594, 8, 'picnic_table2', '18|32|2', 2, 1, '0', '0'),
+(595, 8, 'picnic_table', '20|32|2', 2, 1, '0', '0'),
+(596, 8, 'hedge1', '3|33|2', 4, 1, '0', '0'),
+(597, 8, 'picnic_firewood1', '8|33|2', 0, 1, '0', '0'),
+(598, 8, 'picnic_bench1', '12|33|2', 0, 1, '0', '1'),
+(599, 8, 'picnic_bench2', '13|33|2', 0, 1, '0', '1'),
+(600, 8, 'picnic_bench3', '14|33|2', 0, 1, '0', '1'),
+(601, 8, 'picnic_bench1', '18|33|2', 0, 1, '0', '1'),
+(602, 8, 'picnic_bench2', '19|33|2', 0, 1, '0', '1'),
+(603, 8, 'picnic_bench3', '20|33|2', 0, 1, '0', '1'),
+(604, 8, 'picnic_cabbage', '27|33|2', 0, 1, '0', '0'),
+(605, 8, 'picnic_cabbage', '28|33|2', 0, 1, '0', '0'),
+(606, 8, 'picnic_cabbage', '29|33|2', 0, 1, '0', '0'),
+(607, 8, 'hedge5', '3|34|2', 4, 1, '0', '0'),
+(608, 8, 'picnic_firewood1', '8|34|2', 0, 1, '0', '0'),
+(609, 8, 'hedge5', '3|35|2', 4, 1, '0', '0'),
+(610, 8, 'picnic_firewood1', '8|35|2', 0, 1, '0', '0'),
+(611, 8, 'hedge5', '3|36|2', 4, 1, '0', '0'),
+(612, 8, 'picnic_firewood1', '8|36|2', 0, 1, '0', '0'),
+(613, 8, 'picnic_firewood1', '8|37|2', 0, 1, '0', '0'),
+(614, 8, 'picnic_bench1', '12|37|2', 4, 1, '0', '1'),
+(615, 8, 'picnic_bench2', '13|37|2', 4, 1, '0', '1'),
+(616, 8, 'picnic_bench3', '14|37|2', 4, 1, '0', '1'),
+(617, 8, 'picnic_bench1', '18|37|2', 4, 1, '0', '1'),
+(618, 8, 'picnic_bench2', '19|37|2', 4, 1, '0', '1'),
+(619, 8, 'picnic_bench3', '20|37|2', 4, 1, '0', '1'),
+(620, 8, 'picnic_firewood1', '8|38|2', 0, 1, '0', '0'),
+(621, 8, 'picnic_table2', '12|38|2', 2, 1, '0', '0'),
+(622, 8, 'picnic_table', '14|38|2', 2, 1, '0', '0'),
+(623, 8, 'picnic_table2', '18|38|2', 2, 1, '0', '0'),
+(624, 8, 'picnic_table', '20|38|2', 2, 1, '0', '0'),
+(625, 8, 'picnic_firewood3', '8|39|2', 0, 1, '0', '0'),
+(626, 8, 'picnic_bench1', '12|39|2', 0, 1, '0', '1'),
+(627, 8, 'picnic_bench2', '13|39|2', 0, 1, '0', '1'),
+(628, 8, 'picnic_bench3', '14|39|2', 0, 1, '0', '1'),
+(629, 8, 'picnic_bench1', '18|39|2', 0, 1, '0', '1'),
+(630, 8, 'picnic_bench2', '19|39|2', 0, 1, '0', '1'),
+(631, 8, 'picnic_bench3', '20|39|2', 0, 1, '0', '1'),
+(632, 9, 'greenchair2', '8|4|3', 4, 1, '0', '1'),
+(633, 9, 'greenchair1', '9|4|3', 4, 1, '0', '1'),
+(634, 9, 'greenchair2', '8|6|3', 0, 1, '0', '1'),
+(635, 9, 'greenchair1', '9|6|3', 0, 1, '0', '1'),
+(636, 9, 'dustylamp', '20|6|3', 2, 1, '0', '0'),
+(637, 9, 'dustylamp', '28|6|3', 2, 1, '0', '0'),
+(638, 9, 'greenchair2', '3|7|1', 4, 1, '0', '1'),
+(639, 9, 'greenchair1', '4|7|1', 4, 1, '0', '1'),
+(640, 9, 'greenchair2', '3|9|1', 0, 1, '0', '1'),
+(641, 9, 'greenchair1', '4|9|1', 0, 1, '0', '1'),
+(642, 9, 'yellowchair', '21|10|3', 2, 1, '0', '1'),
+(643, 9, 'yellowchair', '23|10|3', 6, 1, '0', '1'),
+(644, 9, 'yellowchair', '26|10|3', 2, 1, '0', '1'),
+(645, 9, 'yellowchair', '28|10|3', 6, 1, '0', '1'),
+(646, 9, 'greenchair2', '11|12|1', 2, 1, '0', '1'),
+(647, 9, 'greenchair2', '3|13|1', 4, 1, '0', '1'),
+(648, 9, 'greenchair1', '4|13|1', 4, 1, '0', '1'),
+(649, 9, 'greenchair1', '11|13|1', 2, 1, '0', '1'),
+(650, 9, 'dustylamp', '11|14|1', 2, 1, '0', '0'),
+(651, 9, 'greenchair2', '3|15|1', 0, 1, '0', '1'),
+(652, 9, 'greenchair1', '4|15|1', 0, 1, '0', '1'),
+(653, 9, 'greenchair2', '11|15|1', 2, 1, '0', '1'),
+(654, 9, 'yellowchair', '24|15|1', 4, 1, '0', '1'),
+(655, 9, 'greenchair1', '11|16|1', 2, 1, '0', '1'),
+(656, 9, 'yellowchair', '22|17|1', 2, 1, '0', '1'),
+(657, 9, 'dustylamp', '24|17|1', 2, 1, '0', '0'),
+(658, 9, 'yellowchair', '26|17|1', 6, 1, '0', '1'),
+(659, 9, 'dustylamp', '11|19|1', 2, 1, '0', '0'),
+(660, 9, 'yellowchair', '24|19|1', 0, 1, '0', '1'),
+(661, 9, 'greenchair2', '12|23|1', 2, 1, '0', '1'),
+(662, 9, 'greenchair2', '14|23|1', 6, 1, '0', '1'),
+(663, 9, 'greenchair1', '12|24|1', 2, 1, '0', '1'),
+(664, 9, 'greenchair1', '14|24|1', 6, 1, '0', '1'),
+(665, 10, 'bench', '17|10|0', 2, 1, '0', '1'),
+(666, 10, 'bench', '19|10|0', 6, 1, '0', '1'),
+(667, 10, 'bench', '21|10|0', 2, 1, '0', '1'),
+(668, 10, 'bench', '23|10|0', 6, 1, '0', '1'),
+(669, 10, 'bench', '17|11|0', 2, 1, '0', '1'),
+(670, 10, 'bench', '19|11|0', 6, 1, '0', '1'),
+(671, 10, 'bench', '21|11|0', 2, 1, '0', '1'),
+(672, 10, 'bench', '23|11|0', 6, 1, '0', '1'),
+(673, 10, 'koc_chair', '32|11|1', 4, 1, '0', '1'),
+(674, 10, 'bench', '17|12|0', 2, 1, '0', '1'),
+(675, 10, 'bench', '19|12|0', 6, 1, '0', '1'),
+(676, 10, 'bench', '21|12|0', 2, 1, '0', '1'),
+(677, 10, 'bench', '23|12|0', 6, 1, '0', '1'),
+(678, 10, 'koc_chair', '31|12|1', 2, 1, '0', '1'),
+(679, 10, 'koc_table', '32|12|1', 0, 1, '0', '0'),
+(680, 10, 'koc_chair', '33|12|1', 6, 1, '0', '1'),
+(681, 10, 'bench', '17|13|0', 2, 1, '0', '1'),
+(682, 10, 'bench', '19|13|0', 6, 1, '0', '1'),
+(683, 10, 'bench', '21|13|0', 2, 1, '0', '1'),
+(684, 10, 'bench', '23|13|0', 6, 1, '0', '1'),
+(685, 10, 'koc_chair', '25|13|1', 4, 1, '0', '1'),
+(686, 10, 'koc_chair', '32|13|1', 0, 1, '0', '1'),
+(687, 10, 'bench', '17|14|0', 2, 1, '0', '1'),
+(688, 10, 'bench', '19|14|0', 6, 1, '0', '1'),
+(689, 10, 'bench', '21|14|0', 2, 1, '0', '1'),
+(690, 10, 'bench', '23|14|0', 6, 1, '0', '1'),
+(691, 10, 'koc_table', '25|14|1', 0, 1, '0', '0'),
+(692, 10, 'koc_chair', '26|14|1', 6, 1, '0', '1'),
+(693, 10, 'bench', '17|15|0', 2, 1, '0', '1'),
+(694, 10, 'bench', '19|15|0', 6, 1, '0', '1'),
+(695, 10, 'bench', '21|15|0', 2, 1, '0', '1'),
+(696, 10, 'bench', '23|15|0', 6, 1, '0', '1'),
+(697, 10, 'koc_chair', '25|15|1', 0, 1, '0', '1'),
+(698, 10, 'koc_chair', '29|15|1', 2, 1, '0', '1'),
+(699, 10, 'koc_table', '30|15|1', 0, 1, '0', '0'),
+(700, 10, 'koc_chair', '31|15|1', 6, 1, '0', '1'),
+(701, 10, 'koc_chair', '30|16|1', 0, 1, '0', '1'),
+(702, 10, 'chairf1', '25|24|1', 2, 1, '0', '1'),
+(703, 10, 'chairf1', '33|24|1', 6, 1, '0', '1'),
+(704, 10, 'bench', '17|25|0', 2, 1, '0', '1'),
+(705, 10, 'bench', '19|25|0', 6, 1, '0', '1'),
+(706, 10, 'bench', '21|25|0', 2, 1, '0', '1'),
+(707, 10, 'bench', '23|25|0', 6, 1, '0', '1'),
+(708, 10, 'chairf1', '25|25|1', 2, 1, '0', '1'),
+(709, 10, 'chairf1', '33|25|1', 6, 1, '0', '1'),
+(710, 10, 'bench', '17|26|0', 2, 1, '0', '1'),
+(711, 10, 'bench', '19|26|0', 6, 1, '0', '1'),
+(712, 10, 'bench', '21|26|0', 2, 1, '0', '1'),
+(713, 10, 'bench', '23|26|0', 6, 1, '0', '1'),
+(714, 10, 'chairf1', '25|26|1', 2, 1, '0', '1'),
+(715, 10, 'chairf1', '33|26|1', 6, 1, '0', '1'),
+(716, 10, 'bench', '17|27|0', 2, 1, '0', '1'),
+(717, 10, 'bench', '19|27|0', 6, 1, '0', '1'),
+(718, 10, 'bench', '21|27|0', 2, 1, '0', '1'),
+(719, 10, 'bench', '23|27|0', 6, 1, '0', '1'),
+(720, 10, 'bench', '17|28|0', 2, 1, '0', '1'),
+(721, 10, 'bench', '19|28|0', 6, 1, '0', '1'),
+(722, 10, 'bench', '21|28|0', 2, 1, '0', '1'),
+(723, 10, 'bench', '23|28|0', 6, 1, '0', '1'),
+(724, 10, 'bench', '17|29|0', 2, 1, '0', '1'),
+(725, 10, 'bench', '19|29|0', 6, 1, '0', '1'),
+(726, 10, 'bench', '21|29|0', 2, 1, '0', '1'),
+(727, 10, 'bench', '23|29|100000', 6, 1, '0', '1'),
+(728, 10, 'bench', '9|9|0', 4, 1, '0', '1'),
+(729, 10, 'bench', '7|12|0', 2, 1, '0', '1'),
+(730, 10, 'bench', '28|18|0', 4, 1, '0', '1'),
+(731, 10, 'bench', '25|20|0', 2, 1, '0', '1'),
+(732, 10, 'bench', '26|29|0', 4, 1, '0', '1'),
+(733, 11, 'pizza_plant1', '15|0|0', 2, 1, '0', '0'),
+(734, 11, 'pizza_sofa1', '14|3|0', 4, 1, '0', '1'),
+(735, 11, 'pizza_sofa2', '15|3|0', 4, 1, '0', '1'),
+(736, 11, 'pizza_table', '15|5|0', 2, 1, '0', '0'),
+(737, 11, 'pizza_plant2', '0|6|1', 2, 1, '0', '0'),
+(738, 11, 'pizza_sofa3', '14|6|0', 0, 1, '0', '1'),
+(739, 11, 'pizza_sofa4', '15|6|0', 0, 1, '0', '1'),
+(740, 11, 'pizza_chair', '1|8|1', 4, 1, '0', '1'),
+(741, 11, 'pizza_chair', '2|8|1', 4, 1, '0', '1'),
+(742, 11, 'pizza_table', '2|10|1', 2, 1, '0', '0'),
+(743, 11, 'pizza_sofa1', '14|10|0', 4, 1, '0', '1'),
+(744, 11, 'pizza_sofa2', '15|10|0', 4, 1, '0', '1'),
+(745, 11, 'pizza_chair', '1|11|1', 0, 1, '0', '1'),
+(746, 11, 'pizza_chair', '2|11|1', 0, 1, '0', '1'),
+(747, 11, 'pizza_table', '15|12|0', 2, 1, '0', '0'),
+(748, 11, 'pizza_sofa3', '14|13|0', 0, 1, '0', '1'),
+(749, 11, 'pizza_sofa4', '15|13|0', 0, 1, '0', '1'),
+(750, 11, 'pizza_chair', '1|16|1', 4, 1, '0', '1'),
+(751, 11, 'pizza_chair', '2|16|1', 4, 1, '0', '1'),
+(752, 11, 'pizza_table', '2|18|1', 2, 1, '0', '0'),
+(753, 11, 'pizza_chair', '1|19|1', 0, 1, '0', '1'),
+(754, 11, 'pizza_chair', '2|19|1', 0, 1, '0', '1'),
+(755, 11, 'pizza_chair', '11|21|1', 2, 1, '0', '1'),
+(756, 11, 'pizza_chair', '14|21|1', 6, 1, '0', '1'),
+(757, 11, 'pizza_chair', '11|22|1', 2, 1, '0', '1'),
+(758, 11, 'pizza_table', '13|22|1', 0, 1, '0', '0'),
+(759, 11, 'pizza_chair', '14|22|1', 6, 1, '0', '1'),
+(760, 11, 'pizza_plant1', '0|25|1', 2, 1, '0', '0'),
+(761, 11, 'pizza_plant1', '15|25|1', 2, 1, '0', '0'),
+(762, 12, 'parkfence2', '27|5|0', 0, 1, '0', '0'),
+(763, 12, 'parkfence2', '29|5|0', 0, 1, '0', '0'),
+(764, 12, 'parkfence1', '19|6|0', 0, 1, '0', '0'),
+(765, 12, 'parkfence3', '20|6|0', 4, 1, '0', '0'),
+(766, 12, 'parkfence3', '21|6|0', 4, 1, '0', '0'),
+(767, 12, 'parkfence3', '22|6|0', 4, 1, '0', '0'),
+(768, 12, 'parkfence2', '23|6|0', 4, 1, '0', '0'),
+(769, 12, 'parkfence3', '24|6|0', 4, 1, '0', '0'),
+(770, 12, 'parkfence3', '25|6|0', 4, 1, '0', '0'),
+(771, 12, 'parkfence3', '26|6|0', 4, 1, '0', '0'),
+(772, 12, 'parkfence1', '27|6|0', 2, 1, '0', '0'),
+(773, 12, 'parkfence3', '29|6|0', 2, 1, '0', '0'),
+(774, 12, 'parkfence2', '17|7|0', 0, 1, '0', '0'),
+(775, 12, 'parkfence3', '19|7|0', 2, 1, '0', '0'),
+(776, 12, 'parkfence3', '23|7|0', 2, 1, '0', '0'),
+(777, 12, 'parkfence3', '27|7|0', 2, 1, '0', '0'),
+(778, 12, 'parkfence3', '29|7|0', 2, 1, '0', '0'),
+(779, 12, 'parkfence3', '17|8|0', 2, 1, '0', '0'),
+(780, 12, 'parkfence3', '19|8|0', 2, 1, '0', '0'),
+(781, 12, 'parkfence2', '21|8|0', 0, 1, '0', '0'),
+(782, 12, 'parkfence3', '23|8|0', 2, 1, '0', '0'),
+(783, 12, 'parkfence2', '25|8|0', 0, 1, '0', '0'),
+(784, 12, 'parkfence3', '27|8|0', 2, 1, '0', '0'),
+(785, 12, 'parkfence3', '29|8|0', 2, 1, '0', '0'),
+(786, 12, 'bench2', '8|9|0', 4, 1, '0', '1'),
+(787, 12, 'bench', '9|9|0', 4, 1, '0', '1'),
+(788, 12, 'parkfence3', '17|9|0', 2, 1, '0', '0'),
+(789, 12, 'parkfence2', '19|9|0', 6, 1, '0', '0'),
+(790, 12, 'parkfence3', '21|9|0', 2, 1, '0', '0'),
+(791, 12, 'parkfence2', '23|9|0', 6, 1, '0', '0'),
+(792, 12, 'parkfence3', '25|9|0', 2, 1, '0', '0'),
+(793, 12, 'parkfence2', '27|9|0', 6, 1, '0', '0'),
+(794, 12, 'parkfence3', '29|9|0', 2, 1, '0', '0'),
+(795, 12, 'parkfence3', '17|10|0', 2, 1, '0', '0'),
+(796, 12, 'parkfence3', '21|10|0', 2, 1, '0', '0'),
+(797, 12, 'parkfence3', '25|10|0', 2, 1, '0', '0'),
+(798, 12, 'parkfence3', '29|10|0', 2, 1, '0', '0'),
+(799, 12, 'bench2', '7|11|0', 2, 1, '0', '1'),
+(800, 12, 'parkfence1', '17|11|0', 4, 1, '0', '0'),
+(801, 12, 'parkfence3', '18|11|0', 4, 1, '0', '0'),
+(802, 12, 'parkfence3', '19|11|0', 4, 1, '0', '0'),
+(803, 12, 'parkfence3', '20|11|0', 4, 1, '0', '0'),
+(804, 12, 'parkfence2', '21|11|0', 2, 1, '0', '0'),
+(805, 12, 'parkfence3', '22|11|0', 4, 1, '0', '0'),
+(806, 12, 'parkfence3', '23|11|0', 4, 1, '0', '0'),
+(807, 12, 'parkfence3', '24|11|0', 4, 1, '0', '0'),
+(808, 12, 'parkfence2', '25|11|0', 2, 1, '0', '0'),
+(809, 12, 'parkfence3', '26|11|0', 4, 1, '0', '0'),
+(810, 12, 'parkfence3', '27|11|0', 4, 1, '0', '0'),
+(811, 12, 'parkfence3', '28|11|0', 4, 1, '0', '0'),
+(812, 12, 'parkfence1', '29|11|0', 6, 1, '0', '0'),
+(813, 12, 'bench', '7|12|0', 2, 1, '0', '1'),
+(814, 12, 'bench2', '35|16|0', 2, 1, '0', '1'),
+(815, 12, 'bench2', '37|16|0', 4, 1, '0', '1'),
+(816, 12, 'bench', '38|16|0', 4, 1, '0', '1'),
+(817, 12, 'bench', '35|17|0', 2, 1, '0', '1'),
+(818, 12, 'bench2', '27|18|0', 4, 1, '0', '1'),
+(819, 12, 'bench', '28|18|0', 4, 1, '0', '1'),
+(820, 12, 'bench2', '35|18|0', 2, 1, '0', '1'),
+(821, 12, 'bench2', '25|19|0', 2, 1, '0', '1'),
+(822, 12, 'bench', '35|19|0', 2, 1, '0', '1'),
+(823, 12, 'bench', '25|20|0', 2, 1, '0', '1'),
+(824, 12, 'bench2', '25|29|0', 4, 1, '0', '1'),
+(825, 12, 'bench', '26|29|0', 4, 1, '0', '1'),
+(826, 12, 'bench2', '23|30|0', 2, 1, '0', '1'),
+(827, 12, 'bench', '23|31|0', 2, 1, '0', '1'),
+(828, 13, 'rooftop_minichair', '0|1|4', 4, 1, '0', '1'),
+(829, 13, 'rooftop_flatcurb', '16|1|4', 4, 1, '0', '0'),
+(830, 13, 'rooftop_flatcurb2', '17|1|4', 4, 1, '0', '0'),
+(831, 13, 'rooftop_rodtable', '0|2|4', 0, 1, '0', '0'),
+(832, 13, 'rooftop_minichair', '1|2|4', 6, 1, '0', '1'),
+(833, 13, 'rooftop_minichair', '0|3|4', 0, 1, '0', '1'),
+(834, 13, 'rooftop_flatcurb', '16|4|4', 0, 1, '0', '0'),
+(835, 13, 'rooftop_flatcurb2', '17|4|4', 0, 1, '0', '0'),
+(836, 13, 'rooftop_minichair', '2|6|4', 4, 1, '0', '1'),
+(837, 13, 'rooftop_minichair', '1|7|4', 2, 1, '0', '1'),
+(838, 13, 'rooftop_rodtable', '2|7|4', 0, 1, '0', '0'),
+(839, 13, 'rooftop_minichair', '3|7|4', 6, 1, '0', '1'),
+(840, 13, 'rooftop_minichair', '2|8|4', 0, 1, '0', '1'),
+(841, 13, 'rooftop_minichair', '0|9|4', 4, 1, '0', '1'),
+(842, 13, 'rooftop_emptytable', '0|10|4', 0, 1, '0', '0'),
+(843, 13, 'rooftop_minichair', '0|11|4', 0, 1, '0', '1'),
+(844, 13, 'rooftop_flatcurb', '1|13|4', 2, 1, '0', '0'),
+(845, 13, 'rooftop_flatcurb', '6|13|4', 6, 1, '0', '0'),
+(846, 13, 'rooftop_flatcurb', '8|13|4', 2, 1, '0', '0'),
+(847, 13, 'rooftop_flatcurb', '13|13|4', 6, 1, '0', '0'),
+(848, 13, 'rooftop_flatcurb3', '1|14|4', 2, 1, '0', '0'),
+(849, 13, 'rooftop_flatcurb3', '6|14|4', 6, 1, '0', '0'),
+(850, 13, 'rooftop_flatcurb3', '8|14|4', 2, 1, '0', '0'),
+(851, 13, 'rooftop_flatcurb3', '13|14|4', 6, 1, '0', '0'),
+(852, 13, 'rooftop_flatcurb3', '1|15|4', 2, 1, '0', '0'),
+(853, 13, 'rooftop_flatcurb3', '6|15|4', 6, 1, '0', '0'),
+(854, 13, 'rooftop_flatcurb3', '8|15|4', 2, 1, '0', '0'),
+(855, 13, 'rooftop_flatcurb3', '13|15|4', 6, 1, '0', '0'),
+(856, 13, 'rooftop_flatcurb3', '1|16|4', 2, 1, '0', '0'),
+(857, 13, 'rooftop_flatcurb3', '6|16|4', 6, 1, '0', '0'),
+(858, 13, 'rooftop_flatcurb3', '8|16|4', 2, 1, '0', '0'),
+(859, 13, 'rooftop_flatcurb3', '13|16|4', 6, 1, '0', '0'),
+(860, 13, 'rooftop_flatcurb4', '1|17|4', 0, 1, '0', '0'),
+(861, 13, 'rooftop_flatcurb3', '2|17|4', 0, 1, '0', '0'),
+(862, 13, 'rooftop_flatcurb3', '3|17|4', 0, 1, '0', '0'),
+(863, 13, 'rooftop_flatcurb3', '4|17|4', 0, 1, '0', '0'),
+(864, 13, 'rooftop_flatcurb3', '5|17|4', 0, 1, '0', '0'),
+(865, 13, 'rooftop_flatcurb5', '6|17|4', 0, 1, '0', '0'),
+(866, 13, 'rooftop_flatcurb4', '8|17|4', 0, 1, '0', '0'),
+(867, 13, 'rooftop_flatcurb3', '9|17|4', 0, 1, '0', '0'),
+(868, 13, 'rooftop_flatcurb3', '10|17|4', 0, 1, '0', '0'),
+(869, 13, 'rooftop_flatcurb3', '11|17|4', 0, 1, '0', '0'),
+(870, 13, 'rooftop_flatcurb3', '12|17|4', 0, 1, '0', '0'),
+(871, 13, 'rooftop_flatcurb5', '13|17|4', 0, 1, '0', '0'),
+(872, 14, 'rooftop_bigchair', '8|0|0', 4, 1, '0', '1'),
+(873, 14, 'rooftop_bigtable', '8|1|0', 0, 1, '0', '0'),
+(874, 14, 'rooftop_sofab', '0|2|0', 4, 1, '0', '1'),
+(875, 14, 'rooftop_sofa', '1|2|0', 4, 1, '0', '1'),
+(876, 14, 'rooftop_bigchair', '8|2|0', 0, 1, '0', '1'),
+(877, 14, 'rooftop_bigchair', '8|3|0', 4, 1, '0', '1'),
+(878, 14, 'rooftop_bigtable', '8|4|0', 0, 1, '0', '0'),
+(879, 14, 'rooftop_sofab', '0|5|0', 0, 1, '0', '1'),
+(880, 14, 'rooftop_sofa', '1|5|0', 0, 1, '0', '1'),
+(881, 14, 'rooftop_bigchair', '8|5|0', 0, 1, '0', '1'),
+(882, 14, 'rooftop_sofab', '0|6|0', 4, 1, '0', '1'),
+(883, 14, 'rooftop_sofa', '1|6|0', 4, 1, '0', '1'),
+(884, 14, 'rooftop_sofab', '7|6|0', 4, 1, '0', '1'),
+(885, 14, 'rooftop_sofa', '8|6|0', 4, 1, '0', '1'),
+(886, 14, 'rooftop_sofab', '0|9|0', 0, 1, '0', '1'),
+(887, 14, 'rooftop_sofa', '1|9|0', 0, 1, '0', '1'),
+(888, 14, 'rooftop_sofab', '7|9|0', 0, 1, '0', '1'),
+(889, 14, 'rooftop_sofa', '8|9|0', 0, 1, '0', '1'),
+(890, 15, 'float_dummychair', '24|9|3', 4, 1, '0', '1'),
+(891, 15, 'float_dummychair', '25|9|3', 4, 1, '0', '1'),
+(892, 15, 'float_dummychair2', '28|13|3', 4, 1, '0', '1'),
+(893, 15, 'float_dummychair2', '29|13|3', 4, 1, '0', '1'),
+(894, 15, 'floatbench2', '17|17|3', 2, 1, '0', '1'),
+(895, 15, 'floatbench2', '19|17|3', 6, 1, '0', '1'),
+(896, 15, 'floatbench2', '21|17|3', 2, 1, '0', '1'),
+(897, 15, 'floatbench2', '23|17|3', 6, 1, '0', '1'),
+(898, 15, 'floatbench2', '27|17|1', 4, 1, '0', '1'),
+(899, 15, 'floatbench1', '28|17|1', 4, 1, '0', '1'),
+(900, 15, 'floatbench1', '17|18|3', 2, 1, '0', '1'),
+(901, 15, 'floatbench1', '19|18|3', 6, 1, '0', '1'),
+(902, 15, 'floatbench1', '21|18|3', 2, 1, '0', '1'),
+(903, 15, 'floatbench1', '23|18|3', 6, 1, '0', '1'),
+(904, 15, 'floatbench2', '27|19|1', 0, 1, '0', '1'),
+(905, 15, 'floatbench1', '28|19|1', 0, 1, '0', '1'),
+(906, 15, 'floatbench2', '17|23|3', 2, 1, '0', '1'),
+(907, 15, 'floatbench2', '19|23|3', 6, 1, '0', '1'),
+(908, 15, 'floatbench2', '21|23|3', 2, 1, '0', '1'),
+(909, 15, 'floatbench2', '23|23|3', 6, 1, '0', '1'),
+(910, 15, 'floatbench2', '27|23|1', 4, 1, '0', '1'),
+(911, 15, 'floatbench1', '28|23|1', 4, 1, '0', '1'),
+(912, 15, 'floatbench1', '17|24|100000', 2, 1, '0', '1'),
+(913, 15, 'floatbench1', '19|24|3', 6, 1, '0', '1'),
+(914, 15, 'floatbench1', '21|24|3', 2, 1, '0', '1'),
+(915, 15, 'floatbench1', '23|24|3', 6, 1, '0', '1'),
+(916, 15, 'floatbench2', '27|25|1', 0, 1, '0', '1'),
+(917, 15, 'floatbench1', '28|25|1', 0, 1, '0', '1'),
+(918, 15, 'float_dummychair', '0|29|1', 2, 1, '0', '1'),
+(919, 15, 'float_dummychair', '17|30|1', 2, 1, '0', '1'),
+(920, 15, 'float_dummychair', '17|31|1', 2, 1, '0', '1'),
+(921, 15, 'float_dummychair', '21|33|1', 2, 1, '0', '1'),
+(922, 15, 'float_dummychair', '26|33|1', 6, 1, '0', '1'),
+(923, 15, 'float_dummychair', '21|34|1', 2, 1, '0', '1'),
+(924, 15, 'float_dummychair', '26|34|1', 6, 1, '0', '1'),
+(925, 15, 'float_dummychair', '17|35|1', 2, 1, '0', '1'),
+(926, 15, 'float_dummychair', '21|35|1', 2, 1, '0', '1'),
+(927, 15, 'float_dummychair', '26|35|1', 6, 1, '0', '1'),
+(928, 15, 'float_dummychair', '17|36|1', 2, 1, '0', '1'),
+(929, 15, 'float_dummychair', '21|36|1', 2, 1, '0', '1'),
+(930, 15, 'float_dummychair', '26|36|1', 6, 1, '0', '1'),
+(931, 15, 'float_dummychair', '15|37|100000', 4, 1, '0', '1'),
+(932, 15, 'float_dummychair', '16|37|1', 4, 1, '0', '1'),
+(933, 16, 'libchair', '14|2|1', 4, 1, '0', '1'),
+(934, 16, 'libchair', '16|2|1', 4, 1, '0', '1'),
+(935, 16, 'libchair', '26|2|1', 4, 1, '0', '1'),
+(936, 16, 'libchair', '24|3|1', 2, 1, '0', '1'),
+(937, 16, 'libchair', '12|4|1', 2, 1, '0', '1'),
+(938, 16, 'libchair', '12|6|1', 2, 1, '0', '1'),
+(939, 16, 'libstool', '13|14|1', 6, 1, '0', '1'),
+(940, 16, 'libstool', '13|15|1', 6, 1, '0', '1'),
+(941, 16, 'libstool', '13|16|1', 6, 1, '0', '1'),
+(942, 16, 'libchair', '28|27|0', 4, 1, '0', '1'),
+(943, 16, 'libchair', '27|29|0', 2, 1, '0', '1'),
+(944, 16, 'libstool', '24|33|2', 6, 1, '0', '1'),
+(945, 16, 'libstool', '24|34|2', 6, 1, '0', '1'),
+(946, 16, 'libstool', '24|35|2', 6, 1, '0', '1'),
+(947, 16, 'libstool', '21|36|2', 0, 1, '0', '1'),
+(948, 16, 'libstool', '22|36|2', 0, 1, '0', '1'),
+(949, 16, 'libstool', '23|36|2', 0, 1, '0', '1'),
+(950, 17, 'cornerchair2', '0|0|0', 4, 1, '0', '1'),
+(951, 17, 'cornerchair1', '1|0|0', 4, 1, '0', '1'),
+(952, 17, 'chair1', '2|0|0', 4, 1, '0', '1'),
+(953, 17, 'chair1', '3|0|0', 4, 1, '0', '1'),
+(954, 17, 'table1', '5|0|0', 4, 1, '0', '0'),
+(955, 17, 'chair1line', '6|0|0', 4, 1, '0', '1'),
+(956, 17, 'chair1', '7|0|0', 4, 1, '0', '1'),
+(957, 17, 'chair1frontend', '8|0|0', 4, 1, '0', '1'),
+(958, 17, 'hububar', '10|0|0', 4, 1, '0', '0'),
+(959, 17, 'cornerchair1', '0|1|0', 2, 1, '0', '1'),
+(960, 17, 'chair1', '0|2|0', 2, 1, '0', '1'),
+(961, 17, 'chair1', '0|3|0', 2, 1, '0', '1'),
+(962, 17, 'chair1', '0|4|0', 2, 1, '0', '1'),
+(963, 17, 'chair1frontend', '0|5|0', 2, 1, '0', '1'),
+(964, 17, 'table2', '3|5|0', 4, 1, '0', '0'),
+(965, 17, 'modchair', '5|5|0', 0, 1, '0', '1'),
+(966, 17, 'table2', '8|5|0', 4, 1, '0', '0'),
+(967, 12, 'queue_tile2', '28|5|0', 0, 0, '1', '0'),
+(968, 12, 'queue_tile2', '28|6|0', 0, 0, '1', '0'),
+(969, 12, 'queue_tile2', '28|7|0', 0, 0, '1', '0'),
+(970, 12, 'queue_tile2', '28|8|0', 0, 0, '1', '0'),
+(971, 12, 'queue_tile2', '28|9|0', 0, 0, '1', '0'),
+(972, 12, 'queue_tile2', '28|10|0', 0, 0, '1', '0'),
+(973, 12, 'queue_tile2', '27|10|0', 2, 0, '1', '0'),
+(974, 12, 'queue_tile2', '26|10|0', 2, 0, '1', '0'),
+(975, 12, 'queue_tile2', '26|9|0', 4, 0, '1', '0'),
+(976, 12, 'queue_tile2', '26|8|0', 4, 0, '1', '0'),
+(977, 12, 'queue_tile2', '26|7|0', 4, 0, '1', '0'),
+(978, 12, 'queue_tile2', '25|7|0', 2, 0, '1', '0'),
+(979, 12, 'queue_tile2', '24|7|0', 2, 0, '1', '0'),
+(980, 12, 'queue_tile2', '24|8|0', 0, 0, '1', '0'),
+(981, 12, 'queue_tile2', '24|9|0', 0, 0, '1', '0'),
+(982, 12, 'queue_tile2', '24|10|0', 0, 0, '1', '0'),
+(983, 12, 'queue_tile2', '23|10|0', 2, 0, '1', '0'),
+(984, 12, 'queue_tile2', '22|10|0', 2, 0, '1', '0'),
+(985, 12, 'queue_tile2', '22|9|0', 4, 0, '1', '0'),
+(986, 12, 'queue_tile2', '22|8|0', 4, 0, '1', '0'),
+(987, 12, 'queue_tile2', '22|7|0', 4, 0, '1', '0'),
+(988, 12, 'queue_tile2', '21|7|0', 2, 0, '1', '0'),
+(989, 12, 'queue_tile2', '20|7|0', 2, 0, '1', '0'),
+(990, 12, 'queue_tile2', '20|8|0', 0, 0, '1', '0'),
+(991, 12, 'queue_tile2', '20|9|0', 0, 0, '1', '0'),
+(992, 12, 'queue_tile2', '20|10|0', 0, 0, '1', '0'),
+(993, 12, 'queue_tile2', '19|10|0', 2, 0, '1', '0'),
+(994, 12, 'queue_tile2', '18|10|0', 2, 0, '1', '0'),
+(995, 12, 'queue_tile2', '18|9|0', 4, 0, '1', '0'),
+(996, 12, 'queue_tile2', '18|8|0', 4, 0, '1', '0'),
+(997, 12, 'queue_tile2', '18|7|0', 4, 0, '1', '0');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `tags`
+-- Table structure for table `tags`
 --
 
 CREATE TABLE IF NOT EXISTS `tags` (
@@ -9095,14 +9168,14 @@ CREATE TABLE IF NOT EXISTS `tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `tags`
+-- Dumping data for table `tags`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `user_achievements`
+-- Table structure for table `user_achievements`
 --
 
 CREATE TABLE IF NOT EXISTS `user_achievements` (
@@ -9115,14 +9188,14 @@ CREATE TABLE IF NOT EXISTS `user_achievements` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `user_achievements`
+-- Dumping data for table `user_achievements`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `user_gifts`
+-- Table structure for table `user_gifts`
 --
 
 CREATE TABLE IF NOT EXISTS `user_gifts` (
@@ -9134,14 +9207,14 @@ CREATE TABLE IF NOT EXISTS `user_gifts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Extraindo dados da tabela `user_gifts`
+-- Dumping data for table `user_gifts`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `user_quests`
+-- Table structure for table `user_quests`
 --
 
 CREATE TABLE IF NOT EXISTS `user_quests` (
@@ -9154,14 +9227,14 @@ CREATE TABLE IF NOT EXISTS `user_quests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `user_quests`
+-- Dumping data for table `user_quests`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `user_subscriptions`
+-- Table structure for table `user_subscriptions`
 --
 
 CREATE TABLE IF NOT EXISTS `user_subscriptions` (
@@ -9175,14 +9248,13 @@ CREATE TABLE IF NOT EXISTS `user_subscriptions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Extraindo dados da tabela `user_subscriptions`
+-- Dumping data for table `user_subscriptions`
 --
-
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `vouchers`
+-- Table structure for table `vouchers`
 --
 
 CREATE TABLE IF NOT EXISTS `vouchers` (
@@ -9197,14 +9269,14 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `vouchers`
+-- Dumping data for table `vouchers`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `wardrobe`
+-- Table structure for table `wardrobe`
 --
 
 CREATE TABLE IF NOT EXISTS `wardrobe` (
@@ -9215,9 +9287,9 @@ CREATE TABLE IF NOT EXISTS `wardrobe` (
   `gender` enum('F','M') NOT NULL DEFAULT 'M',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `wardrobe`
+-- Dumping data for table `wardrobe`
 --
 

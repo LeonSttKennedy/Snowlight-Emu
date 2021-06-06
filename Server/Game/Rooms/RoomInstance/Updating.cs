@@ -255,10 +255,7 @@ namespace Snowlight.Game.Rooms
         public void ExecuteTriggers(RoomActor Actor)
         {
             Vector2 Redirect = mRedirectGrid[Actor.Position.X, Actor.Position.Y];
-            if (Redirect != null) 
-            {
-                Actor.Position = new Vector3(Redirect.X, Redirect.Y, GetUserStepHeight(Redirect));
-            }
+            if (Redirect != null) Actor.Position = new Vector3(Redirect.X, Redirect.Y, GetUserStepHeight(Redirect));
 
             RoomTileEffect Action = mTileEffects[Actor.Position.X, Actor.Position.Y];
             if (Action == null || Action.TriggerRoomPosition == null) return;
@@ -315,9 +312,7 @@ namespace Snowlight.Game.Rooms
                                 break;
                             }
 
-                            RoomManager.TryLoadRoomInstance(Action.TriggerToRoomId);
                             RoomHandler.PrepareRoom(Session, Action.TriggerToRoomId, string.Empty, true);
-
                             RoomHandler.EnterRoom(Session, Instance);
 
                             if (Instance.Info.Type == RoomType.Public)

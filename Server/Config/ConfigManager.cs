@@ -41,7 +41,6 @@ namespace Snowlight.Config
             mConfigData.Add("net.bind.port", new ConfigElement("net.bind.port", ConfigElementType.Integer, 38101));
             // General
             mConfigData.Add("pathfinder.mode", new ConfigElement("pathfinder.mode", ConfigElementType.Text, "simple"));
-            mConfigData.Add("bot.guide.id", new ConfigElement("bot.guide.id", ConfigElementType.Integer, 15));
             // Cache control
             mConfigData.Add("cache.navigator.enabled", new ConfigElement("cache.navigator.enabled", ConfigElementType.Boolean, true));
             mConfigData.Add("cache.catalog.enabled", new ConfigElement("cache.catalog.enabled", ConfigElementType.Boolean, true));
@@ -50,6 +49,7 @@ namespace Snowlight.Config
             // Navigator/room settings
             mConfigData.Add("navigator.maxroomsperuser", new ConfigElement("navigator.maxroomsperuser", ConfigElementType.Integer, 15));
             mConfigData.Add("navigator.maxfavoritesperuser", new ConfigElement("navigator.maxfavoritesperuser", ConfigElementType.Integer, 30));
+            mConfigData.Add("rooms.botguide.id", new ConfigElement("rooms.botguide.id", ConfigElementType.Integer, 15));
             mConfigData.Add("rooms.staffpicked.category", new ConfigElement("rooms.staffpicked.category", ConfigElementType.Integer, 1));
             mConfigData.Add("rooms.limit.furni", new ConfigElement("rooms.limit.furni", ConfigElementType.Integer, 1000));
             mConfigData.Add("rooms.limit.stacking", new ConfigElement("rooms.limit.stacking", ConfigElementType.Integer, 12));

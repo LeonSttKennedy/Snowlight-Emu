@@ -219,9 +219,9 @@ namespace Snowlight.Game.Rooms
 
                 foreach (StaticObject Object in mStaticObjects)
                 {
-                    mStackHeight[Object.Position.X, Object.Position.Y] = mCachedModel.Heightmap.FloorHeight[Object.Position.X, Object.Position.Y] + 1.0;
-                    mStackTopItemHeight[Object.Position.X, Object.Position.Y] = 1.0;
-                    mUserMovementNodes[Object.Position.X, Object.Position.Y] = (Object.IsSeat ? UserMovementNode.WalkableEndOfRoute : UserMovementNode.Blocked);
+                    mStackHeight[Object.Position.X, Object.Position.Y] = mCachedModel.Heightmap.FloorHeight[Object.Position.X, Object.Position.Y] + Object.Height;
+                    mStackTopItemHeight[Object.Position.X, Object.Position.Y] = Object.Height;
+                    mUserMovementNodes[Object.Position.X, Object.Position.Y] = (Object.IsSeat || Object.Walkable ? UserMovementNode.WalkableEndOfRoute : UserMovementNode.Blocked);
 
                     if (Object.IsSeat)
                     {

@@ -151,7 +151,7 @@ namespace Snowlight.Game.Moderation
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
             if (Instance == null || !Instance.CheckUserRights(Session, true)) return;
 
-            Bot Guide = BotManager.GetBotDefinition((uint)(int)ConfigManager.GetValue("bot.guide.id"));
+            Bot Guide = BotManager.GetBotDefinition((uint)(int)ConfigManager.GetValue("rooms.botguide.id"));
             if (Guide == null)
             {
                 Session.SendData(NotificationMessageComposer.Compose("There are not Guide Bots in the database!"));

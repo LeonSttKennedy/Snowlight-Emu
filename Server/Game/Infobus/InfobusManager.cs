@@ -18,6 +18,7 @@ namespace Snowlight.Game.Infobus
         {
             mInfobusQuestions = new Dictionary<uint, InfobusQuestion>();
 
+            DataRouter.RegisterHandler(OpcodesIn.INFOBUS_ENTER, new ProcessRequestCallback(EnterInfoBus));
             DataRouter.RegisterHandler(OpcodesIn.INFOBUS_SUBMIT_ANSWER, new ProcessRequestCallback(SubmitAnswer));
         }
 
@@ -44,6 +45,13 @@ namespace Snowlight.Game.Infobus
 
                 mInfobusQuestions.Add(RoomId, new InfobusQuestion(Instance, Question, Answers));
             }
+        }
+
+        private static void EnterInfoBus(Session Session, ClientMessage Message)
+        {
+            ServerMessage ServerMessage = new ServerMessage(81);
+            ServerMessage.AppendStringWithBreak("The Infobus is currently closed.");
+            Session.SendData(ServerMessage);
         }
 
         private static void SubmitAnswer(Session Session, ClientMessage Message)
