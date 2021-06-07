@@ -31,6 +31,8 @@ namespace Snowlight.Game.Rooms
         private double mUnloadedTimestamp;
         private int mMarkedEmptyRoom;
 
+        private Dictionary<int, uint> mTmpInteractingUsers;
+
         public uint InstanceId
         {
             get
@@ -84,6 +86,19 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public Dictionary<int, uint> TemporaryInteractionReferenceIds
+        {
+            get
+            {
+                return mTmpInteractingUsers;
+            }
+
+            set
+            {
+                mTmpInteractingUsers = value;
+            }
+        }
+
         public List<string> SearchableTags
         {
             get
@@ -124,6 +139,7 @@ namespace Snowlight.Game.Rooms
             mTradeManager = new TradeManager();
             mRollerItems = new List<Item>[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
             mRoomTriggers = new List<RoomTriggers>();
+            mTmpInteractingUsers = new Dictionary<int, uint>();
 
             foreach (Bot Bot in BotManager.GenerateBotInstancesForRoom(RoomId))
             {
