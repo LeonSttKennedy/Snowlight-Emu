@@ -17,7 +17,6 @@ namespace Snowlight.Game.Rooms
 
     public class RoomTileEffect
     {
-        // Tile Effects
         private RoomTileEffectType mType;
         private int mEffectId;
         private Vector2 mRootPosition;
@@ -25,15 +24,6 @@ namespace Snowlight.Game.Rooms
         private double mInteractionHeight;
         private uint mQuestData;
 
-        // Trigger Actions
-        private uint mId;
-        private Vector3 mRoomPos;
-        private RoomTriggerList mAction;
-        private Vector3 mToRoomPos;
-        private uint mToRoomId;
-        private int mToRoomRotation;
-
-        // Tile Effects
         public RoomTileEffectType Type
         {
             get
@@ -82,49 +72,6 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        // Trigger Actions
-        public uint TriggerId
-        {
-            get
-            {
-                return mId;
-            }
-        }
-        public Vector3 TriggerRoomPosition
-        {
-            get
-            {
-                return mRoomPos;
-            }
-        }
-        public RoomTriggerList TriggerAction
-        {
-            get
-            {
-                return mAction;
-            }
-        }
-        public uint TriggerToRoomId
-        {
-            get
-            {
-                return mToRoomId;
-            }
-        }
-        public Vector3 TriggerToRoomPosition
-        {
-            get
-            {
-                return mToRoomPos;
-            }
-        }
-        public int TriggerToRoomRotation
-        {
-            get
-            {
-                return mToRoomRotation;
-            }
-        }
         public RoomTileEffect()
         {
             mType = RoomTileEffectType.None;
@@ -144,17 +91,6 @@ namespace Snowlight.Game.Rooms
             mEffectId = EffectId;
             mInteractionHeight = InteractionHeight;
             mQuestData = QuestData;
-        }
-
-        public RoomTileEffect(uint TriggerId, Vector3 TriggerRoomPos, RoomTriggerList TriggerAction, 
-                        Vector3 TriggerToRoomPos, uint TriggerToRoomId, int TriggerRoomRotation)
-        {
-            mId = TriggerId;
-            mRoomPos = TriggerRoomPos;
-            mAction = TriggerAction;
-            mToRoomPos = TriggerToRoomPos;
-            mToRoomId = TriggerToRoomId;
-            mToRoomRotation = TriggerRoomRotation;
         }
     }
 }

@@ -257,14 +257,22 @@ namespace Snowlight.Game.Rooms
             Vector2 Redirect = mRedirectGrid[Actor.Position.X, Actor.Position.Y];
             if (Redirect != null) Actor.Position = new Vector3(Redirect.X, Redirect.Y, GetUserStepHeight(Redirect));
 
-            RoomTileEffect Action = mTileEffects[Actor.Position.X, Actor.Position.Y];
-            if (Action == null || Action.TriggerRoomPosition == null) return;
+            RoomTriggers Action = mTileTriggers[Actor.Position.X, Actor.Position.Y];
+            if (Action == null || Action.RoomPosition == null) return;
 
             Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+            if (Session == null) return;
 
-            if (Actor.Position.X == Action.TriggerRoomPosition.X && Actor.Position.Y == Action.TriggerRoomPosition.Y)
+            RoomInstance Instance = null;
+            if (!Session.IsTeleporting)
             {
-                switch (Action.TriggerAction)
+                Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+                if (Instance == null) return;
+            }
+
+            if (Actor.Position.X == Action.RoomPosition.X && Actor.Position.Y == Action.RoomPosition.Y)
+            {
+                switch (Action.Action)
                 {
                     case RoomTriggerList.DEFAULT:
                         /* This a default action this will be used to gave badges to users or another bonuses.
@@ -273,13 +281,13 @@ namespace Snowlight.Game.Rooms
                         break;
 
                     case RoomTriggerList.ROLLER:
-                        if (Action.TriggerToRoomId != 0)
+                        if (Action.ToRoomId != 0)
                         {
-                            Output.WriteLine("[RoomMgr] RollerTrigger (Id: " + Action.TriggerId + ") -> Not configured correctly.", OutputLevel.Warning);
+                            Output.WriteLine("[RoomMgr] RollerTrigger (Id: " + Action.Id + ") -> Not configured correctly.", OutputLevel.Warning);
                             break;
                         }
 
-                        Actor.MoveTo(Action.TriggerToRoomPosition.GetVector2());
+                        Actor.MoveTo(Action.ToRoomPosition.GetVector2());
 
                         Vector2 NextStep = Actor.GetNextStep();
                         if (NextStep == null) break;
@@ -298,45 +306,58 @@ namespace Snowlight.Game.Rooms
                     case RoomTriggerList.TELEPORT:
                         if (Actor.Type != RoomActorType.UserCharacter) break;
 
-                        if (Action.TriggerToRoomId == Session.CurrentRoomId)
+                        if (Action.ToRoomId == Session.CurrentRoomId)
                         {
-                            Actor.PositionToSet = Action.TriggerToRoomPosition.GetVector2();
+                            Actor.PositionToSet = Action.ToRoomPosition.GetVector2();
                             Actor.MoveTo(Actor.PositionToSet);
                             Actor.UpdateNeeded = true;
                         }
-                        else if (Action.TriggerToRoomId != Session.CurrentRoomId)
+                        else if (Action.ToRoomId != Session.CurrentRoomId)
                         {
                             // Todo: Place the user in requested position.
-                            if (Action.TriggerToRoomId == 0)
+                            if (Action.ToRoomId == 0)
                             {
-                                Output.WriteLine("[RoomMgr] TeleTrigger (Id: " + Action.TriggerId + ") -> Not configured correctly.", OutputLevel.Warning);
+                                Output.WriteLine("[RoomMgr] TeleTrigger (Id: " + Action.Id + ") -> Not configured correctly.", OutputLevel.Warning);
                                 break;
                             }
-                            
-                            RoomManager.TryLoadRoomInstance(Action.TriggerToRoomId);
-                            RoomInstance NewInstance = RoomManager.GetInstanceByRoomId(Action.TriggerToRoomId);
-                            //RoomHandler.PrepareRoom(Session, Action.TriggerToRoomId, string.Empty, true);
-                            
-                            RoomInfo Info = RoomInfoLoader.GetRoomInfo(Action.TriggerToRoomId);
+                            uint ActorID = 0;
+
+                            if (Instance == null) break;
+
+                            Actor.BlockWalking();
+
+                            RoomInstance NewInstance = RoomManager.GetInstanceByRoomId(Action.ToRoomId);
+
+                            if (NewInstance == null && Action.ToRoomId > 0)
+                            {
+                                RoomManager.TryLoadRoomInstance(Action.ToRoomId);
+                                NewInstance = RoomManager.GetInstanceByRoomId(Action.ToRoomId);
+                            }
+
+                            RoomInfo Info = RoomInfoLoader.GetRoomInfo(Action.ToRoomId);
                             if (Info.Type == RoomType.Public)
                             {
                                 Session.SendData(PublicRoomData.Compose(Info.Id, Info.SWFs));
                             }
 
-                            RoomHandler.EnterRoom(Session, NewInstance);
+                            if (Instance != NewInstance)
+                            {
+                                ActorID = Actor.ReferenceId;
+                                Session.IsTeleporting = true;
+                                RoomHandler.PrepareRoom(Session, Action.ToRoomId, string.Empty, true);
+                            }
 
-                            /* Good news: the room actor is teleporting around the room
-                             * Bad news: is the wrong room actor 
-                             */
-                            //NewInstance.TemporaryInteractionReferenceIds.Add(1, Actor.Id);
-                            RoomActor NewActor = NewInstance.GetActor(Actor.Id);
-                            NewActor.BlockWalking();
-                            NewActor.Position = Action.TriggerToRoomPosition;
-                            NewActor.BodyRotation = Action.TriggerToRoomRotation;
+                            Case:
+                            RoomActor NewActor = NewInstance.GetActorByReferenceId(ActorID);
+                            if (NewActor == null) goto Case;
+
+                            if (NewActor.Type != RoomActorType.UserCharacter) break;
+
+                            NewActor.Position = Action.ToRoomPosition;
+                            NewActor.BodyRotation = Action.ToRoomRotation;
                             NewActor.HeadRotation = Actor.BodyRotation;
-                            NewActor.MoveTo(Action.TriggerToRoomPosition.GetVector2());
-                            NewActor.UpdateNeeded = true;
                             NewActor.UnblockWalking();
+                            NewActor.UpdateNeeded = true;
                         }
                         break;
                 }

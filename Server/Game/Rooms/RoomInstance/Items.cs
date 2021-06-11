@@ -23,6 +23,8 @@ namespace Snowlight.Game.Rooms
         private RoomTileEffect[,] mTileEffects;
         private Vector2[,] mRedirectGrid;
         private List<Item>[,] mRollerItems;
+
+        private RoomTriggers[,] mTileTriggers;
         private List<RoomTriggers> mRoomTriggers;
 
         public bool GuestsCanPlaceStickies

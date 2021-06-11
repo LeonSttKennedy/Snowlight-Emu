@@ -65,7 +65,8 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public RoomTriggers(uint Id, Vector3 RoomPosition, RoomTriggerList Action, uint ToRoomId, Vector3 ToRoomPosition, int ToRoomRotation)
+        public RoomTriggers(uint Id, Vector3 RoomPosition, RoomTriggerList Action,
+            Vector3 ToRoomPosition, uint ToRoomId, int ToRoomRotation)
         {
             mId = Id;
             mRoomPos = RoomPosition;

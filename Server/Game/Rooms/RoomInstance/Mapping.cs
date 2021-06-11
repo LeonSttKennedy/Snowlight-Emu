@@ -112,6 +112,7 @@ namespace Snowlight.Game.Rooms
                 mStackTopItemHeight = new double[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mUserMovementNodes = new UserMovementNode[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mTileEffects = new RoomTileEffect[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
+                mTileTriggers = new RoomTriggers[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mRedirectGrid = new Vector2[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
 
                 for (int y = 0; y < mCachedModel.Heightmap.SizeY; y++)
@@ -231,7 +232,7 @@ namespace Snowlight.Game.Rooms
 
                 foreach (RoomTriggers Triggers in mRoomTriggers)
                 {
-                    mTileEffects[Triggers.RoomPosition.X, Triggers.RoomPosition.Y] = new RoomTileEffect(Triggers.Id, Triggers.RoomPosition, Triggers.Action, Triggers.ToRoomPosition, Triggers.ToRoomId, Triggers.ToRoomRotation);
+                    mTileTriggers[Triggers.RoomPosition.X, Triggers.RoomPosition.Y] = new RoomTriggers(Triggers.Id, Triggers.RoomPosition, Triggers.Action, Triggers.ToRoomPosition, Triggers.ToRoomId, Triggers.ToRoomRotation);
                 }
 
                 lock (mTileStates)

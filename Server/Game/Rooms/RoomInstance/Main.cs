@@ -31,8 +31,6 @@ namespace Snowlight.Game.Rooms
         private double mUnloadedTimestamp;
         private int mMarkedEmptyRoom;
 
-        private Dictionary<int, uint> mTmpInteractingUsers;
-
         public uint InstanceId
         {
             get
@@ -86,19 +84,6 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public Dictionary<int, uint> TemporaryInteractionReferenceIds
-        {
-            get
-            {
-                return mTmpInteractingUsers;
-            }
-
-            set
-            {
-                mTmpInteractingUsers = value;
-            }
-        }
-
         public List<string> SearchableTags
         {
             get
@@ -139,7 +124,6 @@ namespace Snowlight.Game.Rooms
             mTradeManager = new TradeManager();
             mRollerItems = new List<Item>[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
             mRoomTriggers = new List<RoomTriggers>();
-            mTmpInteractingUsers = new Dictionary<int, uint>();
 
             foreach (Bot Bot in BotManager.GenerateBotInstancesForRoom(RoomId))
             {
@@ -210,9 +194,9 @@ namespace Snowlight.Game.Rooms
                             break;
                     }
 
-                    mRoomTriggers.Add(new RoomTriggers((uint)Row["id"],
-                        Vector3.FromString((string)Row["room_pos"]), Trigger, (uint)Row["to_room_id"],
-                        Vector3.FromString((string)Row["to_room_pos"]), (int)Row["to_room_dir"]));
+                    mRoomTriggers.Add(new RoomTriggers((uint)Row["id"], Vector3.FromString((string)Row["room_pos"]),
+                        Trigger, Vector3.FromString((string)Row["to_room_pos"]), (uint)Row["to_room_id"],
+                        (int)Row["to_room_dir"]));
                 }
 
                 // Pets
