@@ -20,6 +20,7 @@ using Snowlight.Game.Moderation;
 using Snowlight.Game.Achievements;
 using Snowlight.Communication.Incoming;
 using System.Data;
+using Snowlight.Game.Rights;
 
 namespace Snowlight.Game.Rooms
 {
@@ -340,6 +341,31 @@ namespace Snowlight.Game.Rooms
             if (Session.CharacterInfo.IsMuted)
             {
                 Session.SendData(RoomMutedComposer.Compose((int)Session.CharacterInfo.MutedSecondsLeft));
+            }
+
+            if(Instance.Info.BadgeId > 0)
+            {
+                RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+                if (Actor == null) return;
+
+                Badge BadgeToGive = RightsManager.GetBadgeById(Instance.Info.BadgeId);
+                if (BadgeToGive == null) return;
+
+                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                {
+                    if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
+                    {
+                        Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
+                        Session.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
+                        Session.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "Do you have received a new badge, check your inventory!", 1, ChatType.Whisper));
+                    }
+                    else if(Session.BadgeCache.Badges.Contains(BadgeToGive))
+                    {
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "Looks like you've already received this badge.", 4, ChatType.Whisper));
+                    }
+                }
             }
 
             if (Instance.Info.OwnerId != Session.CharacterId)

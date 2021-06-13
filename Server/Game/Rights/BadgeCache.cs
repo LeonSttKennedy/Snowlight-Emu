@@ -182,10 +182,10 @@ namespace Snowlight.Game.Rights
             }
         }
 
-        public void UpdateAchievementBadge(SqlDatabaseClient MySqlClient, string AchievementGroup, Badge NewBadge)
+        public void UpdateAchievementBadge(SqlDatabaseClient MySqlClient, string AchievementGroup, Badge NewBadge, string SourceType = "achievement")
         {
             MySqlClient.SetParameter("userid", mUserId);
-            MySqlClient.SetParameter("sourcetype", "achievement");
+            MySqlClient.SetParameter("sourcetype", SourceType);
             MySqlClient.SetParameter("sourcedata", AchievementGroup);
             MySqlClient.SetParameter("badgeid", NewBadge.Id);
 
