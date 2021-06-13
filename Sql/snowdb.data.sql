@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 05, 2021 at 09:24 PM
+-- Generation Time: Jun 13, 2021 at 05:51 PM
 -- Server version: 5.5.10
 -- PHP Version: 5.3.6
 
@@ -155,6 +155,7 @@ CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
 --
 -- Dumping data for table `achievements_to_unlock`
 --
+
 
 -- --------------------------------------------------------
 
@@ -399,14 +400,14 @@ INSERT INTO `bots` (`id`, `ai_type`, `name`, `look`, `motto`, `room_id`, `pos_st
 (18, 'generic', 'Sandy', 'hr-836-31.sh-907-96.hd-600-7.ch-826-80.lg-715-80', 'I am happy to help you!', 3, '1|10|1', '0|0|0', '', 'freeroam', '1', '0', 2, 0, 500, 10002),
 (19, 'generic', 'Dave', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', '', 5, '10|7|2', '0|0|0', '', 'freeroam', '1', '1', 2, 0, 500, 10003),
 (20, 'generic', 'Sadie', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', '', 5, '10|5|2', '0|0|0', '', 'freeroam', '1', '1', 2, 0, 500, 10004),
-(21, 'generic', 'Mark', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', 'I didn''t participate in the choice of the film that is on display', 6, '1|21|3', '0|0|0', '', 'freeroam', '1', '1', 2, 0, 500, 10005),
+(21, 'generic', 'Mark', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', 'Man of Talent', 6, '1|21|3', '0|0|0', '', 'freeroam', '1', '1', 2, 0, 500, 10005),
 (22, 'generic', 'Takashi', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', '', 7, '10|4|3', '0|0|0', '', 'freeroam', '1', '1', 4, 0, 500, 10006),
 (23, 'generic', 'Patrick', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', '', 9, '23|5|3', '0|0|0', '', 'freeroam', '1', '1', 4, 0, 500, 10007),
 (24, 'generic', 'Sophie', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', '', 10, '27|10|1', '0|0|0', '26|10;27|10;28|10;', 'defined', '1', '0', 4, 0, 500, 10008),
 (25, 'generic', 'Drake', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', 'The master of pizza!', 11, '4|1|1', '0|0|0', '', 'freeroam', '1', '0', 4, 0, 500, 10009),
 (26, 'generic', 'Josh', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', 'Doing everything to better serve you.', 11, '1|4|1', '0|0|0', '', 'freeroam', '1', '0', 4, 0, 500, 10010),
-(27, 'generic', 'Skye', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', 'On top of Uber Hotel!', 14, '3|0|0', '0|0|0', '', 'freeroam', '1', '0', 4, 0, 500, 10011),
-(28, 'generic', 'Marcel', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', 'I search of lost time!', 16, '11|15|1', '0|0|0', '', 'freeroam', '1', '0', 2, 0, 500, 10012);
+(27, 'generic', 'Skye', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', 'On top of Uber Hotel!', 14, '3|0|0', '0|0|0', '1|0;2|0;3|0;4|0;', 'defined', '1', '0', 4, 0, 500, 10011),
+(28, 'generic', 'Marcel', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', 'I search of lost time!', 16, '11|15|1', '0|0|0', '11|14;11|15;11|16;10|14;10|15;10|16;9|14;9|15;8|14;8|15;7|14;', 'defined', '1', '0', 2, 0, 500, 10012);
 
 -- --------------------------------------------------------
 
@@ -4097,6 +4098,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
 -- Dumping data for table `characters`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -7255,6 +7257,7 @@ CREATE TABLE IF NOT EXISTS `messenger_friendships` (
 -- Dumping data for table `messenger_friendships`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -7269,11 +7272,12 @@ CREATE TABLE IF NOT EXISTS `moderation_action_log` (
   `action_detail` text NOT NULL,
   `timestamp` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `moderation_action_log`
 --
+
 
 -- --------------------------------------------------------
 
@@ -7293,6 +7297,7 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
 --
 -- Dumping data for table `moderation_chatlogs`
 --
+
 
 -- --------------------------------------------------------
 
@@ -7456,19 +7461,19 @@ INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `is_category`, 
 (1, 0, 0, '1', '1', 'details', 'Staff Picks', '', 'external', 'officialrooms_hq/staffpickfolder.gif', '', 100, '1'),
 (2, 0, 1, '0', '0', 'banner', 'Welcome Lounge', 'Get a warm welcome to the hotel and meet new people.', 'internal', '', 'Welcome Lounge', 1, '1'),
 (3, 0, 2, '0', '0', 'banner', 'Theatredrome', 'For mass assemblies and gatherings.', 'internal', '', 'Theatredrome', 2, '1'),
-(4, 0, 16, '0', '0', 'banner', 'Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'internal', '', 'Library', 3, '1'),
-(5, 0, 3, '0', '0', 'details', 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'internal', '', '', 4, '1'),
-(6, 0, 4, '0', '0', 'details', 'Star Lounge', 'Celebrities favourite hangout', 'internal', '', '', 5, '1'),
-(7, 0, 5, '0', '0', 'details', 'The Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'internal', '', '', 6, '1'),
-(8, 0, 6, '0', '0', 'details', 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'internal', '', '', 7, '1'),
-(9, 0, 7, '0', '0', 'details', 'Oriental Tearoom', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'internal', '', '', 8, '1'),
-(10, 0, 8, '0', '0', 'details', 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'internal', '', '', 9, '1'),
-(11, 0, 9, '0', '0', 'details', 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'internal', '', '', 10, '1'),
-(12, 0, 10, '0', '0', 'details', 'Club Orient', 'Tres chic with an eastern twist.', 'internal', '', '', 11, '1'),
-(13, 0, 11, '0', '0', 'details', 'Pizzeria', 'The best pizza in town!', 'internal', '', '', 12, '1'),
-(14, 0, 12, '0', '0', 'details', 'The Park', 'Follow the path...', 'internal', '', '', 13, '1'),
-(15, 0, 14, '0', '0', 'details', 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'internal', '', '', 14, '1'),
-(16, 0, 15, '0', '0', 'details', 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'internal', '', '', 15, '1');
+(4, 0, 3, '0', '0', 'details', 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'internal', '', '', 4, '1'),
+(5, 0, 4, '0', '0', 'details', 'Star Lounge', 'Celebrities favourite hangout', 'internal', '', '', 5, '1'),
+(6, 0, 5, '0', '0', 'details', 'The Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'internal', '', '', 6, '1'),
+(7, 0, 6, '0', '0', 'details', 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'internal', '', '', 7, '1'),
+(8, 0, 7, '0', '0', 'details', 'Oriental Tearoom', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'internal', '', '', 8, '1'),
+(9, 0, 8, '0', '0', 'details', 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'internal', '', '', 9, '1'),
+(10, 0, 9, '0', '0', 'details', 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'internal', '', '', 10, '1'),
+(11, 0, 10, '0', '0', 'details', 'Club Orient', 'Tres chic with an eastern twist.', 'internal', '', '', 11, '1'),
+(12, 0, 11, '0', '0', 'details', 'Pizzeria', 'The best pizza in town!', 'internal', '', '', 12, '1'),
+(13, 0, 12, '0', '0', 'details', 'The Park', 'Follow the path...', 'internal', '', '', 13, '1'),
+(14, 0, 13, '0', '0', 'details', 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'internal', '', '', 14, '1'),
+(15, 0, 15, '0', '0', 'details', 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'internal', '', '', 15, '1'),
+(16, 0, 16, '0', '0', 'banner', 'Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'internal', '', 'Library', 3, '1');
 
 -- --------------------------------------------------------
 
@@ -7518,6 +7523,7 @@ CREATE TABLE IF NOT EXISTS `pets` (
 --
 -- Dumping data for table `pets`
 --
+
 
 -- --------------------------------------------------------
 
@@ -7887,6 +7893,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `thickness_wall` int(11) NOT NULL DEFAULT '0',
   `thickness_floor` int(11) NOT NULL DEFAULT '0',
   `decorations` varchar(128) NOT NULL DEFAULT 'landscape=0.0',
+  `badge_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
@@ -7894,24 +7901,25 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `type`, `owner_id`, `name`, `description`, `pub_internal_name`, `tags`, `access_type`, `password`, `category`, `current_users`, `max_users`, `swfs`, `score`, `icon`, `model`, `allow_pets`, `allow_pet_eating`, `disable_blocking`, `hide_walls`, `thickness_wall`, `thickness_floor`, `decorations`) VALUES
-(1, 'public', 0, 'Hotel Reception', 'Where we give you a warm welcome to the hotel!', 'welcome_lounge', '', 'open', '', 0, 1, 50, 'hh_room_nlobby', 0, '0|0|0|0', 'newbie_lobby', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(2, 'public', 0, 'Theatredrome', 'For mass assemblies and gatherings.', 'theatredrome', '', 'open', '', 0, 0, 50, 'hh_room_theater', 0, '0|0|0|0', 'theater', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(3, 'public', 0, 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'netcafe', '', 'open', '', 0, 0, 50, 'hh_room_netcafe', 0, '0|0|0|0', 'netcafe', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(4, 'public', 0, 'Star Lounge', 'Celebrities favourite hangout', 'star_lounge', '', 'open', '', 0, 0, 50, 'hh_room_starlounge', 0, '0|0|0|0', 'star_lounge', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(5, 'public', 0, 'Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'the_dirty_duck_pub', '', 'open', '', 0, 0, 50, 'hh_room_pub', 0, '0|0|0|0', 'pub_a', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(6, 'public', 0, 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'habbo_cinema', '', 'open', '', 0, 0, 50, 'hh_room_cinema', 0, '0|0|0|0', 'cinema_a', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(7, 'public', 0, 'Tea Room', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'tearoom', '', 'open', '', 0, 0, 50, 'hh_room_tearoom', 0, '0|0|0|0', 'tearoom', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(8, 'public', 0, 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'picnic', '', 'open', '', 0, 0, 50, 'hh_room_picnic', 0, '0|0|0|0', 'picnic', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(9, 'public', 0, 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'dusty_lounge', '', 'open', '', 0, 0, 50, 'hh_room_dustylounge', 0, '0|0|0|0', 'dusty_lounge', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(10, 'public', 0, 'Club Orient', 'Tres chic with an eastern twist.', 'orient', '', 'open', '', 0, 0, 50, 'hh_room_orient', 0, '0|0|0|0', 'orient', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(11, 'public', 0, 'Pizza', 'The best pizza in town!', 'pizzeria', '', 'open', '', 0, 0, 50, 'hh_room_pizza', 0, '0|0|0|0', 'pizza', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(12, 'public', 0, 'The Park', 'Follow the path...', 'park', '', 'open', '', 0, 0, 50, 'hh_room_park,hh_room_park_general', 0, '0|0|0|0', 'park_a', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(13, 'public', 0, 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'rooftop', '', 'open', '', 0, 0, 50, 'hh_room_rooftop', 0, '0|0|0|0', 'rooftop', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(14, 'public', 0, 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'rooftop', '', 'open', '', 0, 0, 50, 'hh_room_rooftop', 0, '0|0|0|0', 'rooftop_2', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(15, 'public', 0, 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'floatinggarden', '', 'open', '', 0, 0, 50, 'hh_room_floatinggarden', 0, '0|0|0|0', 'floatinggarden', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(16, 'public', 0, 'The Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'library', '', 'open', '', 0, 0, 50, 'hh_room_library', 0, '0|0|0|0', 'library', '0', '0', '0', '0', 0, 0, 'landscape=0.0'),
-(17, 'public', 0, 'The Infobus', 'Get into infobus', 'park', '', 'open', '', 1, 0, 50, 'hh_room_park,hh_room_park_general', 0, '0|0|0|0', 'park_b', '0', '0', '0', '0', 0, 0, 'landscape=0.0');
+INSERT INTO `rooms` (`id`, `type`, `owner_id`, `name`, `description`, `pub_internal_name`, `tags`, `access_type`, `password`, `category`, `current_users`, `max_users`, `swfs`, `score`, `icon`, `model`, `allow_pets`, `allow_pet_eating`, `disable_blocking`, `hide_walls`, `thickness_wall`, `thickness_floor`, `decorations`, `badge_id`) VALUES
+(1, 'public', 0, 'Hotel Reception', 'Where we give you a warm welcome to the hotel!', 'welcome_lounge', '', 'open', '', 0, 0, 50, 'hh_room_nlobby', 0, '0|0|0|0', 'newbie_lobby', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(2, 'public', 0, 'Theatredrome', 'For mass assemblies and gatherings.', 'theatredrome', '', 'open', '', 0, 0, 50, 'hh_room_theater', 0, '0|0|0|0', 'theater', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(3, 'public', 0, 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'netcafe', '', 'open', '', 0, 0, 50, 'hh_room_netcafe', 0, '0|0|0|0', 'netcafe', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(4, 'public', 0, 'Star Lounge', 'Celebrities favourite hangout', 'star_lounge', '', 'open', '', 0, 0, 50, 'hh_room_starlounge', 0, '0|0|0|0', 'star_lounge', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(5, 'public', 0, 'Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'the_dirty_duck_pub', '', 'open', '', 0, 0, 50, 'hh_room_pub', 0, '0|0|0|0', 'pub_a', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(6, 'public', 0, 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'habbo_cinema', '', 'open', '', 0, 0, 50, 'hh_room_cinema', 0, '0|0|0|0', 'cinema_a', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(7, 'public', 0, 'Tea Room', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'tearoom', '', 'open', '', 0, 0, 50, 'hh_room_tearoom', 0, '0|0|0|0', 'tearoom', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(8, 'public', 0, 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'picnic', '', 'open', '', 0, 0, 50, 'hh_room_picnic', 0, '0|0|0|0', 'picnic', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(9, 'public', 0, 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'dusty_lounge', '', 'open', '', 0, 0, 50, 'hh_room_dustylounge', 0, '0|0|0|0', 'dusty_lounge', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(10, 'public', 0, 'Club Orient', 'Tres chic with an eastern twist.', 'orient', '', 'open', '', 0, 0, 50, 'hh_room_orient', 0, '0|0|0|0', 'orient', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(11, 'public', 0, 'Pizza', 'The best pizza in town!', 'pizzeria', '', 'open', '', 0, 0, 50, 'hh_room_pizza', 0, '0|0|0|0', 'pizza', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(12, 'public', 0, 'The Park', 'Follow the path...', 'park', '', 'open', '', 0, 0, 50, 'hh_room_park,hh_room_park_general', 0, '0|0|0|0', 'park_a', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(13, 'public', 0, 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'rooftop', '', 'open', '', 0, 0, 50, 'hh_room_rooftop', 0, '0|0|0|0', 'rooftop', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(14, 'public', 0, 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'rooftop', '', 'open', '', 0, 0, 50, 'hh_room_rooftop', 0, '0|0|0|0', 'rooftop_2', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(15, 'public', 0, 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'floatinggarden', '', 'open', '', 0, 0, 50, 'hh_room_floatinggarden', 0, '0|0|0|0', 'floatinggarden', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(16, 'public', 0, 'The Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'library', '', 'open', '', 0, 0, 50, 'hh_room_library', 0, '0|0|0|0', 'library', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0),
+(17, 'public', 0, 'The Infobus', 'Get into infobus', 'park', '', 'open', '', 1, 0, 50, 'hh_room_park,hh_room_park_general', 0, '0|0|0|0', 'park_b', '0', '0', '0', '0', 0, 0, 'landscape=0.0', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -7940,7 +7948,7 @@ INSERT INTO `room_models` (`id`, `type`, `heightmap`, `enabled`, `door_x`, `door
 ('cinema_a', 'public', 'XXXXXXX1XX11111111XXXXXX\r\nXXX1111111111111111XXXXX\r\nXXX111XXXX1111111111XXXX\r\nXXXX2XXXXXXXXXXXXXXXXXXX\r\nXX3X3X333311XXXXXXXXXX11\r\nXX3333333311111111111111\r\nXX3333333311111111111111\r\nXX3333333311111111122111\r\nXX3333333311X22222222111\r\nXX3333333311X22222222111\r\nXX3333333311XXXXXXXXX111\r\nXX3333333311111111111111\r\nXX3333333311111111111111\r\nXX3333333311111111111111\r\nXX3333333311111XXXX11111\r\nXX3333333311111XXXX11111\r\nXX3333333311111XXXX11111\r\nXX3333333311111XXXX11111\r\nXX3333333311111XXXX11111\r\nXX3333333311111XXXX11111\r\nXX3333333311111XXXX11111\r\n333333332111111XXXX11111\r\n333333332111111111111111\r\n333333332111111111111111\r\n333333332111111111111111\r\nXX3333332111111111111111\r\nXXXXXXXXXXXXXXXXXXX11111\r\nXXXXXXXXXXXXXXXXXXX11111\r\nXXXXXXXXXXXXXXXXXXX11111', '1', 20, 27, 1, 0, '0', 30),
 ('cr_kitchen', 'public', 'X0XXXX000XXXX000X0X\r\nX000000000000000000\r\nX000000000000000000\r\nX000000000000000XXX\r\nX00XXXX00XXXX000XXX\r\nX00XXXX00XXXX00XXXX\r\nX00000000000000XXXX\r\nX00000000000000XXXX\r\nX00000000000000XXXX\r\nX00XXXXXXXXXX00XXXX\r\nX00XXXXXXXXXX00XXXX\r\nX00XXXXXXXXXX000XXX\r\n0000000000000000XXX\r\n000000000000000XXXX\r\n000000000000000XXXX\r\n000XXX0000XXX00XXXX\r\n000XXX0000XXX00XXXX\r\n000000000000000XXXX\r\n000000000000000XXXX\r\n000000000000000XXXX\r\nXXXXXXX00XXXXXXXXXX\r\nXXXXXXX00XXXXXXXXXX\r\nXXXXXXX00XXXXXXXXXX', '1', 2, 29, 0, 2, '0', 30),
 ('dusty_lounge', 'public', 'XXXXXXXXXXXXXX22XXXXXXXXXXXXX\r\nXXXXXXXXXX222X222X2XXXXXXXXXX\r\nXXXXXXX33322222222223XXXXXXX3\r\nXXXXXXX33322222222223XXXXXXX3\r\nXXXXXXX33322222222223X33333X3\r\nXXXXXXX33322222222223X33333X3\r\nXX111XX33322222222223XXXXXXX3\r\nXX111XXX332222222222333333333\r\nXX111XXXX32222222222333333333\r\nXX111XXXXXX222222222333333333\r\nXX111XXXXXXX1111111X333333333\r\nXX111XXXXXXX1111111X222222222\r\nXX111XXXXXX111111111111111111\r\nXX111XXXXXX111111111111111111\r\n11111XXXXXX111111111111111111\r\n11111XXXXXX111111111111111111\r\n11X11XXXXXX111111111111111111\r\n11XXXXXXXXX11111111111111111X\r\nX11XXXXXXXXX1111111X1111111XX\r\nXX11XXXXXXX111111111111111XXX\r\nXXX11XXXXXX11111111111111XXXX\r\nXXXX11111111111111111111XXXXX\r\nXXXXX11111111111111XXXXXXXXXX\r\nXXXXXXXXXXX11111111XXXXXXXXXX\r\nXXXXXXXXXXX11111111XXXXXXXXXX', '1', 14, 1, 2, 4, '0', 30),
-('floatinggarden', 'public', 'XXXXXXXXXXXXXXXX333333XXXXXXXXX\r\nXXXXXXXXXXXXXXXX3XXXX3XXXXXXXXX\r\nXXXXXXXXXXXXXXXX3XXXX3XXXXXXXXX\r\nXXXXXXXXXXXXXXXX3XXXX3XXXXXXXXX\r\nXXXXXXXXXXXXXXX223XXX33XXXXXXXX\r\nXXXXXXXXXXXXXXX11XXX33333XXXXXX\r\nXXXXXXXXXXXXXXXX11XX3333333XXXX\r\nXXXXXXXXXXXXXXXX11XX33333333XXX\r\nXXXXXXXXXXXXXXXXX11XXXXXXXX3XXX\r\nXXXXXXXXXXXXXXXXXX11XXXX3333XXX\r\nXXXXXXXXXXXXXXXXXXX1XXXX33333XX\r\nXXXXXXXXXXXXXXXXXXX1XXX3333333X\r\n555XXXXXXXXXXX1111111X333333333\r\n555XXXXXXXXXXX21111111XXXXXX333\r\n555XXXXXXXXXXX22111111111XXXXXX\r\n555XXXXXXXXXXX222XXXXXXX111XXXX\r\n555XXXXXXXXXXX22XXXXXXXXXX1XXXX\r\n555XXXXXXXXXXX23333333333X111XX\r\n555XXXXXXXX33333333333333X111XX\r\n555XXXXXXXX333333X3333333X111XX\r\n555XXXXXXXX33333333333333X111XX\r\n555XXXXXXXX33X33333333333X111XX\r\n555XXXXXXXX33X33X33333333X111XX\r\n555XXXXXXXX33X33X33333333X111XX\r\n5554333333333X333X3333333X111XX\r\nX554333333XXXX33XXXXXXXXXX111XX\r\nXXXXXXXXX3XXXX333221111111111XX\r\nXXXXXXXXX3XXXX333221111111111XX\r\nXXXXXXXXX33333333XX1111X11X11XX\r\nXXXXXXXXX33333333111XXX11XXXXXX\r\nXXXXXXXXXXXXXX33311XXXX11XXXXXX\r\nXXXXXXXXXXXXXX33311XXXX11XXXXXX\r\nXXXXXXXXXXXXXX333X1XXXX11XXXXXX\r\nXXXXXXXXXXXXXX333X1XX111111XXXX\r\nXXXXXXXXXXXXXX33311XX111111XXXX\r\nXXXXXXXXXX333333311XX111111XXXX\r\nXXXXXXXXXXX33333311XX111111XXXX\r\nXXXXXXXXXXXXXXXX111XXXXXXXXXXXX\r\nXXXXXXXXXXXXXXX111XXXXXXXXXXXXX', '1', 0, 11, 5, 4, '0', 30),
+('floatinggarden', 'public', 'XXXXXXXXXXXXXXXX333333XXXXXXXXX\r\nXXXXXXXXXXXXXXXX3XXXX3XXXXXXXXX\r\nXXXXXXXXXXXXXXXX3XXXX3XXXXXXXXX\r\nXXXXXXXXXXXXXXXX3XXXX3XXXXXXXXX\r\nXXXXXXXXXXXXXXX223XXX33XXXXXXXX\r\nXXXXXXXXXXXXXXX11XXX33333XXXXXX\r\nXXXXXXXXXXXXXXXX11XX3333333XXXX\r\nXXXXXXXXXXXXXXXX11XX33333333XXX\r\nXXXXXXXXXXXXXXXXX11XXXXXXXX3XXX\r\nXXXXXXXXXXXXXXXXXX11XXXX3333XXX\r\nXXXXXXXXXXXXXXXXXXX1XXXX33333XX\r\nXXXXXXXXXXXXXXXXXXX1XXX3333333X\r\n555XXXXXXXXXXX1111111X333333333\r\n555XXXXXXXXXXX21111111XXXXXX333\r\n555XXXXXXXXXXX22111111111XXXXXX\r\n555XXXXXXXXXXX222XXXXXXX111XXXX\r\n555XXXXXXXXXXX22XXXXXXXXXX1XXXX\r\n555XXXXXXXXXXX23333333333X111XX\r\n555XXXXXXXX33333333333333X111XX\r\n555XXXXXXXX333333X3333333X111XX\r\n555XXXXXXXX33333333333333X111XX\r\n555XXXXXXXX33X33333333333X111XX\r\n555XXXXXXXX33X33X33333333X111XX\r\n555XXXXXXXX33X33X33333333X111XX\r\n5554333333333X333X3333333X111XX\r\nX554333333XXXX33XXXXXXXXXX111XX\r\nXXXXXXXXX3XXXX333221111111111XX\r\nXXXXXXXXX3XXXX333221111111111XX\r\nXXXXXXXXX33333333XX1111X11X11XX\r\nXXXXXXXXX33333333111XXX11XXXXXX\r\nXXXXXXXXXXXXXX33311XXXX11XXXXXX\r\nXXXXXXXXXXXXXX33311XXXX11XXXXXX\r\nXXXXXXXXXXXXXX333X1XXXX11XXXXXX\r\nXXXXXXXXXXXXXX333X1XX111111XXXX\r\nXXXXXXXXXXXXXX33311XX111111XXXX\r\nXXXXXXXXXX333333311XX111111XXXX\r\nXXXXXXXXXXX33333311XX111111XXXX\r\nXXXXXXXXXXXXXXXX111XXXXXXXXXXXX\r\nXXXXXXXXXXXXXXX111XXXXXXXXXXXXX', '1', 0, 12, 5, 4, '0', 30),
 ('library', 'flat', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXX11111XX1XX1X111111X\r\nXXXXXXXXXXXX111111XX1XX11111111X\r\nXX111XXXXXXX111111XX1XX11111111X\r\nXX111XXXXXXX1111111111111111111X\r\nXX111XXXXXXX1111111111111111111X\r\nXX111XXXXXXX1111111111111111111X\r\nXX111XXXXXXX1111111111111XXXXXXX\r\nXX111XXXXXX11111111111111111111X\r\nXX111XXXXXX11111111111111111111X\r\nXX111XXXXXX11111111111111111111X\r\nXX111XXXXXX11111111111111XXXXXXX\r\nXX111XXXXXXXX111111111111111111X\r\nXX111XX11111X111111111111111111X\r\nXX111XX11111X111111111111111111X\r\nXX111XXXXX11X11111111X111XXXXXXX\r\nXX111XXXXXXXX11111111XX11111111X\r\nXX111XXX1111111111111XXX1111111X\r\nXX111XXX1111111111111XXXX111111X\r\nXXX111XX1111111111X11XXXX000000X\r\nXXXXX1111XX1111111X11XXXX000000X\r\nXXXXXXXXXXXX111111X11XXXX000000X\r\nXXXXXXXXXXXX11XX11X11XXXX000000X\r\nXXXXXXXXXXXX11XX11X11XXXX000000X\r\nXXXXXXXXXXXX11XX11X11XXXX000000X\r\nXXXXXXXXXXXX11XX11X11XXXX000000X\r\nXXXXXXXXXXXX11XX11X11XXXX000000X\r\nXXXXXXXXXXXX11XX11X111XXX000000X\r\nXXXXXXXXXXXXXXXXXXXX11XXX000000X\r\nXXXXXXXXXXXXXXXXXXXX11XXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXX22222XXXXXXX\r\nXXXXXXXXXXXXXXXXXXXX22222XXXXXXX\r\nXXXXXXXXXXXXXXXXXXXX22222XXXXXXX\r\nXXXXXXXXXXXXXXXXXXXX22222XXXXXXX\r\nXXXXXXXXXXXXXXXXXXXX22222XXXXXXX\r\nXXXXXXXXXXXXXXXXXXXX22222XXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', '1', 20, 3, 1, 4, '0', 30),
 ('model_a', 'flat', 'xxxxxxxxxxxx\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxx00000000\r\nxxxxxxxxxxxx\r\nxxxxxxxxxxxx', '1', 3, 5, 0, 2, '0', 30),
 ('model_b', 'flat', 'xxxxxxxxxxxx\r\nxxxxx0000000\r\nxxxxx0000000\r\nxxxxx0000000\r\nxxxxx0000000\r\nx00000000000\r\nx00000000000\r\nx00000000000\r\nx00000000000\r\nx00000000000\r\nx00000000000\r\nxxxxxxxxxxxx\r\nxxxxxxxxxxxx\r\nxxxxxxxxxxxx\r\nxxxxxxxxxxxx\r\nxxxxxxxxxxxx', '1', 0, 5, 0, 2, '0', 30),
@@ -7977,8 +7985,8 @@ INSERT INTO `room_models` (`id`, `type`, `heightmap`, `enabled`, `door_x`, `door
 ('picnic', 'public', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXX22222XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\n22XXXXXXXXXXXXX22XXXXXXXXXXXXXXXXXXXXX\r\n2222222222222222222X222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222XXX222222222222222222222222\r\n2222222222XX33X22222222222222222222222\r\n222222222XX3333X2222222222222222222222\r\n222222222X333333X222222222222222222222\r\n222222222X333333X222222222222222222222\r\n2222222222X3332X2222222222222222222222\r\n22222222222X33X22222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222X22222XXXX22222222222222222222\r\n22222222222222XXXX22222222222222222222\r\n22222222222222XXX222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222\r\n22222222222222222222222222222222222222', '1', 16, 5, 2, 4, '0', 30),
 ('pizza', 'public', 'XXXXXXXXX0000000\r\nX11111X1XX000000\r\n11XXXXX111X00000\r\n11X1111111XX0000\r\n11X1111111100000\r\nXXX1111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n1111111111100000\r\n11111111111XXXXX\r\n1111111111XXXXXX\r\n1111111111111111\r\n1111111111111111\r\n1111111111111111\r\n1111111111111111\r\n1111111111111111\r\n1111111111111111\r\n11XX11XX11111111\r\nXXXX11XXXXXXXXXX\r\nXXXX11XXXXXXXXXX', '1', 5, 27, 1, 2, '0', 30),
 ('pub_a', 'public', 'XXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXX2222222211111XXX\r\nXXXXXXXXX2222222211111XXX\r\nXXXXXXXXX2222222211111XXX\r\nXXXXXXXXX2222222211111XXX\r\nXXXXXXXXX2222222222111XXX\r\nXXXXXXXXX2222222222111XXX\r\nXXXXXXXXX2222222222000XXX\r\nXXXXXXXXX2222222222000XXX\r\nXXXXXXXXX2222222222000XXX\r\nXXXXXXXXX2222222222000XXX\r\nX333333332222222222000XXX\r\nX333333332222222222000XXX\r\nX333333332222222222000XXX\r\nX333333332222222222000XXX\r\nX333333332222222222000XXX\r\nX333332222222222222000XXX\r\nX333332222222222222000XXX\r\nX333332222222222222000XXX\r\nX333332222222222222000XXX\r\nX333333332222222222000XXX\r\nXXXXX31111112222222000XXX\r\nXXXXX31111111000000000XXX\r\nXXXXX31111111000000000XXX\r\nXXXXX31111111000000000XXX\r\nXXXXX31111111000000000XXX\r\nXXXXXXXXXXXXXXX00XXXXXXXX\r\nXXXXXXXXXXXXXXX00XXXXXXXX\r\nXXXXXXXXXXXXXXX00XXXXXXXX\r\nXXXXXXXXXXXXXXX00XXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXX', '1', 15, 25, 0, 2, '0', 30),
-('rooftop', 'public', '44XXXXXXXXXXXXXXXXXX\r\n444XXXXXXXXXXX444444\r\n4444XXXXXXXXXX444444\r\n44444XXXX4XXXX444444\r\n444444XXX44XXX444444\r\n44444444444444444444\r\n44444444444444444444\r\n44444444444444444444\r\n44444444XX44XX44XX44\r\n44444444XX44XX44XX44\r\n44444444444444444444\r\n44444444444444444444\r\n44444444444444444444\r\nX444444X444444XX4444\r\nX444444X444444XX333X\r\nX444444X444444XX222X\r\nX444444X444444XX11XX\r\nX444444X444444XXXXXX', '1', 17, 12, 4, 2, '0', 30),
-('rooftop_2', 'public', 'X0000X000\r\nXXXXXX000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\nXXX000XXX\r\nXXX000XXX', '1', 4, 9, 0, 0, '0', 30),
+('rooftop', 'public', '44XXXXXXXXXXXXXXXXXX\r\n444XXXXXXXXXXX444444\r\n4444XXXXXXXXXX444444\r\n44444XXXX4XXXX444444\r\n444444XXX44XXX444444\r\n44444444444444444444\r\n44444444444444444444\r\n44444444444444444444\r\n44444444XX44XX44XX44\r\n44444444XX44XX44XX44\r\n44444444444444444444\r\n44444444444444444444\r\n44444444444444444444\r\nX444444X444444XX4444\r\nX444444X444444XX333X\r\nX444444X444444XX222X\r\nX444444X444444XX11XX\r\nX444444X444444XXXXXX', '1', 17, 12, 4, 0, '0', 30),
+('rooftop_2', 'public', 'X0000X000\r\nXXXXXX000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\n000000000\r\nXXX000XXX\r\nXXX000XXX', '1', 0, 0, 0, 0, '0', 30),
 ('star_lounge', 'public', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX2222X4444442222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX22222X444X32222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX22222XX4XX22222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX222222222222222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX222222222222222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX222222222222222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX222222222222222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX222222222222222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX222222222222222XXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX22222222222222211111XXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX22222222222222211111XXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX22222222222222211111XXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX22222222222222211111XXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX22222222222222222111XXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXX22222222222222222111XXXXXXXXX\r\nXXXXXXXXXXXXXXXX3333X22222222222222XXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXX3333X22222222222222XXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXX3333X22222222221111XXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXX3333XX2X22222220000XXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXX333333332222222000000XXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXX333333332222222X0000000XXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXX33333332222222X0000000XXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXX222222000000XXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', '1', 37, 36, 0, 2, '0', 30),
 ('tearoom', 'public', 'XXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXX3333X33333333X\r\n333333XX3333X33333333X\r\n3333333X3333X33333333X\r\n3333333X3333X33333333X\r\n3333333XXXXXX33333333X\r\n333333333333333333333X\r\n333333333333333333333X\r\n333333333333333333333X\r\n333333333333333333333X\r\n33333333222X333333333X\r\n33333333222X333333333X\r\n33333333222X333333333X\r\n33333333222X333333333X\r\n33333333111X333333333X\r\n33333333111X333333333X\r\n33333333111X333333333X\r\nXXXXXXXX111XXXXXXXXXXX\r\n11111111111111111111XX\r\n1111111111111111111111\r\n1111111111111111111111\r\n11111111111111111111XX', '1', 21, 19, 1, 6, '0', 30),
 ('theater', 'public', 'XXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXXXXXXXXXXXXXXXXXX\r\nXXXXXXX111111111XXXXXXX\r\nXXXXXXX11111111100000XX\r\nXXXX00X11111111100000XX\r\nXXXX00x11111111100000XX\r\n4XXX00X11111111100000XX\r\n4440000XXXXXXXXX00000XX\r\n444000000000000000000XX\r\n4XX000000000000000000XX\r\n4XX0000000000000000000X\r\n44400000000000000000000\r\n44400000000000000000000\r\n44X00000000000000000000\r\n44X11111111111111111000\r\n44X11111111111111111000\r\n33X11111111111111111000\r\n22X11111111111111111000\r\n22X11111111111111111000\r\n22X11111111111111111000\r\n22X11111111111111111000\r\n22X11111111111111111000\r\n22211111111111111111000\r\n22211111111111111111000\r\nXXXXXXXXXXXXXXXXXXXX00X\r\nXXXXXXXXXXXXXXXXXXXX00X', '1', 20, 27, 0, 0, '0', 30),
@@ -8014,12 +8022,12 @@ CREATE TABLE IF NOT EXISTS `room_triggers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `room_id` int(10) unsigned NOT NULL,
   `room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
-  `action` enum('default','roller','teleport') CHARACTER SET utf8 NOT NULL DEFAULT 'default',
+  `action` enum('roller','teleport') CHARACTER SET utf8 NOT NULL DEFAULT 'roller',
   `to_room_id` int(10) unsigned NOT NULL,
   `to_room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
   `to_room_dir` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
 
 --
 -- Dumping data for table `room_triggers`
@@ -8055,7 +8063,13 @@ INSERT INTO `room_triggers` (`id`, `room_id`, `room_pos`, `action`, `to_room_id`
 (27, 12, '28|9|0', 'roller', 0, '28|8|0', 0),
 (28, 12, '28|8|0', 'roller', 0, '28|7|0', 0),
 (29, 12, '28|7|0', 'roller', 0, '28|6|0', 0),
-(30, 12, '28|6|0', 'roller', 0, '28|5|0', 0);
+(30, 12, '28|6|0', 'roller', 0, '28|5|0', 0),
+(31, 13, '9|3|4', 'teleport', 14, '4|10|0', 0),
+(32, 13, '9|4|4', 'teleport', 14, '4|10|0', 0),
+(33, 13, '10|4|4', 'teleport', 14, '4|10|0', 0),
+(34, 14, '3|11|0', 'teleport', 13, '10|5|4', 4),
+(35, 14, '4|11|0', 'teleport', 13, '10|5|4', 4),
+(36, 14, '5|11|0', 'teleport', 13, '10|5|4', 4);
 
 -- --------------------------------------------------------
 
@@ -8075,6 +8089,7 @@ CREATE TABLE IF NOT EXISTS `room_visits` (
 --
 -- Dumping data for table `room_visits`
 --
+
 
 -- --------------------------------------------------------
 
@@ -9250,6 +9265,7 @@ CREATE TABLE IF NOT EXISTS `user_subscriptions` (
 --
 -- Dumping data for table `user_subscriptions`
 --
+
 
 -- --------------------------------------------------------
 

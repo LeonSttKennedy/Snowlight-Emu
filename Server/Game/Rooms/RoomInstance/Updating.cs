@@ -274,11 +274,6 @@ namespace Snowlight.Game.Rooms
             {
                 switch (Action.Action)
                 {
-                    case RoomTriggerList.DEFAULT:
-                        /* This a default action this will be used to gave badges to users or another bonuses.
-                         */
-                        break;
-
                     case RoomTriggerList.ROLLER:
                         if (Action.ToRoomId != 0)
                         {

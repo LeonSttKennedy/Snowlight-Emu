@@ -169,7 +169,8 @@ namespace Snowlight.Game.Rooms
                 Icon, (int)Row["category"], (int)Row["max_users"], (string)Row["swfs"], (int)Row["score"], (string)Row["model"],
                 (Row["allow_pets"].ToString() == "1"), (Row["allow_pet_eating"].ToString() == "1"),
                 (Row["disable_blocking"].ToString() == "1"), (Row["hide_walls"].ToString() == "1"),
-                (string)Row["pub_internal_name"], (int)Row["thickness_wall"], (int)Row["thickness_floor"], Decorations);
+                (string)Row["pub_internal_name"], (int)Row["thickness_wall"], (int)Row["thickness_floor"], Decorations,
+                (uint)Row["badge_id"]);
         }
     }
 }

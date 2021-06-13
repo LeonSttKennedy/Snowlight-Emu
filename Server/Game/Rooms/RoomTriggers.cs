@@ -11,9 +11,8 @@ namespace Snowlight.Game.Rooms
 {
     public enum RoomTriggerList
     {
-        DEFAULT = 0,
-        ROLLER = 1,
-        TELEPORT = 2
+        ROLLER = 0,
+        TELEPORT = 1
     }
     public class RoomTriggers
     {
@@ -87,7 +86,7 @@ namespace Snowlight.Game.Rooms
                 MySqlClient.SetParameter("triggerid", TriggerId);
                 DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM room_triggers WHERE id = @triggerid");
 
-                RoomTriggerList Trigger = RoomTriggerList.DEFAULT;
+                RoomTriggerList Trigger = RoomTriggerList.ROLLER;
                 switch ((string)Row["action"])
                 {
                     case "roller":

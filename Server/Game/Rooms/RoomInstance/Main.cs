@@ -183,7 +183,7 @@ namespace Snowlight.Game.Rooms
 
                 foreach(DataRow Row in TriggersTable.Rows)
                 {
-                    RoomTriggerList Trigger = RoomTriggerList.DEFAULT;
+                    RoomTriggerList Trigger = RoomTriggerList.ROLLER;
                     switch ((string)Row["action"])
                     {
                         case "roller":
