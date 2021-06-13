@@ -58,6 +58,7 @@ namespace Snowlight.Game.Sessions
 
         private bool mIsTeleporting;
         private uint mTargetTeleporterId;
+        private uint mTriggerTeleporterId;
 
         private int mCurrentEffect;
 
@@ -321,6 +322,18 @@ namespace Snowlight.Game.Sessions
             }
         }
 
+        public uint TriggerTeleporterId
+        {
+            get 
+            {
+                return mTriggerTeleporterId;
+            }
+
+            set 
+            {
+                mTriggerTeleporterId = value;
+            }
+        }
         public int CurrentEffect
         {
             get

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-
 using Snowlight.Specialized;
 using Snowlight.Game.Items;
 using Snowlight.Communication.Outgoing;

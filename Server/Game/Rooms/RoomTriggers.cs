@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Snowlight.Storage;
 using Snowlight.Specialized;
+using System.Data;
 
 namespace Snowlight.Game.Rooms
 {
@@ -74,6 +76,35 @@ namespace Snowlight.Game.Rooms
             mToRoomId = ToRoomId;
             mToRoomPos = ToRoomPosition;
             mToRoomRotation = ToRoomRotation;
+        }
+
+        public static RoomTriggers GetTrigger(uint TriggerId)
+        {
+            RoomTriggers Return = null;
+
+            using(SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                MySqlClient.SetParameter("triggerid", TriggerId);
+                DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM room_triggers WHERE id = @triggerid");
+
+                RoomTriggerList Trigger = RoomTriggerList.DEFAULT;
+                switch ((string)Row["action"])
+                {
+                    case "roller":
+                        Trigger = RoomTriggerList.ROLLER;
+                        break;
+
+                    case "teleport":
+                        Trigger = RoomTriggerList.TELEPORT;
+                        break;
+                }
+
+                Return = new RoomTriggers((uint)Row["id"], Vector3.FromString((string)Row["room_pos"]),
+                        Trigger, Vector3.FromString((string)Row["to_room_pos"]), (uint)Row["to_room_id"],
+                        (int)Row["to_room_dir"]);
+            }
+
+            return Return;
         }
     }
 }

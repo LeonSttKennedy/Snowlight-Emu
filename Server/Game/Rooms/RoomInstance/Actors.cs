@@ -148,6 +148,7 @@ namespace Snowlight.Game.Rooms
             if (Session.IsTeleporting)
             {
                 TargetTeleporter = GetItem(Session.TargetTeleporterId);
+                RoomTriggers TriggerTeleport = RoomTriggers.GetTrigger(Session.TriggerTeleporterId);
 
                 if (TargetTeleporter != null && !TargetTeleporter.TemporaryInteractionReferenceIds.ContainsKey(2))
                 {
@@ -162,6 +163,16 @@ namespace Snowlight.Game.Rooms
                     TargetTeleporter.RequestUpdate(3);
                 }
 
+                if (TriggerTeleport != null)
+                {
+                    NewActor.Position = new Vector3(TriggerTeleport.ToRoomPosition.X, TriggerTeleport.ToRoomPosition.Y,
+                        TriggerTeleport.ToRoomPosition.Z);
+                    NewActor.HeadRotation = TriggerTeleport.ToRoomRotation;
+                    NewActor.BodyRotation = TriggerTeleport.ToRoomRotation;
+                    NewActor.UpdateNeeded = true;
+                }
+
+                Session.TriggerTeleporterId = 0;
                 Session.TargetTeleporterId = 0;
                 Session.IsTeleporting = false;
             }

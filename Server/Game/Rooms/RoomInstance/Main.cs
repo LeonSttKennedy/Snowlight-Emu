@@ -164,7 +164,8 @@ namespace Snowlight.Game.Rooms
                 foreach (DataRow Row in StaticObjectTable.Rows)
                 {
                     mStaticObjects.Add(new StaticObject((string)Row["name"], Vector3.FromString((string)Row["position"]),
-                        (int)Row["rotation"], (float)Row["height"], (Row["walkable"].ToString() == "1"), (Row["is_seat"].ToString() == "1")));
+                        (int)Row["rotation"], (float)Row["height"], (Row["walkable"].ToString() == "1"), 
+                        (Row["is_seat"].ToString() == "1")));
                 }
             
                 // Rights
@@ -176,11 +177,11 @@ namespace Snowlight.Game.Rooms
                     mUsersWithRights.Add((uint)Row["user_id"]);
                 }
 
-                // Tiles Tigger
+                // Tiles Trigger
                 MySqlClient.SetParameter("id", RoomId);
-                DataTable TiggersTable = MySqlClient.ExecuteQueryTable("SELECT * FROM room_triggers WHERE room_id = @id");
+                DataTable TriggersTable = MySqlClient.ExecuteQueryTable("SELECT * FROM room_triggers WHERE room_id = @id");
 
-                foreach(DataRow Row in TiggersTable.Rows)
+                foreach(DataRow Row in TriggersTable.Rows)
                 {
                     RoomTriggerList Trigger = RoomTriggerList.DEFAULT;
                     switch ((string)Row["action"])

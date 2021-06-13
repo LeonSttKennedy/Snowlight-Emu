@@ -276,7 +276,6 @@ namespace Snowlight.Game.Rooms
                 {
                     case RoomTriggerList.DEFAULT:
                         /* This a default action this will be used to gave badges to users or another bonuses.
-                         * Maybe needs a database verification to execute a single time. 
                          */
                         break;
 
@@ -314,13 +313,11 @@ namespace Snowlight.Game.Rooms
                         }
                         else if (Action.ToRoomId != Session.CurrentRoomId)
                         {
-                            // Todo: Place the user in requested position.
                             if (Action.ToRoomId == 0)
                             {
                                 Output.WriteLine("[RoomMgr] TeleTrigger (Id: " + Action.Id + ") -> Not configured correctly.", OutputLevel.Warning);
                                 break;
                             }
-                            uint ActorID = 0;
 
                             if (Instance == null) break;
 
@@ -342,22 +339,10 @@ namespace Snowlight.Game.Rooms
 
                             if (Instance != NewInstance)
                             {
-                                ActorID = Actor.ReferenceId;
                                 Session.IsTeleporting = true;
+                                Session.TriggerTeleporterId = Action.Id;
                                 RoomHandler.PrepareRoom(Session, Action.ToRoomId, string.Empty, true);
                             }
-
-                            Case:
-                            RoomActor NewActor = NewInstance.GetActorByReferenceId(ActorID);
-                            if (NewActor == null) goto Case;
-
-                            if (NewActor.Type != RoomActorType.UserCharacter) break;
-
-                            NewActor.Position = Action.ToRoomPosition;
-                            NewActor.BodyRotation = Action.ToRoomRotation;
-                            NewActor.HeadRotation = Actor.BodyRotation;
-                            NewActor.UnblockWalking();
-                            NewActor.UpdateNeeded = true;
                         }
                         break;
                 }
