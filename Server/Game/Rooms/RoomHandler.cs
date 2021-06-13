@@ -343,7 +343,22 @@ namespace Snowlight.Game.Rooms
                 Session.SendData(RoomMutedComposer.Compose((int)Session.CharacterInfo.MutedSecondsLeft));
             }
 
-            if(Instance.Info.BadgeId > 0)
+            if (Instance.Info.OwnerId != Session.CharacterId)
+            {
+                QuestManager.ProgressUserQuest(Session, QuestType.SOCIAL_VISIT);
+            }
+
+            if (Session.QuestCache.CurrentQuestId > 0)
+            {
+                Quest Quest = QuestManager.GetQuest(Session.QuestCache.CurrentQuestId);
+
+                if (Quest != null)
+                {
+                    Session.SendData(QuestStartedComposer.Compose(Session, Quest));
+                }
+            }
+
+            if (Instance.Info.BadgeId > 0)
             {
                 RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
                 if (Actor == null) return;
@@ -361,25 +376,10 @@ namespace Snowlight.Game.Rooms
 
                         Session.SendData(RoomChatComposer.Compose(Actor.Id, "Do you have received a new badge, check your inventory!", 1, ChatType.Whisper));
                     }
-                    else if(Session.BadgeCache.Badges.Contains(BadgeToGive))
+                    else if (Session.BadgeCache.Badges.Contains(BadgeToGive))
                     {
                         Session.SendData(RoomChatComposer.Compose(Actor.Id, "Looks like you've already received this badge.", 4, ChatType.Whisper));
                     }
-                }
-            }
-
-            if (Instance.Info.OwnerId != Session.CharacterId)
-            {
-                QuestManager.ProgressUserQuest(Session, QuestType.SOCIAL_VISIT);
-            }
-
-            if (Session.QuestCache.CurrentQuestId > 0)
-            {
-                Quest Quest = QuestManager.GetQuest(Session.QuestCache.CurrentQuestId);
-
-                if (Quest != null)
-                {
-                    Session.SendData(QuestStartedComposer.Compose(Session, Quest));
                 }
             }
         }

@@ -80,6 +80,12 @@ namespace Snowlight.Game.Misc
                         }
                         string Msg = Input.Substring(3).Replace("*", "\n");
                         SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg + "\r\n- " + Session.CharacterInfo.Username));
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent a global alert",
+                               "Message: '" + Msg + "'");
+                        }
+
                         return true;
                     }
                 #endregion
@@ -92,6 +98,11 @@ namespace Snowlight.Game.Misc
                         }
                         string Msg = Input.Substring(4).Replace("*", "\n");
                         SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg));
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent a anonimate global alert",
+                               "Message: '" + Msg + "'");
+                        }
                         return true;
                     }
                 #endregion
@@ -107,23 +118,33 @@ namespace Snowlight.Game.Misc
                         string Message = Input.Substring(1).Replace("*", "\n");
 
                         SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent a global alert with link",
+                               "Message: '" + Message + "' \nLink: " + Url);
+                        }
                         return true;
                     }
                 #endregion
-                #region :msgstaff <msg>
-                case "msgstaff":
+                #region :has <msg>
+                case "has":
                     {
                         if (!Session.HasRight("hotel_admin"))
                         {
                             return false;
                         }
-                        string Msg = Input.Substring(9).Replace("*", "\n");
+                        string Msg = Input.Substring(4).Replace("*", "\n");
                         SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Staff User: " + Session.CharacterInfo.Username + "\r\n" + Msg), "moderation_tool");
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent a staff alert",
+                               "Message: '" + Msg + "'");
+                        }
                         return true;
                     }
                 #endregion
-                #region :roomalert <msg>
-                case "roomalert":
+                #region :ra <msg>
+                case "ra":
                     {
                         RoomInstance RoomInstance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
                         if (!Session.HasRight("moderation_tool") || RoomInstance == null)
@@ -131,14 +152,104 @@ namespace Snowlight.Game.Misc
                             return false;
                         }
 
-                        string Msg = Input.Substring(10).Replace("*", "\n");
+                        string Msg = Input.Substring(3).Replace("*", "\n");
                         foreach (RoomActor RoomActor in RoomInstance.Actors)
                         {
-                            if(!RoomActor.IsBot)
+                            if (!RoomActor.IsBot)
                             {
                                 Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
                                 TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg + "\r\n- " + Session.CharacterInfo.Username));
                             }
+                        }
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent an alert to a room",
+                               "Message: '" + Msg + "'");
+                        }
+
+                        return true;
+                    }
+                #endregion
+                #region :ara <msg>
+                case "ara":
+                    {
+                        RoomInstance RoomInstance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+                        if (!Session.HasRight("moderation_tool") || RoomInstance == null)
+                        {
+                            return false;
+                        }
+
+                        string Msg = Input.Substring(4).Replace("*", "\n");
+                        foreach (RoomActor RoomActor in RoomInstance.Actors)
+                        {
+                            if (!RoomActor.IsBot)
+                            {
+                                Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
+                                TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg));
+                            }
+                        }
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent an anonimate alert to a room",
+                               "Message: '" + Msg + "'");
+                        }
+
+                        return true;
+                    }
+                #endregion
+                #region :ral <link> <msg>
+                case "ral":
+                    {
+                        RoomInstance RoomInstance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+                        if (!Session.HasRight("moderation_tool") || RoomInstance == null)
+                        {
+                            return false;
+                        }
+                        string Url = Bits[1];
+                        Input = Input.Substring(4).Replace(Url, "");
+                        string Message = Input.Substring(1).Replace("*", "\n");
+
+                        foreach (RoomActor RoomActor in RoomInstance.Actors)
+                        {
+                            if (!RoomActor.IsBot)
+                            {
+                                Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
+                                TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
+                            }
+                        }
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent an alert to a room with link",
+                               "Message: '" + Message + "' \nLink: " + Url);
+                        }
+                        return true;
+                    }
+                #endregion
+                #region :ras <msg>
+                case "ras":
+                    {
+                        RoomInstance RoomInstance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+                        if (!Session.HasRight("moderation_tool") || RoomInstance == null)
+                        {
+                            return false;
+                        }
+
+                        string Msg = Input.Substring(4).Replace("*", "\n");
+                        foreach (RoomActor RoomActor in RoomInstance.Actors)
+                        {
+                            if (!RoomActor.IsBot)
+                            {
+                                Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
+                                if (TargetSession.HasRight("moderation_tool"))
+                                {
+                                    TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg + "\r\n- " + Session.CharacterInfo.Username));
+                                }
+                            }
+                        }
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent an alert to the staff's in a room",
+                               "Message: '" + Msg + "'");
                         }
 
                         return true;
@@ -389,6 +500,21 @@ namespace Snowlight.Game.Misc
                         return true;
                     }
                 #endregion
+                #region :update_achievements
+                case "update_achievements":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+                        using(SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            AchievementManager.ReloadAchievements(MySqlClient);
+                            Session.SendData(NotificationMessageComposer.Compose("Achievements list Reloaded."));
+                        }
+                        return true;
+                    }
+                #endregion
                 #region :superkick <username>
                 case "superkick":
                     {
@@ -399,7 +525,7 @@ namespace Snowlight.Game.Misc
 
                         if (Bits.Length < 2)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :kick <username>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :superkick <username>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -548,12 +674,13 @@ namespace Snowlight.Game.Misc
                                 CommandsBuilder.Append(string.Concat(new object[]
                                     {
                                         "\n:ha <message> - Sends a global alert.",
-                                        "\n:aha <message> - Sends anonimate a global alert.",
+                                        "\n:aha <message> - Sends an anonimate global alert.",
                                         "\n:hal <link> <message> - Sends a global alert with link.",
-                                        "\n:msgstaff <message> - Sends a staff users alert.",
+                                        "\n:has <message> - Sends a staff users alert.",
                                         "\n:superkick <message> - Kicks a user from hotel.",
                                         "\n:clipping - Walk wherever you want.",
                                         "\n:t - Shows the coords to you.",
+                                        "\n:update_achievements - Update achievements list.",
                                         "\n:update_catalog - Update catalog.",
                                         "\n:update_items - Update items definitions."
                                     }));
@@ -562,7 +689,10 @@ namespace Snowlight.Game.Misc
                             {
                                 CommandsBuilder.Append(string.Concat(new object[]
                                     {
-                                        "\n:roomalert <message> - Sends an alert to all users in current room.",
+                                        "\n:ra <message> - Sends an alert to all users in current room.",
+                                        "\n:ara <message> - Sends an anonimate alert to all users in current room.",
+                                        "\n:ral <link> <message> - Sends an alert to all users in current room with link.",
+                                        "\n:ras <message> - Sends an alert to all staff users in current room.",
                                         "\n:kick <username> - Kicks an user from current room."
                                     }));
                             }
