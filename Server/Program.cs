@@ -38,6 +38,7 @@ namespace Snowlight
         private static bool mAlive;
         private static SnowTcpListener mServer;
 
+        private static DateTime mCurrentDay;
         internal static DateTime ServerStarted;
         /// <summary>
         /// Should be used by all non-worker threads to check if they should remain alive, allowing for safe termination.
@@ -47,6 +48,18 @@ namespace Snowlight
             get
             {
                 return (!Environment.HasShutdownStarted && mAlive);
+            }
+        }
+
+        public static DateTime CurrentDay
+        {
+            get
+            {
+                return mCurrentDay;
+            }
+            set
+            {
+                mCurrentDay = value;
             }
         }
 
@@ -88,6 +101,9 @@ namespace Snowlight
                     PerformDatabaseCleanup(MySqlClient);
 
                     Output.WriteLine("Initializing game components and workers...");
+
+                    // Some settings on database
+                    ServerSettings.Initialize(MySqlClient);
 
                     // Core
                     DataRouter.Initialize();
@@ -160,6 +176,8 @@ namespace Snowlight
 
             Output.WriteLine("The server has initialized successfully (" + Math.Round(TimeSpent.TotalSeconds, 2) + " seconds). Ready for connections.", OutputLevel.Notification);
             Output.WriteLine("Press the ENTER key for command input. Shut down server with 'STOP' command.", OutputLevel.Notification);
+
+            CurrentDay = DateTime.Today;
 
             Console.Beep();
             Input.Listen(); // This will make the main thread process console while Program.Alive.

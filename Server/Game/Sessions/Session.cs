@@ -477,6 +477,19 @@ namespace Snowlight.Game.Sessions
 
                 MessengerHandler.MarkUpdateNeeded(this, 0, true);
                 AchievementManager.VerifyProgressUserAchievement(MySqlClient, this);
+
+                if (ServerSettings.LoginBadgeEnabled)
+                {
+                    Badge BadgeToGive = RightsManager.GetBadgeById(ServerSettings.LoginBadgeId);
+                    if (BadgeToGive == null) return;
+
+                    if (!mBadgeCache.Badges.Contains(BadgeToGive))
+                    {
+                        mBadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
+                        mNewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
+                        SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+                    }
+                }
             }
         }
 

@@ -4,6 +4,7 @@ using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Handlers
 {
@@ -81,7 +82,19 @@ namespace Snowlight.Game.Handlers
         }
         private static void OnGetMotdMessage(Session Session, ClientMessage Message)
         {
-            Session.SendData(MessageOfTheDayComposer.Compose("Welcome to uberHotel.org BETA.\n\n\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\n\nPlease submit any bugs, feedback, or ideas via:\nhttp://snowlight.uservoice.com\n\n\nHave fun, and thank you for joining us!"));
+            if (ServerSettings.MotdEnabled)
+            {
+                switch(ServerSettings.MotdType)
+                {
+                    case MotdType.NotificationMessageComposer:
+                        Session.SendData(NotificationMessageComposer.Compose(ServerSettings.MotdText));
+                        break;
+
+                    case MotdType.MessageOfTheDayComposer:
+                        Session.SendData(MessageOfTheDayComposer.Compose(ServerSettings.MotdText));
+                        break;
+                }
+            }
         }
     }
 }

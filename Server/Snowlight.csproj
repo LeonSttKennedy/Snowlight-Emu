@@ -403,6 +403,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ByteUtil.cs" />
+    <Compile Include="Util\ServerSettings.cs" />
     <Compile Include="Util\RandomGenerator.cs" />
     <Compile Include="Specialized\Vector2.cs" />
     <Compile Include="Specialized\Vector3.cs" />

@@ -515,6 +515,21 @@ namespace Snowlight.Game.Misc
                         return true;
                     }
                 #endregion
+                #region :update_serversettings
+                case "update_serversettings":
+                    {
+                        if(!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+                        using(SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ServerSettings.Initialize(MySqlClient);
+                            Session.SendData(NotificationMessageComposer.Compose("Updated server specific configuration."));
+                        }
+                        return true;
+                    }
+                #endregion
                 #region :superkick <username>
                 case "superkick":
                     {
@@ -624,15 +639,30 @@ namespace Snowlight.Game.Misc
                         {
                             return false;
                         }
+                        // Total online players peak
+                        int alltime = 0;
+                        int daily = 0;
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        { 
+                            string alltimeplayerpeak = MySqlClient.ExecuteScalar("SELECT sval FROM server_statistics WHERE skey = 'all_time_player_peak' LIMIT 1").ToString();
+                            int.TryParse(alltimeplayerpeak, out alltime);
 
+                            string dailyplayerpeak = MySqlClient.ExecuteScalar("SELECT sval FROM server_statistics WHERE skey = 'daily_player_peak' LIMIT 1").ToString();
+                            int.TryParse(dailyplayerpeak, out daily);
+                        }
+                        // Total users online
                         List<string> OnlineUsers = SessionManager.ConnectedUserData.Values.ToList();
+                        // Total time online
                         DateTime Now = DateTime.Now;
                         TimeSpan Uptime = (Now - Program.ServerStarted);
+
                         Session.SendData(NotificationMessageComposer.Compose(string.Concat(new object[]
                         {
                             "Server uptime is " + Uptime.Days + " day(s), " + Uptime.Hours + " hour(s), " + Uptime.Minutes + " minute(s) and " + Uptime.Seconds + " second(s)",
                             "\nThere are " + OnlineUsers.Count  + " " + (OnlineUsers.Count == 1? "user online" : "users online"),
                             "\nThere are " + RoomManager.RoomInstances.Count + " " + (RoomManager.RoomInstances.Count == 1? "room loaded" : "rooms loaded"),
+                            "\nDaily player peak: " + daily,
+                            "\nAll time player peak: " + alltime,
                             "\n\nSystem",
                             "\nCPU architecture: " + GetProcessorArchitecture().ToString().ToLower(),
                             "\nCPU cores: "+ Environment.ProcessorCount,
@@ -682,7 +712,8 @@ namespace Snowlight.Game.Misc
                                         "\n:t - Shows the coords to you.",
                                         "\n:update_achievements - Update achievements list.",
                                         "\n:update_catalog - Update catalog.",
-                                        "\n:update_items - Update items definitions."
+                                        "\n:update_items - Update items definitions.",
+                                        "\n:update_serversettings - Update specific server definitions."
                                     }));
                             }
                             if (Session.HasRight("moderation_tool"))

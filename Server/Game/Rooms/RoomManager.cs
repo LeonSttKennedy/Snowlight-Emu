@@ -179,7 +179,7 @@ namespace Snowlight.Game.Rooms
                         {
                             if (mRoomInstances.ContainsKey(DisposeId))
                             {
-                                Output.WriteLine("[RoomMgr] Instance " + DisposeId + " -> Unloaded Room: \"" + mRoomInstances[DisposeId].Info.Name + "\". (RoomID: " + mRoomInstances[DisposeId].RoomId + ")", OutputLevel.Notification);
+                                Output.WriteLine("[RoomMgr] Instance " + DisposeId + " <- Unloaded Room: \"" + mRoomInstances[DisposeId].Info.Name + "\". (RoomID: " + mRoomInstances[DisposeId].RoomId + ")", OutputLevel.Notification);
                                 mRoomInstances[DisposeId].Dispose();
                                 mRoomInstances[DisposeId] = null;
                                 mRoomInstances.Remove(DisposeId);
