@@ -154,7 +154,21 @@ namespace Snowlight.Game.Bots
 
             return NewInstances.AsReadOnly();           
         }
-
+        public static Bot GetBotByBehavior(string BehaviorType)
+        {
+            lock (mSyncRoot)
+            { 
+                foreach(Bot BotDef in mBotDefinitions.Values)
+                {
+                    if(BotDef.BehaviorType == BehaviorType)
+                    {
+                        return BotDef;
+                    }
+                }
+            }
+            
+            return null;
+        }
         public static Bot GetBotDefinition(uint DefinitionId)
         {
             if (mBotDefinitions.ContainsKey(DefinitionId))

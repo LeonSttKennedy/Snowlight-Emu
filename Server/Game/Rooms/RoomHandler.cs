@@ -98,7 +98,7 @@ namespace Snowlight.Game.Rooms
 
         private static void CheckCanCreateRoom(Session Session, ClientMessage Message)
         {
-            Session.SendData(RoomCanCreateResult.Compose(Session.CharacterInfo.GetRoomCount() >= Navigator.MaxRoomsPerUser, Navigator.MaxRoomsPerUser));
+            Session.SendData(RoomCanCreateResult.Compose(Session.CharacterInfo.GetRoomCount() >= ServerSettings.MaxRoomsPerUser, ServerSettings.MaxRoomsPerUser));
         }
         
         private static void OnCreateRoom(Session Session, ClientMessage Message)
@@ -113,7 +113,7 @@ namespace Snowlight.Game.Rooms
 
             RoomModel Model = RoomManager.GetModel(ModelName);
             
-            if (Model == null || !Model.IsUsableBySession(Session) || Session.CharacterInfo.GetRoomCount() >= Navigator.MaxRoomsPerUser)
+            if (Model == null || !Model.IsUsableBySession(Session) || Session.CharacterInfo.GetRoomCount() >= ServerSettings.MaxRoomsPerUser)
             {
                 return;
             }

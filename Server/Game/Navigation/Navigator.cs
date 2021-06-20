@@ -26,22 +26,6 @@ namespace Snowlight.Game.Navigation
         private static List<NavigatorOfficialItem> mOfficialItems;
         private static Dictionary<string, int> mEventSearchQueries;
 
-        public static int MaxRoomsPerUser
-        {
-            get
-            {
-                return (int)ConfigManager.GetValue("navigator.maxroomsperuser");
-            }
-        }
-
-        public static int MaxFavoritesPerUser
-        {
-            get
-            {
-                return (int)ConfigManager.GetValue("navigator.maxfavoritesperuser");
-            }
-        }
-
         public static bool CacheEnabled
         {
             get
@@ -488,7 +472,7 @@ namespace Snowlight.Game.Navigation
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 MySqlClient.SetParameter("ownerid", Session.CharacterId);
-                MySqlClient.SetParameter("limit", MaxRoomsPerUser);
+                MySqlClient.SetParameter("limit", ServerSettings.MaxRoomsPerUser);
                 DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM rooms WHERE owner_id = @ownerid ORDER BY name ASC LIMIT @limit");
 
                 foreach (DataRow Row in Table.Rows)

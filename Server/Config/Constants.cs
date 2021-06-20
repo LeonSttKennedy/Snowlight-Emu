@@ -5,8 +5,7 @@ namespace Snowlight.Config
 {
     public static class Constants
     {
-        public static readonly string           ConsoleTitle                = "Snowlight";
-        public static readonly string           ServerVersion               = "v1.0.0";
+        public static readonly string           ConsoleTitle                = Program.PrettyVersion;
         public static readonly int              ConsoleWindowWidth          = 90;
         public static readonly int              ConsoleWindowHeight         = 30;
         public static readonly string           DataFileDirectory           = Environment.CurrentDirectory + "\\data";

@@ -223,6 +223,7 @@ namespace Snowlight.Game.Catalog
                     dictionary2.Add(Item.Sprite, 1);
                 }
             }
+
             return this.SerializeOffers(MinCost, MaxCost, MarketItems, dictionary2);
         }
         public ServerMessage SerializeOffers(int MinCost, int MaxCost, Dictionary<int, MarketplaceItems> dictionary, Dictionary<int, int> dictionary2)

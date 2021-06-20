@@ -8,6 +8,7 @@ using Snowlight.Storage;
 using Snowlight.Specialized;
 using System.Collections.Generic;
 using Snowlight.Config;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Misc
 {
@@ -17,7 +18,7 @@ namespace Snowlight.Game.Misc
 
         public static void Initialize()
         {
-            if (!(bool)ConfigManager.GetValue("activitypoints.enabled"))
+            if (!ServerSettings.ActivityPointsEnabled)
             {
                 return;
             }
@@ -41,8 +42,9 @@ namespace Snowlight.Game.Misc
         {
             try
             {
-                int Interval = (int)ConfigManager.GetValue("activitypoints.interval");
-                int Amount = (int)ConfigManager.GetValue("activitypoints.amount");
+                int Interval = ServerSettings.ActivityPointsInterval;
+                int CreditsAmount = ServerSettings.ActivityPointsCreditsAmount;
+                int PixelsAmount = ServerSettings.ActivityPointsPixelsAmount;
 
                 Thread.Sleep(60000);
 
@@ -61,8 +63,14 @@ namespace Snowlight.Game.Misc
                                     continue;
                                 }
 
-                                Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, Amount);
-                                Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, Amount));
+                                if(CreditsAmount > 0)
+                                {
+                                    Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, CreditsAmount);
+                                    Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
+                                }
+
+                                Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, PixelsAmount);
+                                Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, PixelsAmount));
                                 Session.CharacterInfo.SetLastActivityPointsUpdate(MySqlClient);
                             }
                         }

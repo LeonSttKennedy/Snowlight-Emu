@@ -5,6 +5,7 @@ using System.Data;
 using System.Text;
 
 using Snowlight.Storage;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Navigation
 {
@@ -41,7 +42,8 @@ namespace Snowlight.Game.Navigation
                 mInner.Clear();
 
                 MySqlClient.SetParameter("characterid", mCharacterId);
-                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT room_id FROM favorites WHERE user_id = @characterid LIMIT " + Navigator.MaxFavoritesPerUser);
+                MySqlClient.SetParameter("limit", ServerSettings.MaxFavoritesPerUser);
+                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT room_id FROM favorites WHERE user_id = @characterid LIMIT @limit");
 
                 foreach (DataRow Row in Table.Rows)
                 {
@@ -63,7 +65,7 @@ namespace Snowlight.Game.Navigation
         {
             lock (mInner)
             {
-                if (mInner.Contains(RoomId) || mInner.Count >= Navigator.MaxFavoritesPerUser)
+                if (mInner.Contains(RoomId) || mInner.Count >= ServerSettings.MaxFavoritesPerUser)
                 {
                     return false;
                 }

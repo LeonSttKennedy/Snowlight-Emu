@@ -572,7 +572,8 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            return false;
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 1, ChatType.Whisper));
+                            return true;
                         }
 
                         if (Bits.Length == 1)
@@ -601,7 +602,8 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            return false;
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 1, ChatType.Whisper));
+                            return true;
                         }
 
                         if (Bits.Length == 1)
@@ -637,22 +639,26 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            return false;
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 1, ChatType.Whisper));
+                            return true;
                         }
+
                         // Total online players peak
                         int alltime = 0;
                         int daily = 0;
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         { 
-                            string alltimeplayerpeak = MySqlClient.ExecuteScalar("SELECT sval FROM server_statistics WHERE skey = 'all_time_player_peak' LIMIT 1").ToString();
+                            string alltimeplayerpeak = MySqlClient.ExecuteScalar("SELECT all_time_player_peak FROM server_statistics LIMIT 1").ToString();
                             int.TryParse(alltimeplayerpeak, out alltime);
 
-                            string dailyplayerpeak = MySqlClient.ExecuteScalar("SELECT sval FROM server_statistics WHERE skey = 'daily_player_peak' LIMIT 1").ToString();
+                            string dailyplayerpeak = MySqlClient.ExecuteScalar("SELECT daily_player_peak FROM server_statistics LIMIT 1").ToString();
                             int.TryParse(dailyplayerpeak, out daily);
                         }
+                        
                         // Total users online
                         List<string> OnlineUsers = SessionManager.ConnectedUserData.Values.ToList();
-                        // Total time online
+                        
+                        // Total server online time
                         DateTime Now = DateTime.Now;
                         TimeSpan Uptime = (Now - Program.ServerStarted);
 
@@ -676,7 +682,8 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            return false;
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 1, ChatType.Whisper));
+                            return true;
                         }
 
                         List<string> OnlineUsers = SessionManager.ConnectedUserData.Values.ToList();

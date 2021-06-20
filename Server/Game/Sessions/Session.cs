@@ -655,6 +655,8 @@ namespace Snowlight.Game.Sessions
                 }
 
                 MessengerHandler.MarkUpdateNeeded(this, 0, true);
+
+                Output.WriteLine("[UserMgr] " + mCharacterInfo.Username + " has logged out.", OutputLevel.UserInformational);
             }
 
             Output.WriteLine("Stopped and disconnected client " + Id + ".", OutputLevel.DebugInformation);

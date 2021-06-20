@@ -560,7 +560,7 @@ namespace Snowlight.Game.Catalog
                         Profit += (int)Row["asking_price"];
                         if (Profit >= 1)
                         {
-                            Session.CharacterInfo.UpdateCreditsBalance(dbClient, +Profit);
+                            Session.CharacterInfo.UpdateCreditsBalance(dbClient, Profit);
                             Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
                         }
                     }

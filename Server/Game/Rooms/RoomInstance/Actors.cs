@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 
 using Snowlight.Game.Rooms.Trading;
 using Snowlight.Config;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Rooms
 {
@@ -556,7 +557,7 @@ namespace Snowlight.Game.Rooms
 
         public bool CanPlacePet(bool IsOwner)
         {
-            if (mPetCount >= (int)ConfigManager.GetValue("rooms.limit.pets"))
+            if (mPetCount >= ServerSettings.MaxPetsPerRoom)
             {
                 return false;
             }

@@ -9,6 +9,8 @@ namespace Snowlight
 {
     public enum OutputLevel
     {
+        UserInformationalError = 5,
+        UserInformational = 4,
         CriticalError = 3,
         Warning = 2,
         Notification = 1,
@@ -85,6 +87,12 @@ namespace Snowlight
         {
             switch (SeverityLevel)
             {
+                case OutputLevel.UserInformational:
+
+                    ApplyColorScheme(ConsoleColor.Blue);
+                    break;
+
+                case OutputLevel.UserInformationalError:
                 case OutputLevel.CriticalError:
 
                     ApplyColorScheme(ConsoleColor.Red);
@@ -120,12 +128,14 @@ namespace Snowlight
 
             List<string> Lines = new List<string>();
 
-            Lines.Add("   _________                    .__  .__       .__     __   ");
-            Lines.Add("  /   _____/ ____   ______  _  _|  | |__| ____ |  |___/  |_   "          + "Snowlight " + Constants.ServerVersion);
-            Lines.Add("  \\_____  \\ /    \\ /  _ \\ \\/ \\/ /  | |  |/ ___\\|  |  \\   __\\  " + "Development version");
-            Lines.Add("  /        \\   |  (  <_> )     /|  |_|  / /_/  >   Y  \\  |    "        + "Edited by LeonSttKennedy");
-            Lines.Add(" /_______  /___|  /\\____/ \\/\\_/ |____/__\\___  /|___|  /__|    ");
-            Lines.Add("         \\/     \\/                     /_____/      \\/      ");
+            Lines.Add("     _________                    .__  .__       .__     __   ");
+            Lines.Add("    /   _____/ ____   ______  _  _|  | |__| ____ |  |___/  |_   ");
+            Lines.Add("    \\_____  \\ /    \\ /  _ \\ \\/ \\/ /  | |  |/ ___\\|  |  \\   __\\  ");
+            Lines.Add("    /        \\   |  (  <_> )     /|  |_|  / /_/  >   Y  \\  |    ");
+            Lines.Add("   /_______  /___|  /\\____/ \\/\\_/ |____/__\\___  /|___|  /__|    ");
+            Lines.Add("           \\/     \\/                     /_____/      \\/      ");
+            Lines.Add("                               " + Program.PrettyVersion);
+            Lines.Add(" ---------------------------------------------------------------------------------------");
 
             foreach (string Line in Lines)
             {

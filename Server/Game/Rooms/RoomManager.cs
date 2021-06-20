@@ -171,7 +171,7 @@ namespace Snowlight.Game.Rooms
                             if (mRoomInstances.ContainsKey(UnloadId))
                             {
                                 mRoomInstances[UnloadId].Unload();
-                                Output.WriteLine("[RoomMgr] Request -> Unload idle room instance: "+ UnloadId + ". (RoomID: " + mRoomInstances[UnloadId].RoomId + ")", OutputLevel.Notification);
+                                Output.WriteLine("[RoomMgr] Request -> Unload idle room instance: "+ UnloadId + ". (RoomID: " + mRoomInstances[UnloadId].RoomId + ")", OutputLevel.UserInformational);
                             }
                         }
 
@@ -179,7 +179,7 @@ namespace Snowlight.Game.Rooms
                         {
                             if (mRoomInstances.ContainsKey(DisposeId))
                             {
-                                Output.WriteLine("[RoomMgr] Instance " + DisposeId + " <- Unloaded Room: \"" + mRoomInstances[DisposeId].Info.Name + "\". (RoomID: " + mRoomInstances[DisposeId].RoomId + ")", OutputLevel.Notification);
+                                Output.WriteLine("[RoomMgr] Instance " + DisposeId + " <- Unloaded Room: \"" + mRoomInstances[DisposeId].Info.Name + "\". (RoomID: " + mRoomInstances[DisposeId].RoomId + ")", OutputLevel.UserInformational);
                                 mRoomInstances[DisposeId].Dispose();
                                 mRoomInstances[DisposeId] = null;
                                 mRoomInstances.Remove(DisposeId);
@@ -360,7 +360,7 @@ namespace Snowlight.Game.Rooms
                     mRoomInstances.Add(NewInstanceId, Instance);
                 }
 
-                Output.WriteLine("[RoomMgr] Instance " + NewInstanceId + " -> Loaded Room: \"" + Instance.Info.Name + "\". (RoomID: " + RoomId + ")", OutputLevel.Notification);
+                Output.WriteLine("[RoomMgr] Instance " + NewInstanceId + " -> Loaded Room: \"" + Instance.Info.Name + "\". (RoomID: " + RoomId + ")", OutputLevel.UserInformational);
             }
             return true;
         }

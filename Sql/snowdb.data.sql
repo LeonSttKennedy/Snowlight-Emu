@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 16, 2021 at 11:19 PM
+-- Generation Time: Jun 19, 2021 at 09:14 PM
 -- Server version: 5.5.10
 -- PHP Version: 5.3.6
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `achievements` (
   `reward_points` int(11) DEFAULT '10',
   `progress_needed` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=98 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
 
 --
 -- Dumping data for table `achievements`
@@ -4098,6 +4098,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
 -- Dumping data for table `characters`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -7256,6 +7257,7 @@ CREATE TABLE IF NOT EXISTS `messenger_friendships` (
 -- Dumping data for table `messenger_friendships`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -7486,7 +7488,7 @@ CREATE TABLE IF NOT EXISTS `new_items` (
   `item_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `new_items`
@@ -8098,19 +8100,33 @@ CREATE TABLE IF NOT EXISTS `room_visits` (
 --
 
 CREATE TABLE IF NOT EXISTS `server_settings` (
-  `motd_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `activitypoints_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
+  `activitypoints_interval` int(11) NOT NULL DEFAULT '1800',
+  `activitypoints_credits_amount` int(11) NOT NULL DEFAULT '0',
+  `activitypoints_pixels_amount` int(11) NOT NULL DEFAULT '50',
+  `motd_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
   `motd_type` enum('NotificationMessageComposer','MessageOfTheDayComposer') CHARACTER SET utf8 NOT NULL DEFAULT 'MessageOfTheDayComposer',
   `motd_text` text CHARACTER SET utf8 NOT NULL,
   `login_badge_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
-  `login_badge_id` int(10) unsigned NOT NULL
+  `login_badge_id` int(10) unsigned NOT NULL DEFAULT '33',
+  `moderation_actionlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `moderation_chatlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `moderation_roomlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `marketplace_tax` int(2) NOT NULL DEFAULT '1',
+  `marketplace_max_price` int(9) NOT NULL DEFAULT '10000',
+  `max_favorites_per_user` int(2) NOT NULL DEFAULT '30',
+  `max_furni_per_room` int(6) NOT NULL DEFAULT '500',
+  `max_furni_stacking` int(2) NOT NULL DEFAULT '12',
+  `max_pets_per_room` int(2) NOT NULL DEFAULT '10',
+  `max_rooms_per_user` int(2) NOT NULL DEFAULT '15'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `server_settings`
 --
 
-INSERT INTO `server_settings` (`motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`) VALUES
-('1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!', '0', 33);
+INSERT INTO `server_settings` (`activitypoints_enabled`, `activitypoints_interval`, `activitypoints_credits_amount`, `activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_tax`, `marketplace_max_price`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`) VALUES
+('1', 1800, 0, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!', '0', 33, '1', '1', '1', 1, 10000, 30, 500, 12, 10, 15);
 
 -- --------------------------------------------------------
 
@@ -8119,19 +8135,20 @@ INSERT INTO `server_settings` (`motd_enabled`, `motd_type`, `motd_text`, `login_
 --
 
 CREATE TABLE IF NOT EXISTS `server_statistics` (
-  `skey` varchar(64) NOT NULL,
-  `sval` varchar(64) NOT NULL,
-  PRIMARY KEY (`skey`)
+  `server_status` enum('0','1','2') NOT NULL DEFAULT '0',
+  `server_ver` text NOT NULL,
+  `active_connections` int(11) NOT NULL DEFAULT '0',
+  `all_time_player_peak` int(11) NOT NULL DEFAULT '0',
+  `daily_player_peak` int(11) NOT NULL DEFAULT '0',
+  `rooms_loaded` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `server_statistics`
 --
 
-INSERT INTO `server_statistics` (`skey`, `sval`) VALUES
-('active_connections', '0'),
-('all_time_player_peak', '0'),
-('daily_player_peak', '0');
+INSERT INTO `server_statistics` (`server_status`, `server_ver`, `active_connections`, `all_time_player_peak`, `daily_player_peak`, `rooms_loaded`) VALUES
+('1', 'Snowlight Emulator v1.0-dev (Build 37166)', 2, 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -9262,7 +9279,7 @@ CREATE TABLE IF NOT EXISTS `user_quests` (
   `progress` int(11) NOT NULL DEFAULT '0',
   `is_current` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `user_quests`

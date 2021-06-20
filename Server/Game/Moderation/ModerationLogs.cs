@@ -9,6 +9,7 @@ using Snowlight.Specialized;
 
 using Snowlight.Game.Sessions;
 using Snowlight.Config;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Moderation
 {
@@ -16,7 +17,7 @@ namespace Snowlight.Game.Moderation
     {
         public static void LogChatMessage(SqlDatabaseClient MySqlClient, uint UserId, uint RoomId, string Message)
         {
-            if (!(bool)ConfigManager.GetValue("moderation.chatlogs.enabled"))
+            if (!ServerSettings.ModerationChatLogs)
             {
                 return;
             }
@@ -30,7 +31,7 @@ namespace Snowlight.Game.Moderation
 
         public static void LogRoomEntry(uint UserId, uint RoomId)
         {
-            if (!(bool)ConfigManager.GetValue("moderation.roomlogs.enabled"))
+            if (!ServerSettings.ModerationRoomLogs)
             {
                 return;
             }
@@ -54,7 +55,7 @@ namespace Snowlight.Game.Moderation
         {
             List<ModerationRoomVisit> Visits = new List<ModerationRoomVisit>();
 
-            if (!(bool)ConfigManager.GetValue("moderation.roomlogs.enabled"))
+            if (!ServerSettings.ModerationRoomLogs)
             {
                 return Visits.AsReadOnly();
             }
@@ -77,7 +78,7 @@ namespace Snowlight.Game.Moderation
 
         public static Dictionary<ModerationRoomVisit, ReadOnlyCollection<ModerationChatlogEntry>> GetLogsForUser(uint UserId, double FromTimestamp)
         {
-            if (!(bool)ConfigManager.GetValue("moderation.roomlogs.enabled"))
+            if (!ServerSettings.ModerationRoomLogs)
             {
                 return new Dictionary<ModerationRoomVisit, ReadOnlyCollection<ModerationChatlogEntry>>();
             }
@@ -99,7 +100,7 @@ namespace Snowlight.Game.Moderation
         {
             List<ModerationChatlogEntry> Entries = new List<ModerationChatlogEntry>();
             
-            if (!(bool)ConfigManager.GetValue("moderation.chatlogs.enabled"))
+            if (!ServerSettings.ModerationChatLogs)
             {
                 return Entries.AsReadOnly();
             }       
@@ -124,6 +125,11 @@ namespace Snowlight.Game.Moderation
 
         public static void LogModerationAction(SqlDatabaseClient MySqlClient, Session Session, string ActionDescr, string ActionDetail)
         {
+            if(!ServerSettings.ModerationActionLogs)
+            {
+                return;
+            }
+
             MySqlClient.SetParameter("userid", Session.CharacterId);
             MySqlClient.SetParameter("username", Session.CharacterInfo.Username);
             MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());

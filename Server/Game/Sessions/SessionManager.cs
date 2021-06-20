@@ -285,10 +285,11 @@ namespace Snowlight.Game.Sessions
 
         public static void HandleIncomingConnection(Socket IncomingSocket)
         {
+            uint Id = mCounter++;
             bool Reject = ModerationBanManager.IsRemoteAddressBlacklisted(IncomingSocket.RemoteEndPoint.ToString().Split(':')[0]);
 
-            Output.WriteLine((Reject ? "Rejected" : "Accepted") + " incoming connection from " + IncomingSocket.RemoteEndPoint.ToString() + ".",
-                OutputLevel.Informational);
+            Output.WriteLine("[UserMgr] " + (Reject ? "Rejected" : "Accepted") + " incoming connection. ["+ Id + "/" + IncomingSocket.RemoteEndPoint.ToString().Split(':')[0] + "]",
+                (Reject? OutputLevel.UserInformationalError : OutputLevel.UserInformational));
 
             if (Reject)
             {
@@ -303,7 +304,6 @@ namespace Snowlight.Game.Sessions
 
             lock (mSyncRoot)
             {
-                uint Id = mCounter++;
                 mSessions.Add(Id, new Session(Id, IncomingSocket));
             }
         }

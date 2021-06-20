@@ -7,6 +7,7 @@ using Snowlight.Game.Items;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Sessions;
 using Snowlight.Config;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Rooms
 {
@@ -247,7 +248,7 @@ namespace Snowlight.Game.Rooms
                     }
                 }
 
-                if ((HighestStack + Item.Definition.Height) >= (int)ConfigManager.GetValue("rooms.limit.stacking"))
+                if ((HighestStack + Item.Definition.Height) >= ServerSettings.MaxFurniStacking)
                 {
                     return -1;
                 }
@@ -369,7 +370,7 @@ namespace Snowlight.Game.Rooms
                 return string.Empty;
             }
 
-            if (TotalLimitCount >= (int)ConfigManager.GetValue("rooms.limit.furni"))
+            if (TotalLimitCount >= ServerSettings.MaxFurniPerRoom)
             {
                 Session.SendData(RoomItemPlacementErrorComposer.Compose(RoomItemPlacementErrorCode.FurniLimitReached));
                 return string.Empty;
@@ -436,7 +437,7 @@ namespace Snowlight.Game.Rooms
                 return null;
             }
 
-            if (TotalLimitCount >= (int)ConfigManager.GetValue("rooms.limit.furni"))
+            if (TotalLimitCount >= ServerSettings.MaxFurniPerRoom)
             {
                 Session.SendData(RoomItemPlacementErrorComposer.Compose(RoomItemPlacementErrorCode.FurniLimitReached));
                 return null;
