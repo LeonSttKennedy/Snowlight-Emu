@@ -672,7 +672,7 @@ namespace Snowlight.Game.Misc
                             "\n\nSystem",
                             "\nCPU architecture: " + GetProcessorArchitecture().ToString().ToLower(),
                             "\nCPU cores: "+ Environment.ProcessorCount,
-                            "\nMemory usage: " + (((GetTotalMemoryInBytes() / 1024d) / 1024d) / 1024d).ToString().Substring(0, 4) + " MB"
+                            "\nMemory usage: " + Math.Round((((GetTotalMemoryInBytes() / 1024d) / 1024d) / 1024d), 2) + " MB"
                         })));
                         return true;
                     }

@@ -4,7 +4,7 @@
   <description asmv2:iconFile="Snow.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Snowlight" version="0.1.0.809" language="neutral" processorArchitecture="x86" />
+    <assemblyIdentity name="Snowlight" version="0.1.0.22215" language="neutral" processorArchitecture="x86" />
     <commandLine file="Snowlight.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -55,14 +55,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Snowlight.exe" size="438272">
-      <assemblyIdentity name="Snowlight" version="0.1.0.809" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Snowlight.exe" size="440320">
+      <assemblyIdentity name="Snowlight" version="0.1.0.22215" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>7BqaQb8ujC3xYvyI7zK1Y0M/sEs=</dsig:DigestValue>
+        <dsig:DigestValue>hCymwx1xqLHVaajXzhKAETbfsrA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

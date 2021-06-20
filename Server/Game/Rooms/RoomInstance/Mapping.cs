@@ -220,13 +220,34 @@ namespace Snowlight.Game.Rooms
 
                 foreach (StaticObject Object in mStaticObjects)
                 {
-                    mStackHeight[Object.Position.X, Object.Position.Y] = mCachedModel.Heightmap.FloorHeight[Object.Position.X, Object.Position.Y] + Object.Height;
-                    mStackTopItemHeight[Object.Position.X, Object.Position.Y] = Object.Height;
-                    mUserMovementNodes[Object.Position.X, Object.Position.Y] = (Object.IsSeat || Object.Walkable ? UserMovementNode.WalkableEndOfRoute : UserMovementNode.Blocked);
+                    double TotalItemStackHeightOld = mCachedModel.Heightmap.FloorHeight[Object.Position.X, Object.Position.Y] + Object.Height;
+                    double TotalItemStackHeight = Object.Position.Z + Math.Round(Object.Height, 1);
 
-                    if (Object.IsSeat)
+                    List<Vector2> AffectedTiles = NegativeStaticObjectCalculateAffectedTiles(Object, Object.Position.GetVector2(), Object.Rotation);
+                    UserMovementNode MovimentNode = UserMovementNode.Blocked;
+
+                    if (Object.Walkable)
                     {
-                        mTileEffects[Object.Position.X, Object.Position.Y] = new RoomTileEffect(RoomTileEffectType.Sit, Object.Rotation, Object.Position.GetVector2(), 1.0);
+                        MovimentNode = UserMovementNode.Walkable;
+                    }
+                    else if (Object.IsSeat)
+                    {
+                        MovimentNode = UserMovementNode.WalkableEndOfRoute;
+                    }
+
+                    foreach (Vector2 Tile in AffectedTiles)
+                    {
+                        if (TotalItemStackHeight >= mStackHeight[Tile.X, Tile.Y])
+                        {
+                            mStackHeight[Tile.X, Tile.Y] = TotalItemStackHeight;
+                            mStackTopItemHeight[Tile.X, Tile.Y] = Object.Height;
+                            mUserMovementNodes[Tile.X, Tile.Y] = MovimentNode;
+
+                            if (Object.IsSeat)
+                            {
+                                mTileEffects[Tile.X, Tile.Y] = new RoomTileEffect(RoomTileEffectType.Sit, Object.Rotation, Object.Position.GetVector2(), Object.Height);
+                            }
+                        }
                     }
                 }
 

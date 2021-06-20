@@ -8,6 +8,8 @@ namespace Snowlight.Game.Items
     {
         private string mName;
         private Vector3 mPosition;
+        private int mSizeX;
+        private int mSizeY;
         private int mRotation;
         private float mHeight;
         private bool mWalkable;
@@ -28,7 +30,20 @@ namespace Snowlight.Game.Items
                 return mPosition;
             }
         }
-
+        public int SizeX
+        {
+            get
+            {
+                return mSizeX;
+            }
+        }
+        public int SizeY
+        {
+            get
+            {
+                return mSizeY;
+            }
+        }
         public int Rotation
         {
             get
@@ -58,10 +73,12 @@ namespace Snowlight.Game.Items
             }
         }
 
-        public StaticObject(string Name, Vector3 Position, int Rotation, float Height, bool Walkable, bool IsSeat)
+        public StaticObject(string Name, Vector3 Position, int SizeX, int SizeY, int Rotation, float Height, bool Walkable, bool IsSeat)
         {
             mName = Name;
             mPosition = Position;
+            mSizeX = SizeX;
+            mSizeY = SizeY;
             mRotation = Rotation;
             mHeight = Height;
             mWalkable = Walkable;
