@@ -82,16 +82,26 @@ namespace Snowlight.Game.Handlers
         }
         private static void OnGetMotdMessage(Session Session, ClientMessage Message)
         {
+            string MotdText = ServerSettings.MotdText[0];
+            string MotdLink = ServerSettings.MotdText[1];
+
             if (ServerSettings.MotdEnabled)
             {
                 switch(ServerSettings.MotdType)
                 {
                     case MotdType.NotificationMessageComposer:
-                        Session.SendData(NotificationMessageComposer.Compose(ServerSettings.MotdText));
+                        if(MotdLink != string.Empty)
+                        {
+                            Session.SendData(NotificationMessageComposer.Compose(MotdText, MotdLink));
+                        }
+                        else
+                        {
+                            Session.SendData(NotificationMessageComposer.Compose(MotdText));
+                        }
                         break;
 
                     case MotdType.MessageOfTheDayComposer:
-                        Session.SendData(MessageOfTheDayComposer.Compose(ServerSettings.MotdText));
+                        Session.SendData(MessageOfTheDayComposer.Compose(MotdText));
                         break;
                 }
             }

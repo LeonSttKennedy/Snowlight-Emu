@@ -1067,13 +1067,10 @@ namespace Snowlight.Game.Rooms
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
 
-            if (Instance == null || !Instance.CheckUserRights(Session, true))
-            {
-                return;
-            }
+            if (Instance == null || !Instance.CheckUserRights(Session, true)) return;
 
             Instance.DeleteRoom(Session);
-            //Navigator.GetUserRooms(Session, null); todo: fix. do not uncomment, shit will break in this implementation.
+            Navigator.GetUserRooms(Session, null);
         }
 
         private static void IgnoreUser(Session Session, ClientMessage Message)
@@ -1226,26 +1223,17 @@ namespace Snowlight.Game.Rooms
         {
             uint PresentID = Message.PopWiredUInt32();
             double ExpireTimestamp = 0;
-            DataRow Row = null;
+
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-                if (Instance == null || !Instance.CheckUserRights(Session, true))
-                {
-                    return;
-                }
+                if (Instance == null || !Instance.CheckUserRights(Session, true)) return;
 
                 Item GiftItem = Instance.GetItem(PresentID);
-                if (GiftItem == null)
-                {
-                    return;
-                }
+                if (GiftItem == null) return;
 
-                Row = MySqlClient.ExecuteQueryRow("SELECT * FROM user_gifts WHERE item_id = '" + GiftItem.Id + "' LIMIT 1");
-                if (Row == null)
-                {
-                    return;
-                }
+                DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM user_gifts WHERE item_id = '" + GiftItem.Id + "' LIMIT 1");
+                if (Row == null) return;
 
                 ItemDefinition BaseItem = ItemDefinitionManager.GetDefinition((uint)Row["base_id"]);
                 GiftItem.RemovePermanently(MySqlClient);
@@ -1360,7 +1348,6 @@ namespace Snowlight.Game.Rooms
 
                     if (TargetSession != null)
                     {
-                        TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
                         AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, "ACH_Spr", 1);
                     }
                     else

@@ -17,9 +17,12 @@ namespace Snowlight.Util
     public static class ServerSettings
     {
         private static bool mActivityPointsEnabled;
+        private static bool mMoreActivityPointsForVipUsers;
         private static int mActivityPointsInterval;
         private static int mActivityPointsCreditsAmount;
+        private static int mMoreActivityPointsCreditsAmount;
         private static int mActivityPointsPixelsAmount;
+        private static int mMoreActivityPointsPixelsAmount;
         private static bool mLoginBadgeEnabled;
         private static uint mLoginBadgeId;
         private static int mMarketplaceTax;
@@ -34,7 +37,7 @@ namespace Snowlight.Util
         private static bool mModerationRoomLogs;
         private static bool mMotdEnabled;
         private static MotdType mMotdType;
-        private static string mMotdText;
+        private static List<string> mMotdText;
 
         public static bool ActivityPointsEnabled
         {
@@ -46,6 +49,18 @@ namespace Snowlight.Util
             set
             {
                 mActivityPointsEnabled = value;
+            }
+        }
+        public static bool MoreActivityPointsForVipUsers
+        {
+            get
+            {
+                return mMoreActivityPointsForVipUsers;
+            }
+
+            set
+            {
+                mMoreActivityPointsForVipUsers = value;
             }
         }
         public static int ActivityPointsInterval
@@ -72,6 +87,18 @@ namespace Snowlight.Util
                 mActivityPointsCreditsAmount = value;
             }
         }
+        public static int MoreActivityPointsCreditsAmount
+        {
+            get
+            {
+                return mMoreActivityPointsCreditsAmount;
+            }
+
+            set
+            {
+                mMoreActivityPointsCreditsAmount = value;
+            }
+        }
         public static int ActivityPointsPixelsAmount
         {
             get
@@ -82,6 +109,18 @@ namespace Snowlight.Util
             set
             {
                 mActivityPointsPixelsAmount = value;
+            }
+        }
+        public static int MoreActivityPointsPixelsAmount
+        {
+            get
+            {
+                return mMoreActivityPointsPixelsAmount;
+            }
+
+            set
+            {
+                mMoreActivityPointsPixelsAmount = value;
             }
         }
         public static bool LoginBadgeEnabled
@@ -251,7 +290,7 @@ namespace Snowlight.Util
                 mMotdType = value;
             }
         }
-        public static string MotdText
+        public static List<string> MotdText
         {
             get
             {
@@ -260,7 +299,7 @@ namespace Snowlight.Util
 
             set
             {
-                mMotdText = value.Replace("\\n", "\n");
+                mMotdText = value;
             }
         }
 
@@ -279,9 +318,17 @@ namespace Snowlight.Util
                     break;
             }
 
+            List<string> Motd = new List<string>();
+
+            foreach (string MotdString in Row["motd_text"].ToString().Replace("\\n", "\n").Split('|')) Motd.Add(MotdString);
+
             ActivityPointsEnabled = (Row["activitypoints_enabled"].ToString() == "1");
+            MoreActivityPointsForVipUsers = (Row["more_activitypoints_for_vip_users"].ToString() == "1");
             ActivityPointsInterval = (int)Row["activitypoints_interval"];
+            ActivityPointsCreditsAmount = (int)Row["activitypoints_credits_amount"];
+            MoreActivityPointsCreditsAmount = (int)Row["more_activitypoints_credits_amount"];
             ActivityPointsPixelsAmount = (int)Row["activitypoints_pixels_amount"];
+            MoreActivityPointsPixelsAmount = (int)Row["more_activitypoints_pixels_amount"];
             LoginBadgeEnabled = (Row["login_badge_enabled"].ToString() == "1");
             LoginBadgeId = (uint)Row["login_badge_id"];
             MarketplaceTax = (int)Row["marketplace_tax"];
@@ -296,7 +343,7 @@ namespace Snowlight.Util
             ModerationRoomLogs = (Row["moderation_roomlogs_enabled"].ToString() == "1");
             MotdEnabled = (Row["motd_enabled"].ToString() == "1");
             MotdType = Motd_Type;
-            MotdText = (string)Row["motd_text"];
+            MotdText = Motd;
         }
     }
 }

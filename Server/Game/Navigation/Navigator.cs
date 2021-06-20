@@ -459,6 +459,8 @@ namespace Snowlight.Game.Navigation
 
         public static void GetUserRooms(Session Session, ClientMessage Message)
         {
+            if (Message == null) goto pullout;
+
             ServerMessage Response = TryGetResponseFromCache(Session.CharacterId, Message);
 
             if (Response != null)
@@ -467,6 +469,7 @@ namespace Snowlight.Game.Navigation
                 return;
             }
 
+            pullout:
             List<RoomInfo> Rooms = new List<RoomInfo>();
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
@@ -481,9 +484,16 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, Rooms);
-            AddToCacheIfNeeded(Session.CharacterId, Message, Response);
-            Session.SendData(Response);
+            if (Message != null)
+            {
+                Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, Rooms);
+                AddToCacheIfNeeded(Session.CharacterId, Message, Response);
+                Session.SendData(Response);
+            }
+            else
+            {
+                Session.SendData(NavigatorRoomListComposer.Compose(0, 5, string.Empty, Rooms));
+            }
         }
 
         private static void AddFavorite(Session Session, ClientMessage Message)

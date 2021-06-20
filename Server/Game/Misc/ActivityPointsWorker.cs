@@ -63,14 +63,24 @@ namespace Snowlight.Game.Misc
                                     continue;
                                 }
 
-                                if(CreditsAmount > 0)
+                                if (ServerSettings.MoreActivityPointsForVipUsers && Session.HasRight("club_vip"))
+                                {
+                                    CreditsAmount += ServerSettings.MoreActivityPointsCreditsAmount;
+                                    PixelsAmount += ServerSettings.MoreActivityPointsPixelsAmount;
+                                }
+
+                                if (CreditsAmount > 0)
                                 {
                                     Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, CreditsAmount);
                                     Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
                                 }
 
-                                Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, PixelsAmount);
-                                Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, PixelsAmount));
+                                if (PixelsAmount > 0)
+                                {
+                                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, PixelsAmount);
+                                    Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, PixelsAmount));
+                                }
+
                                 Session.CharacterInfo.SetLastActivityPointsUpdate(MySqlClient);
                             }
                         }

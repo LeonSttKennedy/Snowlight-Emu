@@ -104,6 +104,8 @@ namespace Snowlight
 
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
+                    PerformDatabaseCleanup(MySqlClient, 1);
+
                     Output.WriteLine("Initializing game components and workers...");
 
                     // Some settings on database
@@ -167,8 +169,6 @@ namespace Snowlight
 
                     // Polish
                     WarningSurpressors.Initialize();
-
-                    PerformDatabaseCleanup(MySqlClient, 1);
                 }
             }
             catch (Exception e)
@@ -183,21 +183,18 @@ namespace Snowlight
             Output.WriteLine("The server has initialized successfully (" + Math.Round(TimeSpent.TotalSeconds, 2) + " seconds). Ready for connections.", OutputLevel.Notification);
             Output.WriteLine("Press the ENTER key for command input. Shut down server with 'STOP' command.", OutputLevel.Notification);
 
-            CurrentDay = DateTime.Today;
-
             Console.Beep();
             Input.Listen(); // This will make the main thread process console while Program.Alive.
         }
 
         private static void PerformDatabaseCleanup(SqlDatabaseClient MySqlClient, int ServerStatus)
         {
+            Output.WriteLine("Resetting database counters and statistics...");
             MySqlClient.ExecuteNonQuery("UPDATE rooms SET current_users = 0");
             MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
             MySqlClient.ExecuteNonQuery("UPDATE room_visits SET timestamp_left = @timestamp WHERE timestamp_left = 0");
             MySqlClient.ExecuteNonQuery("UPDATE characters SET auth_ticket = ''");
             MySqlClient.ExecuteNonQuery("UPDATE server_statistics SET server_status = '" + ServerStatus + "', active_connections = '0', server_ver = '" + PrettyVersion + "' LIMIT 1");
-
-            Output.WriteLine("Resetting database counters and statistics...");
         }
         public static void HandleFatalError(string Message)
         {

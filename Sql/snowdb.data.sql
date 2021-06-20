@@ -8101,9 +8101,12 @@ CREATE TABLE IF NOT EXISTS `room_visits` (
 
 CREATE TABLE IF NOT EXISTS `server_settings` (
   `activitypoints_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
-  `activitypoints_interval` int(11) NOT NULL DEFAULT '1800',
+  `more_activitypoints_for_vip_users` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `activitypoints_interval` int(11) NOT NULL DEFAULT '1800' COMMENT '1800 = 30 min',
   `activitypoints_credits_amount` int(11) NOT NULL DEFAULT '0',
+  `more_activitypoints_credits_amount` int(11) NOT NULL DEFAULT '25',
   `activitypoints_pixels_amount` int(11) NOT NULL DEFAULT '50',
+  `more_activitypoints_pixels_amount` int(11) NOT NULL DEFAULT '50',
   `motd_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
   `motd_type` enum('NotificationMessageComposer','MessageOfTheDayComposer') CHARACTER SET utf8 NOT NULL DEFAULT 'MessageOfTheDayComposer',
   `motd_text` text CHARACTER SET utf8 NOT NULL,
@@ -8125,8 +8128,8 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
 -- Dumping data for table `server_settings`
 --
 
-INSERT INTO `server_settings` (`activitypoints_enabled`, `activitypoints_interval`, `activitypoints_credits_amount`, `activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_tax`, `marketplace_max_price`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`) VALUES
-('1', 1800, 0, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!', '0', 33, '1', '1', '1', 1, 10000, 30, 500, 12, 10, 15);
+INSERT INTO `server_settings` (`activitypoints_enabled`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_tax`, `marketplace_max_price`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`) VALUES
+('1', '1', 900, 0, 25, 25, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', 1, 10000, 30, 500, 12, 10, 15);
 
 -- --------------------------------------------------------
 
