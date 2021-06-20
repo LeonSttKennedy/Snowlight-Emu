@@ -211,7 +211,6 @@ namespace Snowlight.Game.Catalog
 
                             NewItems[3].Add(Pet.Id);
 
-                            Session.BadgeCache.ReloadCache(MySqlClient, Session.AchievementCache);
                             AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_PetLover", 1);
                             break;
                     }

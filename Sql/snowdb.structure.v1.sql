@@ -1,24 +1,31 @@
-/*
-Navicat MySQL Data Transfer
+-- phpMyAdmin SQL Dump
+-- version 3.3.9.2
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Jun 20, 2021 at 04:25 PM
+-- Server version: 5.5.10
+-- PHP Version: 5.3.6
 
-Source Server         : localhost
-Source Server Version : 50510
-Source Host           : localhost:3306
-Source Database       : snowdb
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
-Target Server Type    : MYSQL
-Target Server Version : 50510
-File Encoding         : 65001
 
-Date: 2011-08-12 14:26:19
-*/
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
 
-SET FOREIGN_KEY_CHECKS=0;
--- ----------------------------
--- Table structure for `achievements`
--- ----------------------------
-DROP TABLE IF EXISTS `achievements`;
-CREATE TABLE `achievements` (
+--
+-- Database: `snowdb`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `achievements`
+--
+
+CREATE TABLE IF NOT EXISTS `achievements` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `group_name` varchar(64) NOT NULL DEFAULT 'ACH_',
   `category` varchar(255) NOT NULL DEFAULT 'identity',
@@ -27,13 +34,29 @@ CREATE TABLE `achievements` (
   `reward_points` int(11) DEFAULT '10',
   `progress_needed` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `avatar_effects`
--- ----------------------------
-DROP TABLE IF EXISTS `avatar_effects`;
-CREATE TABLE `avatar_effects` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `achievements_to_unlock`
+--
+
+CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `group_id` varchar(255) NOT NULL DEFAULT '',
+  `progress` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `avatar_effects`
+--
+
+CREATE TABLE IF NOT EXISTS `avatar_effects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `sprite_id` int(11) NOT NULL DEFAULT '0',
@@ -43,13 +66,15 @@ CREATE TABLE `avatar_effects` (
   `quantity` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `badges`
--- ----------------------------
-DROP TABLE IF EXISTS `badges`;
-CREATE TABLE `badges` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `badges`
+--
+
+CREATE TABLE IF NOT EXISTS `badges` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `badge_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -58,24 +83,28 @@ CREATE TABLE `badges` (
   `slot_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `badge_definitions`
--- ----------------------------
-DROP TABLE IF EXISTS `badge_definitions`;
-CREATE TABLE `badge_definitions` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `badge_definitions`
+--
+
+CREATE TABLE IF NOT EXISTS `badge_definitions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(64) NOT NULL,
   `rights_sets` varchar(128) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`,`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `bans`
--- ----------------------------
-DROP TABLE IF EXISTS `bans`;
-CREATE TABLE `bans` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bans`
+--
+
+CREATE TABLE IF NOT EXISTS `bans` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `remote_address` varchar(64) NOT NULL DEFAULT '',
@@ -84,13 +113,15 @@ CREATE TABLE `bans` (
   `moderator_id` int(10) unsigned NOT NULL DEFAULT '0',
   `reason_text` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `bots`
--- ----------------------------
-DROP TABLE IF EXISTS `bots`;
-CREATE TABLE `bots` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bots`
+--
+
+CREATE TABLE IF NOT EXISTS `bots` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ai_type` varchar(64) NOT NULL,
   `name` varchar(64) NOT NULL,
@@ -108,37 +139,43 @@ CREATE TABLE `bots` (
   `response_distance` int(11) NOT NULL DEFAULT '5',
   `pet_type_handler_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `bots_speech`
--- ----------------------------
-DROP TABLE IF EXISTS `bots_speech`;
-CREATE TABLE `bots_speech` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bots_speech`
+--
+
+CREATE TABLE IF NOT EXISTS `bots_speech` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `bot_id` int(10) unsigned NOT NULL,
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `bot_responses`
--- ----------------------------
-DROP TABLE IF EXISTS `bot_responses`;
-CREATE TABLE `bot_responses` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bot_responses`
+--
+
+CREATE TABLE IF NOT EXISTS `bot_responses` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `bot_id` int(10) unsigned NOT NULL DEFAULT '0',
   `triggers` text NOT NULL,
   `responses` text NOT NULL,
   `response_serve_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `catalog`
--- ----------------------------
-DROP TABLE IF EXISTS `catalog`;
-CREATE TABLE `catalog` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `catalog`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) NOT NULL DEFAULT '0',
   `order_num` int(11) NOT NULL DEFAULT '1',
@@ -149,17 +186,20 @@ CREATE TABLE `catalog` (
   `required_right` varchar(64) NOT NULL DEFAULT '',
   `visible` enum('0','1') NOT NULL DEFAULT '1',
   `dummy_page` enum('0','1') NOT NULL DEFAULT '0',
+  `coming_soon` enum('0','1') NOT NULL DEFAULT '0',
   `template` varchar(32) NOT NULL DEFAULT 'default_3x3',
   `page_strings_1` text COMMENT 'Delimiter: |',
   `page_strings_2` text COMMENT 'Delimiter: |',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `catalog_items`
--- ----------------------------
-DROP TABLE IF EXISTS `catalog_items`;
-CREATE TABLE `catalog_items` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `catalog_items`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `page_id` int(11) NOT NULL,
   `base_id` int(10) unsigned NOT NULL,
@@ -171,26 +211,84 @@ CREATE TABLE `catalog_items` (
   `amount` int(11) NOT NULL DEFAULT '1',
   `club_restriction` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50247 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `catalog_subscriptions`
--- ----------------------------
-DROP TABLE IF EXISTS `catalog_subscriptions`;
-CREATE TABLE `catalog_subscriptions` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `catalog_marketplace_data`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `sprite_id` int(7) NOT NULL,
+  `sold` int(7) NOT NULL DEFAULT '0',
+  `avgprice` int(9) NOT NULL DEFAULT '0',
+  `daysago` int(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `catalog_marketplace_offers`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
+  `offer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `asking_price` int(11) NOT NULL,
+  `total_price` int(11) NOT NULL DEFAULT '0',
+  `public_name` text NOT NULL,
+  `sprite_id` int(11) NOT NULL,
+  `item_type` enum('1','2') NOT NULL DEFAULT '1',
+  `timestamp` double NOT NULL,
+  `state` enum('1','2') NOT NULL DEFAULT '1',
+  `extra_data` text NOT NULL,
+  `furni_id` int(10) unsigned NOT NULL,
+  `limited_number` int(11) NOT NULL DEFAULT '0',
+  `limited_stack` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`offer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `catalog_subscriptions`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_subscriptions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL DEFAULT 'HABBO_CLUB_BASIC_1_MONTH',
   `type` enum('vip','upgrade','basic') NOT NULL DEFAULT 'basic',
   `cost_credits` int(10) NOT NULL DEFAULT '20',
   `length_days` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `characters`
--- ----------------------------
-DROP TABLE IF EXISTS `characters`;
-CREATE TABLE `characters` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `catalog_subscriptions_gifts`
+--
+
+CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
+  `item_id` int(10) NOT NULL,
+  `item_name` varchar(100) NOT NULL,
+  `sprite_id` int(10) NOT NULL,
+  `days_need` int(10) NOT NULL DEFAULT '1',
+  `isvip` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`item_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `characters`
+--
+
+CREATE TABLE IF NOT EXISTS `characters` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account_uid` int(10) unsigned NOT NULL DEFAULT '0',
   `username` varchar(15) NOT NULL DEFAULT '',
@@ -218,37 +316,45 @@ CREATE TABLE `characters` (
   `respect_points` int(11) NOT NULL DEFAULT '0',
   `respect_credit_humans` int(11) NOT NULL DEFAULT '3',
   `respect_credit_pets` int(11) NOT NULL DEFAULT '3',
+  `marketplace_tickets` int(11) NOT NULL DEFAULT '0',
+  `last_respect_update` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `drink_sets`
--- ----------------------------
-DROP TABLE IF EXISTS `drink_sets`;
-CREATE TABLE `drink_sets` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `drink_sets`
+--
+
+CREATE TABLE IF NOT EXISTS `drink_sets` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `drinks` varchar(255) COLLATE latin1_german1_ci NOT NULL,
   `internal_comment` text COLLATE latin1_german1_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `favorites`
--- ----------------------------
-DROP TABLE IF EXISTS `favorites`;
-CREATE TABLE `favorites` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `favorites`
+--
+
+CREATE TABLE IF NOT EXISTS `favorites` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `room_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `flat_categories`
--- ----------------------------
-DROP TABLE IF EXISTS `flat_categories`;
-CREATE TABLE `flat_categories` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `flat_categories`
+--
+
+CREATE TABLE IF NOT EXISTS `flat_categories` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `title` varchar(64) NOT NULL DEFAULT '',
   `order_num` int(11) NOT NULL DEFAULT '0',
@@ -256,62 +362,72 @@ CREATE TABLE `flat_categories` (
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   `allow_trading` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `help_categories`
--- ----------------------------
-DROP TABLE IF EXISTS `help_categories`;
-CREATE TABLE `help_categories` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `help_categories`
+--
+
+CREATE TABLE IF NOT EXISTS `help_categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
   `visible` enum('1','0') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `help_topics`
--- ----------------------------
-DROP TABLE IF EXISTS `help_topics`;
-CREATE TABLE `help_topics` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `help_topics`
+--
+
+CREATE TABLE IF NOT EXISTS `help_topics` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category` int(10) unsigned NOT NULL,
   `title` varchar(128) NOT NULL,
   `body` text NOT NULL,
   `priority` enum('1','2','0') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `ignores`
--- ----------------------------
-DROP TABLE IF EXISTS `ignores`;
-CREATE TABLE `ignores` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ignores`
+--
+
+CREATE TABLE IF NOT EXISTS `ignores` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `ignore_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `interstitials`
--- ----------------------------
-DROP TABLE IF EXISTS `interstitials`;
-CREATE TABLE `interstitials` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `interstitials`
+--
+
+CREATE TABLE IF NOT EXISTS `interstitials` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `views` int(11) NOT NULL,
   `enabled` enum('1','0') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `items`
--- ----------------------------
-DROP TABLE IF EXISTS `items`;
-CREATE TABLE `items` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `items`
+--
+
+CREATE TABLE IF NOT EXISTS `items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `definition_id` int(10) unsigned NOT NULL DEFAULT '0',
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -328,13 +444,15 @@ CREATE TABLE `items` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `item_definitions`
--- ----------------------------
-DROP TABLE IF EXISTS `item_definitions`;
-CREATE TABLE `item_definitions` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_definitions`
+--
+
+CREATE TABLE IF NOT EXISTS `item_definitions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `sprite_id` int(10) unsigned NOT NULL,
   `name` varchar(128) NOT NULL DEFAULT 'new_item',
@@ -353,26 +471,30 @@ CREATE TABLE `item_definitions` (
   `walkable` enum('1','2','0') NOT NULL DEFAULT '0',
   `room_limit` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2898 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `messenger_friendships`
--- ----------------------------
-DROP TABLE IF EXISTS `messenger_friendships`;
-CREATE TABLE `messenger_friendships` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messenger_friendships`
+--
+
+CREATE TABLE IF NOT EXISTS `messenger_friendships` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_1_id` int(11) unsigned NOT NULL,
   `user_2_id` int(11) unsigned NOT NULL,
   `confirmed` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_1_id` (`user_1_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `moderation_action_log`
--- ----------------------------
-DROP TABLE IF EXISTS `moderation_action_log`;
-CREATE TABLE `moderation_action_log` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moderation_action_log`
+--
+
+CREATE TABLE IF NOT EXISTS `moderation_action_log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `moderator_id` int(10) unsigned NOT NULL,
   `moderator_name` varchar(16) NOT NULL,
@@ -380,59 +502,69 @@ CREATE TABLE `moderation_action_log` (
   `action_detail` text NOT NULL,
   `timestamp` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `moderation_chatlogs`
--- ----------------------------
-DROP TABLE IF EXISTS `moderation_chatlogs`;
-CREATE TABLE `moderation_chatlogs` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moderation_chatlogs`
+--
+
+CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `timestamp` double NOT NULL DEFAULT '0',
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `moderation_presets`
--- ----------------------------
-DROP TABLE IF EXISTS `moderation_presets`;
-CREATE TABLE `moderation_presets` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moderation_presets`
+--
+
+CREATE TABLE IF NOT EXISTS `moderation_presets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('user','room') NOT NULL DEFAULT 'user',
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `moderation_preset_action_categories`
--- ----------------------------
-DROP TABLE IF EXISTS `moderation_preset_action_categories`;
-CREATE TABLE `moderation_preset_action_categories` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moderation_preset_action_categories`
+--
+
+CREATE TABLE IF NOT EXISTS `moderation_preset_action_categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `caption` varchar(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `moderation_preset_action_messages`
--- ----------------------------
-DROP TABLE IF EXISTS `moderation_preset_action_messages`;
-CREATE TABLE `moderation_preset_action_messages` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moderation_preset_action_messages`
+--
+
+CREATE TABLE IF NOT EXISTS `moderation_preset_action_messages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned NOT NULL,
   `caption` varchar(32) NOT NULL,
   `message_text` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `moderation_tickets`
--- ----------------------------
-DROP TABLE IF EXISTS `moderation_tickets`;
-CREATE TABLE `moderation_tickets` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `moderation_tickets`
+--
+
+CREATE TABLE IF NOT EXISTS `moderation_tickets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category` int(10) unsigned NOT NULL DEFAULT '0',
   `status` enum('5','4','3','2','1','0') NOT NULL DEFAULT '0',
@@ -443,23 +575,27 @@ CREATE TABLE `moderation_tickets` (
   `timestamp` double NOT NULL DEFAULT '0',
   `message` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `navigator_event_search_categories`
--- ----------------------------
-DROP TABLE IF EXISTS `navigator_event_search_categories`;
-CREATE TABLE `navigator_event_search_categories` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `navigator_event_search_categories`
+--
+
+CREATE TABLE IF NOT EXISTS `navigator_event_search_categories` (
   `query` varchar(48) NOT NULL,
   `category_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`query`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for `navigator_frontpage`
--- ----------------------------
-DROP TABLE IF EXISTS `navigator_frontpage`;
-CREATE TABLE `navigator_frontpage` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `navigator_frontpage`
+--
+
+CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned NOT NULL DEFAULT '0',
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -474,30 +610,35 @@ CREATE TABLE `navigator_frontpage` (
   `order_num` int(11) NOT NULL DEFAULT '0',
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `new_items`
--- ----------------------------
-DROP TABLE IF EXISTS `new_items`;
-CREATE TABLE `new_items` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `new_items`
+--
+
+CREATE TABLE IF NOT EXISTS `new_items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `tab_id` int(11) NOT NULL DEFAULT '1',
   `item_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `pets`
--- ----------------------------
-DROP TABLE IF EXISTS `pets`;
-CREATE TABLE `pets` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pets`
+--
+
+CREATE TABLE IF NOT EXISTS `pets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(16) NOT NULL,
   `type` int(11) NOT NULL DEFAULT '0',
   `race` int(11) NOT NULL DEFAULT '0',
+  `color` varchar(11) DEFAULT NULL,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `room_id` int(11) unsigned NOT NULL DEFAULT '0',
   `room_pos` varchar(16) NOT NULL DEFAULT '0|0|0',
@@ -509,13 +650,15 @@ CREATE TABLE `pets` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7755 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `pet_races`
--- ----------------------------
-DROP TABLE IF EXISTS `pet_races`;
-CREATE TABLE `pet_races` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pet_races`
+--
+
+CREATE TABLE IF NOT EXISTS `pet_races` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pet_type` int(11) NOT NULL DEFAULT '0',
   `data1` int(11) NOT NULL DEFAULT '0',
@@ -523,23 +666,27 @@ CREATE TABLE `pet_races` (
   `data3` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `pet_type` (`pet_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `pet_tricks`
--- ----------------------------
-DROP TABLE IF EXISTS `pet_tricks`;
-CREATE TABLE `pet_tricks` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pet_tricks`
+--
+
+CREATE TABLE IF NOT EXISTS `pet_tricks` (
   `type` int(3) NOT NULL,
   `trick` varchar(32) NOT NULL,
   KEY `type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for `quests`
--- ----------------------------
-DROP TABLE IF EXISTS `quests`;
-CREATE TABLE `quests` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quests`
+--
+
+CREATE TABLE IF NOT EXISTS `quests` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category` varchar(32) NOT NULL DEFAULT '',
   `series_number` int(11) NOT NULL DEFAULT '0',
@@ -549,35 +696,41 @@ CREATE TABLE `quests` (
   `reward` int(11) NOT NULL DEFAULT '10',
   `data_bit` varchar(2) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `recycler_rewards`
--- ----------------------------
-DROP TABLE IF EXISTS `recycler_rewards`;
-CREATE TABLE `recycler_rewards` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `recycler_rewards`
+--
+
+CREATE TABLE IF NOT EXISTS `recycler_rewards` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `chance_level` int(11) NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `rights`
--- ----------------------------
-DROP TABLE IF EXISTS `rights`;
-CREATE TABLE `rights` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rights`
+--
+
+CREATE TABLE IF NOT EXISTS `rights` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `set_id` int(10) unsigned NOT NULL,
   `right_id` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `rooms`
--- ----------------------------
-DROP TABLE IF EXISTS `rooms`;
-CREATE TABLE `rooms` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rooms`
+--
+
+CREATE TABLE IF NOT EXISTS `rooms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('flat','public') NOT NULL DEFAULT 'flat',
   `owner_id` int(11) unsigned NOT NULL,
@@ -601,14 +754,17 @@ CREATE TABLE `rooms` (
   `thickness_wall` int(11) NOT NULL DEFAULT '0',
   `thickness_floor` int(11) NOT NULL DEFAULT '0',
   `decorations` varchar(128) NOT NULL DEFAULT 'landscape=0.0',
+  `badge_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `room_models`
--- ----------------------------
-DROP TABLE IF EXISTS `room_models`;
-CREATE TABLE `room_models` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room_models`
+--
+
+CREATE TABLE IF NOT EXISTS `room_models` (
   `id` varchar(64) NOT NULL,
   `type` enum('public','flat') NOT NULL DEFAULT 'flat',
   `heightmap` text NOT NULL,
@@ -622,99 +778,198 @@ CREATE TABLE `room_models` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for `room_rights`
--- ----------------------------
-DROP TABLE IF EXISTS `room_rights`;
-CREATE TABLE `room_rights` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room_rights`
+--
+
+CREATE TABLE IF NOT EXISTS `room_rights` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `room_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `room_visits`
--- ----------------------------
-DROP TABLE IF EXISTS `room_visits`;
-CREATE TABLE `room_visits` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room_triggers`
+--
+
+CREATE TABLE IF NOT EXISTS `room_triggers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `room_id` int(10) unsigned NOT NULL,
+  `room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
+  `action` enum('roller','teleport') CHARACTER SET utf8 NOT NULL DEFAULT 'roller',
+  `to_room_id` int(10) unsigned NOT NULL,
+  `to_room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
+  `to_room_dir` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `room_visits`
+--
+
+CREATE TABLE IF NOT EXISTS `room_visits` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL DEFAULT '0',
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `timestamp_entered` double NOT NULL DEFAULT '0',
   `timestamp_left` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=608 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `server_statistics`
--- ----------------------------
-DROP TABLE IF EXISTS `server_statistics`;
-CREATE TABLE `server_statistics` (
-  `skey` varchar(64) NOT NULL,
-  `sval` varchar(64) NOT NULL,
-  PRIMARY KEY (`skey`)
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `server_settings`
+--
+
+CREATE TABLE IF NOT EXISTS `server_settings` (
+  `activitypoints_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
+  `more_activitypoints_for_vip_users` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `activitypoints_interval` int(11) NOT NULL DEFAULT '1800' COMMENT '1800 = 30 min',
+  `activitypoints_credits_amount` int(11) NOT NULL DEFAULT '0',
+  `more_activitypoints_credits_amount` int(11) NOT NULL DEFAULT '25',
+  `activitypoints_pixels_amount` int(11) NOT NULL DEFAULT '50',
+  `more_activitypoints_pixels_amount` int(11) NOT NULL DEFAULT '50',
+  `motd_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
+  `motd_type` enum('NotificationMessageComposer','MessageOfTheDayComposer') CHARACTER SET utf8 NOT NULL DEFAULT 'MessageOfTheDayComposer',
+  `motd_text` text CHARACTER SET utf8 NOT NULL COMMENT 'Example: Text|Link',
+  `login_badge_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `login_badge_id` int(10) unsigned NOT NULL DEFAULT '33',
+  `moderation_actionlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `moderation_chatlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `moderation_roomlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `marketplace_tax` int(2) NOT NULL DEFAULT '1',
+  `marketplace_max_price` int(9) NOT NULL DEFAULT '10000',
+  `max_favorites_per_user` int(2) NOT NULL DEFAULT '30',
+  `max_furni_per_room` int(6) NOT NULL DEFAULT '500',
+  `max_furni_stacking` int(2) NOT NULL DEFAULT '12',
+  `max_pets_per_room` int(2) NOT NULL DEFAULT '10',
+  `max_rooms_per_user` int(2) NOT NULL DEFAULT '15'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `server_statistics`
+--
+
+CREATE TABLE IF NOT EXISTS `server_statistics` (
+  `server_status` enum('0','1','2') NOT NULL DEFAULT '0',
+  `server_ver` text NOT NULL,
+  `active_connections` int(11) NOT NULL DEFAULT '0',
+  `all_time_player_peak` int(11) NOT NULL DEFAULT '0',
+  `daily_player_peak` int(11) NOT NULL DEFAULT '0',
+  `rooms_loaded` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for `songs`
--- ----------------------------
-DROP TABLE IF EXISTS `songs`;
-CREATE TABLE `songs` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `songs`
+--
+
+CREATE TABLE IF NOT EXISTS `songs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `artist` varchar(32) NOT NULL,
   `song_data` text NOT NULL,
   `length` double NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `static_objects`
--- ----------------------------
-DROP TABLE IF EXISTS `static_objects`;
-CREATE TABLE `static_objects` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `static_objects`
+--
+
+CREATE TABLE IF NOT EXISTS `static_objects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(64) NOT NULL DEFAULT '',
-  `position` varchar(8) NOT NULL DEFAULT '0|0',
-  `height` int(11) NOT NULL DEFAULT '0',
-  `rotation` int(11) DEFAULT '0',
+  `position` varchar(16) NOT NULL DEFAULT '0|0|0',
+  `size_x` int(11) NOT NULL DEFAULT '1',
+  `size_y` int(11) NOT NULL DEFAULT '1',
+  `rotation` int(11) NOT NULL DEFAULT '0',
+  `height` float NOT NULL DEFAULT '1',
+  `walkable` enum('0','1') DEFAULT '0',
   `is_seat` enum('0','1') DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `tags`
--- ----------------------------
-DROP TABLE IF EXISTS `tags`;
-CREATE TABLE `tags` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
+
+CREATE TABLE IF NOT EXISTS `tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `tag` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `user_achievements`
--- ----------------------------
-DROP TABLE IF EXISTS `user_achievements`;
-CREATE TABLE `user_achievements` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_achievements`
+--
+
+CREATE TABLE IF NOT EXISTS `user_achievements` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `group_id` varchar(255) NOT NULL DEFAULT '',
   `level` int(11) NOT NULL DEFAULT '0',
   `progress` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `user_subscriptions`
--- ----------------------------
-DROP TABLE IF EXISTS `user_subscriptions`;
-CREATE TABLE `user_subscriptions` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_gifts`
+--
+
+CREATE TABLE IF NOT EXISTS `user_gifts` (
+  `item_id` int(10) unsigned NOT NULL,
+  `base_id` int(10) unsigned NOT NULL,
+  `amount` int(11) NOT NULL,
+  `extra_data` text NOT NULL,
+  KEY `item_id` (`item_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_quests`
+--
+
+CREATE TABLE IF NOT EXISTS `user_quests` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `quest_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `progress` int(11) NOT NULL DEFAULT '0',
+  `is_current` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_subscriptions`
+--
+
+CREATE TABLE IF NOT EXISTS `user_subscriptions` (
   `user_id` int(10) unsigned NOT NULL,
   `subscription_level` enum('2','1','0') NOT NULL DEFAULT '0',
   `timestamp_created` double(11,0) NOT NULL DEFAULT '0',
@@ -724,11 +979,13 @@ CREATE TABLE `user_subscriptions` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Table structure for `vouchers`
--- ----------------------------
-DROP TABLE IF EXISTS `vouchers`;
-CREATE TABLE `vouchers` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vouchers`
+--
+
+CREATE TABLE IF NOT EXISTS `vouchers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(32) NOT NULL DEFAULT '',
   `value_credits` int(11) NOT NULL DEFAULT '0',
@@ -737,13 +994,15 @@ CREATE TABLE `vouchers` (
   `uses` int(11) NOT NULL DEFAULT '1',
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
--- ----------------------------
--- Table structure for `wardrobe`
--- ----------------------------
-DROP TABLE IF EXISTS `wardrobe`;
-CREATE TABLE `wardrobe` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wardrobe`
+--
+
+CREATE TABLE IF NOT EXISTS `wardrobe` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `slot_id` int(11) NOT NULL DEFAULT '0',
@@ -751,4 +1010,4 @@ CREATE TABLE `wardrobe` (
   `gender` enum('F','M') NOT NULL DEFAULT 'M',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

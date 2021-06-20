@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 20, 2021 at 12:22 PM
+-- Generation Time: Jun 20, 2021 at 04:18 PM
 -- Server version: 5.5.10
 -- PHP Version: 5.3.6
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `achievements` (
   `reward_points` int(11) DEFAULT '10',
   `progress_needed` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=117 ;
 
 --
 -- Dumping data for table `achievements`
@@ -136,7 +136,27 @@ INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pix
 (93, 'ACH_PetRespectGiver', 'pets', 17, 3000, 3000, 1610),
 (94, 'ACH_PetRespectGiver', 'pets', 18, 3000, 3000, 1870),
 (95, 'ACH_PetRespectGiver', 'pets', 19, 3000, 3000, 2150),
-(96, 'ACH_PetRespectGiver', 'pets', 20, 3000, 3000, 2450);
+(96, 'ACH_PetRespectGiver', 'pets', 20, 3000, 3000, 2450),
+(97, 'ACH_RoomEntry', 'explore', 1, 5, 5, 5),
+(98, 'ACH_RoomEntry', 'explore', 2, 20, 20, 10),
+(99, 'ACH_RoomEntry', 'explore', 3, 40, 40, 20),
+(100, 'ACH_RoomEntry', 'explore', 4, 100, 100, 30),
+(101, 'ACH_RoomEntry', 'explore', 5, 200, 200, 40),
+(102, 'ACH_RoomEntry', 'explore', 6, 500, 500, 50),
+(103, 'ACH_RoomEntry', 'explore', 7, 1000, 1000, 100),
+(104, 'ACH_RoomEntry', 'explore', 8, 1300, 1300, 200),
+(105, 'ACH_RoomEntry', 'explore', 9, 2000, 2000, 300),
+(106, 'ACH_RoomEntry', 'explore', 10, 3000, 3000, 400),
+(107, 'ACH_RoomEntry', 'explore', 11, 3000, 3000, 500),
+(108, 'ACH_RoomEntry', 'explore', 12, 3000, 3000, 600),
+(109, 'ACH_RoomEntry', 'explore', 13, 3000, 3000, 700),
+(110, 'ACH_RoomEntry', 'explore', 14, 3000, 3000, 800),
+(111, 'ACH_RoomEntry', 'explore', 15, 3000, 3000, 900),
+(112, 'ACH_RoomEntry', 'explore', 16, 3000, 3000, 1000),
+(113, 'ACH_RoomEntry', 'explore', 17, 3000, 3000, 1500),
+(114, 'ACH_RoomEntry', 'explore', 18, 3000, 3000, 2000),
+(115, 'ACH_RoomEntry', 'explore', 19, 3000, 3000, 2500),
+(116, 'ACH_RoomEntry', 'explore', 20, 3000, 3000, 3000);
 
 -- --------------------------------------------------------
 
@@ -215,7 +235,7 @@ CREATE TABLE IF NOT EXISTS `badge_definitions` (
   `code` varchar(64) NOT NULL,
   `rights_sets` varchar(128) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`,`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=105 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=127 ;
 
 --
 -- Dumping data for table `badge_definitions`
@@ -325,7 +345,29 @@ INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
 (101, 'ACH_PetRespectGiver17', ''),
 (102, 'ACH_PetRespectGiver18', ''),
 (103, 'ACH_PetRespectGiver19', ''),
-(104, 'ACH_PetRespectGiver20', '');
+(104, 'ACH_PetRespectGiver20', ''),
+(105, 'ACH_RoomEntry1', ''),
+(106, 'ACH_RoomEntry2', ''),
+(107, 'ACH_RoomEntry3', ''),
+(108, 'ACH_RoomEntry4', ''),
+(109, 'ACH_RoomEntry5', ''),
+(110, 'ACH_RoomEntry6', ''),
+(111, 'ACH_RoomEntry7', ''),
+(112, 'ACH_RoomEntry8', ''),
+(113, 'ACH_RoomEntry9', ''),
+(114, 'ACH_RoomEntry10', ''),
+(115, 'ACH_RoomEntry11', ''),
+(116, 'ACH_RoomEntry12', ''),
+(117, 'ACH_RoomEntry13', ''),
+(118, 'ACH_RoomEntry14', ''),
+(119, 'ACH_RoomEntry15', ''),
+(120, 'ACH_RoomEntry16', ''),
+(121, 'ACH_RoomEntry17', ''),
+(122, 'ACH_RoomEntry18', ''),
+(123, 'ACH_RoomEntry19', ''),
+(124, 'ACH_RoomEntry20', ''),
+(125, 'Z64', ''),
+(126, 'SG4', '');
 
 -- --------------------------------------------------------
 
@@ -3970,7 +4012,7 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
   `avgprice` int(9) NOT NULL DEFAULT '0',
   `daysago` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `catalog_marketplace_data`
@@ -3999,7 +4041,7 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
   `limited_number` int(11) NOT NULL DEFAULT '0',
   `limited_stack` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`offer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `catalog_marketplace_offers`
@@ -5906,7 +5948,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 (1575, 3164, 'country_corner', 's', 'static', 2, 'disable', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (1576, 3165, 'country_ditch', 's', 'gate', 2, 'disable', 1, 2, 0, '1', '1', '0', '1', '1', '0', 0),
 (1577, 3166, 'country_patio', 's', 'static', 2, 'normal', 1, 1, 0.1, '1', '1', '0', '1', '1', '1', 0),
-(1578, 3167, 'totem_head', 's', 'switch', 15, 'terminator', 1, 1, 1, '1', '1', '1', '1', '1', '0', 0),
+(1578, 3167, 'totem_head', 's', 'switch', 15, 'normal', 1, 1, 1.8, '1', '1', '1', '1', '1', '0', 0),
 (1579, 3168, 'ads_calip_chair', 's', 'seat', 0, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (1580, 3169, 'ads_idol_trophy', 's', 'switch', 2, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (1581, 3170, 'LT_pillar2', 's', 'switch', 2, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
@@ -7292,7 +7334,7 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `moderation_chatlogs`
@@ -7488,7 +7530,7 @@ CREATE TABLE IF NOT EXISTS `new_items` (
   `item_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `new_items`
@@ -8007,7 +8049,7 @@ CREATE TABLE IF NOT EXISTS `room_rights` (
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `room_rights`
@@ -8151,7 +8193,7 @@ CREATE TABLE IF NOT EXISTS `server_statistics` (
 --
 
 INSERT INTO `server_statistics` (`server_status`, `server_ver`, `active_connections`, `all_time_player_peak`, `daily_player_peak`, `rooms_loaded`) VALUES
-('0', 'Snowlight Emulator v1.0-dev (Build 22215)', 0, 0, 0, 0);
+('0', 'Snowlight Emulator v1.0-dev (Build 29336)', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 

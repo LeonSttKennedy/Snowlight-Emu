@@ -43,8 +43,6 @@ namespace Snowlight.Game.Misc
             try
             {
                 int Interval = ServerSettings.ActivityPointsInterval;
-                int CreditsAmount = ServerSettings.ActivityPointsCreditsAmount;
-                int PixelsAmount = ServerSettings.ActivityPointsPixelsAmount;
 
                 Thread.Sleep(60000);
 
@@ -63,22 +61,17 @@ namespace Snowlight.Game.Misc
                                     continue;
                                 }
 
-                                if (ServerSettings.MoreActivityPointsForVipUsers && Session.HasRight("club_vip"))
-                                {
-                                    CreditsAmount += ServerSettings.MoreActivityPointsCreditsAmount;
-                                    PixelsAmount += ServerSettings.MoreActivityPointsPixelsAmount;
-                                }
 
-                                if (CreditsAmount > 0)
+                                if (ToIncrease(Session)[0] > 0)
                                 {
-                                    Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, CreditsAmount);
+                                    Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, ToIncrease(Session)[0]);
                                     Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
                                 }
 
-                                if (PixelsAmount > 0)
+                                if (ToIncrease(Session)[1] > 0)
                                 {
-                                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, PixelsAmount);
-                                    Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, PixelsAmount));
+                                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, ToIncrease(Session)[1]);
+                                    Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, ToIncrease(Session)[1]));
                                 }
 
                                 Session.CharacterInfo.SetLastActivityPointsUpdate(MySqlClient);
@@ -90,6 +83,25 @@ namespace Snowlight.Game.Misc
                 }
             }
             catch (ThreadAbortException) { }
+        }
+
+        private static List<int> ToIncrease(Session Session)
+        {
+            List<int> ToReturn = new List<int>();
+
+            int CreditsAmount = ServerSettings.ActivityPointsCreditsAmount;
+            int PixelsAmount = ServerSettings.ActivityPointsPixelsAmount;
+            
+            if (Session.HasRight("club_vip"))
+            {
+                CreditsAmount += ServerSettings.MoreActivityPointsCreditsAmount;
+                PixelsAmount += ServerSettings.MoreActivityPointsPixelsAmount;
+            }
+
+            ToReturn.Add(CreditsAmount);
+            ToReturn.Add(PixelsAmount);
+
+            return ToReturn;
         }
     }
 }

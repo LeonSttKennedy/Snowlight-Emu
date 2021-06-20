@@ -42,10 +42,7 @@ namespace Snowlight.Game.Bots.Behavior
         {
             mSelfActor = Instance.GetActorByReferenceId(mSelfBot.Id, RoomActorType.AiBot);
 
-            if (mSelfActor == null)
-            {
-                return;
-            }
+            if (mSelfActor == null) return;
 
             mNeedsRotation = false;
             mNextSpeechAttempt = RandomGenerator.GetNext(20, 255);
@@ -60,6 +57,12 @@ namespace Snowlight.Game.Bots.Behavior
                 mSelfActor.BodyRotation = mSelfBot.Rotation;
                 mSelfActor.HeadRotation = mSelfBot.Rotation;
             }
+
+            mSelfActor.Chat("Hi and welcome to Uber! I am a bot Guide and I'm here to help you.", false, true);
+            mSelfActor.Chat("This is your own room, you can always come back to room by clicking the nest icon on room information.", false, true);
+            mSelfActor.Chat("If you want to explore the Habbo by yourself, click on the orange hotel icon on the left (we call it navigator).", false, true);
+            mSelfActor.Chat("You will find cool rooms and fun events with other people in them, feel free to visit them.", false, true);
+            mSelfActor.Chat("I can give you tips and hints on what to do here, just ask me a question :)", false, true);
         }
 
         public override void OnSelfLeaveRoom(RoomInstance Instance)
