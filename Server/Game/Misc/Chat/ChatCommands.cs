@@ -1,23 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Snowlight.Game.Sessions;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Infobus;
-using Snowlight.Game.Rooms;
-using Snowlight.Game.Bots;
-using Snowlight.Storage;
-using Snowlight.Game.Achievements;
-using Snowlight.Game.Pets;
-using Snowlight.Util;
+using System.Data;
 using System.Text;
-using Snowlight.Game.Moderation;
-using Microsoft.VisualBasic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+
+using Microsoft.VisualBasic;
+
+using Snowlight.Util;
+using Snowlight.Storage;
+using Snowlight.Game.Bots;
+using Snowlight.Game.Pets;
+using Snowlight.Game.Rooms;
+using Snowlight.Game.Infobus;
+using Snowlight.Game.Sessions;
+using Snowlight.Game.Moderation;
+using Snowlight.Game.Achievements;
+using Snowlight.Communication.Outgoing;
+
+
 using Snowlight.Communication;
-using System.Data;
+using Snowlight.Game.Rights;
+using Snowlight.Game.Items;
 
 namespace Snowlight.Game.Misc
 {
@@ -78,8 +83,10 @@ namespace Snowlight.Game.Misc
                         {
                             return false;
                         }
+
                         string Msg = Input.Substring(3).Replace("*", "\n");
                         SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg + "\r\n- " + Session.CharacterInfo.Username));
+
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent a global alert",
@@ -96,13 +103,16 @@ namespace Snowlight.Game.Misc
                         {
                             return false;
                         }
+
                         string Msg = Input.Substring(4).Replace("*", "\n");
                         SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg));
+
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent a anonimate global alert",
                                "Message: '" + Msg + "'");
                         }
+
                         return true;
                     }
                 #endregion
@@ -113,16 +123,19 @@ namespace Snowlight.Game.Misc
                         {
                             return false;
                         }
+
                         string Url = Bits[1];
                         Input = Input.Substring(4).Replace(Url, "");
                         string Message = Input.Substring(1).Replace("*", "\n");
 
                         SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
+
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent a global alert with link",
                                "Message: '" + Message + "' \nLink: " + Url);
                         }
+
                         return true;
                     }
                 #endregion
@@ -133,27 +146,29 @@ namespace Snowlight.Game.Misc
                         {
                             return false;
                         }
+
                         string Msg = Input.Substring(4).Replace("*", "\n");
                         SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Staff User: " + Session.CharacterInfo.Username + "\r\n" + Msg), "moderation_tool");
+
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent a staff alert",
                                "Message: '" + Msg + "'");
                         }
+
                         return true;
                     }
                 #endregion
                 #region :ra <msg>
                 case "ra":
                     {
-                        RoomInstance RoomInstance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-                        if (!Session.HasRight("moderation_tool") || RoomInstance == null)
+                        if (!Session.HasRight("moderation_tool"))
                         {
                             return false;
                         }
 
                         string Msg = Input.Substring(3).Replace("*", "\n");
-                        foreach (RoomActor RoomActor in RoomInstance.Actors)
+                        foreach (RoomActor RoomActor in Instance.Actors)
                         {
                             if (!RoomActor.IsBot)
                             {
@@ -161,6 +176,7 @@ namespace Snowlight.Game.Misc
                                 TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg + "\r\n- " + Session.CharacterInfo.Username));
                             }
                         }
+
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent an alert to a room",
@@ -173,14 +189,13 @@ namespace Snowlight.Game.Misc
                 #region :ara <msg>
                 case "ara":
                     {
-                        RoomInstance RoomInstance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-                        if (!Session.HasRight("moderation_tool") || RoomInstance == null)
+                        if (!Session.HasRight("moderation_tool") || Instance == null)
                         {
                             return false;
                         }
 
                         string Msg = Input.Substring(4).Replace("*", "\n");
-                        foreach (RoomActor RoomActor in RoomInstance.Actors)
+                        foreach (RoomActor RoomActor in Instance.Actors)
                         {
                             if (!RoomActor.IsBot)
                             {
@@ -188,6 +203,7 @@ namespace Snowlight.Game.Misc
                                 TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Msg));
                             }
                         }
+
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent an anonimate alert to a room",
@@ -200,8 +216,7 @@ namespace Snowlight.Game.Misc
                 #region :ral <link> <msg>
                 case "ral":
                     {
-                        RoomInstance RoomInstance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-                        if (!Session.HasRight("moderation_tool") || RoomInstance == null)
+                        if (!Session.HasRight("moderation_tool"))
                         {
                             return false;
                         }
@@ -209,7 +224,7 @@ namespace Snowlight.Game.Misc
                         Input = Input.Substring(4).Replace(Url, "");
                         string Message = Input.Substring(1).Replace("*", "\n");
 
-                        foreach (RoomActor RoomActor in RoomInstance.Actors)
+                        foreach (RoomActor RoomActor in Instance.Actors)
                         {
                             if (!RoomActor.IsBot)
                             {
@@ -217,6 +232,7 @@ namespace Snowlight.Game.Misc
                                 TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
                             }
                         }
+
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent an alert to a room with link",
@@ -228,14 +244,13 @@ namespace Snowlight.Game.Misc
                 #region :ras <msg>
                 case "ras":
                     {
-                        RoomInstance RoomInstance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-                        if (!Session.HasRight("moderation_tool") || RoomInstance == null)
+                        if (!Session.HasRight("moderation_tool"))
                         {
                             return false;
                         }
 
                         string Msg = Input.Substring(4).Replace("*", "\n");
-                        foreach (RoomActor RoomActor in RoomInstance.Actors)
+                        foreach (RoomActor RoomActor in Instance.Actors)
                         {
                             if (!RoomActor.IsBot)
                             {
@@ -246,6 +261,7 @@ namespace Snowlight.Game.Misc
                                 }
                             }
                         }
+
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Sent an alert to the staff's in a room",
@@ -470,6 +486,21 @@ namespace Snowlight.Game.Misc
                         return true;
                     }
                 #endregion
+                #region :update_achievements
+                case "update_achievements":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            AchievementManager.ReloadAchievements(MySqlClient);
+                            Session.SendData(NotificationMessageComposer.Compose("Achievements list Reloaded."));
+                        }
+                        return true;
+                    }
+                #endregion
                 #region :update_catalog
                 case "update_catalog":
                     {
@@ -481,7 +512,22 @@ namespace Snowlight.Game.Misc
                         {
                             Snowlight.Game.Catalog.CatalogManager.RefreshCatalogData(MySqlClient);
                         }
-                        Session.SendData(NotificationMessageComposer.Compose("Catalog Reloaded"));
+                        Session.SendData(NotificationMessageComposer.Compose("Catalog reloaded."));
+                        return true;
+                    }
+                #endregion
+                #region :update_filter
+                case "update_filter":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ChatWordFilter.Initialize(MySqlClient);
+                        }
+                        Session.SendData(NotificationMessageComposer.Compose("Wordfilter reloaded."));
                         return true;
                     }
                 #endregion
@@ -499,30 +545,15 @@ namespace Snowlight.Game.Misc
                         Session.SendData(NotificationMessageComposer.Compose("Items reloaded"));
                         return true;
                     }
-                #endregion
-                #region :update_achievements
-                case "update_achievements":
+                #endregion   
+                #region :update_serversettings
+                case "update_serversettings":
                     {
                         if (!Session.HasRight("hotel_admin"))
                         {
                             return false;
                         }
-                        using(SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                        {
-                            AchievementManager.ReloadAchievements(MySqlClient);
-                            Session.SendData(NotificationMessageComposer.Compose("Achievements list Reloaded."));
-                        }
-                        return true;
-                    }
-                #endregion
-                #region :update_serversettings
-                case "update_serversettings":
-                    {
-                        if(!Session.HasRight("hotel_admin"))
-                        {
-                            return false;
-                        }
-                        using(SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             ServerSettings.Initialize(MySqlClient);
                             Session.SendData(NotificationMessageComposer.Compose("Updated server specific configuration."));
@@ -564,6 +595,516 @@ namespace Snowlight.Game.Misc
                         return true;
                     }
                 #endregion
+                #region :gubadge <username> <code>
+                case "gubadge":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        string Username = Bits[1];
+                        string BadgeCode = Bits[2];
+
+                        // Verify if username is a white space or empty
+                        if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(BadgeCode))
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character name or badge code is null.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Verify if badge code is in database
+                        Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
+                        if (BadgeToGive == null)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Badge id doesn't exists in database.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Verify the user session is connected
+                        Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(Username));
+                        if (TargetSession == null)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character doesn't exists or maybe not online.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Getting the current room instance the user is in
+                        RoomInstance TargetInstance = RoomManager.GetInstanceByRoomId(TargetSession.CurrentRoomId);
+                        if (TargetInstance == null)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character isn't in a room.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Just to confirm if user is in a room
+                        RoomActor TargetActor = TargetInstance.GetActorByReferenceId(TargetSession.CharacterId);
+                        if (TargetActor == null)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character doesn't exists or maybe not in a room.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Also verify if badge has rights set, after this verification, executes the addition of badge
+                        if (RightsManager.GetRightsForBadge(BadgeToGive).Count == 0)
+                        {
+                            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                            {
+                                if (!TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                                {
+                                    TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
+                                    TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
+                                    TargetSession.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+
+                                    TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
+
+                                    TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
+                                    TargetSession.SendData(RoomChatComposer.Compose(TargetActor.Id, "Do you have received a new badge, check your Inventory!", 1, ChatType.Whisper));
+
+                                    Session.SendData(NotificationMessageComposer.Compose("Badge given successfully."));
+                                    ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given a badge",
+                                        Session.CharacterInfo.Username + " had give a badge ( " + BadgeToGive.Code + " ) to " + TargetSession.CharacterInfo.Username);
+                                }
+                                else if (TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                                {
+                                    Session.SendData(RoomChatComposer.Compose(Actor.Id, "User already has this badge.", 0, ChatType.Whisper));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "You can't give a badge that give rights the user.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        return true;
+                    }
+                #endregion
+                #region :grbadge <code>
+                case "grbadge":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        string BadgeCode = Bits[1];
+
+                        // Verify if username is a white space or empty
+                        if (string.IsNullOrWhiteSpace(BadgeCode))
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the badge code is null.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Verify if badge code is in database
+                        Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
+                        if (BadgeToGive == null)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Badge id doesn't exists in database.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Also verify if badge has rights set, after this verification, executes the addition of badge
+                        if (RightsManager.GetRightsForBadge(BadgeToGive).Count == 0)
+                        {
+                            foreach (RoomActor RoomActors in Instance.Actors)
+                            {
+                                if (!RoomActors.IsBot)
+                                {
+                                    Session TargetSession = SessionManager.GetSessionByCharacterId(RoomActors.ReferenceId);
+                                    if (TargetSession.CharacterId != Session.CharacterId)
+                                    {
+                                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                        {
+                                            if (!TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                                            {
+                                                TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
+                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
+                                                TargetSession.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+
+                                                TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
+
+                                                TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
+                                                TargetSession.SendData(RoomChatComposer.Compose(RoomActors.Id, "Do you have received a new badge, check your Inventory!", 1, ChatType.Whisper));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "You can't give a badge that give rights.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given a badge",
+                                Session.CharacterInfo.Username + " had give a badge ( " + BadgeToGive.Code + " ) to room: " + Instance.Info.Name + " (ID: " + Instance.Info.Id + ").");
+                        }
+
+                        Session.SendData(NotificationMessageComposer.Compose("Badge added to all users in current room!"));
+
+                        return true;
+                    }
+                #endregion
+                #region :ggbadge <code> - TODO
+                case "ggbadge":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        string BadgeCode = Bits[1];
+
+                        // Verify if username is a white space or empty
+                        if (string.IsNullOrWhiteSpace(BadgeCode))
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the badge code is null.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Verify if badge code is in database
+                        Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
+                        if (BadgeToGive == null)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Badge id doesn't exists in database.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Also verify if badge has rights set, after this verification, executes the addition of badge
+                        if (RightsManager.GetRightsForBadge(BadgeToGive).Count == 0)
+                        {
+                            Dictionary<uint, Session> Sessions = SessionManager.Sessions;
+                            foreach (Session TargetSession in Sessions.Values)
+                            {
+                                if (TargetSession.CharacterId != Session.CharacterId)
+                                {
+                                    using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                    {
+                                        if (!TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                                        {
+                                            TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
+                                            TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
+                                            TargetSession.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+
+                                            TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
+
+                                            TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
+                                            TargetSession.SendData(NotificationMessageComposer.Compose("Do you have received a new badge, check your Inventory!\r\n- " + Session.CharacterInfo.Username));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "You can't give a badge that give rights.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given a badge",
+                                Session.CharacterInfo.Username + " had give a badge ( " + BadgeToGive.Code + " ) to all online users.");
+                        }
+
+                        Session.SendData(NotificationMessageComposer.Compose("Badge added to all online users!"));
+
+                        return true;
+                    }
+                #endregion
+                #region :gucoins <username> <amount>
+                case "gucoins":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        string Username = Bits[1];
+                        int CoinsAmount = 0;
+                        int.TryParse(Bits[2], out CoinsAmount);
+
+                        // Verify if username is a white space or empty
+                        if (string.IsNullOrWhiteSpace(Username))
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character name is empty.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Verify the user session is connected
+                        Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(Username));
+                        if (TargetSession == null)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character doesn't exists or maybe not online.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // If the user has a value bigger than 100.000 of coins in your purse, doesn't add any credits to him
+                        if (TargetSession.CharacterInfo.CreditsBalance > 100000)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character has a good quantity of coins in his purse.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Coins amount isn't be bigger than 25.000, doesn't execute the action of add coins
+                        if (CoinsAmount > 25000)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like it's a bigger amount of credits, don't you think?", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, CoinsAmount);
+                            TargetSession.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
+                            TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + CoinsAmount + " credits. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given Coins",
+                                Session.CharacterInfo.Username + " had give " + CoinsAmount + " Coins to " + TargetSession.CharacterInfo.Username);
+                        }
+
+                        return true;
+                    }
+                #endregion
+                #region :grcoins <amount>
+                case "grcoins":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        int CoinsAmount = 0;
+                        int.TryParse(Bits[1], out CoinsAmount);
+
+                        // Coins amount isn't be bigger than 25.000, doesn't execute the action of add coins
+                        if (CoinsAmount > 25000)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like it's a bigger amount of credits, don't you think?", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        foreach (RoomActor RoomActors in Instance.Actors)
+                        {
+                            if (!RoomActors.IsBot)
+                            {
+                                Session TargetSession = SessionManager.GetSessionByCharacterId(RoomActors.ReferenceId);
+
+                                if (TargetSession.CharacterId != Session.CharacterId)
+                                {
+                                    using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                    {
+                                        TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, CoinsAmount);
+                                        TargetSession.SendData(CreditsBalanceComposer.Compose(TargetSession.CharacterInfo.CreditsBalance));
+                                        TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + CoinsAmount + " credits. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                    }
+                                }
+                            }
+                        }
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given Coins",
+                                Session.CharacterInfo.Username + " had give " + CoinsAmount + " Coins to room: " + Instance.Info.Name + " (ID: " + Instance.Info.Id + ").");
+                        }
+
+                        Session.SendData(NotificationMessageComposer.Compose("Coins added to all users in current room!"));
+
+                        return true;
+                    }
+                #endregion
+                #region :ggcoins <amount>
+                case "ggcoins":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        int CoinsAmount = 0;
+                        int.TryParse(Bits[1], out CoinsAmount);
+
+                        // Coins amount isn't be bigger than 25.000, doesn't execute the action of add coins
+                        if (CoinsAmount > 25000)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like it's a bigger amount of credits, don't you think?", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        Dictionary<uint, Session> Sessions = SessionManager.Sessions;
+                        foreach (Session TargetSession in Sessions.Values)
+                        {
+                            if (TargetSession.CharacterId != Session.CharacterId)
+                            {
+                                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                {
+                                    TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, CoinsAmount);
+                                    TargetSession.SendData(CreditsBalanceComposer.Compose(TargetSession.CharacterInfo.CreditsBalance));
+                                    TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + CoinsAmount + " credits. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                }
+                            }
+                        }
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given Coins",
+                                Session.CharacterInfo.Username + " had give " + CoinsAmount + " Coins to all online users.");
+                        }
+
+                        Session.SendData(NotificationMessageComposer.Compose("Coins added to all users in current room!"));
+
+                        return true;
+                    }
+                #endregion
+                #region :gupixels <username> <amount>
+                case "gupixels":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        string Username = Bits[1];
+                        int PixelsAmount = 0;
+                        int.TryParse(Bits[2], out PixelsAmount);
+
+                        // Verify if username is a white space or empty
+                        if (string.IsNullOrWhiteSpace(Username))
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character name is empty.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Verify the user session is connected
+                        Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(Username));
+                        if (TargetSession == null)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character doesn't exists or maybe not online.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // If the user has a value bigger than 100.000 of pixels in your purse, doesn't add any pixels to him
+                        if (TargetSession.CharacterInfo.ActivityPointsBalance > 100000)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character has a good quantity of pixels in his purse.", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        // Pixels amount isn't be bigger than 25.000
+                        if (PixelsAmount > 25000)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like it's a bigger amount of pixels, don't you think?", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, PixelsAmount);
+                            TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, PixelsAmount));
+                            TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + PixelsAmount + " Pixels. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given Pixels",
+                                Session.CharacterInfo.Username + " had give " + PixelsAmount + " Pixels to " + TargetSession.CharacterInfo.Username);
+                        }
+
+                        return true;
+                    }
+                #endregion
+                #region :grpixels <amount>
+                case "grpixels":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        int PixelsAmount = 0;
+                        int.TryParse(Bits[1], out PixelsAmount);
+
+                        // Pixels amount isn't be bigger than 25.000
+                        if (PixelsAmount > 25000)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like it's a bigger amount of pixels, don't you think?", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        foreach (RoomActor RoomActors in Instance.Actors)
+                        {
+                            if (!RoomActors.IsBot)
+                            {
+                                Session TargetSession = SessionManager.GetSessionByCharacterId(RoomActors.ReferenceId);
+
+                                if (TargetSession.CharacterId != Session.CharacterId)
+                                {
+                                    using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                    {
+                                        TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, PixelsAmount);
+                                        TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, PixelsAmount));
+                                        TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + PixelsAmount + " Pixels. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                    }
+                                }
+                            }
+                        }
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given Pixels",
+                                Session.CharacterInfo.Username + " had give " + PixelsAmount + " Pixels to room: " + Instance.Info.Name + " (ID: " + Instance.Info.Id + ").");
+                        }
+
+                        Session.SendData(NotificationMessageComposer.Compose("Pixels added to all users in current room!"));
+
+                        return true;
+                    }
+                #endregion
+                #region :ggpixels <amount>
+                case "ggpixels":
+                    {
+                        if (!Session.HasRight("hotel_admin"))
+                        {
+                            return false;
+                        }
+
+                        int PixelsAmount = 0;
+                        int.TryParse(Bits[1], out PixelsAmount);
+
+                        // Pixels amount isn't be bigger than 25.000
+                        if (PixelsAmount > 25000)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like it's a bigger amount of pixels, don't you think?", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        Dictionary<uint, Session> Sessions = SessionManager.Sessions;
+                        foreach (Session TargetSession in Sessions.Values)
+                        {
+                            if (TargetSession.CharacterId != Session.CharacterId)
+                            {
+                                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                {
+                                    TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, PixelsAmount);
+                                    TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, PixelsAmount));
+                                    TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + PixelsAmount + " Pixels. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                }
+                            }
+                        }
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given Pixels",
+                                Session.CharacterInfo.Username + " had give " + PixelsAmount + " Pixels to all online users.");
+                        }
+
+                        Session.SendData(NotificationMessageComposer.Compose("Pixels added to all online users!"));
+
+                        return true;
+                    }
+                #endregion
                 #endregion
 
                 #region Vip
@@ -572,7 +1113,7 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 1, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
                             return true;
                         }
 
@@ -602,7 +1143,7 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 1, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
                             return true;
                         }
 
@@ -634,12 +1175,63 @@ namespace Snowlight.Game.Misc
                         return true;
                     }
                 #endregion
+                #region :redeemcoins <yes>
+                case "redeemcoins":
+                    {
+                        if (!Session.HasRight("club_vip"))
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
+                            return true;
+                        }
+
+                        if (Bits.Length == 1)
+                        {
+                            Session.SendData(NotificationMessageComposer.Compose("Are you sure you want to clear your exchange furni in your hand ?!\n" +
+                            "To confirm, type \":redeemcoins yes\". \n\nOnce you do this, there is no going back!\n(If you do not want to redeem it, just ignore this message!)"));
+                        }
+                        else
+                        {
+                            if(Bits.Length == 2 && Bits[1].ToString() == "yes")
+                            {
+                                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                {
+                                    int CoinsAmount = 0;
+
+                                    foreach (Item Items in Session.InventoryCache.Items.Values)
+                                    {
+                                        if (Items.Definition.Behavior == ItemBehavior.ExchangeItem && Items.RoomId == 0)
+                                        {
+                                            CoinsAmount += Items.Definition.BehaviorData;
+                                            Session.InventoryCache.RemoveItem(Items.Id);
+                                            Items.RemovePermanently(MySqlClient);
+                                        }
+                                    }
+
+                                    Session.InventoryCache.ReloadCache(MySqlClient);
+                                    Session.SendData(InventoryRefreshComposer.Compose());
+
+                                    if (CoinsAmount > 0)
+                                    {
+                                        Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, CoinsAmount);
+                                        Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
+                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "Total Redeem: " + CoinsAmount + " Coin(s)", 0, ChatType.Whisper));
+                                    }
+                                }
+                            }
+                            else if (Bits.Length == 2 && Bits[1].ToString() != "yes")
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, "To confirm, you must type in :redeemcoins yes", 0, ChatType.Whisper));
+                            }
+                        }
+                        return true;
+                    }
+                #endregion
                 #region :status
                 case "status":
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 1, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
                             return true;
                         }
 
@@ -672,7 +1264,7 @@ namespace Snowlight.Game.Misc
                             "\n\nSystem",
                             "\nCPU architecture: " + GetProcessorArchitecture().ToString().ToLower(),
                             "\nCPU cores: "+ Environment.ProcessorCount,
-                            "\nMemory usage: " + Math.Round((((GetTotalMemoryInBytes() / 1024d) / 1024d) / 1024d), 2) + " MB"
+                            "\nMemory usage: " + Math.Round(GetTotalMemoryInBytes() / 1024d / 1024d / 1024d, 2) + " MB"
                         })));
                         return true;
                     }
@@ -682,7 +1274,7 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 1, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
                             return true;
                         }
 
@@ -719,8 +1311,18 @@ namespace Snowlight.Game.Misc
                                         "\n:t - Shows the coords to you.",
                                         "\n:update_achievements - Update achievements list.",
                                         "\n:update_catalog - Update catalog.",
+                                        "\n:update_filter - Update wordfilter.",
                                         "\n:update_items - Update items definitions.",
-                                        "\n:update_serversettings - Update specific server definitions."
+                                        "\n:update_serversettings - Update specific server definitions.",
+                                        "\n:gubadge <username> <code> - Gives to a single user an badge.",
+                                        "\n:grbadge <code> - Gives to all users in a room an badge.",
+                                        "\n:ggbadge <code> - Gives to all connected users an badge.",
+                                        "\n:gucoins <username> <amount> - Gives to a single user a amount of coins.",
+                                        "\n:grcoins <amount> - Gives to all users in a room a amount of coins.",
+                                        "\n:ggcoins <amount> - Gives to all connected users a amount of coins.",
+                                        "\n:gupixels <username> <amount> - Gives to a single user a amount of pixels.",
+                                        "\n:grpixels <amount> - Gives to all users in a room a amount of pixels.",
+                                        "\n:ggpixels <amount> - Gives to all connected users a amount of pixels.",
                                     }));
                             }
                             if (Session.HasRight("moderation_tool"))
@@ -731,7 +1333,7 @@ namespace Snowlight.Game.Misc
                                         "\n:ara <message> - Sends an anonimate alert to all users in current room.",
                                         "\n:ral <link> <message> - Sends an alert to all users in current room with link.",
                                         "\n:ras <message> - Sends an alert to all staff users in current room.",
-                                        "\n:kick <username> - Kicks an user from current room."
+                                        "\n:kick <username> - Kicks an user from current room.",
                                     }));
                             }
                             if (Session.HasRight("mute"))
@@ -741,7 +1343,7 @@ namespace Snowlight.Game.Misc
                                         "\n:mute <username> <seconds> - Makes a user mute for time determined.",
                                         "\n:unmute <username> - Unmute the user.",
                                         "\n:roommute - Mutes the current room.",
-                                        "\n:roomunmute - Unmutes the current room."
+                                        "\n:roomunmute - Unmutes the current room.",
                                     }));
                             }
                             CommandsBuilder.Append("\n\n");
@@ -751,9 +1353,10 @@ namespace Snowlight.Game.Misc
                         {
                             CommandsBuilder.Append(string.Concat(new object[]
                                 { 
-                                    "The following commands are available to vip users:\n",
+                                    "The following commands are available to vip member users:\n",
                                     "\n:emptypets <yes> - Empty your pets inventory.",
                                     "\n:emptyinv <yes> - Empty your items inventory.",
+                                    "\n:redeemcoins <yes> - Turns all exchange items in your hand back into coins.",
                                     "\n:online - Shows who are online.",
                                     "\n:status - Shows to you the stats from the server.",
                                 }));
@@ -810,10 +1413,9 @@ namespace Snowlight.Game.Misc
                         Instance.PickAllToUserInventory(Session);
                         return true;
                     }
-                    #endregion
+                #endregion
                 #endregion
             }
-
             return false;
         }
     }

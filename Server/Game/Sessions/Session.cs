@@ -44,7 +44,7 @@ namespace Snowlight.Game.Sessions
         private UserIgnoreCache mIgnoreCache;
         private NewItemsCache mNewItemsCache;
         private AvatarEffectCache mAvatarEffectCache;
-        private AchievementCache mAchieventCache;
+        private AchievementCache mAchievementCache;
         private BadgeCache mBadgeCache;
         private ClubSubscription mSubscriptionManager;
         private QuestCache mQuestCache;
@@ -192,7 +192,7 @@ namespace Snowlight.Game.Sessions
         {
             get
             {
-                return mAchieventCache;
+                return mAchievementCache;
             }
         }
 
@@ -386,8 +386,8 @@ namespace Snowlight.Game.Sessions
 
                 mCharacterInfo = Info;
 
-                mAchieventCache = new AchievementCache(MySqlClient, CharacterId);
-                mBadgeCache = new BadgeCache(MySqlClient, CharacterId, mAchieventCache);
+                mAchievementCache = new AchievementCache(MySqlClient, CharacterId);
+                mBadgeCache = new BadgeCache(MySqlClient, CharacterId, mAchievementCache);
 
                 if (!HasRight("login"))
                 {

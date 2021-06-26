@@ -10,6 +10,8 @@ using Snowlight.Game.Rights;
 using Snowlight.Game.Handlers;
 using Snowlight.Game.Achievements;
 using Snowlight.Specialized;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Moderation;
 
 namespace Snowlight.Game.Characters
 {
@@ -44,6 +46,7 @@ namespace Snowlight.Game.Characters
         private Dictionary<int, WardrobeItem> mWardrobe;
         private List<string> mTags;
 
+        private static Dictionary<string, int> mInFractions;
         private int mModerationTickets;
         private int mModerationTicketsAbusive;
         private double mModerationTicketsCooldown;
@@ -273,6 +276,14 @@ namespace Snowlight.Game.Characters
             }
         }
 
+        public Dictionary<string, int> InFraction
+        {
+            get
+            {
+                return mInFractions;
+            }
+        }
+
         public int ModerationTickets
         {
             get
@@ -468,6 +479,7 @@ namespace Snowlight.Game.Characters
             mRespectCreditHuman = RespectCreditHuman;
             mRespectCreditPets = RespectCreditPets;
 
+            mInFractions = new Dictionary<string, int>();
             mModerationTickets = ModerationTickets;
             mModerationTicketsAbusive = ModerationTicketsAbusive;
             mModerationTicketsCooldown = ModerationTicketCooldown;
@@ -643,7 +655,7 @@ namespace Snowlight.Game.Characters
                 MySqlClient.ExecuteNonQuery("UPDATE characters SET moderation_muted_until_timestamp = @mutetime WHERE id = @id LIMIT 1");
             }
         }
-
+        
         public void Unmute(SqlDatabaseClient MySqlClient)
         {
             mModerationMutedUntil = 0;

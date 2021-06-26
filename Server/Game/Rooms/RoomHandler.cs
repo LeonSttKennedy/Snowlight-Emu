@@ -550,7 +550,7 @@ namespace Snowlight.Game.Rooms
             }
 
             bool Shout = (Message.Id == OpcodesIn.ROOM_CHAT_SHOUT);
-            string MessageText = UserInputFilter.FilterString(Message.PopString());
+            string MessageText = ChatWordFilter.CheckWords(UserInputFilter.FilterString(Message.PopString()), Session);
 
             if (MessageText.Length == 0)
             {
@@ -597,7 +597,7 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            string MessageText = UserInputFilter.FilterString(Message.PopString().Trim());
+            string MessageText = ChatWordFilter.CheckWords(UserInputFilter.FilterString(Message.PopString().Trim()), Session);
 
             if (MessageText.Length == 0)
             {

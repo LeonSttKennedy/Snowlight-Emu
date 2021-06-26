@@ -164,7 +164,7 @@ namespace Snowlight.Game.Pathfinding
                 }
             }
 
-            return Points;         
+            return Points;
         }
     }
 }

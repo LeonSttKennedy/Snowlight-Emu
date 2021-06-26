@@ -548,9 +548,10 @@ namespace Snowlight.Game.Catalog
         {
             DataTable Results = null;
 
-            using (SqlDatabaseClient dbClient = SqlDatabaseManager.GetClient())
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                Results = dbClient.ExecuteQueryTable("SELECT asking_price FROM catalog_marketplace_offers WHERE user_id = '" + Session.CharacterId + "' AND state = '2'");
+                MySqlClient.SetParameter("id", Session.CharacterId);
+                Results = MySqlClient.ExecuteQueryTable("SELECT asking_price FROM catalog_marketplace_offers WHERE user_id = @id AND state = '2'");
                 if (Results != null)
                 {
                     int Profit = 0;
@@ -560,11 +561,13 @@ namespace Snowlight.Game.Catalog
                         Profit += (int)Row["asking_price"];
                         if (Profit >= 1)
                         {
-                            Session.CharacterInfo.UpdateCreditsBalance(dbClient, Profit);
+                            Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, Profit);
                             Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
                         }
                     }
-                    dbClient.ExecuteQueryTable("DELETE FROM catalog_marketplace_offers WHERE user_id = '" + Session.CharacterId + "' AND state = '2'");
+
+                    MySqlClient.SetParameter("id", Session.CharacterId);
+                    MySqlClient.ExecuteQueryTable("DELETE FROM catalog_marketplace_offers WHERE user_id = @id AND state = '2'");
                 }
             }
         }

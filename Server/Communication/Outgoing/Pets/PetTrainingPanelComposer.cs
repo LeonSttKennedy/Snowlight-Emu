@@ -1,10 +1,12 @@
 ﻿using System;
 
+using Snowlight.Game.Pets;
+
 namespace Snowlight.Communication.Outgoing
 {
     public static class PetTrainingPanelComposer
     {
-        public static ServerMessage Compose(uint PetId, int PetLevel, int i = 0)
+        public static ServerMessage Compose(uint PetId, Pet PetData, int i = 0)
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.PET_TRAINING_PANEL);
             Message.AppendUInt32(PetId);
@@ -27,7 +29,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(14); //drink
             Message.AppendInt32(15); //follow left
             Message.AppendInt32(16); //follow right
-            while (PetLevel > i)
+            while (PetData.Level > i)
             {
                 i++;
             }

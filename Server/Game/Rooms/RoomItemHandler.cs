@@ -589,7 +589,7 @@ namespace Snowlight.Game.Rooms
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
             if (PetData == null) return;
             
-            Session.SendData(PetTrainingPanelComposer.Compose(Actor.ReferenceId, PetData.Level));
+            Session.SendData(PetTrainingPanelComposer.Compose(Actor.ReferenceId, PetData));
         }
 
         private static void RespectPet(Session Session, ClientMessage Message)
@@ -632,6 +632,7 @@ namespace Snowlight.Game.Rooms
                     AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_PetRespectGiver", 1);
                 }
             }
+
             Instance.BroadcastMessage(RoomPetUpdateComposer.Compose(Actor.ReferenceId, PetData));
         }
     }

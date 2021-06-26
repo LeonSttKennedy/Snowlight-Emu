@@ -58,9 +58,9 @@ namespace Snowlight.Game.Bots.Behavior
                 mSelfActor.HeadRotation = mSelfBot.Rotation;
             }
 
-            mSelfActor.Chat("Hi and welcome to Uber! I am a bot Guide and I'm here to help you.", false, true);
+            mSelfActor.Chat("Hi and welcome to uberHotel! I am a bot Guide and I'm here to help you.", false, true);
             mSelfActor.Chat("This is your own room, you can always come back to room by clicking the nest icon on room information.", false, true);
-            mSelfActor.Chat("If you want to explore the Habbo by yourself, click on the orange hotel icon on the left (we call it navigator).", false, true);
+            mSelfActor.Chat("If you want to explore the Habbo by yourself, click on the 'Rooms' icon on the left (we call it navigator).", false, true);
             mSelfActor.Chat("You will find cool rooms and fun events with other people in them, feel free to visit them.", false, true);
             mSelfActor.Chat("I can give you tips and hints on what to do here, just ask me a question :)", false, true);
         }

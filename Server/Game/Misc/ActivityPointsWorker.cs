@@ -61,7 +61,6 @@ namespace Snowlight.Game.Misc
                                     continue;
                                 }
 
-
                                 if (ToIncrease(Session)[0] > 0)
                                 {
                                     Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, ToIncrease(Session)[0]);

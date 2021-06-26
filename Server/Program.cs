@@ -158,6 +158,7 @@ namespace Snowlight
                     BotManager.Initialize(MySqlClient);
                     InterstitialManager.Initialize(MySqlClient);
                     ChatEmotions.Initialize();
+                    ChatWordFilter.Initialize(MySqlClient);
                     EffectsCacheWorker.Initialize();
                     CatalogClubGifts.Initialize(MySqlClient);
                     RecyclerManager.Initialize(MySqlClient);

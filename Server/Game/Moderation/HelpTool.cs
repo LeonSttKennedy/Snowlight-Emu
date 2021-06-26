@@ -172,13 +172,15 @@ namespace Snowlight.Game.Moderation
             }
 
             RoomModel Model = Instance.Model;
-            Instance.AddBotToRoom(BotManager.CreateNewInstance(Guide, Instance.InstanceId, new Specialized.Vector3(Model.DoorPosition.X, Model.DoorPosition.Y, Model.DoorPosition.Z)));
+            Instance.AddBotToRoom(BotManager.CreateNewInstance(Guide, Instance.InstanceId, 
+                new Specialized.Vector3(Model.DoorPosition.X, Model.DoorPosition.Y, Model.DoorPosition.Z)));
             
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 Session.BadgeCache.ReloadCache(MySqlClient, Session.AchievementCache);
                 AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_Student", 1);
             }
+
             Session.CharacterInfo.CalledGuideBot = true;
         }
         private static void GetHelpHomepage(Session Client, ClientMessage Message)

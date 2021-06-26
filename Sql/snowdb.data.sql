@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 20, 2021 at 04:18 PM
+-- Generation Time: Jun 26, 2021 at 06:33 PM
 -- Server version: 5.5.10
 -- PHP Version: 5.3.6
 
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `badges` (
   `slot_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `badges`
@@ -4041,7 +4041,7 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
   `limited_number` int(11) NOT NULL DEFAULT '0',
   `limited_stack` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`offer_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `catalog_marketplace_offers`
@@ -4253,7 +4253,7 @@ CREATE TABLE IF NOT EXISTS `help_topics` (
   `body` text NOT NULL,
   `priority` enum('1','2','0') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `help_topics`
@@ -4264,8 +4264,13 @@ INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
 (2, 5, 'snowlight.uservoice.com', 'If you have found any bugs, missing features, or have other ideas or feedback, please submit them on our uservoice forum:\r\n\r\nhttp://snowlight.uservoice.com\r\n\r\nThank you!', '2'),
 (3, 4, 'Reporting a user', 'If another user is misbehaving, breaking rules, or behaving inappropiately, it is possible to report the user to the moderators. There are two possible ways to do so:\r\n\r\n1. Select the user, and press ''Report''. The report window will appear.\r\n2. Click the yellow question mark (while in a room), and click ''Report user to the moderators''. Select the offending user. The report window will appear.', '1'),
 (4, 1, 'The Habbo Way (Rules)', 'What is the Habbo Way?\r\nThe Habbo Way is like a code of conduct, a guide to how Habbos should act in the Hotel. Habbos who break the Habbo Way are not welcome in the Hotel and may be banned. The Habbo Way is a simple set of rules for all players to follow in the Habbo.\r\n\r\nThe Habbo Way\r\n1. Do not bully, harass or abuse other players; avoid violent or aggressive behaviour.\r\n2. Do not steal or scam passwords, credits or furniture from other players. \r\n3. Keep your password and personal details secret and never try to gain this information from other players.\r\n4. You may not give away, sell or trade your Habbo account or seek to sell virtual items from Habbo for cash.\r\n5. Do not take part in sexual activities, make sexual proposals or respond to them.\r\n6. Do not use any scripts or third party software to enter, disrupt or modify Habbo.\r\n7. Treat other players as you would wish to be treated! And remember that a crime in a virtual world is as serious as in the real world.\r\n\r\nYou may also wish to review our Terms of Use.\r\n\r\nWhy is there a Habbo Way?\r\nHabbo Hotel is a place where people come to relax, hang out and make new friends in a safe, non-threatening environment. The Habbo Way helps to maintain this safe, non-threatening environment.\r\n\r\nWhat should I do if I see someone break the Habbo Way?\r\nIf you see someone break the Habbo Way and you are uncomfortable with it, you should use the Ignore feature. This prevents their chat from showing up on your screen. Use Ignore for name-calling, mild swearing, or anything else that just doesn''t suit your taste. If the chat is truly offensive, hateful or racist, or if you feel threatened by it, send a ''call for help'' and report them to an on duty Moderator, then leave the room or place the Habbo on Ignore.\r\n\r\nWhat will happen if I break the Habbo Way?\r\nIf you break the Habbo Way you may be alerted, kicked from the room or banned from Habbo Hotel.\r\n\r\nWhy do my words come up as ''*****''?\r\nAll areas of Habbo Hotel have a word filter which takes out offensive words. This covers swearing and racist or sexist language, plus email addresses and phone numbers.  Offensive words are replaced with ''*****''. The filters also work on Habbo names, missions, Stickies and all types of messages sent through the Console.\r\n\r\nWhat happens if I avoid the word filter?\r\nIf you avoid the word filter you may be banned from Habbo Hotel.', '2'),
-(5, 2, 'How do I aquire credits?', 'You can acquire credits by buying exchange furniture from the catalog using pixels. You get pixels automatically for playing.\r\n\r\nCredits are considered the "premium" currency.', '1'),
-(6, 2, 'How do I aquire pixels?', 'You will receive pixels automatically every 15 minutes while being logged in to the hotel.', '1');
+(5, 2, 'How do I aquire credits?', 'You can acquire credits by buying exchange furniture from the catalog using pixels or credits. \r\nYou get pixels automatically for playing.\r\n\r\nAnother way is considering to subscribe in VIP club to get 25 credits every 15 minutes while being logged in to the hotel.\r\n\r\nCredits are considered the "premium" currency.', '1'),
+(6, 2, 'How do I aquire pixels?', 'You will receive 25 pixels automatically every 15 minutes. If you''re a VIP club member you receive a bonuses of 50 pixels while logged in hotel.\r\n\r\nYou can earn pixels by unlocking achievements, see what achievements you have to unlock in the ''Achievement'' tab in your toolbar on the left of your screen.', '1'),
+(7, 6, 'Are all achievements available on uberHotel?', 'We have not yet added all achievements. The ones that are available can be seen under the ''Achievement'' tab in your toolbar on left of your screen.', '0'),
+(8, 6, 'Where is the Infobus?', 'Infobus is currently closed.', '0'),
+(9, 1, 'Staff on uberHotel', 'uberHotel is being maintained and moderated by a relatively small staff team. They are here to make sure everything works correctly and to help our players and keep them safe.\r\n\r\nIn general we do not have any staff openings; if we are looking for staff it will be announced on the homepage, or we will approach players we deem capable.', '2'),
+(10, 3, 'I have a suggestion for new furniture!', 'We do NOT accept any requests for custom furniture or anything along those lines, we only use furniture that is available on the official hotels. If you have suggestions for new furniture, try contacting Habbo. They might like your idea!', '0'),
+(11, 3, 'Why is this piece of furniture missing?', 'We may have not added all furniture yet or we may have purposely decided not to put it up for sale. Please do not contact us about this - we are constantly adding new furniture.', '0');
 
 -- --------------------------------------------------------
 
@@ -7314,7 +7319,7 @@ CREATE TABLE IF NOT EXISTS `moderation_action_log` (
   `action_detail` text NOT NULL,
   `timestamp` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `moderation_action_log`
@@ -7334,7 +7339,7 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `moderation_chatlogs`
@@ -8049,7 +8054,7 @@ CREATE TABLE IF NOT EXISTS `room_rights` (
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `room_rights`
@@ -8163,15 +8168,18 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
   `max_furni_per_room` int(6) NOT NULL DEFAULT '500',
   `max_furni_stacking` int(2) NOT NULL DEFAULT '12',
   `max_pets_per_room` int(2) NOT NULL DEFAULT '10',
-  `max_rooms_per_user` int(2) NOT NULL DEFAULT '15'
+  `max_rooms_per_user` int(2) NOT NULL DEFAULT '15',
+  `wordfilter_maximum_count` int(2) NOT NULL DEFAULT '5',
+  `wordfilter_replacement_word` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT 'bobba',
+  `wordfilter_time_muted` int(11) NOT NULL DEFAULT '300' COMMENT '300 = 5 min'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `server_settings`
 --
 
-INSERT INTO `server_settings` (`activitypoints_enabled`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_tax`, `marketplace_max_price`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`) VALUES
-('1', '1', 900, 0, 25, 25, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', 1, 10000, 30, 500, 12, 10, 15);
+INSERT INTO `server_settings` (`activitypoints_enabled`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_tax`, `marketplace_max_price`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `wordfilter_maximum_count`, `wordfilter_replacement_word`, `wordfilter_time_muted`) VALUES
+('1', '1', 900, 0, 25, 25, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', 1, 10000, 30, 500, 12, 10, 15, 5, 'bobba', 300);
 
 -- --------------------------------------------------------
 
@@ -8193,7 +8201,7 @@ CREATE TABLE IF NOT EXISTS `server_statistics` (
 --
 
 INSERT INTO `server_statistics` (`server_status`, `server_ver`, `active_connections`, `all_time_player_peak`, `daily_player_peak`, `rooms_loaded`) VALUES
-('0', 'Snowlight Emulator v1.0-dev (Build 29336)', 0, 0, 0, 0);
+('0', 'Snowlight Emulator v1.0-dev (Build 33728)', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -9397,3 +9405,22 @@ CREATE TABLE IF NOT EXISTS `wardrobe` (
 -- Dumping data for table `wardrobe`
 --
 
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wordfilter`
+--
+
+CREATE TABLE IF NOT EXISTS `wordfilter` (
+  `word` varchar(100) NOT NULL,
+  PRIMARY KEY (`word`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `wordfilter`
+--
+
+INSERT INTO `wordfilter` (`word`) VALUES
+('damn'),
+('fuck');

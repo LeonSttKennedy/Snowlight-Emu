@@ -38,6 +38,9 @@ namespace Snowlight.Util
         private static bool mMotdEnabled;
         private static MotdType mMotdType;
         private static List<string> mMotdText;
+        private static int mWordFilterMaximumCount;
+        private static string mWordFilterReplacementWord;
+        private static int mWordFilterTimeToMute;
 
         public static bool ActivityPointsEnabled
         {
@@ -302,7 +305,45 @@ namespace Snowlight.Util
                 mMotdText = value;
             }
         }
+        public static int WordFilterMaximumCount
+        {
+            get
+            {
+                return mWordFilterMaximumCount;
+            }
 
+            set
+            {
+                mWordFilterMaximumCount = value;
+            }
+
+        }
+        public static string WordFilterReplacementWord
+        {
+            get 
+            {
+                return mWordFilterReplacementWord;
+            }
+
+            set 
+            {
+                mWordFilterReplacementWord = value;
+            }
+
+        }
+        public static int WordFilterTimeToMute
+        {
+            get
+            {
+                return mWordFilterTimeToMute;
+            }
+
+            set
+            {
+                mWordFilterTimeToMute = value;
+            }
+
+        }
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
             DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM server_settings LIMIT 1");
@@ -344,6 +385,9 @@ namespace Snowlight.Util
             MotdEnabled = (Row["motd_enabled"].ToString() == "1");
             MotdType = Motd_Type;
             MotdText = Motd;
+            WordFilterMaximumCount = (int)Row["wordfilter_maximum_count"];
+            WordFilterReplacementWord = (string)Row["wordfilter_replacement_word"];
+            WordFilterTimeToMute = (int)Row["wordfilter_time_muted"];
         }
     }
 }

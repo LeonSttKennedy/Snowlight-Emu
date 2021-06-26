@@ -328,6 +328,7 @@
     <Compile Include="Game\Misc\Caches\UserIgnoreCache.cs" />
     <Compile Include="Game\Misc\Chat\ChatCommands.cs" />
     <Compile Include="Game\Misc\Chat\ChatEmotions.cs" />
+    <Compile Include="Game\Misc\Chat\ChatWordFilter.cs" />
     <Compile Include="Game\Misc\CrossdomainPolicy.cs" />
     <Compile Include="Game\Misc\Distance.cs" />
     <Compile Include="Game\Misc\DrinkSet.cs" />
