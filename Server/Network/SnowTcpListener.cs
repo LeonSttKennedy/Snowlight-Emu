@@ -42,7 +42,10 @@ namespace Snowlight.Network
         {
             try
             {
-                mSocket.BeginAccept(OnAccept, null);
+                if (mSocket != null)
+                {
+                    mSocket.BeginAccept(OnAccept, null);
+                }
             }
             catch (Exception) { }
         }
@@ -51,8 +54,11 @@ namespace Snowlight.Network
         {
             try
             {
-                Socket ResultSocket = (Socket)mSocket.EndAccept(Result);
-                mCallback.Invoke(ResultSocket);
+                if (mSocket != null)
+                {
+                    Socket ResultSocket = (Socket)mSocket.EndAccept(Result);
+                    mCallback.Invoke(ResultSocket);
+                }
             }
             catch (Exception) { }
 

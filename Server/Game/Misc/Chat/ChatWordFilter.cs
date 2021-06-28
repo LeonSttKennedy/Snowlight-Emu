@@ -109,7 +109,6 @@ namespace Snowlight.Game.Misc
                     WordList.Clear();
                     Index = 0;
                 }
-
             }
         }
     }

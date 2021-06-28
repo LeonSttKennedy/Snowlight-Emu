@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Net;
+using System.Threading;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Security.Permissions;
-using System.Net;
+using System.Runtime.InteropServices;
 
 using Snowlight.Communication.Incoming;
 using Snowlight.Config;
@@ -36,6 +38,7 @@ namespace Snowlight
 {
     public static class Program
     {
+
         private static bool mAlive;
         private static SnowTcpListener mServer;
 
@@ -64,15 +67,31 @@ namespace Snowlight
             {
                 return mCurrentDay;
             }
+
             set
             {
                 mCurrentDay = value;
             }
         }
 
+        private delegate bool ConsoleCtrlHandlerDelegate(int sig);
+
+        [DllImport("Kernel32")]
         [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
+
+        private static extern bool SetConsoleCtrlHandler(ConsoleCtrlHandlerDelegate handler, bool add);
+
+        static ConsoleCtrlHandlerDelegate _consoleCtrlHandler;
+
         public static void Main(string[] args)
         {
+            _consoleCtrlHandler += s =>
+            {
+                Stop();
+                return false;
+            };
+            SetConsoleCtrlHandler(_consoleCtrlHandler, true);
+
             mAlive = true;
             ServerStarted = DateTime.Now;
 
@@ -190,12 +209,18 @@ namespace Snowlight
 
         private static void PerformDatabaseCleanup(SqlDatabaseClient MySqlClient, int ServerStatus)
         {
-            Output.WriteLine("Resetting database counters and statistics...");
+            Output.WriteLine((ServerStatus == 1 ? "Resetting database counters and statistics..." : "Performed database cleanup..."));
+
             MySqlClient.ExecuteNonQuery("UPDATE rooms SET current_users = 0");
+
             MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
             MySqlClient.ExecuteNonQuery("UPDATE room_visits SET timestamp_left = @timestamp WHERE timestamp_left = 0");
+            
             MySqlClient.ExecuteNonQuery("UPDATE characters SET auth_ticket = ''");
-            MySqlClient.ExecuteNonQuery("UPDATE server_statistics SET server_status = '" + ServerStatus + "', active_connections = '0', server_ver = '" + PrettyVersion + "' LIMIT 1");
+            
+            MySqlClient.SetParameter("status", ServerStatus.ToString());
+            MySqlClient.SetParameter("version", PrettyVersion);
+            MySqlClient.ExecuteNonQuery("UPDATE server_statistics SET server_status = @status, active_connections = '0', rooms_loaded = '0', server_ver = @version LIMIT 1");
         }
         public static void HandleFatalError(string Message)
         {
@@ -210,6 +235,7 @@ namespace Snowlight
         public static void Stop()
         {
             Output.WriteLine("Stopping Snowlight...");
+
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 PerformDatabaseCleanup(MySqlClient, 0);
@@ -224,6 +250,7 @@ namespace Snowlight
 
             Output.WriteLine("Bye!");
 
+            Thread.Sleep(1250);
             Environment.Exit(0);
         }
     }
