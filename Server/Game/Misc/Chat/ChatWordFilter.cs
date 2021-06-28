@@ -9,6 +9,7 @@ using Snowlight.Storage;
 using Snowlight.Game.Sessions;
 using Snowlight.Game.Moderation;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Rooms;
 
 namespace Snowlight.Game.Misc
 {
@@ -42,6 +43,21 @@ namespace Snowlight.Game.Misc
                     }
                 }
             }
+        }
+        public static bool IsPetCommand(string Message, RoomInstance Instance)
+        {
+            bool ToReturn = false;
+            if (Instance == null || !Message.Contains(' '))
+            {
+                ToReturn = false;
+            }
+
+            if (Instance.GetPetByName(Message.Split(' ')[0]) != null)
+            { 
+                ToReturn = true; 
+            }
+
+            return ToReturn;
         }
         public static string CheckWords(string Message, Session Session)
         {

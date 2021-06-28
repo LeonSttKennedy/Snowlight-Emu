@@ -562,8 +562,10 @@ namespace Snowlight.Game.Rooms
                 MessageText = MessageText.Substring(0, 100);
             }
 
-            if (MessageText.StartsWith(":") && (ChatCommands.HandleCommand(Session, MessageText.Substring(1)) ||
-                Session.HasRight("moderation_tool")))
+            /*if (MessageText.StartsWith(":") && (ChatCommands.HandleCommand(Session, MessageText.Substring(1)) ||
+                Session.HasRight("moderation_tool")))*/
+
+            if (MessageText.StartsWith(":") && ChatCommands.HandleCommand(Session, MessageText.Substring(1)))
             {
                 return;
             }         

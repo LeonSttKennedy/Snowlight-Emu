@@ -746,7 +746,10 @@ namespace Snowlight.Game.Rooms
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
                     ModerationLogs.LogChatMessage(MySqlClient, mReferenceId, mInstance.RoomId, "(" + (Shout ? "Shout" : "Say") + ") " + MessageText);
-                    IncrecementAntiSpam(MySqlClient);
+                    if (!ChatWordFilter.IsPetCommand(MessageText, mInstance))
+                    {
+                        IncrecementAntiSpam(MySqlClient);
+                    }
                 }
             }
         }

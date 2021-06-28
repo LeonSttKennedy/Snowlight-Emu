@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using Snowlight.Game.Rooms.Trading;
 using Snowlight.Config;
 using Snowlight.Util;
+using Snowlight.Game.Pets;
 
 namespace Snowlight.Game.Rooms
 {
@@ -501,6 +502,33 @@ namespace Snowlight.Game.Rooms
                 foreach (RoomActor Actor in mActors.Values)
                 {
                     if (Actor.Type == ReferenceType && Actor.ReferenceId == ReferenceId)
+                    {
+                        return Actor;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public RoomActor GetPetByName(string Name)
+        {
+            lock (mActors)
+            {
+                foreach (RoomActor Actor in mActors.Values)
+                {
+                    if (!Actor.IsBot)
+                    {
+                        continue;
+                    }
+                    
+                    Bot Bot = (Bot)Actor.ReferenceObject;
+                    if(Bot.PetData == null)
+                    {
+                        continue;
+                    }
+
+                    if (Bot.PetData.Name == Name)
                     {
                         return Actor;
                     }
