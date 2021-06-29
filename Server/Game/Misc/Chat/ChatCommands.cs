@@ -486,78 +486,92 @@ namespace Snowlight.Game.Misc
                         return true;
                     }
                 #endregion
-                #region :update_achievements
-                case "update_achievements":
+                #region :update <variable>
+                case "update":
                     {
                         if (!Session.HasRight("hotel_admin"))
                         {
                             return false;
                         }
+
+                        if (Bits.Length == 1)
+                        {
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :update <a thing to update>", 0, ChatType.Whisper));
+                            return true;
+                        }
+
+                        string ToSend = string.Empty;
+                        string ToUpdate = Bits[1];
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
-                            AchievementManager.ReloadAchievements(MySqlClient);
-                            Session.SendData(NotificationMessageComposer.Compose("Achievements list Reloaded."));
+                            switch (ToUpdate.ToLower())
+                            {
+                                #region Development update commands
+                                case "catalog_order":
+                                    {
+                                        // parent_id = 2 ( Pixels furniture catalog tab )
+                                        DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog ORDER BY title ASC");
+                                        int i = 1;
+                                        foreach (DataRow Row in Table.Rows)
+                                        {
+                                            if ((int)Row["parent_id"] == 2)
+                                            {
+                                                MySqlClient.SetParameter("order", i);
+                                                MySqlClient.SetParameter("id", (int)Row["id"]);
+                                                MySqlClient.ExecuteNonQuery("UPDATE catalog SET order_num = @order WHERE id = @id");
+                                                i += 1;
+                                            }
+                                        }
+                                        Session.SendData(NotificationMessageComposer.Compose("Catalog order updated!"));
+                                        return true;
+                                    }
+                                #endregion
+
+                                case "achievements":
+                                    {
+                                        ToSend = "Achievement list";
+                                        AchievementManager.ReloadAchievements(MySqlClient);
+                                        goto End;
+                                    }
+
+                                case "catalog":
+                                    {
+                                        ToSend = "Catalog";
+                                        Snowlight.Game.Catalog.CatalogManager.RefreshCatalogData(MySqlClient);
+                                        goto End;
+                                    }
+
+                                case "filter":
+                                    {
+                                        ToSend = "Wordfilter";
+                                        ChatWordFilter.Initialize(MySqlClient);
+                                        goto End;
+                                    }
+
+                                case "items":
+                                    {
+                                        ToSend = "Items";
+                                        Snowlight.Game.Items.ItemDefinitionManager.Initialize(MySqlClient);
+                                        goto End;
+                                    }
+
+                                case "serversettings":
+                                    {
+                                        ToSend = "Server settings";
+                                        ServerSettings.Initialize(MySqlClient);
+                                        goto End;
+                                    }
+
+                                default:
+                                    {
+                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "'" + ToUpdate + "' isn't a valid thing to reload.", 0, ChatType.Whisper));
+                                        return true;
+                                    }
+                            }
                         }
-                        return true;
-                    }
-                #endregion
-                #region :update_catalog
-                case "update_catalog":
-                    {
-                        if (!Session.HasRight("hotel_admin"))
-                        {
-                            return false;
-                        }
-                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                        {
-                            Snowlight.Game.Catalog.CatalogManager.RefreshCatalogData(MySqlClient);
-                        }
-                        Session.SendData(NotificationMessageComposer.Compose("Catalog reloaded."));
-                        return true;
-                    }
-                #endregion
-                #region :update_filter
-                case "update_filter":
-                    {
-                        if (!Session.HasRight("hotel_admin"))
-                        {
-                            return false;
-                        }
-                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                        {
-                            ChatWordFilter.Initialize(MySqlClient);
-                        }
-                        Session.SendData(NotificationMessageComposer.Compose("Wordfilter reloaded."));
-                        return true;
-                    }
-                #endregion
-                #region :update_items
-                case "update_items":
-                    {
-                        if (!Session.HasRight("hotel_admin"))
-                        {
-                            return false;
-                        }
-                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                        {
-                            Snowlight.Game.Items.ItemDefinitionManager.Initialize(MySqlClient);
-                        }
-                        Session.SendData(NotificationMessageComposer.Compose("Items reloaded"));
-                        return true;
-                    }
-                #endregion   
-                #region :update_serversettings
-                case "update_serversettings":
-                    {
-                        if (!Session.HasRight("hotel_admin"))
-                        {
-                            return false;
-                        }
-                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                        {
-                            ServerSettings.Initialize(MySqlClient);
-                            Session.SendData(NotificationMessageComposer.Compose("Updated server specific configuration."));
-                        }
+
+                        End:
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ToSend + " successfully reloaded.", 0, ChatType.Whisper));
                         return true;
                     }
                 #endregion
@@ -1270,11 +1284,7 @@ namespace Snowlight.Game.Misc
                                         "\n:superkick <message> - Kicks a user from hotel.",
                                         "\n:clipping - Walk wherever you want.",
                                         "\n:t - Shows the coords to you.",
-                                        "\n:update_achievements - Update achievements list.",
-                                        "\n:update_catalog - Update catalog.",
-                                        "\n:update_filter - Update wordfilter.",
-                                        "\n:update_items - Update items definitions.",
-                                        "\n:update_serversettings - Update specific server definitions.",
+                                        "\n:update <variable> - Reloads a specific part of the hotel.",
                                         "\n:directbadge <username> <code> - Gives to a single user an badge.",
                                         "\n:massbadge <method> <code> - Gives to all users an badge.",
                                         "\n:directgive <username> <type> <amount> - Gives to a user an amount of coin.",
