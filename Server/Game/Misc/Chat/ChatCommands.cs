@@ -86,7 +86,7 @@ namespace Snowlight.Game.Misc
 
                         string Message = MergeParams(Bits, 1).Replace("\\n", "\n");
 
-                        SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username));
+                        SessionManager.BroadcastPacket(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ha_fixed_text") + "\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username));
 
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
@@ -107,7 +107,7 @@ namespace Snowlight.Game.Misc
 
                         string Message = MergeParams(Bits, 1).Replace("\\n", "\n");
 
-                        SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message));
+                        SessionManager.BroadcastPacket(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ha_fixed_text") + "\r\n" + Message));
 
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
@@ -129,7 +129,7 @@ namespace Snowlight.Game.Misc
                         string Url = Bits[1];
                         string Message = MergeParams(Bits, 2).Replace("\\n", "\n");
 
-                        SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
+                        SessionManager.BroadcastPacket(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ha_fixed_text")  + "\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
 
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
@@ -149,7 +149,7 @@ namespace Snowlight.Game.Misc
                         }
 
                         string Message = MergeParams(Bits, 1).Replace("\\n", "\n");
-                        SessionManager.BroadcastPacket(NotificationMessageComposer.Compose("Message from Staff User: " + Session.CharacterInfo.Username + "\r\n" + Message), "moderation_tool");
+                        SessionManager.BroadcastPacket(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_has_fixed_text") + " " + Session.CharacterInfo.Username + "\r\n" + Message), "moderation_tool");
 
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
@@ -174,7 +174,7 @@ namespace Snowlight.Game.Misc
                             if (!RoomActor.IsBot)
                             {
                                 Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
-                                TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ra_fixed_text") + "\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username));
                             }
                         }
 
@@ -201,7 +201,7 @@ namespace Snowlight.Game.Misc
                             if (!RoomActor.IsBot)
                             {
                                 Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
-                                TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ra_fixed_text") + "\r\n" + Message));
                             }
                         }
 
@@ -229,7 +229,7 @@ namespace Snowlight.Game.Misc
                             if (!RoomActor.IsBot)
                             {
                                 Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
-                                TargetSession.SendData(NotificationMessageComposer.Compose("Message from Hotel Management:\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ra_fixed_text") + "\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
                             }
                         }
 
@@ -257,7 +257,7 @@ namespace Snowlight.Game.Misc
                                 Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
                                 if (TargetSession.HasRight("moderation_tool"))
                                 {
-                                    TargetSession.SendData(NotificationMessageComposer.Compose("Message from Staff User: " + Session.CharacterInfo.Username + "\r\n" + Message));
+                                    TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ras_fixed_text") + " " + Session.CharacterInfo.Username + "\r\n" + Message));
                                 }
                             }
                         }
@@ -281,7 +281,7 @@ namespace Snowlight.Game.Misc
 
                         if (Bits.Length < 2)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :kick <username>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :kick <username>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -290,12 +290,12 @@ namespace Snowlight.Game.Misc
 
                         if (TargetSession == null || TargetSession.HasRight("moderation_tool") || !TargetSession.InRoom)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Target user '" + Username + "' is offline, not in a room, or cannot be kicked.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_kick_error", Username), 0, ChatType.Whisper));
                             return true;
                         }
 
                         RoomManager.RemoveUserFromRoom(TargetSession, true);
-                        TargetSession.SendData(NotificationMessageComposer.Compose("You have been kicked from the room by a community staff member."));
+                        TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_kick_targetuser_message")));
 
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
@@ -370,7 +370,7 @@ namespace Snowlight.Game.Misc
 
                         if (Bits.Length < 2)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :unmute <username>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :unmute <username>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -380,7 +380,7 @@ namespace Snowlight.Game.Misc
 
                         if (TargetSession == null)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Target user '" + Username + "' does not exist or is not online.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_unmute_error", Username), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -417,7 +417,7 @@ namespace Snowlight.Game.Misc
 
                         if (Bits.Length < 2)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :mute <username> [length in seconds]", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :mute <username> [length in seconds]", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -436,7 +436,7 @@ namespace Snowlight.Game.Misc
 
                         if (TimeToMute > 3600)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "The maximum mute time is one hour.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_mute_maxtime"), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -444,7 +444,7 @@ namespace Snowlight.Game.Misc
 
                         if (TargetSession == null || TargetSession.HasRight("mute"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Target user '" + Username + "' does not exist, is not online, or cannot be muted.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_mute_error", Username), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -456,19 +456,19 @@ namespace Snowlight.Game.Misc
                         }
 
                         TargetSession.SendData(RoomMutedComposer.Compose(TimeToMute));
-                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "User '" + Username + "' has been muted successfully for " + TimeToMute + " seconds.", 0, ChatType.Whisper));
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_mute_success", new string[] { Username, TimeToMute.ToString() }), 0, ChatType.Whisper));
                         return true;
                     }
                 #endregion
-                #region :t
-                case "t":
+                #region :coords
+                case "coords":
                     {
                         if (!Session.HasRight("hotel_admin"))
                         {
                             return false;
                         }
 
-                        Session.SendData(NotificationMessageComposer.Compose("Position: " + Actor.Position.ToString() + ", Rotation: " + Actor.BodyRotation));
+                        Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_coords_text", new string[] { Actor.Position.ToString(), Actor.BodyRotation.ToString() })));
                         return true;
                     }
                 #endregion
@@ -496,7 +496,7 @@ namespace Snowlight.Game.Misc
 
                         if (Bits.Length == 1)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :update <a thing to update>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :update <a thing to update>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -529,49 +529,56 @@ namespace Snowlight.Game.Misc
 
                                 case "achievements":
                                     {
-                                        ToSend = "Achievement list";
+                                        ToSend = ExternalTexts.GetValue("command_update_achievements");
                                         AchievementManager.ReloadAchievements(MySqlClient);
                                         goto End;
                                     }
 
                                 case "catalog":
                                     {
-                                        ToSend = "Catalog";
+                                        ToSend = ExternalTexts.GetValue("command_update_catalog");
                                         Snowlight.Game.Catalog.CatalogManager.RefreshCatalogData(MySqlClient);
                                         goto End;
                                     }
 
                                 case "filter":
                                     {
-                                        ToSend = "Wordfilter";
+                                        ToSend = ExternalTexts.GetValue("command_update_filter");
                                         ChatWordFilter.Initialize(MySqlClient);
                                         goto End;
                                     }
 
                                 case "items":
                                     {
-                                        ToSend = "Items";
+                                        ToSend = ExternalTexts.GetValue("command_update_items");
                                         Snowlight.Game.Items.ItemDefinitionManager.Initialize(MySqlClient);
                                         goto End;
                                     }
 
                                 case "serversettings":
                                     {
-                                        ToSend = "Server settings";
+                                        ToSend = ExternalTexts.GetValue("command_update_serversettings");
                                         ServerSettings.Initialize(MySqlClient);
+                                        goto End;
+                                    }
+
+                                case "texts":
+                                    {
+                                        ToSend = ExternalTexts.GetValue("command_update_texts");
+                                        ExternalTexts.Initialize(MySqlClient);
                                         goto End;
                                     }
 
                                 default:
                                     {
-                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "'" + ToUpdate + "' isn't a valid thing to reload.", 0, ChatType.Whisper));
+                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_update_error", ToUpdate), 0, ChatType.Whisper));
                                         return true;
                                     }
                             }
                         }
 
                         End:
-                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ToSend + " successfully reloaded.", 0, ChatType.Whisper));
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_update_success", ToSend), 0, ChatType.Whisper));
                         return true;
                     }
                 #endregion
@@ -585,7 +592,7 @@ namespace Snowlight.Game.Misc
 
                         if (Bits.Length < 2)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :superkick <username>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :superkick <username>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -594,7 +601,7 @@ namespace Snowlight.Game.Misc
 
                         if (TargetSession == null || TargetSession.HasRight("moderation_tool") || !TargetSession.InRoom)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Target user '" + Username + "' is offline or cannot be kicked.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_superkick_error", Username), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -620,7 +627,7 @@ namespace Snowlight.Game.Misc
                         // Verify if username or badge code is empty
                         if (Bits.Length < 3)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :directbadge <username> <badge code>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :directbadge <username> <badge code>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -631,7 +638,7 @@ namespace Snowlight.Game.Misc
                         Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
                         if (BadgeToGive == null)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Badge id doesn't exists in database.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_dmbadge_badge_error"), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -639,7 +646,7 @@ namespace Snowlight.Game.Misc
                         Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(Username));
                         if (TargetSession == null)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character doesn't exists or maybe not online.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_targetuser_error"), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -647,7 +654,7 @@ namespace Snowlight.Game.Misc
                         RoomInstance TargetInstance = RoomManager.GetInstanceByRoomId(TargetSession.CurrentRoomId);
                         if (TargetInstance == null)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character isn't in a room.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_directbadge_instance_error"), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -655,7 +662,7 @@ namespace Snowlight.Game.Misc
                         RoomActor TargetActor = TargetInstance.GetActorByReferenceId(TargetSession.CharacterId);
                         if (TargetActor == null)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character doesn't exists or maybe not in a room.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_directbadge_actor_error"), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -673,21 +680,21 @@ namespace Snowlight.Game.Misc
                                     TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
 
                                     TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
-                                    TargetSession.SendData(RoomChatComposer.Compose(TargetActor.Id, "Do you have received a new badge, check your Inventory!", 1, ChatType.Whisper));
+                                    TargetSession.SendData(RoomChatComposer.Compose(TargetActor.Id, ExternalTexts.GetValue("command_dmbadge_targetuser_success"), 1, ChatType.Whisper));
 
-                                    Session.SendData(NotificationMessageComposer.Compose("Badge given successfully."));
+                                    Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_directbadge_success")));
                                     ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given a badge",
                                         Session.CharacterInfo.Username + " had give a badge ( " + BadgeToGive.Code + " ) to " + TargetSession.CharacterInfo.Username);
                                 }
                                 else if (TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
                                 {
-                                    Session.SendData(RoomChatComposer.Compose(Actor.Id, "User already has this badge.", 0, ChatType.Whisper));
+                                    Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_directbadge_error"), 0, ChatType.Whisper));
                                 }
                             }
                         }
                         else
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "You can't give a badge that give rights the user.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_dmbadge_rights_error"), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -702,9 +709,9 @@ namespace Snowlight.Game.Misc
                             return false;
                         }
 
-                        if (Bits.Length == 1)
+                        if (Bits.Length < 3)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :massbadge <method: room or all> <badge code>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :massbadge <method: room or all> <badge code>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -714,7 +721,7 @@ namespace Snowlight.Game.Misc
                         Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
                         if (BadgeToGive == null)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Badge code doesn't exists in database.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_dmbadge_badge_error"), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -743,7 +750,7 @@ namespace Snowlight.Game.Misc
                                                             TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
 
                                                             TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
-                                                            TargetSession.SendData(RoomChatComposer.Compose(RoomActors.Id, "Do you have received a new badge, check your Inventory!", 1, ChatType.Whisper));
+                                                            TargetSession.SendData(RoomChatComposer.Compose(RoomActors.Id, ExternalTexts.GetValue("command_dmbadge_targetuser_success"), 1, ChatType.Whisper));
                                                         }
                                                     }
                                                 }
@@ -767,7 +774,7 @@ namespace Snowlight.Game.Misc
                                                         TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
 
                                                         TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
-                                                        TargetSession.SendData(NotificationMessageComposer.Compose("Do you have received a new badge, check your Inventory!\r\n- " + Session.CharacterInfo.Username));
+                                                        TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_dmbadge_targetuser_success") + "\r\n- " + Session.CharacterInfo.Username));
                                                     }
                                                 }
                                             }
@@ -776,21 +783,21 @@ namespace Snowlight.Game.Misc
 
                                     default:
                                         {
-                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "The method current doesn't exists ( " + Method + " ), please try again.", 0, ChatType.Whisper));
+                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_massbadge_method_error"), 0, ChatType.Whisper));
                                             return true;
                                         }
                                 }
                             }
                             else
                             {
-                                Session.SendData(RoomChatComposer.Compose(Actor.Id, "You can't give a badge that give rights.", 0, ChatType.Whisper));
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_dmbadge_rights_error"), 0, ChatType.Whisper));
                                 return true;
                             }
 
                             End:
-                            string ToSend = (Method.Equals("room") ? "users in current room!" : "online users!");
+                            string ToSend = (Method.Equals("room") ? "command_massbadge_room_success" : "command_massbadge_all_success");
                             string ToMethod = (Method.Equals("room") ? "to room: " + Instance.Info.Name + " (ID: " + Instance.Info.Id + ")." : "to all online users.");
-                            Session.SendData(NotificationMessageComposer.Compose("Badge added to all " + ToSend));
+                            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue(ToSend)));
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given a badge",
                                 Session.CharacterInfo.Username + " had give a badge ( " + BadgeToGive.Code + " ) " + ToMethod);
                         }
@@ -808,7 +815,7 @@ namespace Snowlight.Game.Misc
 
                         if (Bits.Length < 4)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :directgive <username> <type: coins/credits or pixels> <quantity>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :directgive <username> <type: coins/credits or pixels> <quantity>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -819,7 +826,7 @@ namespace Snowlight.Game.Misc
                         Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(Username));
                         if (TargetSession == null)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Look's like the character doesn't exists or maybe not online.", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_targetuser_error"), 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -835,12 +842,12 @@ namespace Snowlight.Game.Misc
                                         {
                                             TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, Amount);
                                             TargetSession.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                                            TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + Amount + " credits. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                            TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
                                             goto End;
                                         }
                                         else
                                         {
-                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Exists an error with quantity, please try again.", 0, ChatType.Whisper));
+                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
                                             return true;
                                         }
                                     }
@@ -851,25 +858,25 @@ namespace Snowlight.Game.Misc
                                         {
                                             TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, Amount);
                                             TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, Amount));
-                                            TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + Amount + " Pixels. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                            TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
                                             goto End;
                                         }
                                         else
                                         {
-                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Exists an error with quantity, please try again.", 0, ChatType.Whisper));
+                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
                                             return true;
                                         }
                                     }
 
                                 default:
                                     {
-                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "The currency doesn't exists ( " + Type + " ), please try again.", 0, ChatType.Whisper));
+                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_currency_error", Type), 0, ChatType.Whisper));
                                         return true;
                                     }
                             }
 
                             End:
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Command executed successfully, " + Amount + " " + Type + " added to " + TargetSession.CharacterInfo.Username + ".", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_success", new string[] { Amount.ToString(), Type, TargetSession.CharacterInfo.Username }), 0, ChatType.Whisper));
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given " + Type,
                                 Session.CharacterInfo.Username + " had give " + Amount + " " + Type + " to " + TargetSession.CharacterInfo.Username);
 
@@ -888,7 +895,7 @@ namespace Snowlight.Game.Misc
 
                         if (Bits.Length < 4)
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Invalid syntax - :massgive <method: room or all> <type: coins/credits or pixels> <quantity>", 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :massgive <method: room or all> <type: coins/credits or pixels> <quantity>", 0, ChatType.Whisper));
                             return true;
                         }
 
@@ -920,7 +927,7 @@ namespace Snowlight.Game.Misc
                                                                 {
                                                                     TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, Amount);
                                                                     TargetSession.SendData(CreditsBalanceComposer.Compose(TargetSession.CharacterInfo.CreditsBalance));
-                                                                    TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + Amount + " credits. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                                                    TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
                                                                 }
                                                             }
                                                         }
@@ -936,7 +943,7 @@ namespace Snowlight.Game.Misc
                                                             {
                                                                 TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, Amount);
                                                                 TargetSession.SendData(CreditsBalanceComposer.Compose(TargetSession.CharacterInfo.CreditsBalance));
-                                                                TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + Amount + " credits. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
                                                             }
                                                         }
                                                         goto End;
@@ -944,7 +951,7 @@ namespace Snowlight.Game.Misc
 
                                                 default:
                                                     {
-                                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "The method current doesn't exists ( " + Type + " ), please try again.", 0, ChatType.Whisper));
+                                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_currency_error", Type), 0, ChatType.Whisper));
                                                         return true;
                                                     }
                                             }
@@ -952,7 +959,7 @@ namespace Snowlight.Game.Misc
                                         }
                                         else
                                         {
-                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Exists an error with quantity, please try again.", 0, ChatType.Whisper));
+                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
                                             return true;
                                         }
                                     }
@@ -975,7 +982,7 @@ namespace Snowlight.Game.Misc
                                                                 {
                                                                     TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, Amount);
                                                                     TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, Amount));
-                                                                    TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + Amount + " Pixels. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                                                    TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
                                                                 }
                                                             }
                                                         }
@@ -991,7 +998,7 @@ namespace Snowlight.Game.Misc
                                                             {
                                                                 TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, Amount);
                                                                 TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, Amount));
-                                                                TargetSession.SendData(NotificationMessageComposer.Compose("Do you received " + Amount + " Pixels. Enjoy!!\r\n- " + Session.CharacterInfo.Username));
+                                                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
                                                             }
                                                         }
                                                         goto End;
@@ -999,28 +1006,28 @@ namespace Snowlight.Game.Misc
 
                                                 default:
                                                     {
-                                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "The method current doesn't exists ( " + Type + " ), please try again.", 0, ChatType.Whisper));
+                                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_method_error", Type), 0, ChatType.Whisper));
                                                         return true;
                                                     }
                                             }
                                         }
                                         else
                                         {
-                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Exists an error with quantity, please try again.", 0, ChatType.Whisper));
+                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
                                             return true;
                                         }
                                     }
 
                                 default:
                                     {
-                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "The currency doesn't exists ( " + Currency + " ), please try again.", 0, ChatType.Whisper));
+                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_currency_error", Currency), 0, ChatType.Whisper));
                                         return true;
                                     }
                             }
                             End:
-                            string ToSend = (Type.Equals("room") ? "users in current room!" : "online users!");
+                            string ToSend = (Type.Equals("room") ? "command_massgive_room_success" : "command_massgive_all_success");
                             string ToMethod = (Type.Equals("room") ? "to room: " + Instance.Info.Name + " (ID: " + Instance.Info.Id + ")." : "to all online users.");
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "Command executed successfully, " + Amount + " " + Currency + " added to all " + ToSend, 0, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue(ToSend), 0, ChatType.Whisper));
                             ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given " + Type,
                                 Session.CharacterInfo.Username + " had give " + Amount + " " + Currency + " " + ToMethod);
                         }
@@ -1035,14 +1042,13 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_vip_error"), 4, ChatType.Whisper));
                             return true;
                         }
 
                         if (Bits.Length == 1)
                         {
-                            Session.SendData(NotificationMessageComposer.Compose("Are you sure you want to clear your inventory ? You will lose all the furniture!\n" +
-                            "To confirm, type \":emptyinv yes\". \n\nOnce you do this, there is no going back!\n(If you do not want to empty it, just ignore this message!)"));
+                            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_emptyinv_info")));
                         }
                         else
                         {
@@ -1050,11 +1056,11 @@ namespace Snowlight.Game.Misc
                             {
                                 Session.InventoryCache.ClearAndDeleteAll();
                                 Session.SendData(InventoryRefreshComposer.Compose());
-                                Session.SendData(NotificationMessageComposer.Compose("Your inventory has been emptied."));
+                                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_emptyinv_success")));
                             }
                             else if (Bits.Length == 2 && Bits[1].ToString() != "yes")
                             {
-                                Session.SendData(RoomChatComposer.Compose(Actor.Id, "To confirm, you must type in :emptyinv yes", 0, ChatType.Whisper));
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_emptyinv_confirm"), 0, ChatType.Whisper));
                             }
                         }
                         return true;
@@ -1065,14 +1071,13 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_vip_error"), 4, ChatType.Whisper));
                             return true;
                         }
 
                         if (Bits.Length == 1)
                         {
-                            Session.SendData(NotificationMessageComposer.Compose("Are you sure you want to clear your pet inventory ? You will lose all your cute pets!\n" +
-                            "To confirm, type \":emptypets yes\". \n\nOnce you do this, there is no going back!\n(If you do not want to empty it, just ignore this message!)"));
+                            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_emptypets_info")));
                         }
                         else
                         {
@@ -1087,11 +1092,11 @@ namespace Snowlight.Game.Misc
                                     }
                                 }
                                 Session.PetInventoryCache.ClearAndDeleteAll();
-                                Session.SendData(NotificationMessageComposer.Compose("Your pets inventory has been emptied."));
+                                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_emptypets_success")));
                             }
                             else if (Bits.Length == 2 && Bits[1].ToString() != "yes")
                             {
-                                Session.SendData(RoomChatComposer.Compose(Actor.Id, "To confirm, you must type in :emptypets yes", 0, ChatType.Whisper));
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_emptypets_confirm"), 0, ChatType.Whisper));
                             }
                         }
                         return true;
@@ -1102,20 +1107,19 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_vip_error"), 4, ChatType.Whisper));
                             return true;
                         }
 
                         if (Instance.TradeManager.UserHasActiveTrade(Session.CharacterId))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is disabled while you have an active trade!", 4, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_redeemcoins_trade_disable"), 4, ChatType.Whisper));
                             return true;
                         }
 
                         if (Bits.Length == 1)
                         {
-                            Session.SendData(NotificationMessageComposer.Compose("Are you sure you want to clear your exchange furni in your hand ?!\n" +
-                            "To confirm, type \":redeemcoins yes\". \n\nOnce you do this, there is no going back!\n(If you do not want to redeem it, just ignore this message!)"));
+                            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_redeemcoins_info")));
                         }
                         else
                         {
@@ -1142,17 +1146,17 @@ namespace Snowlight.Game.Misc
                                     {
                                         Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, CoinsAmount);
                                         Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "All credits have successfully been converted! (Total Redeem: " + CoinsAmount + " Coins)", 0, ChatType.Whisper));
+                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_redeemcoins_success", CoinsAmount.ToString()), 0, ChatType.Whisper));
                                     }
                                     else
                                     {
-                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "It appears you don't have any exchangeable items!", 4, ChatType.Whisper));
+                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_redeemcoins_error"), 4, ChatType.Whisper));
                                     }
                                 }
                             }
                             else if (Bits.Length == 2 && Bits[1].ToString() != "yes")
                             {
-                                Session.SendData(RoomChatComposer.Compose(Actor.Id, "To confirm, you must type in :redeemcoins yes", 0, ChatType.Whisper));
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_redeemcoins_confirm"), 0, ChatType.Whisper));
                             }
                         }
                         return true;
@@ -1163,14 +1167,13 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_vip_error"), 4, ChatType.Whisper));
                             return true;
                         }
 
                         if (Bits.Length == 1)
                         {
-                            Session.SendData(NotificationMessageComposer.Compose("The correct use of the command is, \":mimic <username>\"." +
-                            "\n\nYou can copy any user's clothes, as long as they are registered at our hotel."));
+                            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_mimic_info")));
                             return true;
                         }
                         else
@@ -1186,7 +1189,7 @@ namespace Snowlight.Game.Misc
                                     Data = MySqlClient.ExecuteQueryRow("SELECT * FROM characters WHERE username LIKE @username LIMIT 1");
                                     if (Data == null)
                                     {
-                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "This user (" + Bits[1] + ") isn't online or maybe doesn't exists, please select another user to mimic!", 4, ChatType.Whisper));
+                                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_mimic_error", Username), 4, ChatType.Whisper));
                                         return true;
                                     }
                                 }
@@ -1206,7 +1209,7 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_vip_error"), 4, ChatType.Whisper));
                             return true;
                         }
 
@@ -1229,17 +1232,25 @@ namespace Snowlight.Game.Misc
                         DateTime Now = DateTime.Now;
                         TimeSpan Uptime = (Now - Program.ServerStarted);
 
+                        string[] Args = { Uptime.Days.ToString(), Uptime.Hours.ToString(), Uptime.Minutes.ToString(), Uptime.Seconds.ToString(),
+                            OnlineUsers.Count.ToString(), RoomManager.RoomInstances.Count.ToString(), daily.ToString(), alltime.ToString(),
+                            GetProcessorArchitecture().ToString().ToLower(), Environment.ProcessorCount.ToString(),
+                            Math.Round(GetTotalMemoryInBytes() / 1024d / 1024d / 1024d, 2).ToString()
+                        };
+
                         Session.SendData(NotificationMessageComposer.Compose(string.Concat(new object[]
                         {
-                            "Server uptime is " + Uptime.Days + " day(s), " + Uptime.Hours + " hour(s), " + Uptime.Minutes + " minute(s) and " + Uptime.Seconds + " second(s)",
-                            "\nThere are " + OnlineUsers.Count  + " " + (OnlineUsers.Count == 1? "user online" : "users online"),
-                            "\nThere are " + RoomManager.RoomInstances.Count + " " + (RoomManager.RoomInstances.Count == 1? "room loaded" : "rooms loaded"),
-                            "\nDaily player peak: " + daily,
-                            "\nAll time player peak: " + alltime,
-                            "\n\nSystem",
-                            "\nCPU architecture: " + GetProcessorArchitecture().ToString().ToLower(),
-                            "\nCPU cores: "+ Environment.ProcessorCount,
-                            "\nMemory usage: " + Math.Round(GetTotalMemoryInBytes() / 1024d / 1024d / 1024d, 2) + " MB"
+                            "[SERVER]",
+                            "\nUptime: " + Args[0] + " day(s), " + Args[1] + " hour(s), " + Args[2] + " minute(s) and " + Args[3] + " second(s)",
+                            "\nThere are " + Args[4]  + " user(s) online",
+                            "\nThere are " + Args[5] + " room(s) loaded",
+                            "\nDaily player peak: " + Args[6],
+                            "\nAll time player peak: " + Args[7],
+                            "\n\n",
+                            "[SYSTEM]",
+                            "\nCPU architecture: " + Args[8],
+                            "\nCPU cores: "+ Args[9],
+                            "\nMemory usage: " + Args[10] + " MB"
                         })));
                         return true;
                     }
@@ -1249,14 +1260,14 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Session.HasRight("club_vip"))
                         {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, "This command is just for VIP user only!", 4, ChatType.Whisper));
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_vip_error"), 4, ChatType.Whisper));
                             return true;
                         }
 
                         List<string> OnlineUsers = SessionManager.ConnectedUserData.Values.ToList();
 
                         Session.SendData(NotificationMessageComposer.Compose(String.Concat(new object[] {
-                            "There are currently " + OnlineUsers.Count + " " + (OnlineUsers.Count == 1? "user" : "users") + " online.\n",
+                            "There are currently " + OnlineUsers.Count + " user(s) online.\n",
                             "List of users online:\n\n",
                             string.Join(", ", OnlineUsers)
                         })));
@@ -1272,7 +1283,7 @@ namespace Snowlight.Game.Misc
                         StringBuilder CommandsBuilder = new StringBuilder("");
                         if (Session.HasRight("hotel_admin") || Session.HasRight("moderation_tool") || Session.HasRight("mute"))
                         {
-                            CommandsBuilder.Append("The following commands are available to staff users:\n");
+                            CommandsBuilder.Append(ExternalTexts.GetValue("command_staff_user_list") + "\n");
                             if (Session.HasRight("hotel_admin"))
                             {
                                 CommandsBuilder.Append(string.Concat(new object[]
@@ -1283,7 +1294,7 @@ namespace Snowlight.Game.Misc
                                         "\n:has <message> - Sends a staff users alert.",
                                         "\n:superkick <message> - Kicks a user from hotel.",
                                         "\n:clipping - Walk wherever you want.",
-                                        "\n:t - Shows the coords to you.",
+                                        "\n:coords - Shows the coords to you.",
                                         "\n:update <variable> - Reloads a specific part of the hotel.",
                                         "\n:directbadge <username> <code> - Gives to a single user an badge.",
                                         "\n:massbadge <method> <code> - Gives to all users an badge.",
@@ -1319,7 +1330,7 @@ namespace Snowlight.Game.Misc
                         {
                             CommandsBuilder.Append(string.Concat(new object[]
                                 {
-                                    "The following commands are available to vip member users:\n",
+                                    ExternalTexts.GetValue("command_vip_user_list") + "\n",
                                     "\n:emptypets <yes> - Empty your pets inventory.",
                                     "\n:emptyinv <yes> - Empty your items inventory.",
                                     "\n:redeemcoins <yes> - Turns all exchange items in your hand back into coins.",
@@ -1334,7 +1345,7 @@ namespace Snowlight.Game.Misc
                         {
                             CommandsBuilder.Append(string.Concat(new object[]
                                 {
-                                    "The following commands are available to club users:\n",
+                                    ExternalTexts.GetValue("command_club_user_list") + "\n",
                                     "\n:chooser - Show all users on current room.",
                                     "\n:furni - Show all furnitures on current room.",
                                 }));
@@ -1343,7 +1354,7 @@ namespace Snowlight.Game.Misc
 
                         CommandsBuilder.Append(string.Concat(new object[]
                         {
-                            "The following commands are available to regular users:\n",
+                            ExternalTexts.GetValue("command_regular_user_list") + "\n",
                             "\n:commands - Shows which commands are available to you.",
                             "\n:about - Shows you which server is behind this retro.",
                             "\n:pickall - Picks up all furniture from your room."
@@ -1373,7 +1384,7 @@ namespace Snowlight.Game.Misc
                     {
                         if (!Instance.CheckUserRights(Session, true))
                         {
-                            Session.SendData(NotificationMessageComposer.Compose("You do not have rights to pickall in this room."));
+                            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_pickall_error")));
                             return true;
                         }
 

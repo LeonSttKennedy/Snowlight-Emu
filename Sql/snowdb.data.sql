@@ -2,10 +2,10 @@
 -- version 3.3.9.2
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Jun 26, 2021 at 06:33 PM
--- Server version: 5.5.10
--- PHP Version: 5.3.6
+-- Servidor: localhost
+-- Tempo de Geração: Jul 01, 2021 as 08:14 AM
+-- Versão do Servidor: 5.5.10
+-- Versão do PHP: 5.3.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,13 +16,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `snowdb`
+-- Banco de Dados: `snowdb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `achievements`
+-- Estrutura da tabela `achievements`
 --
 
 CREATE TABLE IF NOT EXISTS `achievements` (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `achievements` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=117 ;
 
 --
--- Dumping data for table `achievements`
+-- Extraindo dados da tabela `achievements`
 --
 
 INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pixels`, `reward_points`, `progress_needed`) VALUES
@@ -161,7 +161,7 @@ INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pix
 -- --------------------------------------------------------
 
 --
--- Table structure for table `achievements_to_unlock`
+-- Estrutura da tabela `achievements_to_unlock`
 --
 
 CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
@@ -173,14 +173,14 @@ CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `achievements_to_unlock`
+-- Extraindo dados da tabela `achievements_to_unlock`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `avatar_effects`
+-- Estrutura da tabela `avatar_effects`
 --
 
 CREATE TABLE IF NOT EXISTS `avatar_effects` (
@@ -196,14 +196,14 @@ CREATE TABLE IF NOT EXISTS `avatar_effects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `avatar_effects`
+-- Extraindo dados da tabela `avatar_effects`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `badges`
+-- Estrutura da tabela `badges`
 --
 
 CREATE TABLE IF NOT EXISTS `badges` (
@@ -215,10 +215,10 @@ CREATE TABLE IF NOT EXISTS `badges` (
   `slot_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `badges`
+-- Extraindo dados da tabela `badges`
 --
 
 INSERT INTO `badges` (`id`, `user_id`, `badge_id`, `source_type`, `source_data`, `slot_id`) VALUES
@@ -227,7 +227,7 @@ INSERT INTO `badges` (`id`, `user_id`, `badge_id`, `source_type`, `source_data`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `badge_definitions`
+-- Estrutura da tabela `badge_definitions`
 --
 
 CREATE TABLE IF NOT EXISTS `badge_definitions` (
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `badge_definitions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=127 ;
 
 --
--- Dumping data for table `badge_definitions`
+-- Extraindo dados da tabela `badge_definitions`
 --
 
 INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
@@ -372,7 +372,7 @@ INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bans`
+-- Estrutura da tabela `bans`
 --
 
 CREATE TABLE IF NOT EXISTS `bans` (
@@ -387,14 +387,14 @@ CREATE TABLE IF NOT EXISTS `bans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `bans`
+-- Extraindo dados da tabela `bans`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bots`
+-- Estrutura da tabela `bots`
 --
 
 CREATE TABLE IF NOT EXISTS `bots` (
@@ -418,7 +418,7 @@ CREATE TABLE IF NOT EXISTS `bots` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
--- Dumping data for table `bots`
+-- Extraindo dados da tabela `bots`
 --
 
 INSERT INTO `bots` (`id`, `ai_type`, `name`, `look`, `motto`, `room_id`, `pos_start`, `pos_serve`, `pos_defined_range`, `walk_mode`, `enabled`, `kickable`, `rotation`, `effect`, `response_distance`, `pet_type_handler_id`) VALUES
@@ -454,7 +454,7 @@ INSERT INTO `bots` (`id`, `ai_type`, `name`, `look`, `motto`, `room_id`, `pos_st
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bots_speech`
+-- Estrutura da tabela `bots_speech`
 --
 
 CREATE TABLE IF NOT EXISTS `bots_speech` (
@@ -465,14 +465,14 @@ CREATE TABLE IF NOT EXISTS `bots_speech` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `bots_speech`
+-- Extraindo dados da tabela `bots_speech`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bot_responses`
+-- Estrutura da tabela `bot_responses`
 --
 
 CREATE TABLE IF NOT EXISTS `bot_responses` (
@@ -485,14 +485,14 @@ CREATE TABLE IF NOT EXISTS `bot_responses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `bot_responses`
+-- Extraindo dados da tabela `bot_responses`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog`
+-- Estrutura da tabela `catalog`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog` (
@@ -514,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `catalog` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=152 ;
 
 --
--- Dumping data for table `catalog`
+-- Extraindo dados da tabela `catalog`
 --
 
 INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon`, `color`, `required_right`, `visible`, `dummy_page`, `coming_soon`, `template`, `page_strings_1`, `page_strings_2`) VALUES
@@ -654,7 +654,7 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_items`
+-- Estrutura da tabela `catalog_items`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_items` (
@@ -672,7 +672,7 @@ CREATE TABLE IF NOT EXISTS `catalog_items` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50283 ;
 
 --
--- Dumping data for table `catalog_items`
+-- Extraindo dados da tabela `catalog_items`
 --
 
 INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`, `cost_credits`, `cost_pixels`, `enabled`, `amount`, `club_restriction`) VALUES
@@ -2103,7 +2103,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1452, 88, 1452, '', 'bolly_lamp', 0, 3, '1', 1, 0),
 (1453, 88, 1453, '', 'bolly_tree', 0, 3, '1', 1, 0),
 (1454, 88, 1454, '', 'bolly_vase', 0, 3, '1', 1, 0),
-(1455, 82, 1455, '', 'planet_of_love', 25, 7500, '1', 1, 0),
+(1455, 82, 1455, '', 'planet_of_love', 1, 2000, '1', 1, 0),
 (1456, 140, 1456, '', 'ads_idol_floor1', 0, 10, '1', 1, 0),
 (1457, 142, 1457, '', 'ads_igor_flask', 0, 5, '1', 1, 0),
 (1458, 140, 1458, '', 'ads_idol_floor2', 0, 10, '1', 1, 0),
@@ -2130,7 +2130,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1479, 89, 1479, '', 'lc_crab2', 0, 3, '1', 1, 0),
 (1480, 89, 1480, '', 'lc_tile2', 0, 3, '1', 1, 0),
 (1481, 89, 1481, '', 'lc_desk', 0, 3, '1', 1, 0),
-(1482, 91, 1482, '', 'lostc_teleport', 250, 3000, '1', 1, 0),
+(1482, 91, 1482, '', 'lostc_teleport', 200, 100, '1', 1, 0),
 (1483, 89, 1483, '', 'lc_tubes_corners', 0, 3, '1', 1, 0),
 (1484, 89, 1484, '', 'lc_medusa2', 0, 3, '1', 1, 0),
 (1485, 89, 1485, '', 'lc_anemone', 0, 3, '1', 1, 0),
@@ -2240,7 +2240,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1589, 90, 1589, '', 'lt_spider', 0, 3, '1', 1, 0),
 (1590, 140, 1590, '', 'audChr', 0, 10, '0', 1, 0),
 (1591, 90, 1591, '', 'lt_lavac', 0, 3, '1', 1, 0),
-(1592, 82, 1592, '', 'saturn', 25, 7500, '1', 1, 0),
+(1592, 82, 1592, '', 'saturn', 1, 2000, '1', 1, 0),
 (1593, 94, 1593, '', 'ads_calip_pool', 10, 0, '1', 1, 0),
 (1594, 90, 1594, '', 'lt_stage1', 0, 3, '1', 1, 0),
 (1595, 140, 1595, '', 'clrack', 0, 5, '1', 1, 0),
@@ -2292,7 +2292,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1641, 78, 1641, '', 'rela_candles1', 0, 3, '1', 1, 0),
 (1642, 78, 1642, '', 'rela_candle3', 0, 3, '1', 1, 0),
 (1643, 78, 1643, '', 'rela_candles3', 0, 3, '1', 1, 0),
-(1644, 82, 1644, '', 'pix_asteroid', 25, 7500, '1', 1, 0),
+(1644, 82, 1644, '', 'pix_asteroid', 1, 2000, '1', 1, 0),
 (1645, 78, 1645, '', 'rela_candle1', 0, 3, '1', 1, 0),
 (1646, 78, 1646, '', 'rela_orchid', 0, 3, '1', 1, 0),
 (1647, 78, 1647, '', 'rela_stick', 0, 3, '1', 1, 0),
@@ -4002,7 +4002,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_marketplace_data`
+-- Estrutura da tabela `catalog_marketplace_data`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
@@ -4015,14 +4015,13 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `catalog_marketplace_data`
+-- Extraindo dados da tabela `catalog_marketplace_data`
 --
-
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_marketplace_offers`
+-- Estrutura da tabela `catalog_marketplace_offers`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
@@ -4044,14 +4043,14 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `catalog_marketplace_offers`
+-- Extraindo dados da tabela `catalog_marketplace_offers`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_subscriptions`
+-- Estrutura da tabela `catalog_subscriptions`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_subscriptions` (
@@ -4064,7 +4063,7 @@ CREATE TABLE IF NOT EXISTS `catalog_subscriptions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `catalog_subscriptions`
+-- Extraindo dados da tabela `catalog_subscriptions`
 --
 
 INSERT INTO `catalog_subscriptions` (`id`, `name`, `type`, `cost_credits`, `length_days`) VALUES
@@ -4078,7 +4077,7 @@ INSERT INTO `catalog_subscriptions` (`id`, `name`, `type`, `cost_credits`, `leng
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_subscriptions_gifts`
+-- Estrutura da tabela `catalog_subscriptions_gifts`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
@@ -4091,7 +4090,7 @@ CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `catalog_subscriptions_gifts`
+-- Extraindo dados da tabela `catalog_subscriptions_gifts`
 --
 
 INSERT INTO `catalog_subscriptions_gifts` (`item_id`, `item_name`, `sprite_id`, `days_need`, `isvip`) VALUES
@@ -4100,7 +4099,7 @@ INSERT INTO `catalog_subscriptions_gifts` (`item_id`, `item_name`, `sprite_id`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `characters`
+-- Estrutura da tabela `characters`
 --
 
 CREATE TABLE IF NOT EXISTS `characters` (
@@ -4134,17 +4133,18 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `marketplace_tickets` int(11) NOT NULL DEFAULT '0',
   `last_respect_update` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `characters`
+-- Extraindo dados da tabela `characters`
 --
 
-
+INSERT INTO `characters` (`id`, `account_uid`, `username`, `real_name`, `motto`, `figure`, `gender`, `credits_balance`, `activity_points_balance`, `activity_points_last_update`, `score`, `privacy_accept_friends`, `home_room`, `auth_ticket`, `last_ip`, `config_volume`, `timestamp_lastvisit`, `timestamp_created`, `moderation_tickets`, `moderation_tickets_abusive`, `moderation_tickets_cooldown`, `moderation_bans`, `moderation_cautions`, `moderation_muted_until_timestamp`, `respect_points`, `respect_credit_humans`, `respect_credit_pets`, `marketplace_tickets`, `last_respect_update`) VALUES
+(1, 1, 'Admin', 'Jane Doe', 'Administrator', 'hr-3194-40-31.cc-3039-100.sh-290-62.hd-3092-1.lg-270-110.fa-1206-62.ha-3129-100', 'M', 100, 2000, 1625094522.9335861, 200, '1', 0, '', '127.0.0.1', 100, 1625094471, 0, 0, 0, 0, 0, 0, 1624495953.6613128, 27, 3, 3, 4, 1625047923.1113982);
 -- --------------------------------------------------------
 
 --
--- Table structure for table `drink_sets`
+-- Estrutura da tabela `drink_sets`
 --
 
 CREATE TABLE IF NOT EXISTS `drink_sets` (
@@ -4155,7 +4155,7 @@ CREATE TABLE IF NOT EXISTS `drink_sets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=8 ;
 
 --
--- Dumping data for table `drink_sets`
+-- Extraindo dados da tabela `drink_sets`
 --
 
 INSERT INTO `drink_sets` (`id`, `drinks`, `internal_comment`) VALUES
@@ -4170,7 +4170,7 @@ INSERT INTO `drink_sets` (`id`, `drinks`, `internal_comment`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `favorites`
+-- Estrutura da tabela `favorites`
 --
 
 CREATE TABLE IF NOT EXISTS `favorites` (
@@ -4182,14 +4182,14 @@ CREATE TABLE IF NOT EXISTS `favorites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `favorites`
+-- Extraindo dados da tabela `favorites`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `flat_categories`
+-- Estrutura da tabela `flat_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `flat_categories` (
@@ -4203,7 +4203,7 @@ CREATE TABLE IF NOT EXISTS `flat_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
--- Dumping data for table `flat_categories`
+-- Extraindo dados da tabela `flat_categories`
 --
 
 INSERT INTO `flat_categories` (`id`, `title`, `order_num`, `visible`, `enabled`, `allow_trading`) VALUES
@@ -4218,7 +4218,7 @@ INSERT INTO `flat_categories` (`id`, `title`, `order_num`, `visible`, `enabled`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `help_categories`
+-- Estrutura da tabela `help_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `help_categories` (
@@ -4229,7 +4229,7 @@ CREATE TABLE IF NOT EXISTS `help_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `help_categories`
+-- Extraindo dados da tabela `help_categories`
 --
 
 INSERT INTO `help_categories` (`id`, `name`, `visible`) VALUES
@@ -4243,7 +4243,7 @@ INSERT INTO `help_categories` (`id`, `name`, `visible`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `help_topics`
+-- Estrutura da tabela `help_topics`
 --
 
 CREATE TABLE IF NOT EXISTS `help_topics` (
@@ -4256,7 +4256,7 @@ CREATE TABLE IF NOT EXISTS `help_topics` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Dumping data for table `help_topics`
+-- Extraindo dados da tabela `help_topics`
 --
 
 INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
@@ -4275,7 +4275,7 @@ INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ignores`
+-- Estrutura da tabela `ignores`
 --
 
 CREATE TABLE IF NOT EXISTS `ignores` (
@@ -4287,14 +4287,14 @@ CREATE TABLE IF NOT EXISTS `ignores` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `ignores`
+-- Extraindo dados da tabela `ignores`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `interstitials`
+-- Estrutura da tabela `interstitials`
 --
 
 CREATE TABLE IF NOT EXISTS `interstitials` (
@@ -4307,7 +4307,7 @@ CREATE TABLE IF NOT EXISTS `interstitials` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `interstitials`
+-- Extraindo dados da tabela `interstitials`
 --
 
 INSERT INTO `interstitials` (`id`, `url`, `image`, `views`, `enabled`) VALUES
@@ -4319,7 +4319,7 @@ INSERT INTO `interstitials` (`id`, `url`, `image`, `views`, `enabled`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `items`
+-- Estrutura da tabela `items`
 --
 
 CREATE TABLE IF NOT EXISTS `items` (
@@ -4342,14 +4342,14 @@ CREATE TABLE IF NOT EXISTS `items` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `items`
+-- Extraindo dados da tabela `items`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `item_definitions`
+-- Estrutura da tabela `item_definitions`
 --
 
 CREATE TABLE IF NOT EXISTS `item_definitions` (
@@ -4374,7 +4374,7 @@ CREATE TABLE IF NOT EXISTS `item_definitions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2911 ;
 
 --
--- Dumping data for table `item_definitions`
+-- Extraindo dados da tabela `item_definitions`
 --
 
 INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `behavior_data`, `stacking_behavior`, `size_x`, `size_y`, `height`, `allow_recycling`, `allow_trading`, `allow_selling`, `allow_gifting`, `allow_inventory_stacking`, `walkable`, `room_limit`) VALUES
@@ -7288,7 +7288,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `messenger_friendships`
+-- Estrutura da tabela `messenger_friendships`
 --
 
 CREATE TABLE IF NOT EXISTS `messenger_friendships` (
@@ -7301,14 +7301,14 @@ CREATE TABLE IF NOT EXISTS `messenger_friendships` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `messenger_friendships`
+-- Extraindo dados da tabela `messenger_friendships`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_action_log`
+-- Estrutura da tabela `moderation_action_log`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_action_log` (
@@ -7319,17 +7319,17 @@ CREATE TABLE IF NOT EXISTS `moderation_action_log` (
   `action_detail` text NOT NULL,
   `timestamp` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `moderation_action_log`
+-- Extraindo dados da tabela `moderation_action_log`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_chatlogs`
+-- Estrutura da tabela `moderation_chatlogs`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
@@ -7339,17 +7339,17 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `moderation_chatlogs`
+-- Extraindo dados da tabela `moderation_chatlogs`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_presets`
+-- Estrutura da tabela `moderation_presets`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_presets` (
@@ -7360,7 +7360,7 @@ CREATE TABLE IF NOT EXISTS `moderation_presets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `moderation_presets`
+-- Extraindo dados da tabela `moderation_presets`
 --
 
 INSERT INTO `moderation_presets` (`id`, `type`, `message`) VALUES
@@ -7369,7 +7369,7 @@ INSERT INTO `moderation_presets` (`id`, `type`, `message`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_preset_action_categories`
+-- Estrutura da tabela `moderation_preset_action_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_preset_action_categories` (
@@ -7379,7 +7379,7 @@ CREATE TABLE IF NOT EXISTS `moderation_preset_action_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Dumping data for table `moderation_preset_action_categories`
+-- Extraindo dados da tabela `moderation_preset_action_categories`
 --
 
 INSERT INTO `moderation_preset_action_categories` (`id`, `caption`) VALUES
@@ -7393,7 +7393,7 @@ INSERT INTO `moderation_preset_action_categories` (`id`, `caption`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_preset_action_messages`
+-- Estrutura da tabela `moderation_preset_action_messages`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_preset_action_messages` (
@@ -7405,7 +7405,7 @@ CREATE TABLE IF NOT EXISTS `moderation_preset_action_messages` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
--- Dumping data for table `moderation_preset_action_messages`
+-- Extraindo dados da tabela `moderation_preset_action_messages`
 --
 
 INSERT INTO `moderation_preset_action_messages` (`id`, `parent_id`, `caption`, `message_text`) VALUES
@@ -7427,7 +7427,7 @@ INSERT INTO `moderation_preset_action_messages` (`id`, `parent_id`, `caption`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_tickets`
+-- Estrutura da tabela `moderation_tickets`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_tickets` (
@@ -7444,14 +7444,14 @@ CREATE TABLE IF NOT EXISTS `moderation_tickets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `moderation_tickets`
+-- Extraindo dados da tabela `moderation_tickets`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `navigator_event_search_categories`
+-- Estrutura da tabela `navigator_event_search_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `navigator_event_search_categories` (
@@ -7461,7 +7461,7 @@ CREATE TABLE IF NOT EXISTS `navigator_event_search_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `navigator_event_search_categories`
+-- Extraindo dados da tabela `navigator_event_search_categories`
 --
 
 INSERT INTO `navigator_event_search_categories` (`query`, `category_id`) VALUES
@@ -7480,7 +7480,7 @@ INSERT INTO `navigator_event_search_categories` (`query`, `category_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `navigator_frontpage`
+-- Estrutura da tabela `navigator_frontpage`
 --
 
 CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
@@ -7501,7 +7501,7 @@ CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- Dumping data for table `navigator_frontpage`
+-- Extraindo dados da tabela `navigator_frontpage`
 --
 
 INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `is_category`, `category_autoexpand`, `display_type`, `name`, `descr`, `image_type`, `image_src`, `banner_label`, `order_num`, `enabled`) VALUES
@@ -7525,7 +7525,7 @@ INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `is_category`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `new_items`
+-- Estrutura da tabela `new_items`
 --
 
 CREATE TABLE IF NOT EXISTS `new_items` (
@@ -7538,14 +7538,14 @@ CREATE TABLE IF NOT EXISTS `new_items` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `new_items`
+-- Extraindo dados da tabela `new_items`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pets`
+-- Estrutura da tabela `pets`
 --
 
 CREATE TABLE IF NOT EXISTS `pets` (
@@ -7568,14 +7568,14 @@ CREATE TABLE IF NOT EXISTS `pets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `pets`
+-- Extraindo dados da tabela `pets`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pet_races`
+-- Estrutura da tabela `pet_races`
 --
 
 CREATE TABLE IF NOT EXISTS `pet_races` (
@@ -7589,7 +7589,7 @@ CREATE TABLE IF NOT EXISTS `pet_races` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=160 ;
 
 --
--- Dumping data for table `pet_races`
+-- Extraindo dados da tabela `pet_races`
 --
 
 INSERT INTO `pet_races` (`id`, `pet_type`, `data1`, `data2`, `data3`) VALUES
@@ -7745,7 +7745,7 @@ INSERT INTO `pet_races` (`id`, `pet_type`, `data1`, `data2`, `data3`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pet_tricks`
+-- Estrutura da tabela `pet_tricks`
 --
 
 CREATE TABLE IF NOT EXISTS `pet_tricks` (
@@ -7755,7 +7755,7 @@ CREATE TABLE IF NOT EXISTS `pet_tricks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `pet_tricks`
+-- Extraindo dados da tabela `pet_tricks`
 --
 
 INSERT INTO `pet_tricks` (`type`, `trick`) VALUES
@@ -7777,7 +7777,7 @@ INSERT INTO `pet_tricks` (`type`, `trick`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quests`
+-- Estrutura da tabela `quests`
 --
 
 CREATE TABLE IF NOT EXISTS `quests` (
@@ -7793,7 +7793,7 @@ CREATE TABLE IF NOT EXISTS `quests` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
 
 --
--- Dumping data for table `quests`
+-- Extraindo dados da tabela `quests`
 --
 
 INSERT INTO `quests` (`id`, `category`, `series_number`, `goal_type`, `goal_data`, `name`, `reward`, `data_bit`) VALUES
@@ -7834,7 +7834,7 @@ INSERT INTO `quests` (`id`, `category`, `series_number`, `goal_type`, `goal_data
 -- --------------------------------------------------------
 
 --
--- Table structure for table `recycler_rewards`
+-- Estrutura da tabela `recycler_rewards`
 --
 
 CREATE TABLE IF NOT EXISTS `recycler_rewards` (
@@ -7845,43 +7845,43 @@ CREATE TABLE IF NOT EXISTS `recycler_rewards` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
--- Dumping data for table `recycler_rewards`
+-- Extraindo dados da tabela `recycler_rewards`
 --
 
 INSERT INTO `recycler_rewards` (`id`, `chance_level`, `item_id`) VALUES
 (1, 5, 1553),
-(2, 4, 1566),
-(3, 3, 1518),
-(4, 3, 1513),
-(5, 3, 1515),
-(6, 2, 1511),
-(7, 2, 1499),
-(8, 2, 1507),
-(9, 2, 1505),
-(10, 2, 1517),
-(11, 2, 1495),
-(12, 2, 2375),
-(13, 2, 2373),
-(14, 2, 2376),
-(15, 2, 1497),
-(16, 2, 1500),
-(17, 2, 1510),
-(18, 2, 1493),
-(19, 2, 1509),
-(20, 2, 1519),
-(21, 1, 1502),
-(22, 1, 1503),
-(23, 1, 1508),
-(24, 1, 1516),
-(25, 1, 1494),
-(26, 1, 1496),
-(27, 4, 1504),
-(28, 5, 1520);
+(2, 5, 1520),
+(3, 4, 1566),
+(4, 4, 1504),
+(5, 3, 1518),
+(6, 3, 1513),
+(7, 3, 1515),
+(8, 2, 1511),
+(9, 2, 1499),
+(10, 2, 1507),
+(11, 2, 1505),
+(12, 2, 1517),
+(13, 2, 1495),
+(14, 2, 2375),
+(15, 2, 2373),
+(16, 2, 2376),
+(17, 2, 1497),
+(18, 2, 1500),
+(19, 2, 1510),
+(20, 2, 1493),
+(21, 2, 1509),
+(22, 2, 1519),
+(23, 1, 1502),
+(24, 1, 1503),
+(25, 1, 1508),
+(26, 1, 1516),
+(27, 1, 1494),
+(28, 1, 1496);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rights`
+-- Estrutura da tabela `rights`
 --
 
 CREATE TABLE IF NOT EXISTS `rights` (
@@ -7892,7 +7892,7 @@ CREATE TABLE IF NOT EXISTS `rights` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
--- Dumping data for table `rights`
+-- Extraindo dados da tabela `rights`
 --
 
 INSERT INTO `rights` (`id`, `set_id`, `right_id`) VALUES
@@ -7913,7 +7913,7 @@ INSERT INTO `rights` (`id`, `set_id`, `right_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rooms`
+-- Estrutura da tabela `rooms`
 --
 
 CREATE TABLE IF NOT EXISTS `rooms` (
@@ -7945,7 +7945,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
--- Dumping data for table `rooms`
+-- Extraindo dados da tabela `rooms`
 --
 
 INSERT INTO `rooms` (`id`, `type`, `owner_id`, `name`, `description`, `pub_internal_name`, `tags`, `access_type`, `password`, `category`, `current_users`, `max_users`, `swfs`, `score`, `icon`, `model`, `allow_pets`, `allow_pet_eating`, `disable_blocking`, `hide_walls`, `thickness_wall`, `thickness_floor`, `decorations`, `badge_id`) VALUES
@@ -7970,7 +7970,7 @@ INSERT INTO `rooms` (`id`, `type`, `owner_id`, `name`, `description`, `pub_inter
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room_models`
+-- Estrutura da tabela `room_models`
 --
 
 CREATE TABLE IF NOT EXISTS `room_models` (
@@ -7988,7 +7988,7 @@ CREATE TABLE IF NOT EXISTS `room_models` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `room_models`
+-- Extraindo dados da tabela `room_models`
 --
 
 INSERT INTO `room_models` (`id`, `type`, `heightmap`, `enabled`, `door_x`, `door_y`, `door_z`, `door_dir`, `subscription_requirement`, `max_users`) VALUES
@@ -8045,7 +8045,7 @@ INSERT INTO `room_models` (`id`, `type`, `heightmap`, `enabled`, `door_x`, `door
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room_rights`
+-- Estrutura da tabela `room_rights`
 --
 
 CREATE TABLE IF NOT EXISTS `room_rights` (
@@ -8057,14 +8057,14 @@ CREATE TABLE IF NOT EXISTS `room_rights` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `room_rights`
+-- Extraindo dados da tabela `room_rights`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room_triggers`
+-- Estrutura da tabela `room_triggers`
 --
 
 CREATE TABLE IF NOT EXISTS `room_triggers` (
@@ -8079,7 +8079,7 @@ CREATE TABLE IF NOT EXISTS `room_triggers` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
 
 --
--- Dumping data for table `room_triggers`
+-- Extraindo dados da tabela `room_triggers`
 --
 
 INSERT INTO `room_triggers` (`id`, `room_id`, `room_pos`, `action`, `to_room_id`, `to_room_pos`, `to_room_dir`) VALUES
@@ -8123,7 +8123,7 @@ INSERT INTO `room_triggers` (`id`, `room_id`, `room_pos`, `action`, `to_room_id`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room_visits`
+-- Estrutura da tabela `room_visits`
 --
 
 CREATE TABLE IF NOT EXISTS `room_visits` (
@@ -8136,14 +8136,102 @@ CREATE TABLE IF NOT EXISTS `room_visits` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `room_visits`
+-- Extraindo dados da tabela `room_visits`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `server_settings`
+-- Estrutura da tabela `server_ingame_texts`
+--
+
+CREATE TABLE IF NOT EXISTS `server_ingame_texts` (
+  `identifier` varchar(50) NOT NULL,
+  `display_text` text NOT NULL,
+  PRIMARY KEY (`identifier`),
+  KEY `identifier` (`identifier`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `server_ingame_texts`
+--
+
+INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
+('cannot_ignore_user', 'You can not ignore this user.'),
+('cannot_place_pet', 'This pet cannot be placed right now. Please try again later.'),
+('catalog_marketplace_boosting_error', 'To prevent average boosting you cannot purchase your own marketplace offers.'),
+('catalog_marketplace_error', 'Sorry, this offer has expired.'),
+('catalog_recycler_disabled', 'The recycler is temporarily disabled. Please check back later.'),
+('command_club_user_list', 'The following commands are available to club users:'),
+('command_coords_text', 'Position: %0%, Rotation: %1%'),
+('command_directbadge_actor_error', 'Look''s like the character doesn''t exists or maybe not in a room.'),
+('command_directbadge_error', 'User already has this badge.'),
+('command_directbadge_instance_error', 'Look''s like the character isn''t in a room.'),
+('command_directbadge_success', 'Badge given successfully.'),
+('command_dmbadge_badge_error', 'Badge code doesn''t exists in database.'),
+('command_dmbadge_rights_error', 'You can''t give a badge that give rights the user.'),
+('command_dmbadge_targetuser_success', 'Do you have received a new badge, check your Inventory!'),
+('command_emptyinv_confirm', 'To confirm, you must type in :emptyinv yes'),
+('command_emptyinv_info', 'Are you sure you want to clear your inventory ? You will lose all the furniture!\\nTo confirm, type ":emptyinv yes". \\n\\nOnce you do this, there is no going back!\\n(If you do not want to empty it, just ignore this message!)'),
+('command_emptyinv_success', 'Your inventory has been emptied.'),
+('command_emptypets_confirm', 'To confirm, you must type in :emptypets yes'),
+('command_emptypets_info', 'Are you sure you want to clear your pet inventory ? You will lose all your cute pets!\\nTo confirm, type ":emptypets yes". \\n\\nOnce you do this, there is no going back!\\n(If you do not want to empty it, just ignore this message!)'),
+('command_emptypets_success', 'Your pets inventory has been emptied.'),
+('command_give_currency_error', 'The currency doesn''t exists ( %0% ), please try again.'),
+('command_give_method_error', 'The method current doesn''t exists ( %0% ), please try again.'),
+('command_give_quantity_error', 'Exists an error with quantity, please try again.'),
+('command_give_success', 'Command executed successfully, %0% %1% added to %2%.'),
+('command_give_targetuser_success', 'Do you received %0% %1%. Enjoy!!'),
+('command_has_fixed_text', 'Message from Staff User:'),
+('command_ha_fixed_text', 'Message from Hotel Management:'),
+('command_invalid_syntax', 'Invalid syntax'),
+('command_kick_error', 'Target user ''%0%'' is offline, not in a room, or cannot be kicked.'),
+('command_kick_targetuser_message', 'You have been kicked from the room by a community staff member.'),
+('command_massbadge_all_success', 'Badge added to all online users!'),
+('command_massbadge_method_error', 'The method current doesn''t exists ( %0% ), please try again.'),
+('command_massbadge_room_success', 'Badge added to all users in current room!'),
+('command_massgive_all_success', 'Command executed successfully, %0% %1% added to all online users!'),
+('command_massgive_room_success', 'Command executed successfully, %0% %1% added to all users in current room!'),
+('command_mimic_error', 'This user (%0%) isn''t online or maybe doesn''t exists, please select another user to mimic!'),
+('command_mimic_info', 'The correct use of the command is, ":mimic <username>".\\n\\nYou can copy any user''s clothes, as long as they are registered at our hotel.'),
+('command_mute_error', 'Target user ''%0%'' does not exist, is not online, or cannot be muted.'),
+('command_mute_maxtime', 'The maximum mute time is one hour.'),
+('command_mute_success', 'User ''%0%'' has been muted successfully for %1% seconds.'),
+('command_pickall_error', 'You do not have rights to pickall in this room.'),
+('command_ras_fixed_text', 'Message from Staff User:'),
+('command_ra_fixed_text', 'Message from Hotel Management:'),
+('command_redeemcoins_confirm', 'To confirm, you must type in :redeemcoins yes'),
+('command_redeemcoins_error', 'It appears you don''t have any exchangeable items!'),
+('command_redeemcoins_info', 'Are you sure you want to clear your exchange furni in your hand ?!\\nTo confirm, type ":redeemcoins yes". \\n\\nOnce you do this, there is no going back!\\n(If you do not want to redeem it, just ignore this message!)'),
+('command_redeemcoins_success', 'All credits have successfully been converted! (Total Redeem: %0% Coins)'),
+('command_redeemcoins_trade_disable', 'This command is disabled while you have an active trade!'),
+('command_regular_user_list', 'The following commands are available to regular users:'),
+('command_staff_user_list', 'The following commands are available to staff users:'),
+('command_superkick_error', 'Target user ''%0%'' is offline or cannot be kicked.'),
+('command_targetuser_error', 'Look''s like the character doesn''t exists or maybe not online.'),
+('command_unmute_error', 'Target user ''%0%'' does not exist or is not online.'),
+('command_update_achievements', 'Achievement list'),
+('command_update_catalog', 'Catalog'),
+('command_update_error', '''%0%'' isn''t a valid thing to reload.'),
+('command_update_filter', 'Wordfilter'),
+('command_update_items', 'Items'),
+('command_update_serversettings', 'Server settings'),
+('command_update_success', '%0% successfully reloaded.'),
+('command_update_texts', 'External texts'),
+('command_vip_error', 'This command is just for VIP user only!'),
+('command_vip_user_list', 'The following commands are available to vip member users:'),
+('onenter_room_win_badge_error', 'Looks like you''ve already received this badge.'),
+('onenter_room_win_badge_success', 'Do you have received a new badge, check your inventory!'),
+('room_furni_limit_type_reached', 'This room cannot hold any more furniture of this type.'),
+('staffpick_add_success', 'This room has been added to the staff picked rooms successfully.'),
+('staffpick_remove_success', 'This room has been removed from the staff picked rooms successfully.'),
+('wordfilter_replacement_word', 'bobba');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `server_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `server_settings` (
@@ -8170,21 +8258,20 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
   `max_pets_per_room` int(2) NOT NULL DEFAULT '10',
   `max_rooms_per_user` int(2) NOT NULL DEFAULT '15',
   `wordfilter_maximum_count` int(2) NOT NULL DEFAULT '5',
-  `wordfilter_replacement_word` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT 'bobba',
   `wordfilter_time_muted` int(11) NOT NULL DEFAULT '300' COMMENT '300 = 5 min'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `server_settings`
+-- Extraindo dados da tabela `server_settings`
 --
 
-INSERT INTO `server_settings` (`activitypoints_enabled`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_tax`, `marketplace_max_price`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `wordfilter_maximum_count`, `wordfilter_replacement_word`, `wordfilter_time_muted`) VALUES
-('1', '1', 900, 0, 25, 25, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', 1, 10000, 30, 500, 12, 10, 15, 5, 'bobba', 300);
+INSERT INTO `server_settings` (`activitypoints_enabled`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_tax`, `marketplace_max_price`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `wordfilter_maximum_count`, `wordfilter_time_muted`) VALUES
+('1', '1', 900, 0, 25, 25, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', 1, 10000, 30, 500, 12, 10, 15, 5, 300);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `server_statistics`
+-- Estrutura da tabela `server_statistics`
 --
 
 CREATE TABLE IF NOT EXISTS `server_statistics` (
@@ -8197,16 +8284,16 @@ CREATE TABLE IF NOT EXISTS `server_statistics` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `server_statistics`
+-- Extraindo dados da tabela `server_statistics`
 --
 
 INSERT INTO `server_statistics` (`server_status`, `server_ver`, `active_connections`, `all_time_player_peak`, `daily_player_peak`, `rooms_loaded`) VALUES
-('0', 'Snowlight Emulator v1.0-dev (Build 33728)', 0, 0, 0, 0);
+('0', 'Snowlight Emulator v1.0-dev (Build 10000)', 0, 3, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `songs`
+-- Estrutura da tabela `songs`
 --
 
 CREATE TABLE IF NOT EXISTS `songs` (
@@ -8219,7 +8306,7 @@ CREATE TABLE IF NOT EXISTS `songs` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- Dumping data for table `songs`
+-- Extraindo dados da tabela `songs`
 --
 
 INSERT INTO `songs` (`id`, `name`, `artist`, `song_data`, `length`) VALUES
@@ -8243,7 +8330,7 @@ INSERT INTO `songs` (`id`, `name`, `artist`, `song_data`, `length`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `static_objects`
+-- Estrutura da tabela `static_objects`
 --
 
 CREATE TABLE IF NOT EXISTS `static_objects` (
@@ -8261,7 +8348,7 @@ CREATE TABLE IF NOT EXISTS `static_objects` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=998 ;
 
 --
--- Dumping data for table `static_objects`
+-- Extraindo dados da tabela `static_objects`
 --
 
 INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `size_x`, `size_y`, `rotation`, `height`, `walkable`, `is_seat`) VALUES
@@ -9092,182 +9179,182 @@ INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `size_x`, `si
 (825, 12, 'bench', '26|29|0', 1, 1, 4, 1, '0', '1'),
 (826, 12, 'bench2', '23|30|0', 1, 1, 2, 1, '0', '1'),
 (827, 12, 'bench', '23|31|0', 1, 1, 2, 1, '0', '1'),
-(828, 13, 'rooftop_minichair', '0|1|4', 1, 1, 4, 1, '0', '1'),
-(829, 13, 'rooftop_flatcurb', '16|1|4', 1, 1, 4, 1, '0', '0'),
-(830, 13, 'rooftop_flatcurb2', '17|1|4', 1, 1, 4, 1, '0', '0'),
-(831, 13, 'rooftop_rodtable', '0|2|4', 1, 1, 0, 1, '0', '0'),
-(832, 13, 'rooftop_minichair', '1|2|4', 1, 1, 6, 1, '0', '1'),
-(833, 13, 'rooftop_minichair', '0|3|4', 1, 1, 0, 1, '0', '1'),
-(834, 13, 'rooftop_flatcurb', '16|4|4', 1, 1, 0, 1, '0', '0'),
-(835, 13, 'rooftop_flatcurb2', '17|4|4', 1, 1, 0, 1, '0', '0'),
-(836, 13, 'rooftop_minichair', '2|6|4', 1, 1, 4, 1, '0', '1'),
-(837, 13, 'rooftop_minichair', '1|7|4', 1, 1, 2, 1, '0', '1'),
-(838, 13, 'rooftop_rodtable', '2|7|4', 1, 1, 0, 1, '0', '0'),
-(839, 13, 'rooftop_minichair', '3|7|4', 1, 1, 6, 1, '0', '1'),
-(840, 13, 'rooftop_minichair', '2|8|4', 1, 1, 0, 1, '0', '1'),
-(841, 13, 'rooftop_minichair', '0|9|4', 1, 1, 4, 1, '0', '1'),
-(842, 13, 'rooftop_emptytable', '0|10|4', 1, 1, 0, 1, '0', '0'),
-(843, 13, 'rooftop_minichair', '0|11|4', 1, 1, 0, 1, '0', '1'),
-(844, 13, 'rooftop_flatcurb', '1|13|4', 1, 1, 2, 1, '0', '0'),
-(845, 13, 'rooftop_flatcurb', '6|13|4', 1, 1, 6, 1, '0', '0'),
-(846, 13, 'rooftop_flatcurb', '8|13|4', 1, 1, 2, 1, '0', '0'),
-(847, 13, 'rooftop_flatcurb', '13|13|4', 1, 1, 6, 1, '0', '0'),
-(848, 13, 'rooftop_flatcurb3', '1|14|4', 1, 1, 2, 1, '0', '0'),
-(849, 13, 'rooftop_flatcurb3', '6|14|4', 1, 1, 6, 1, '0', '0'),
-(850, 13, 'rooftop_flatcurb3', '8|14|4', 1, 1, 2, 1, '0', '0'),
-(851, 13, 'rooftop_flatcurb3', '13|14|4', 1, 1, 6, 1, '0', '0'),
-(852, 13, 'rooftop_flatcurb3', '1|15|4', 1, 1, 2, 1, '0', '0'),
-(853, 13, 'rooftop_flatcurb3', '6|15|4', 1, 1, 6, 1, '0', '0'),
-(854, 13, 'rooftop_flatcurb3', '8|15|4', 1, 1, 2, 1, '0', '0'),
-(855, 13, 'rooftop_flatcurb3', '13|15|4', 1, 1, 6, 1, '0', '0'),
-(856, 13, 'rooftop_flatcurb3', '1|16|4', 1, 1, 2, 1, '0', '0'),
-(857, 13, 'rooftop_flatcurb3', '6|16|4', 1, 1, 6, 1, '0', '0'),
-(858, 13, 'rooftop_flatcurb3', '8|16|4', 1, 1, 2, 1, '0', '0'),
-(859, 13, 'rooftop_flatcurb3', '13|16|4', 1, 1, 6, 1, '0', '0'),
-(860, 13, 'rooftop_flatcurb4', '1|17|4', 1, 1, 0, 1, '0', '0'),
-(861, 13, 'rooftop_flatcurb3', '2|17|4', 1, 1, 0, 1, '0', '0'),
-(862, 13, 'rooftop_flatcurb3', '3|17|4', 1, 1, 0, 1, '0', '0'),
-(863, 13, 'rooftop_flatcurb3', '4|17|4', 1, 1, 0, 1, '0', '0'),
-(864, 13, 'rooftop_flatcurb3', '5|17|4', 1, 1, 0, 1, '0', '0'),
-(865, 13, 'rooftop_flatcurb5', '6|17|4', 1, 1, 0, 1, '0', '0'),
-(866, 13, 'rooftop_flatcurb4', '8|17|4', 1, 1, 0, 1, '0', '0'),
-(867, 13, 'rooftop_flatcurb3', '9|17|4', 1, 1, 0, 1, '0', '0'),
-(868, 13, 'rooftop_flatcurb3', '10|17|4', 1, 1, 0, 1, '0', '0'),
-(869, 13, 'rooftop_flatcurb3', '11|17|4', 1, 1, 0, 1, '0', '0'),
-(870, 13, 'rooftop_flatcurb3', '12|17|4', 1, 1, 0, 1, '0', '0'),
-(871, 13, 'rooftop_flatcurb5', '13|17|4', 1, 1, 0, 1, '0', '0'),
-(872, 14, 'rooftop_bigchair', '8|0|0', 1, 1, 4, 1, '0', '1'),
-(873, 14, 'rooftop_bigtable', '8|1|0', 1, 1, 0, 1, '0', '0'),
-(874, 14, 'rooftop_sofab', '0|2|0', 1, 1, 4, 1, '0', '1'),
-(875, 14, 'rooftop_sofa', '1|2|0', 1, 1, 4, 1, '0', '1'),
-(876, 14, 'rooftop_bigchair', '8|2|0', 1, 1, 0, 1, '0', '1'),
-(877, 14, 'rooftop_bigchair', '8|3|0', 1, 1, 4, 1, '0', '1'),
-(878, 14, 'rooftop_bigtable', '8|4|0', 1, 1, 0, 1, '0', '0'),
-(879, 14, 'rooftop_sofab', '0|5|0', 1, 1, 0, 1, '0', '1'),
-(880, 14, 'rooftop_sofa', '1|5|0', 1, 1, 0, 1, '0', '1'),
-(881, 14, 'rooftop_bigchair', '8|5|0', 1, 1, 0, 1, '0', '1'),
-(882, 14, 'rooftop_sofab', '0|6|0', 1, 1, 4, 1, '0', '1'),
-(883, 14, 'rooftop_sofa', '1|6|0', 1, 1, 4, 1, '0', '1'),
-(884, 14, 'rooftop_sofab', '7|6|0', 1, 1, 4, 1, '0', '1'),
-(885, 14, 'rooftop_sofa', '8|6|0', 1, 1, 4, 1, '0', '1'),
-(886, 14, 'rooftop_sofab', '0|9|0', 1, 1, 0, 1, '0', '1'),
-(887, 14, 'rooftop_sofa', '1|9|0', 1, 1, 0, 1, '0', '1'),
-(888, 14, 'rooftop_sofab', '7|9|0', 1, 1, 0, 1, '0', '1'),
-(889, 14, 'rooftop_sofa', '8|9|0', 1, 1, 0, 1, '0', '1'),
-(890, 15, 'float_dummychair', '24|9|3', 1, 1, 4, 1, '0', '1'),
-(891, 15, 'float_dummychair', '25|9|3', 1, 1, 4, 1, '0', '1'),
-(892, 15, 'float_dummychair2', '28|13|3', 1, 1, 4, 1, '0', '1'),
-(893, 15, 'float_dummychair2', '29|13|3', 1, 1, 4, 1, '0', '1'),
-(894, 15, 'floatbench2', '17|17|3', 1, 1, 2, 1, '0', '1'),
-(895, 15, 'floatbench2', '19|17|3', 1, 1, 6, 1, '0', '1'),
-(896, 15, 'floatbench2', '21|17|3', 1, 1, 2, 1, '0', '1'),
-(897, 15, 'floatbench2', '23|17|3', 1, 1, 6, 1, '0', '1'),
-(898, 15, 'floatbench2', '27|17|1', 1, 1, 4, 1, '0', '1'),
-(899, 15, 'floatbench1', '28|17|1', 1, 1, 4, 1, '0', '1'),
-(900, 15, 'floatbench1', '17|18|3', 1, 1, 2, 1, '0', '1'),
-(901, 15, 'floatbench1', '19|18|3', 1, 1, 6, 1, '0', '1'),
-(902, 15, 'floatbench1', '21|18|3', 1, 1, 2, 1, '0', '1'),
-(903, 15, 'floatbench1', '23|18|3', 1, 1, 6, 1, '0', '1'),
-(904, 15, 'floatbench2', '27|19|1', 1, 1, 0, 1, '0', '1'),
-(905, 15, 'floatbench1', '28|19|1', 1, 1, 0, 1, '0', '1'),
-(906, 15, 'floatbench2', '17|23|3', 1, 1, 2, 1, '0', '1'),
-(907, 15, 'floatbench2', '19|23|3', 1, 1, 6, 1, '0', '1'),
-(908, 15, 'floatbench2', '21|23|3', 1, 1, 2, 1, '0', '1'),
-(909, 15, 'floatbench2', '23|23|3', 1, 1, 6, 1, '0', '1'),
-(910, 15, 'floatbench2', '27|23|1', 1, 1, 4, 1, '0', '1'),
-(911, 15, 'floatbench1', '28|23|1', 1, 1, 4, 1, '0', '1'),
-(912, 15, 'floatbench1', '17|24|100000', 1, 1, 2, 1, '0', '1'),
-(913, 15, 'floatbench1', '19|24|3', 1, 1, 6, 1, '0', '1'),
-(914, 15, 'floatbench1', '21|24|3', 1, 1, 2, 1, '0', '1'),
-(915, 15, 'floatbench1', '23|24|3', 1, 1, 6, 1, '0', '1'),
-(916, 15, 'floatbench2', '27|25|1', 1, 1, 0, 1, '0', '1'),
-(917, 15, 'floatbench1', '28|25|1', 1, 1, 0, 1, '0', '1');
+(828, 12, 'queue_tile2', '28|5|0', 1, 1, 0, 0, '1', '0'),
+(829, 12, 'queue_tile2', '28|6|0', 1, 1, 0, 0, '1', '0'),
+(830, 12, 'queue_tile2', '28|7|0', 1, 1, 0, 0, '1', '0'),
+(831, 12, 'queue_tile2', '28|8|0', 1, 1, 0, 0, '1', '0'),
+(832, 12, 'queue_tile2', '28|9|0', 1, 1, 0, 0, '1', '0'),
+(833, 12, 'queue_tile2', '28|10|0', 1, 1, 0, 0, '1', '0'),
+(834, 12, 'queue_tile2', '27|10|0', 1, 1, 2, 0, '1', '0'),
+(835, 12, 'queue_tile2', '26|10|0', 1, 1, 2, 0, '1', '0'),
+(836, 12, 'queue_tile2', '26|9|0', 1, 1, 4, 0, '1', '0'),
+(837, 12, 'queue_tile2', '26|8|0', 1, 1, 4, 0, '1', '0'),
+(838, 12, 'queue_tile2', '26|7|0', 1, 1, 4, 0, '1', '0'),
+(839, 12, 'queue_tile2', '25|7|0', 1, 1, 2, 0, '1', '0'),
+(840, 12, 'queue_tile2', '24|7|0', 1, 1, 2, 0, '1', '0'),
+(841, 12, 'queue_tile2', '24|8|0', 1, 1, 0, 0, '1', '0'),
+(842, 12, 'queue_tile2', '24|9|0', 1, 1, 0, 0, '1', '0'),
+(843, 12, 'queue_tile2', '24|10|0', 1, 1, 0, 0, '1', '0'),
+(844, 12, 'queue_tile2', '23|10|0', 1, 1, 2, 0, '1', '0'),
+(845, 12, 'queue_tile2', '22|10|0', 1, 1, 2, 0, '1', '0'),
+(846, 12, 'queue_tile2', '22|9|0', 1, 1, 4, 0, '1', '0'),
+(847, 12, 'queue_tile2', '22|8|0', 1, 1, 4, 0, '1', '0'),
+(848, 12, 'queue_tile2', '22|7|0', 1, 1, 4, 0, '1', '0'),
+(849, 12, 'queue_tile2', '21|7|0', 1, 1, 2, 0, '1', '0'),
+(850, 12, 'queue_tile2', '20|7|0', 1, 1, 2, 0, '1', '0'),
+(851, 12, 'queue_tile2', '20|8|0', 1, 1, 0, 0, '1', '0'),
+(852, 12, 'queue_tile2', '20|9|0', 1, 1, 0, 0, '1', '0'),
+(853, 12, 'queue_tile2', '20|10|0', 1, 1, 0, 0, '1', '0'),
+(854, 12, 'queue_tile2', '19|10|0', 1, 1, 2, 0, '1', '0'),
+(855, 12, 'queue_tile2', '18|10|0', 1, 1, 2, 0, '1', '0'),
+(856, 12, 'queue_tile2', '18|9|0', 1, 1, 4, 0, '1', '0'),
+(857, 12, 'queue_tile2', '18|8|0', 1, 1, 4, 0, '1', '0'),
+(858, 12, 'queue_tile2', '18|7|0', 1, 1, 4, 0, '1', '0'),
+(859, 13, 'rooftop_minichair', '0|1|4', 1, 1, 4, 1, '0', '1'),
+(860, 13, 'rooftop_flatcurb', '16|1|4', 1, 1, 4, 1, '0', '0'),
+(861, 13, 'rooftop_flatcurb2', '17|1|4', 1, 1, 4, 1, '0', '0'),
+(862, 13, 'rooftop_rodtable', '0|2|4', 1, 1, 0, 1, '0', '0'),
+(863, 13, 'rooftop_minichair', '1|2|4', 1, 1, 6, 1, '0', '1'),
+(864, 13, 'rooftop_minichair', '0|3|4', 1, 1, 0, 1, '0', '1'),
+(865, 13, 'rooftop_flatcurb', '16|4|4', 1, 1, 0, 1, '0', '0'),
+(866, 13, 'rooftop_flatcurb2', '17|4|4', 1, 1, 0, 1, '0', '0'),
+(867, 13, 'rooftop_minichair', '2|6|4', 1, 1, 4, 1, '0', '1'),
+(868, 13, 'rooftop_minichair', '1|7|4', 1, 1, 2, 1, '0', '1'),
+(869, 13, 'rooftop_rodtable', '2|7|4', 1, 1, 0, 1, '0', '0'),
+(870, 13, 'rooftop_minichair', '3|7|4', 1, 1, 6, 1, '0', '1'),
+(871, 13, 'rooftop_minichair', '2|8|4', 1, 1, 0, 1, '0', '1'),
+(872, 13, 'rooftop_minichair', '0|9|4', 1, 1, 4, 1, '0', '1'),
+(873, 13, 'rooftop_emptytable', '0|10|4', 1, 1, 0, 1, '0', '0'),
+(874, 13, 'rooftop_minichair', '0|11|4', 1, 1, 0, 1, '0', '1'),
+(875, 13, 'rooftop_flatcurb', '1|13|4', 1, 1, 2, 1, '0', '0'),
+(876, 13, 'rooftop_flatcurb', '6|13|4', 1, 1, 6, 1, '0', '0'),
+(877, 13, 'rooftop_flatcurb', '8|13|4', 1, 1, 2, 1, '0', '0'),
+(878, 13, 'rooftop_flatcurb', '13|13|4', 1, 1, 6, 1, '0', '0'),
+(879, 13, 'rooftop_flatcurb3', '1|14|4', 1, 1, 2, 1, '0', '0'),
+(880, 13, 'rooftop_flatcurb3', '6|14|4', 1, 1, 6, 1, '0', '0'),
+(881, 13, 'rooftop_flatcurb3', '8|14|4', 1, 1, 2, 1, '0', '0'),
+(882, 13, 'rooftop_flatcurb3', '13|14|4', 1, 1, 6, 1, '0', '0'),
+(883, 13, 'rooftop_flatcurb3', '1|15|4', 1, 1, 2, 1, '0', '0'),
+(884, 13, 'rooftop_flatcurb3', '6|15|4', 1, 1, 6, 1, '0', '0'),
+(885, 13, 'rooftop_flatcurb3', '8|15|4', 1, 1, 2, 1, '0', '0'),
+(886, 13, 'rooftop_flatcurb3', '13|15|4', 1, 1, 6, 1, '0', '0'),
+(887, 13, 'rooftop_flatcurb3', '1|16|4', 1, 1, 2, 1, '0', '0'),
+(888, 13, 'rooftop_flatcurb3', '6|16|4', 1, 1, 6, 1, '0', '0'),
+(889, 13, 'rooftop_flatcurb3', '8|16|4', 1, 1, 2, 1, '0', '0'),
+(890, 13, 'rooftop_flatcurb3', '13|16|4', 1, 1, 6, 1, '0', '0'),
+(891, 13, 'rooftop_flatcurb4', '1|17|4', 1, 1, 0, 1, '0', '0'),
+(892, 13, 'rooftop_flatcurb3', '2|17|4', 1, 1, 0, 1, '0', '0'),
+(893, 13, 'rooftop_flatcurb3', '3|17|4', 1, 1, 0, 1, '0', '0'),
+(894, 13, 'rooftop_flatcurb3', '4|17|4', 1, 1, 0, 1, '0', '0'),
+(895, 13, 'rooftop_flatcurb3', '5|17|4', 1, 1, 0, 1, '0', '0'),
+(896, 13, 'rooftop_flatcurb5', '6|17|4', 1, 1, 0, 1, '0', '0'),
+(897, 13, 'rooftop_flatcurb4', '8|17|4', 1, 1, 0, 1, '0', '0'),
+(898, 13, 'rooftop_flatcurb3', '9|17|4', 1, 1, 0, 1, '0', '0'),
+(899, 13, 'rooftop_flatcurb3', '10|17|4', 1, 1, 0, 1, '0', '0'),
+(900, 13, 'rooftop_flatcurb3', '11|17|4', 1, 1, 0, 1, '0', '0'),
+(901, 13, 'rooftop_flatcurb3', '12|17|4', 1, 1, 0, 1, '0', '0'),
+(902, 13, 'rooftop_flatcurb5', '13|17|4', 1, 1, 0, 1, '0', '0'),
+(903, 14, 'rooftop_bigchair', '8|0|0', 1, 1, 4, 1, '0', '1'),
+(904, 14, 'rooftop_bigtable', '8|1|0', 1, 1, 0, 1, '0', '0'),
+(905, 14, 'rooftop_sofab', '0|2|0', 1, 1, 4, 1, '0', '1'),
+(906, 14, 'rooftop_sofa', '1|2|0', 1, 1, 4, 1, '0', '1'),
+(907, 14, 'rooftop_bigchair', '8|2|0', 1, 1, 0, 1, '0', '1'),
+(908, 14, 'rooftop_bigchair', '8|3|0', 1, 1, 4, 1, '0', '1'),
+(909, 14, 'rooftop_bigtable', '8|4|0', 1, 1, 0, 1, '0', '0'),
+(910, 14, 'rooftop_sofab', '0|5|0', 1, 1, 0, 1, '0', '1'),
+(911, 14, 'rooftop_sofa', '1|5|0', 1, 1, 0, 1, '0', '1'),
+(912, 14, 'rooftop_bigchair', '8|5|0', 1, 1, 0, 1, '0', '1'),
+(913, 14, 'rooftop_sofab', '0|6|0', 1, 1, 4, 1, '0', '1'),
+(914, 14, 'rooftop_sofa', '1|6|0', 1, 1, 4, 1, '0', '1'),
+(915, 14, 'rooftop_sofab', '7|6|0', 1, 1, 4, 1, '0', '1'),
+(916, 14, 'rooftop_sofa', '8|6|0', 1, 1, 4, 1, '0', '1'),
+(917, 14, 'rooftop_sofab', '0|9|0', 1, 1, 0, 1, '0', '1');
 INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `size_x`, `size_y`, `rotation`, `height`, `walkable`, `is_seat`) VALUES
-(918, 15, 'float_dummychair', '0|29|1', 1, 1, 2, 1, '0', '1'),
-(919, 15, 'float_dummychair', '17|30|1', 1, 1, 2, 1, '0', '1'),
-(920, 15, 'float_dummychair', '17|31|1', 1, 1, 2, 1, '0', '1'),
-(921, 15, 'float_dummychair', '21|33|1', 1, 1, 2, 1, '0', '1'),
-(922, 15, 'float_dummychair', '26|33|1', 1, 1, 6, 1, '0', '1'),
-(923, 15, 'float_dummychair', '21|34|1', 1, 1, 2, 1, '0', '1'),
-(924, 15, 'float_dummychair', '26|34|1', 1, 1, 6, 1, '0', '1'),
-(925, 15, 'float_dummychair', '17|35|1', 1, 1, 2, 1, '0', '1'),
-(926, 15, 'float_dummychair', '21|35|1', 1, 1, 2, 1, '0', '1'),
-(927, 15, 'float_dummychair', '26|35|1', 1, 1, 6, 1, '0', '1'),
-(928, 15, 'float_dummychair', '17|36|1', 1, 1, 2, 1, '0', '1'),
-(929, 15, 'float_dummychair', '21|36|1', 1, 1, 2, 1, '0', '1'),
-(930, 15, 'float_dummychair', '26|36|1', 1, 1, 6, 1, '0', '1'),
-(931, 15, 'float_dummychair', '15|37|100000', 1, 1, 4, 1, '0', '1'),
-(932, 15, 'float_dummychair', '16|37|1', 1, 1, 4, 1, '0', '1'),
-(933, 16, 'libchair', '14|2|1', 1, 1, 4, 1, '0', '1'),
-(934, 16, 'libchair', '16|2|1', 1, 1, 4, 1, '0', '1'),
-(935, 16, 'libchair', '26|2|1', 1, 1, 4, 1, '0', '1'),
-(936, 16, 'libchair', '24|3|1', 1, 1, 2, 1, '0', '1'),
-(937, 16, 'libchair', '12|4|1', 1, 1, 2, 1, '0', '1'),
-(938, 16, 'libchair', '12|6|1', 1, 1, 2, 1, '0', '1'),
-(939, 16, 'libstool', '13|14|1', 1, 1, 6, 1, '0', '1'),
-(940, 16, 'libstool', '13|15|1', 1, 1, 6, 1, '0', '1'),
-(941, 16, 'libstool', '13|16|1', 1, 1, 6, 1, '0', '1'),
-(942, 16, 'libchair', '28|27|0', 1, 1, 4, 1, '0', '1'),
-(943, 16, 'libchair', '27|29|0', 1, 1, 2, 1, '0', '1'),
-(944, 16, 'libstool', '24|33|2', 1, 1, 6, 1, '0', '1'),
-(945, 16, 'libstool', '24|34|2', 1, 1, 6, 1, '0', '1'),
-(946, 16, 'libstool', '24|35|2', 1, 1, 6, 1, '0', '1'),
-(947, 16, 'libstool', '21|36|2', 1, 1, 0, 1, '0', '1'),
-(948, 16, 'libstool', '22|36|2', 1, 1, 0, 1, '0', '1'),
-(949, 16, 'libstool', '23|36|2', 1, 1, 0, 1, '0', '1'),
-(950, 17, 'cornerchair2', '0|0|0', 1, 1, 4, 1, '0', '1'),
-(951, 17, 'cornerchair1', '1|0|0', 1, 1, 4, 1, '0', '1'),
-(952, 17, 'chair1', '2|0|0', 1, 1, 4, 1, '0', '1'),
-(953, 17, 'chair1', '3|0|0', 1, 1, 4, 1, '0', '1'),
-(954, 17, 'table1', '5|0|0', 1, 1, 4, 1, '0', '0'),
-(955, 17, 'chair1line', '6|0|0', 1, 1, 4, 1, '0', '1'),
-(956, 17, 'chair1', '7|0|0', 1, 1, 4, 1, '0', '1'),
-(957, 17, 'chair1frontend', '8|0|0', 1, 1, 4, 1, '0', '1'),
-(958, 17, 'hububar', '10|0|0', 1, 1, 4, 1, '0', '0'),
-(959, 17, 'cornerchair1', '0|1|0', 1, 1, 2, 1, '0', '1'),
-(960, 17, 'chair1', '0|2|0', 1, 1, 2, 1, '0', '1'),
-(961, 17, 'chair1', '0|3|0', 1, 1, 2, 1, '0', '1'),
-(962, 17, 'chair1', '0|4|0', 1, 1, 2, 1, '0', '1'),
-(963, 17, 'chair1frontend', '0|5|0', 1, 1, 2, 1, '0', '1'),
-(964, 17, 'table2', '3|5|0', 1, 1, 4, 1, '0', '0'),
-(965, 17, 'modchair', '5|5|0', 1, 1, 0, 1, '0', '1'),
-(966, 17, 'table2', '8|5|0', 1, 1, 4, 1, '0', '0'),
-(967, 12, 'queue_tile2', '28|5|0', 1, 1, 0, 0, '1', '0'),
-(968, 12, 'queue_tile2', '28|6|0', 1, 1, 0, 0, '1', '0'),
-(969, 12, 'queue_tile2', '28|7|0', 1, 1, 0, 0, '1', '0'),
-(970, 12, 'queue_tile2', '28|8|0', 1, 1, 0, 0, '1', '0'),
-(971, 12, 'queue_tile2', '28|9|0', 1, 1, 0, 0, '1', '0'),
-(972, 12, 'queue_tile2', '28|10|0', 1, 1, 0, 0, '1', '0'),
-(973, 12, 'queue_tile2', '27|10|0', 1, 1, 2, 0, '1', '0'),
-(974, 12, 'queue_tile2', '26|10|0', 1, 1, 2, 0, '1', '0'),
-(975, 12, 'queue_tile2', '26|9|0', 1, 1, 4, 0, '1', '0'),
-(976, 12, 'queue_tile2', '26|8|0', 1, 1, 4, 0, '1', '0'),
-(977, 12, 'queue_tile2', '26|7|0', 1, 1, 4, 0, '1', '0'),
-(978, 12, 'queue_tile2', '25|7|0', 1, 1, 2, 0, '1', '0'),
-(979, 12, 'queue_tile2', '24|7|0', 1, 1, 2, 0, '1', '0'),
-(980, 12, 'queue_tile2', '24|8|0', 1, 1, 0, 0, '1', '0'),
-(981, 12, 'queue_tile2', '24|9|0', 1, 1, 0, 0, '1', '0'),
-(982, 12, 'queue_tile2', '24|10|0', 1, 1, 0, 0, '1', '0'),
-(983, 12, 'queue_tile2', '23|10|0', 1, 1, 2, 0, '1', '0'),
-(984, 12, 'queue_tile2', '22|10|0', 1, 1, 2, 0, '1', '0'),
-(985, 12, 'queue_tile2', '22|9|0', 1, 1, 4, 0, '1', '0'),
-(986, 12, 'queue_tile2', '22|8|0', 1, 1, 4, 0, '1', '0'),
-(987, 12, 'queue_tile2', '22|7|0', 1, 1, 4, 0, '1', '0'),
-(988, 12, 'queue_tile2', '21|7|0', 1, 1, 2, 0, '1', '0'),
-(989, 12, 'queue_tile2', '20|7|0', 1, 1, 2, 0, '1', '0'),
-(990, 12, 'queue_tile2', '20|8|0', 1, 1, 0, 0, '1', '0'),
-(991, 12, 'queue_tile2', '20|9|0', 1, 1, 0, 0, '1', '0'),
-(992, 12, 'queue_tile2', '20|10|0', 1, 1, 0, 0, '1', '0'),
-(993, 12, 'queue_tile2', '19|10|0', 1, 1, 2, 0, '1', '0'),
-(994, 12, 'queue_tile2', '18|10|0', 1, 1, 2, 0, '1', '0'),
-(995, 12, 'queue_tile2', '18|9|0', 1, 1, 4, 0, '1', '0'),
-(996, 12, 'queue_tile2', '18|8|0', 1, 1, 4, 0, '1', '0'),
-(997, 12, 'queue_tile2', '18|7|0', 1, 1, 4, 0, '1', '0');
+(918, 14, 'rooftop_sofa', '1|9|0', 1, 1, 0, 1, '0', '1'),
+(919, 14, 'rooftop_sofab', '7|9|0', 1, 1, 0, 1, '0', '1'),
+(920, 14, 'rooftop_sofa', '8|9|0', 1, 1, 0, 1, '0', '1'),
+(921, 15, 'float_dummychair', '24|9|3', 1, 1, 4, 1, '0', '1'),
+(922, 15, 'float_dummychair', '25|9|3', 1, 1, 4, 1, '0', '1'),
+(923, 15, 'float_dummychair2', '28|13|3', 1, 1, 4, 1, '0', '1'),
+(924, 15, 'float_dummychair2', '29|13|3', 1, 1, 4, 1, '0', '1'),
+(925, 15, 'floatbench2', '17|17|3', 1, 1, 2, 1, '0', '1'),
+(926, 15, 'floatbench2', '19|17|3', 1, 1, 6, 1, '0', '1'),
+(927, 15, 'floatbench2', '21|17|3', 1, 1, 2, 1, '0', '1'),
+(928, 15, 'floatbench2', '23|17|3', 1, 1, 6, 1, '0', '1'),
+(929, 15, 'floatbench2', '27|17|1', 1, 1, 4, 1, '0', '1'),
+(930, 15, 'floatbench1', '28|17|1', 1, 1, 4, 1, '0', '1'),
+(931, 15, 'floatbench1', '17|18|3', 1, 1, 2, 1, '0', '1'),
+(932, 15, 'floatbench1', '19|18|3', 1, 1, 6, 1, '0', '1'),
+(933, 15, 'floatbench1', '21|18|3', 1, 1, 2, 1, '0', '1'),
+(934, 15, 'floatbench1', '23|18|3', 1, 1, 6, 1, '0', '1'),
+(935, 15, 'floatbench2', '27|19|1', 1, 1, 0, 1, '0', '1'),
+(936, 15, 'floatbench1', '28|19|1', 1, 1, 0, 1, '0', '1'),
+(937, 15, 'floatbench2', '17|23|3', 1, 1, 2, 1, '0', '1'),
+(938, 15, 'floatbench2', '19|23|3', 1, 1, 6, 1, '0', '1'),
+(939, 15, 'floatbench2', '21|23|3', 1, 1, 2, 1, '0', '1'),
+(940, 15, 'floatbench2', '23|23|3', 1, 1, 6, 1, '0', '1'),
+(941, 15, 'floatbench2', '27|23|1', 1, 1, 4, 1, '0', '1'),
+(942, 15, 'floatbench1', '28|23|1', 1, 1, 4, 1, '0', '1'),
+(943, 15, 'floatbench1', '17|24|100000', 1, 1, 2, 1, '0', '1'),
+(944, 15, 'floatbench1', '19|24|3', 1, 1, 6, 1, '0', '1'),
+(945, 15, 'floatbench1', '21|24|3', 1, 1, 2, 1, '0', '1'),
+(946, 15, 'floatbench1', '23|24|3', 1, 1, 6, 1, '0', '1'),
+(947, 15, 'floatbench2', '27|25|1', 1, 1, 0, 1, '0', '1'),
+(948, 15, 'floatbench1', '28|25|1', 1, 1, 0, 1, '0', '1'),
+(949, 15, 'float_dummychair', '0|29|1', 1, 1, 2, 1, '0', '1'),
+(950, 15, 'float_dummychair', '17|30|1', 1, 1, 2, 1, '0', '1'),
+(951, 15, 'float_dummychair', '17|31|1', 1, 1, 2, 1, '0', '1'),
+(952, 15, 'float_dummychair', '21|33|1', 1, 1, 2, 1, '0', '1'),
+(953, 15, 'float_dummychair', '26|33|1', 1, 1, 6, 1, '0', '1'),
+(954, 15, 'float_dummychair', '21|34|1', 1, 1, 2, 1, '0', '1'),
+(955, 15, 'float_dummychair', '26|34|1', 1, 1, 6, 1, '0', '1'),
+(956, 15, 'float_dummychair', '17|35|1', 1, 1, 2, 1, '0', '1'),
+(957, 15, 'float_dummychair', '21|35|1', 1, 1, 2, 1, '0', '1'),
+(958, 15, 'float_dummychair', '26|35|1', 1, 1, 6, 1, '0', '1'),
+(959, 15, 'float_dummychair', '17|36|1', 1, 1, 2, 1, '0', '1'),
+(960, 15, 'float_dummychair', '21|36|1', 1, 1, 2, 1, '0', '1'),
+(961, 15, 'float_dummychair', '26|36|1', 1, 1, 6, 1, '0', '1'),
+(962, 15, 'float_dummychair', '15|37|100000', 1, 1, 4, 1, '0', '1'),
+(963, 15, 'float_dummychair', '16|37|1', 1, 1, 4, 1, '0', '1'),
+(964, 16, 'libchair', '14|2|1', 1, 1, 4, 1, '0', '1'),
+(965, 16, 'libchair', '16|2|1', 1, 1, 4, 1, '0', '1'),
+(966, 16, 'libchair', '26|2|1', 1, 1, 4, 1, '0', '1'),
+(967, 16, 'libchair', '24|3|1', 1, 1, 2, 1, '0', '1'),
+(968, 16, 'libchair', '12|4|1', 1, 1, 2, 1, '0', '1'),
+(969, 16, 'libchair', '12|6|1', 1, 1, 2, 1, '0', '1'),
+(970, 16, 'libstool', '13|14|1', 1, 1, 6, 1, '0', '1'),
+(971, 16, 'libstool', '13|15|1', 1, 1, 6, 1, '0', '1'),
+(972, 16, 'libstool', '13|16|1', 1, 1, 6, 1, '0', '1'),
+(973, 16, 'libchair', '28|27|0', 1, 1, 4, 1, '0', '1'),
+(974, 16, 'libchair', '27|29|0', 1, 1, 2, 1, '0', '1'),
+(975, 16, 'libstool', '24|33|2', 1, 1, 6, 1, '0', '1'),
+(976, 16, 'libstool', '24|34|2', 1, 1, 6, 1, '0', '1'),
+(977, 16, 'libstool', '24|35|2', 1, 1, 6, 1, '0', '1'),
+(978, 16, 'libstool', '21|36|2', 1, 1, 0, 1, '0', '1'),
+(979, 16, 'libstool', '22|36|2', 1, 1, 0, 1, '0', '1'),
+(980, 16, 'libstool', '23|36|2', 1, 1, 0, 1, '0', '1'),
+(981, 17, 'cornerchair2', '0|0|0', 1, 1, 4, 1, '0', '1'),
+(982, 17, 'cornerchair1', '1|0|0', 1, 1, 4, 1, '0', '1'),
+(983, 17, 'chair1', '2|0|0', 1, 1, 4, 1, '0', '1'),
+(984, 17, 'chair1', '3|0|0', 1, 1, 4, 1, '0', '1'),
+(985, 17, 'table1', '5|0|0', 1, 1, 4, 1, '0', '0'),
+(986, 17, 'chair1line', '6|0|0', 1, 1, 4, 1, '0', '1'),
+(987, 17, 'chair1', '7|0|0', 1, 1, 4, 1, '0', '1'),
+(988, 17, 'chair1frontend', '8|0|0', 1, 1, 4, 1, '0', '1'),
+(989, 17, 'hububar', '10|0|0', 1, 1, 4, 1, '0', '0'),
+(990, 17, 'cornerchair1', '0|1|0', 1, 1, 2, 1, '0', '1'),
+(991, 17, 'chair1', '0|2|0', 1, 1, 2, 1, '0', '1'),
+(992, 17, 'chair1', '0|3|0', 1, 1, 2, 1, '0', '1'),
+(993, 17, 'chair1', '0|4|0', 1, 1, 2, 1, '0', '1'),
+(994, 17, 'chair1frontend', '0|5|0', 1, 1, 2, 1, '0', '1'),
+(995, 17, 'table2', '3|5|0', 1, 1, 4, 1, '0', '0'),
+(996, 17, 'modchair', '5|5|0', 1, 1, 0, 1, '0', '1'),
+(997, 17, 'table2', '8|5|0', 1, 1, 4, 1, '0', '0');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tags`
+-- Estrutura da tabela `tags`
 --
 
 CREATE TABLE IF NOT EXISTS `tags` (
@@ -9279,14 +9366,14 @@ CREATE TABLE IF NOT EXISTS `tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `tags`
+-- Extraindo dados da tabela `tags`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_achievements`
+-- Estrutura da tabela `user_achievements`
 --
 
 CREATE TABLE IF NOT EXISTS `user_achievements` (
@@ -9299,14 +9386,14 @@ CREATE TABLE IF NOT EXISTS `user_achievements` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `user_achievements`
+-- Extraindo dados da tabela `user_achievements`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_gifts`
+-- Estrutura da tabela `user_gifts`
 --
 
 CREATE TABLE IF NOT EXISTS `user_gifts` (
@@ -9318,14 +9405,14 @@ CREATE TABLE IF NOT EXISTS `user_gifts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user_gifts`
+-- Extraindo dados da tabela `user_gifts`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_quests`
+-- Estrutura da tabela `user_quests`
 --
 
 CREATE TABLE IF NOT EXISTS `user_quests` (
@@ -9338,14 +9425,14 @@ CREATE TABLE IF NOT EXISTS `user_quests` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `user_quests`
+-- Extraindo dados da tabela `user_quests`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_subscriptions`
+-- Estrutura da tabela `user_subscriptions`
 --
 
 CREATE TABLE IF NOT EXISTS `user_subscriptions` (
@@ -9359,14 +9446,14 @@ CREATE TABLE IF NOT EXISTS `user_subscriptions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `user_subscriptions`
+-- Extraindo dados da tabela `user_subscriptions`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vouchers`
+-- Estrutura da tabela `vouchers`
 --
 
 CREATE TABLE IF NOT EXISTS `vouchers` (
@@ -9381,14 +9468,14 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `vouchers`
+-- Extraindo dados da tabela `vouchers`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `wardrobe`
+-- Estrutura da tabela `wardrobe`
 --
 
 CREATE TABLE IF NOT EXISTS `wardrobe` (
@@ -9402,14 +9489,14 @@ CREATE TABLE IF NOT EXISTS `wardrobe` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `wardrobe`
+-- Extraindo dados da tabela `wardrobe`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `wordfilter`
+-- Estrutura da tabela `wordfilter`
 --
 
 CREATE TABLE IF NOT EXISTS `wordfilter` (
@@ -9418,7 +9505,7 @@ CREATE TABLE IF NOT EXISTS `wordfilter` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `wordfilter`
+-- Extraindo dados da tabela `wordfilter`
 --
 
 INSERT INTO `wordfilter` (`word`) VALUES

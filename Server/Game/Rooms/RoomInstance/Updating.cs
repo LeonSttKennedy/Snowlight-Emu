@@ -275,11 +275,6 @@ namespace Snowlight.Game.Rooms
                 switch (Action.Action)
                 {
                     case RoomTriggerList.ROLLER:
-                        if (Action.ToRoomId != 0)
-                        {
-                            Output.WriteLine("[RoomMgr] RollerTrigger (Id: " + Action.Id + ") -> Not configured correctly.", OutputLevel.Warning);
-                            break;
-                        }
 
                         Actor.MoveTo(Action.ToRoomPosition.GetVector2());
 
@@ -298,9 +293,10 @@ namespace Snowlight.Game.Rooms
                         break;
 
                     case RoomTriggerList.TELEPORT:
+                        
                         if (Actor.Type != RoomActorType.UserCharacter) break;
 
-                        if (Action.ToRoomId == Session.CurrentRoomId)
+                        if (Action.ToRoomId == Session.CurrentRoomId || Action.ToRoomId == 0)
                         {
                             Actor.PositionToSet = Action.ToRoomPosition.GetVector2();
                             Actor.MoveTo(Actor.PositionToSet);
@@ -308,12 +304,6 @@ namespace Snowlight.Game.Rooms
                         }
                         else if (Action.ToRoomId != Session.CurrentRoomId)
                         {
-                            if (Action.ToRoomId == 0)
-                            {
-                                Output.WriteLine("[RoomMgr] TeleTrigger (Id: " + Action.Id + ") -> Not configured correctly.", OutputLevel.Warning);
-                                break;
-                            }
-
                             if (Instance == null) break;
 
                             Actor.BlockWalking();

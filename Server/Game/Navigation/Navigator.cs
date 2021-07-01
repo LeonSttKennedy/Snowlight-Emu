@@ -201,7 +201,9 @@ namespace Snowlight.Game.Navigation
                 return;
             }
 
-            Response = NavigatorOfficialRoomsComposer.Message(mOfficialItems);
+            IEnumerable<NavigatorOfficialItem> Official = mOfficialItems.OrderByDescending(O => O.GetTotalUsersInPublicRoom());
+
+            Response = NavigatorOfficialRoomsComposer.Message(Official.ToList());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }

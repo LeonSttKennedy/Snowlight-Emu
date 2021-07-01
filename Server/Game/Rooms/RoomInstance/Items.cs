@@ -531,7 +531,7 @@ namespace Snowlight.Game.Rooms
 
             if (Item.Definition.RoomLimit > 0 && SpecificLimitCount >= Item.Definition.RoomLimit)
             {
-                Session.SendData(NotificationMessageComposer.Compose("This room cannot hold any more furniture of this type."));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("room_furni_limit_type_reached")));
                 return string.Empty;
             }
 
@@ -598,7 +598,7 @@ namespace Snowlight.Game.Rooms
 
             if (Item.Definition.RoomLimit > 0 && SpecificLimitCount >= Item.Definition.RoomLimit)
             {
-                Session.SendData(NotificationMessageComposer.Compose("This room cannot hold any more furniture of this type."));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("room_furni_limit_type_reached")));
                 return null;
             }
 

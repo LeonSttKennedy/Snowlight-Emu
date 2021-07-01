@@ -130,7 +130,7 @@ namespace Snowlight.Game.Recycler
         {
             if (!mEnabled)
             {
-                Session.SendData(NotificationMessageComposer.Compose("The recycler is temporarily disabled. Please check back later."));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_recycler_disabled")));
                 return;
             }
 
@@ -196,18 +196,18 @@ namespace Snowlight.Game.Recycler
                     DataTable Table = MySqlClient.ExecuteQueryTable("INSERT INTO user_gifts(item_id, base_id, amount, extra_data) VALUES('" + GeneratedItem.Id + "', '" + Reward.Id + "', '1', '')");
                 }
 
-                foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                {
-                    foreach (uint NewItem in NewItemData.Value)
-                    {
-                        Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                    }
-                }
                 if (NewItems.Count > 0)
                 {
+                    foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
+                    {
+                        foreach (uint NewItem in NewItemData.Value)
+                        {
+                            Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
+                        }
+                    }
                     Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
+                    Session.SendData(InventoryRefreshComposer.Compose());
                 }
-                Session.SendData(InventoryRefreshComposer.Compose());
             }
         }
     }

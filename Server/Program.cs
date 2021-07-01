@@ -54,11 +54,11 @@ namespace Snowlight
                 return (!Environment.HasShutdownStarted && mAlive);
             }
         }
-        public static String PrettyVersion
+        public static string PrettyVersion
         {
             get
             {
-                return "Snowlight Emulator v1.0-dev (Build " + Assembly.GetExecutingAssembly().GetName().Version.ToString().Split('.')[3] + ")";
+                return "Snowlight Emulator v1.0-dev (Build " + Constants.ConsoleBuild + ")";
             }
         }
         public static DateTime CurrentDay
@@ -129,6 +129,7 @@ namespace Snowlight
 
                     // Some settings on database
                     ServerSettings.Initialize(MySqlClient);
+                    ExternalTexts.Initialize(MySqlClient);
 
                     // Core
                     DataRouter.Initialize();
@@ -201,7 +202,7 @@ namespace Snowlight
             TimeSpan TimeSpent = DateTime.Now - ServerStarted;
 
             Output.WriteLine("The server has initialized successfully (" + Math.Round(TimeSpent.TotalSeconds, 2) + " seconds). Ready for connections.", OutputLevel.Notification);
-            Output.WriteLine("Press the ENTER key for command input. Shut down server with 'STOP' command.", OutputLevel.Notification);
+            Output.WriteLine("Press the ENTER key for command input. After type 'HELP' for command list.", OutputLevel.Notification);
 
             Console.Beep();
             Input.Listen(); // This will make the main thread process console while Program.Alive.

@@ -138,16 +138,14 @@ namespace Snowlight.Game.Catalog
                     dbClient.SetParameter("public_name", UserItem.Definition.Name);
                     dbClient.SetParameter("extra_data", UserItem.Flags);
                     dbClient.ExecuteQueryTable("INSERT INTO catalog_marketplace_offers (item_id,user_id,asking_price,total_price,public_name,sprite_id,item_type,timestamp,extra_data) VALUES ('" + UserItem.DefinitionId + "','" + Session.CharacterId + "','" + SellingPrice + "','" + TotalPrice + "',@public_name,'" + UserItem.Definition.SpriteId + "','" + ItemType + "','" + UnixTimestamp.GetCurrent() + "',@extra_data)");
-                    dbClient.ExecuteQueryTable("DELETE FROM items WHERE id = '" + UserItem.Id + "' LIMIT 1");
-                    dbClient.ExecuteQueryTable("UPDATE characters SET marketplace_tickets = marketplace_tickets - 1 WHERE id = '" + Session.CharacterId + "'");
+
+                    UserItem.RemovePermanently(dbClient);
+                    Session.CharacterInfo.UpdateMarketplaceTokens(dbClient, -1);
+                    Session.InventoryCache.RemoveItem(ItemID);
+                    Session.SendData(InventoryRefreshComposer.Compose());
+                    Session.SendData(CatalogMarketplaceSellItemComposer.Compose(SellOK));
                 }
-
-                Session.CharacterInfo.MarketplaceTokensTotal -= 1;
-                Session.InventoryCache.RemoveItem(ItemID);
-                Session.SendData(InventoryRefreshComposer.Compose());
             }
-
-            Session.SendData(CatalogMarketplaceSellItemComposer.Compose(SellOK));
         }
 
         public ServerMessage SerializeOffersNew(int MinCost, int MaxCost, string SearchQuery, int FilterMode)

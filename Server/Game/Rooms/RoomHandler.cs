@@ -297,11 +297,11 @@ namespace Snowlight.Game.Rooms
                         Session.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
                         Session.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
 
-                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "Do you have received a new badge, check your inventory!", 1, ChatType.Whisper));
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_success"), 1, ChatType.Whisper));
                     }
                     else if (Session.BadgeCache.Badges.Contains(BadgeToGive))
                     {
-                        Session.SendData(RoomChatComposer.Compose(Actor.Id, "Looks like you've already received this badge.", 4, ChatType.Whisper));
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_error"), 4, ChatType.Whisper));
                     }
                 }
 
@@ -1102,7 +1102,7 @@ namespace Snowlight.Game.Rooms
             {
                 if (TargetSession.HasRight("cannot_ignore"))
                 {
-                    Session.SendData(NotificationMessageComposer.Compose("You can not ignore this user."));
+                    Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("cannot_ignore_user")));
                     return;
                 }
 
@@ -1347,7 +1347,7 @@ namespace Snowlight.Game.Rooms
             if (!Navigator.StaffPickedContainsRoom(Instance.RoomId))
             {
                 Navigator.AddRoomToStaffPicked(Instance.RoomId);
-                Session.SendData(NotificationMessageComposer.Compose("This room has been added to the staff picked rooms successfully."));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("staffpick_add_success")));
 
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
@@ -1366,7 +1366,7 @@ namespace Snowlight.Game.Rooms
             else
             {
                 Navigator.RemoveRoomFromStaffPicked(Instance.RoomId);
-                Session.SendData(NotificationMessageComposer.Compose("This room has been removed from the staff picked rooms successfully."));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("staffpick_remove_success")));
             }
         }
 

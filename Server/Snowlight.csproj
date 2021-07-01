@@ -99,6 +99,7 @@
     <Compile Include="Communication\Outgoing\Catalog\CatalogIndexComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\CatalogPageComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\CatalogPetDataComposer.cs" />
+    <Compile Include="Communication\Outgoing\Catalog\CatalogPurchaseBalanceErrorComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\CatalogPurchaseResultComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\CatalogRecyclerConfigComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\CatalogRecyclerRewardsComposer.cs" />
@@ -404,6 +405,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ByteUtil.cs" />
+    <Compile Include="Util\ExternalTexts.cs" />
     <Compile Include="Util\ServerSettings.cs" />
     <Compile Include="Util\RandomGenerator.cs" />
     <Compile Include="Specialized\Vector2.cs" />
@@ -445,7 +447,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Game\Catalog\Marketplace\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

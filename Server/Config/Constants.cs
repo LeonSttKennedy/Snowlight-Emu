@@ -5,6 +5,7 @@ namespace Snowlight.Config
 {
     public static class Constants
     {
+        public static readonly int              ConsoleBuild                = 10000;
         public static readonly string           ConsoleTitle                = Program.PrettyVersion;
         public static readonly int              ConsoleWindowWidth          = 90;
         public static readonly int              ConsoleWindowHeight         = 30;

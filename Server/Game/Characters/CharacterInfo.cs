@@ -544,7 +544,14 @@ namespace Snowlight.Game.Characters
             MySqlClient.SetParameter("credits", CreditsBalance);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET credits_balance = @credits WHERE id = @id LIMIT 1");
         }
+        public void UpdateMarketplaceTokens(SqlDatabaseClient MySqlClient, int Amount)
+        {
+            MarketplaceTokensTotal += Amount;
 
+            MySqlClient.SetParameter("id", mId);
+            MySqlClient.SetParameter("marketplacetokens", MarketplaceTokensTotal);
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET marketplace_tickets = @marketplacetokens WHERE id = @id LIMIT 1");
+        }
         public void UpdateActivityPointsBalance(SqlDatabaseClient MySqlClient, int Amount)
         {
             ActivityPointsBalance += Amount;

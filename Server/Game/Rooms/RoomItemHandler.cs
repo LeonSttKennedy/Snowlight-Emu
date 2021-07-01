@@ -516,7 +516,7 @@ namespace Snowlight.Game.Rooms
             Bot BotDefinition = BotManager.GetHandlerDefinitionForPetType(Pet.Type);
             if (BotDefinition == null)
             {
-                Session.SendData(NotificationMessageComposer.Compose("This pet cannot be placed right now. Please try again later."));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("cannot_place_pet")));
                 return;
             }
 

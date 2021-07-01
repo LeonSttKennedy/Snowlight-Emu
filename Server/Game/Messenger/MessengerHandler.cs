@@ -413,6 +413,11 @@ namespace Snowlight.Game.Messenger
 
             if (Info != null)
             {
+                if (Info.Type == RoomType.Public && Info.Id == 14)
+                {
+                    Info = RoomInfoLoader.GetRoomInfo(13);
+                }
+
                 Session.SendData(MessengerFollowResultComposer.Compose(Info));
             }
         }

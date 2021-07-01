@@ -147,5 +147,10 @@ namespace Snowlight.Game.Navigation
         {
             return RoomInfoLoader.GetRoomInfo(mRoomId);
         }
+
+        public int GetTotalUsersInPublicRoom()
+        {
+            return (TryGetRoomInstance() != null ? TryGetRoomInstance().CachedNavigatorUserCount : 0);
+        }
     }
 }

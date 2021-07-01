@@ -256,7 +256,7 @@ namespace Snowlight.Game.Catalog
             return null;
         }
 
-        public static void MarketplaceBuyTickets(Session Session, ClientMessage CMessage)
+        public static void MarketplaceBuyTickets(Session Session, ClientMessage Message)
         {
             bool CreditsError = false;
 
@@ -265,31 +265,26 @@ namespace Snowlight.Game.Catalog
                 CreditsError = true;
             }
 
+            if (Session.CharacterInfo.MarketplaceTokensTotal < 0)
+            {
+                Session.CharacterInfo.MarketplaceTokensTotal = 0;
+            }
+
             if (CreditsError)
             {
-                ServerMessage Message = new ServerMessage(68);
-                Message.AppendBoolean(true); // Credits error
-                Message.AppendBoolean(false); // Pixel error
-                Session.SendData(Message);
+                Session.SendData(CatalogPurchaseBalanceErrorComposer.Composer(CreditsError, false));
                 return;
             }
             else
             {
                 using (SqlDatabaseClient dbClient = SqlDatabaseManager.GetClient())
                 {
-                    dbClient.ExecuteQueryTable("UPDATE characters SET marketplace_tickets = marketplace_tickets + 5 WHERE id = '" + Session.CharacterId + "'");
                     Session.CharacterInfo.UpdateCreditsBalance(dbClient, -1);
                     Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
+                    Session.CharacterInfo.UpdateMarketplaceTokens(dbClient, 5);
                 }
 
-                if (Session.CharacterInfo.MarketplaceTokensTotal < 0)
-                {
-                    Session.CharacterInfo.MarketplaceTokensTotal = 0;
-                }
-
-                Session.CharacterInfo.MarketplaceTokensTotal += 5;
-
-                MarketplaceCanSell(Session, CMessage);
+                MarketplaceCanSell(Session, Message);
             }
         }
 
@@ -426,13 +421,13 @@ namespace Snowlight.Game.Catalog
 
                 if (Row == null || (string)Row["state"] != "1" || (double)Row["timestamp"] <= CatalogManager.Marketplace.FormatTimestamp())
                 {
-                    Session.SendData(NotificationMessageComposer.Compose("Sorry, this offer has expired."));
+                    Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_marketplace_error")));
                     return;
                 }
 
                 if ((uint)Row["user_id"] == Session.CharacterInfo.Id)
                 {
-                    Session.SendData(NotificationMessageComposer.Compose("To prevent average boosting you cannot purchase your own marketplace offers."));
+                    Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_marketplace_boosting_error")));
                     return;
                 }
 

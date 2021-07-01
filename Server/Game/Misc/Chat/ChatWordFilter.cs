@@ -74,7 +74,7 @@ namespace Snowlight.Game.Misc
                 {
                     HandleInfraction(Message, Session);
 
-                    Message = Message.Replace(Word, ServerSettings.WordFilterReplacementWord);
+                    Message = Message.Replace(Word, ExternalTexts.GetValue("wordfilter_replacement_word"));
                 }
             }
 
