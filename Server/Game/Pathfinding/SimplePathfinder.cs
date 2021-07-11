@@ -99,19 +99,8 @@ namespace Snowlight.Game.Pathfinding
                     LastPoint = Points[Points.Count - 1];
                 }
 
-                int FromX = 0;
-                int FromY = 0;
-
-                if (LastPoint != null)
-                {
-                    FromX = LastPoint.X;
-                    FromY = LastPoint.Y;
-                }
-                else
-                {
-                    FromX = Actor.Position.X;
-                    FromY = Actor.Position.Y;
-                }
+                int FromX = (LastPoint != null ? LastPoint.X : Actor.Position.X);
+                int FromY = (LastPoint != null ? LastPoint.Y : Actor.Position.Y);
 
                 if (FromX == mTarget.X && FromY == mTarget.Y)
                 {

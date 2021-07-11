@@ -25,8 +25,15 @@ namespace Snowlight.Util
         private static int mMoreActivityPointsPixelsAmount;
         private static bool mLoginBadgeEnabled;
         private static uint mLoginBadgeId;
+        private static bool mMarketplaceEnabled;
         private static int mMarketplaceTax;
+        private static int mMarketplaceTokensPrice;
+        private static int mMarketplacePremiumTokens;
+        private static int mMarketplaceDefaultTokens;
+        private static int mMarketplaceMinPrice;
         private static int mMarketplaceMaxPrice;
+        private static int mMarketplaceOfferTime;
+        private static int mMarketplaceAverageOfferDays;
         private static int mMaxFavoritesPerUser;
         private static int mMaxFurniPerRoom;
         private static int mMaxFurniStacking;
@@ -149,6 +156,18 @@ namespace Snowlight.Util
                 mLoginBadgeId = value;
             }
         }
+        public static bool MarketplaceEnabled
+        {
+            get
+            {
+                return mMarketplaceEnabled;
+            }
+
+            set
+            {
+                mMarketplaceEnabled = value;
+            }
+        }
         public static int MarketplaceTax
         {
             get
@@ -161,6 +180,54 @@ namespace Snowlight.Util
                 mMarketplaceTax = value;
             }
         }
+        public static int MarketplaceTokensPrice
+        {
+            get
+            {
+                return mMarketplaceTokensPrice;
+            }
+
+            set
+            {
+                mMarketplaceTokensPrice = value;
+            }
+        }
+        public static int MarketplacePremiumTokens
+        {
+            get
+            {
+                return mMarketplacePremiumTokens;
+            }
+
+            set
+            {
+                mMarketplacePremiumTokens = value;
+            }
+        }
+        public static int MarketplaceNormalTokens
+        {
+            get
+            {
+                return mMarketplaceDefaultTokens;
+            }
+
+            set
+            {
+                mMarketplaceDefaultTokens = value;
+            }
+        }
+        public static int MarketplaceMinPrice
+        {
+            get
+            {
+                return mMarketplaceMinPrice;
+            }
+
+            set
+            {
+                mMarketplaceMinPrice = value;
+            }
+        }
         public static int MarketplaceMaxPrice
         {
             get
@@ -171,6 +238,30 @@ namespace Snowlight.Util
             set
             {
                 mMarketplaceMaxPrice = value;
+            }
+        }
+        public static int MarketplaceOfferTotalHours
+        {
+            get
+            {
+                return mMarketplaceOfferTime;
+            }
+
+            set
+            {
+                mMarketplaceOfferTime = value;
+            }
+        }
+        public static int MarketplaceAvarageDays
+        {
+            get
+            {
+                return mMarketplaceAverageOfferDays;
+            }
+
+            set
+            {
+                mMarketplaceAverageOfferDays = value;
             }
         }
         public static int MaxFavoritesPerUser
@@ -359,8 +450,15 @@ namespace Snowlight.Util
             MoreActivityPointsPixelsAmount = (int)Row["more_activitypoints_pixels_amount"];
             LoginBadgeEnabled = (Row["login_badge_enabled"].ToString() == "1");
             LoginBadgeId = (uint)Row["login_badge_id"];
+            MarketplaceEnabled = (Row["marketplace_enabled"].ToString() == "1");
             MarketplaceTax = (int)Row["marketplace_tax"];
+            MarketplaceTokensPrice = (int)Row["marketplace_tokens_price"];
+            MarketplacePremiumTokens = (int)Row["marketplace_premium_tokens"];
+            MarketplaceNormalTokens = (int)Row["marketplace_default_tokens"];
+            MarketplaceMinPrice = (int)Row["marketplace_min_price"];
             MarketplaceMaxPrice = (int)Row["marketplace_max_price"];
+            MarketplaceOfferTotalHours = (int)Row["marketplace_offer_hours"];
+            MarketplaceAvarageDays = (int)Row["marketplace_avarage_days"];
             MaxFavoritesPerUser = (int)Row["max_favorites_per_user"];
             MaxFurniPerRoom = (int)Row["max_furni_per_room"];
             MaxFurniStacking = (int)Row["max_furni_stacking"];

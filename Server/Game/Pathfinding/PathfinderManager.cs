@@ -15,6 +15,10 @@ namespace Snowlight.Game.Pathfinding
                 case "simple":
 
                     return new SimplePathfinder();
+
+                case "complex":
+
+                    return new ComplexPathfinder();
             }
         }
     }

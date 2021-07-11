@@ -1,4 +1,6 @@
-﻿using Snowlight.Storage;
+﻿using Snowlight.Game.Catalog;
+using Snowlight.Storage;
+using Snowlight.Util;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,7 +18,7 @@ namespace Snowlight.Communication.Outgoing
             using (SqlDatabaseClient dbClient = SqlDatabaseManager.GetClient())
             {
                 DataTable Data = dbClient.ExecuteQueryTable("SELECT * FROM catalog_marketplace_offers WHERE user_id = '" + CharacterID + "'");
-                String RawProfit = dbClient.ExecuteQueryRow("SELECT SUM(asking_price) FROM catalog_marketplace_offers WHERE state = '2' AND user_id = '" + CharacterID + "'")[0].ToString();
+                string RawProfit = dbClient.ExecuteQueryRow("SELECT SUM(asking_price) FROM catalog_marketplace_offers WHERE state = '2' AND user_id = '" + CharacterID + "'")[0].ToString();
 
                 if (RawProfit.Length > 0)
                 {
@@ -31,7 +33,7 @@ namespace Snowlight.Communication.Outgoing
                     {
                         // IhHI`n~^II[EFPN[OKPA
 
-                        int MinutesLeft = (int)Math.Floor((((Double)Row["timestamp"] + 172800) - UnixTimestamp.GetCurrent()) / 60);
+                        int MinutesLeft = (int)Math.Floor((((double)Row["timestamp"] + (ServerSettings.MarketplaceOfferTotalHours * 3600))) - UnixTimestamp.GetCurrent()) / 60;
                         int state = int.Parse(Row["state"].ToString());
 
                         if (MinutesLeft <= 0)

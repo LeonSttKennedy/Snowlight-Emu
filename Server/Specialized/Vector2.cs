@@ -71,5 +71,36 @@ namespace Snowlight.Specialized
 
             return new Vector2(X, Y);
         }
+
+        public int GetDistanceSquared(Vector2 Point)
+        {
+            int dx = this.X - Point.X;
+            int dy = this.Y - Point.Y;
+            return (dx * dx) + (dy * dy);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector2)
+            {
+                Vector2 v2 = (Vector2)obj;
+                return v2.X == X && v2.Y == Y;
+            }
+
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return (X + " " + Y).GetHashCode();
+        }
+
+        public static Vector2 operator +(Vector2 One, Vector2 Two)
+        {
+            return new Vector2(One.X + Two.X, One.Y + Two.Y);
+        }
+        public static Vector2 operator -(Vector2 One, Vector2 Two)
+        {
+            return new Vector2(One.X - Two.X, One.Y - Two.Y);
+        }
     }
 }

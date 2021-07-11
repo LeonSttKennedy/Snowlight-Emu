@@ -108,8 +108,11 @@
     <Compile Include="Communication\Outgoing\Catalog\CatalogUpdatedNotificationComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\CatalogVerifyPetNameResultComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\ClubGiftReadyComposer.cs" />
+    <Compile Include="Communication\Outgoing\Catalog\Marketplace\CatalogMarketplaceBuyOfferResultComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\Marketplace\CatalogMarketplaceCanSellComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\Marketplace\CatalogMarketplaceConfigComposer.cs" />
+    <Compile Include="Communication\Outgoing\Catalog\Marketplace\CatalogMarketplaceItemStatsComposer.cs" />
+    <Compile Include="Communication\Outgoing\Catalog\Marketplace\CatalogMarketplaceSerializeOffersComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\Marketplace\CatalogMarketplaceSerializeOwnOffersComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\Marketplace\CatalogMarketplaceSellItemComposer.cs" />
     <Compile Include="Communication\Outgoing\Catalog\Marketplace\CatalogMarketplaceTakeBackComposer.cs" />
@@ -284,13 +287,13 @@
     <Compile Include="Game\Bots\Bot.cs" />
     <Compile Include="Game\Bots\BotManager.cs" />
     <Compile Include="Game\Bots\BotResponse.cs" />
-    <Compile Include="Game\Catalog\CatalogClubOffer.cs" />
+    <Compile Include="Game\Catalog\Club\CatalogClubOffer.cs" />
     <Compile Include="Game\Catalog\CatalogManager.cs" />
     <Compile Include="Game\Catalog\CatalogPage.cs" />
     <Compile Include="Game\Catalog\CatalogPurchaseHandler.cs" />
-    <Compile Include="Game\Catalog\CatalogClubGifts.cs" />
-    <Compile Include="Game\Catalog\Marketplace.cs" />
-    <Compile Include="Game\Catalog\MarketplaceItems.cs" />
+    <Compile Include="Game\Catalog\Club\CatalogClubGifts.cs" />
+    <Compile Include="Game\Catalog\Marketplace\MarketplaceManager.cs" />
+    <Compile Include="Game\Catalog\Marketplace\MarktplaceOffer.cs" />
     <Compile Include="Game\Characters\CharacterInfo.cs" />
     <Compile Include="Game\Characters\CharacterInfoLoader.cs" />
     <Compile Include="Game\Characters\CharacterResolverCache.cs" />
@@ -336,6 +339,9 @@
     <Compile Include="Game\Misc\DrinkSetManager.cs" />
     <Compile Include="Game\Misc\Items\MoodlightData.cs" />
     <Compile Include="Game\Misc\Items\TeleporterLinkFinder.cs" />
+    <Compile Include="Game\Pathfinding\MinHeap.cs" />
+    <Compile Include="Game\Pathfinding\OtherPathfinder.cs" />
+    <Compile Include="Game\Pathfinding\PathfinderNode.cs" />
     <Compile Include="Game\Rooms\RoomTriggers.cs" />
     <Compile Include="Game\Sessions\SingleSignOnAuthenticator.cs" />
     <Compile Include="Game\Misc\Vouchers\VoucherManager.cs" />
@@ -447,9 +453,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\Catalog\Marketplace\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

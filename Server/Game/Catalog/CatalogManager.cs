@@ -22,7 +22,7 @@ namespace Snowlight.Game.Catalog
 {
     public static class CatalogManager
     {
-        private static Marketplace Marketplace;
+        private static MarketplaceManager Marketplace;
         private static Dictionary<int, CatalogPage> mPages;
 
         private static Dictionary<int, List<CatalogItem>> mCatalogItems;
@@ -51,7 +51,7 @@ namespace Snowlight.Game.Catalog
 
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
-            Marketplace = new Marketplace();
+            Marketplace = new MarketplaceManager();
             mPages = new Dictionary<int, CatalogPage>();
             mCatalogItems = new Dictionary<int, List<CatalogItem>>();
             mCatalogItemsIdIndex = new Dictionary<uint, CatalogItem>();
@@ -260,14 +260,14 @@ namespace Snowlight.Game.Catalog
         {
             bool CreditsError = false;
 
-            if (Session.CharacterInfo.CreditsBalance <= 0)
-            {
-                CreditsError = true;
-            }
-
             if (Session.CharacterInfo.MarketplaceTokensTotal < 0)
             {
                 Session.CharacterInfo.MarketplaceTokensTotal = 0;
+            }
+
+            if (Session.CharacterInfo.CreditsBalance <= 0)
+            {
+                CreditsError = true;
             }
 
             if (CreditsError)
@@ -277,61 +277,28 @@ namespace Snowlight.Game.Catalog
             }
             else
             {
-                using (SqlDatabaseClient dbClient = SqlDatabaseManager.GetClient())
+                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
-                    Session.CharacterInfo.UpdateCreditsBalance(dbClient, -1);
+                    Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, -ServerSettings.MarketplaceTokensPrice);
                     Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                    Session.CharacterInfo.UpdateMarketplaceTokens(dbClient, 5);
+                    Session.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, Session.HasHcOrVip() ? ServerSettings.MarketplacePremiumTokens : ServerSettings.MarketplaceNormalTokens);
                 }
 
                 MarketplaceCanSell(Session, Message);
             }
         }
 
-        public static void MarketplaceItemStats(Session Session, ClientMessage CMessage)
+        public static void MarketplaceItemStats(Session Session, ClientMessage Message)
         {
-            int int_ = CMessage.PopWiredInt32();
-            int Sprite = CMessage.PopWiredInt32();
-            ServerMessage Message = new ServerMessage(617);
-            Message.AppendInt32(1);
-            Message.AppendInt32(CatalogManager.Marketplace.OfferCountForSprite(Sprite));
-            Dictionary<int, DataRow> dictionary = new Dictionary<int, DataRow>();
-            DataTable Table = null;
-            using (SqlDatabaseClient adapter = SqlDatabaseManager.GetClient())
-            {
-                Table = adapter.ExecuteQueryTable("SELECT * FROM catalog_marketplace_data WHERE daysago > -30 AND sprite_id = " + Sprite + " LIMIT 30;");
-            }
-            if (Table != null)
-            {
-                foreach (DataRow dataRow in Table.Rows)
-                {
-                    dictionary.Add(Convert.ToInt32(dataRow["daysago"]), dataRow);
-                }
-            }
-            Message.AppendInt32(30);
-            Message.AppendInt32(29);
-            for (int i = -29; i < 0; i++)
-            {
-                Message.AppendInt32(i);
-                if (dictionary.ContainsKey(i + 1))
-                {
-                    Message.AppendInt32(Convert.ToInt32(dictionary[i + 1]["avgprice"]) / Convert.ToInt32(dictionary[i + 1]["sold"]));
-                    Message.AppendInt32(Convert.ToInt32(dictionary[i + 1]["sold"]));
-                }
-                else
-                {
-                    Message.AppendInt32(0);
-                    Message.AppendInt32(0);
-                }
-            }
-            Message.AppendInt32(int_);
-            Message.AppendInt32(Sprite);
-            Session.SendData(Message);
+            int ItemType = Message.PopWiredInt32();
+            uint Sprite = Message.PopWiredUInt32();
+
+            Session.SendData(CatalogMarketplaceItemStatsComposer.Compose(CatalogManager.Marketplace.OfferCountForSprite(Sprite), Sprite, ItemType));
         }
 
-        public static void MarketplaceConfig(Session Session, ClientMessage Event)
+        public static void MarketplaceConfig(Session Session, ClientMessage Message)
         {
-            Session.SendData(CatalogMarketplaceConfigComposer.Compose());
+            Session.SendData(CatalogMarketplaceConfigComposer.Compose(Session));
         }
 
         private static void MarketplaceGetOffers(Session Session, ClientMessage Message)
@@ -341,67 +308,19 @@ namespace Snowlight.Game.Catalog
             string SearchQuery = Message.PopString();
             int FilterMode = Message.PopWiredInt32();
 
-            Session.SendData(CatalogManager.Marketplace.SerializeOffersNew(MinPrice, MaxPrice, SearchQuery, FilterMode));
+            CatalogManager.Marketplace.SerializeOffers(Session, MinPrice, MaxPrice, SearchQuery, FilterMode);
         }
 
         private static void MarketplaceTakeBack(Session Session, ClientMessage Message)
         {
             uint ItemId = Message.PopWiredUInt32();
-            DataRow Row = null;
-
-            using (SqlDatabaseClient dbClient = SqlDatabaseManager.GetClient())
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                Row = dbClient.ExecuteQueryRow("SELECT * FROM catalog_marketplace_offers WHERE offer_id = '" + ItemId + "' LIMIT 1");
-                if (Row == null || (uint)Row["user_id"] != Session.CharacterId || (string)Row["state"] != "1")
-                {
-                    return;
-                }
-                ItemDefinition UserItem = ItemDefinitionManager.GetDefinition((uint)Row["item_id"]);
-                if (UserItem == null)
-                {
-                    return;
-                }
-
-                Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
-                List<Item> GeneratedGenericItems = new List<Item>();
-                GeneratedGenericItems.Add(ItemFactory.CreateItem(dbClient, UserItem.Id,
-                        Session.CharacterInfo.Id, (string)Row["extra_data"], (string)Row["extra_data"], 0));
-
-                foreach (Item GeneratedItem in GeneratedGenericItems)
-                {
-                    Session.InventoryCache.Add(GeneratedItem);
-
-                    int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
-
-                    if (!NewItems.ContainsKey(TabId))
-                    {
-                        NewItems.Add(TabId, new List<uint>());
-                    }
-
-                    NewItems[TabId].Add(GeneratedItem.Id);
-                }
-
-                foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                {
-                    foreach (uint NewItem in NewItemData.Value)
-                    {
-                        Session.NewItemsCache.MarkNewItem(dbClient, NewItemData.Key, NewItem);
-                    }
-                }
-
-                if (NewItems.Count > 0)
-                {
-                    Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-                }
-                Session.SendData(InventoryRefreshComposer.Compose());
-
-                dbClient.ExecuteQueryTable("DELETE FROM catalog_marketplace_offers WHERE offer_id = '" + ItemId + "' LIMIT 1");
+                CatalogManager.Marketplace.CancelOffer(Session, MySqlClient, ItemId);
             }
-
-            Session.SendData(CatalogMarketplaceTakeBackComposer.Compose((uint)Row["offer_id"]));
         }
 
-        private static void MarketplaceCanSell(Session Session, ClientMessage Event)
+        private static void MarketplaceCanSell(Session Session, ClientMessage Message)
         {
             if (Session.CharacterInfo.MarketplaceTokensTotal < 0)
             {
@@ -413,108 +332,11 @@ namespace Snowlight.Game.Catalog
         private static void MarketplacePurchase(Session Session, ClientMessage Event)
         {
             uint ItemId = Event.PopWiredUInt32();
-            DataRow Row = null;
-
-            using (SqlDatabaseClient dbClient = SqlDatabaseManager.GetClient())
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                Row = dbClient.ExecuteQueryRow("SELECT * FROM catalog_marketplace_offers WHERE offer_id = '" + ItemId + "' LIMIT 1");
-
-                if (Row == null || (string)Row["state"] != "1" || (double)Row["timestamp"] <= CatalogManager.Marketplace.FormatTimestamp())
-                {
-                    Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_marketplace_error")));
-                    return;
-                }
-
-                if ((uint)Row["user_id"] == Session.CharacterInfo.Id)
-                {
-                    Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_marketplace_boosting_error")));
-                    return;
-                }
-
-                if (Session.CharacterInfo.CreditsBalance < (int)Row["total_price"])
-                {
-                    return;
-                }
-
-                ItemDefinition UserItem = ItemDefinitionManager.GetDefinition((uint)Row["item_id"]);
-                if (UserItem == null)
-                {
-                    return;
-                }
-
-                dbClient.ExecuteQueryTable("UPDATE catalog_marketplace_offers SET state = '2' WHERE offer_id = '" + ItemId + "' LIMIT 1");
-
-                DataRow MarketData = dbClient.ExecuteQueryRow("SELECT * FROM catalog_marketplace_data WHERE daysago = 0 AND sprite_id = '" + (int)Row["sprite_id"] + "' LIMIT 1;");
-                if (MarketData != null)
-                {
-                    dbClient.ExecuteQueryTable("UPDATE catalog_marketplace_data SET sold = sold + 1, avgprice = (avgprice + " + (int)Row["total_price"] + ") WHERE id = " + (int)MarketData["id"] + " LIMIT 1;");
-                }
-                else
-                {
-                    dbClient.ExecuteQueryTable("INSERT INTO catalog_marketplace_data (sprite_id, sold, avgprice, daysago) VALUES ('" + UserItem.SpriteId + "', 1, " + (int)Row["total_price"] + ", 0)");
-                }
-
-                if (CatalogManager.Marketplace.MarketAverages.ContainsKey((int)UserItem.SpriteId) && CatalogManager.Marketplace.MarketCounts.ContainsKey((int)UserItem.SpriteId))
-                {
-                    int num3 = CatalogManager.Marketplace.MarketCounts[(int)UserItem.SpriteId];
-                    int num4 = CatalogManager.Marketplace.MarketAverages[(int)UserItem.SpriteId];
-                    num4 += (int)Row["total_price"];
-                    CatalogManager.Marketplace.MarketAverages.Remove((int)UserItem.SpriteId);
-                    CatalogManager.Marketplace.MarketAverages.Add((int)UserItem.SpriteId, num4);
-                    CatalogManager.Marketplace.MarketCounts.Remove((int)UserItem.SpriteId);
-                    CatalogManager.Marketplace.MarketCounts.Add((int)UserItem.SpriteId, num3 + 1);
-                }
-                else
-                {
-                    if (!CatalogManager.Marketplace.MarketAverages.ContainsKey((int)UserItem.SpriteId))
-                    {
-                        CatalogManager.Marketplace.MarketAverages.Add((int)UserItem.SpriteId, (int)Row["total_price"]);
-                    }
-                    if (!CatalogManager.Marketplace.MarketCounts.ContainsKey((int)UserItem.SpriteId))
-                    {
-                        CatalogManager.Marketplace.MarketCounts.Add((int)UserItem.SpriteId, 1);
-                    }
-                }
-
-                Session.CharacterInfo.UpdateCreditsBalance(dbClient, -(int)Row["total_price"]);
-                Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-
-                Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
-                List<Item> GeneratedGenericItems = new List<Item>();
-                GeneratedGenericItems.Add(ItemFactory.CreateItem(dbClient, UserItem.Id,
-                        Session.CharacterInfo.Id, (string)Row["extra_data"], (string)Row["extra_data"], 0));
-
-                foreach (Item GeneratedItem in GeneratedGenericItems)
-                {
-                    Session.InventoryCache.Add(GeneratedItem);
-
-                    int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
-
-                    if (!NewItems.ContainsKey(TabId))
-                    {
-                        NewItems.Add(TabId, new List<uint>());
-                    }
-
-                    NewItems[TabId].Add(GeneratedItem.Id);
-                }
-
-                foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                {
-                    foreach (uint NewItem in NewItemData.Value)
-                    {
-                        Session.NewItemsCache.MarkNewItem(dbClient, NewItemData.Key, NewItem);
-                    }
-                }
-
-                if (NewItems.Count > 0)
-                {
-                    Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-                }
-                Session.SendData(InventoryRefreshComposer.Compose());
-                Session.SendData(CatalogManager.Marketplace.SerializeOffersNew(-1, -1, "", 1));
+                CatalogManager.Marketplace.Purchase(Session, MySqlClient, ItemId);
             }
         }
-
         private static void MarketPlacePostItem(Session Session, ClientMessage Message) 
         {
             if (Session.InventoryCache != null)
@@ -527,44 +349,22 @@ namespace Snowlight.Game.Catalog
                         return;
                     }
                 }
+
                 int sellingPrice = Message.PopWiredInt32();
                 int junk = Message.PopWiredInt32();
                 uint itemId = Message.PopWiredUInt32();
 
                 Item UserItem = Session.InventoryCache.GetItem(itemId);
-                if (UserItem != null && Marketplace.CanSellItem(UserItem))
-                { 
-                    CatalogManager.Marketplace.SellItem(Session, itemId, sellingPrice); 
+                if (UserItem != null && CatalogManager.Marketplace.CanSellItem(UserItem))
+                {
+                    CatalogManager.Marketplace.SellItem(Session, itemId, sellingPrice);
                 }
             }
         }
 
         private static void MarketplaceClaimCredits(Session Session, ClientMessage Message)
         {
-            DataTable Results = null;
-
-            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-            {
-                MySqlClient.SetParameter("id", Session.CharacterId);
-                Results = MySqlClient.ExecuteQueryTable("SELECT asking_price FROM catalog_marketplace_offers WHERE user_id = @id AND state = '2'");
-                if (Results != null)
-                {
-                    int Profit = 0;
-
-                    foreach (DataRow Row in Results.Rows)
-                    {
-                        Profit += (int)Row["asking_price"];
-                        if (Profit >= 1)
-                        {
-                            Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, Profit);
-                            Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                        }
-                    }
-
-                    MySqlClient.SetParameter("id", Session.CharacterId);
-                    MySqlClient.ExecuteQueryTable("DELETE FROM catalog_marketplace_offers WHERE user_id = @id AND state = '2'");
-                }
-            }
+            CatalogManager.Marketplace.RedeemCredits(Session);
         }
 
         private static void MarketplaceGetOwnOffers(Session Session, ClientMessage Message)

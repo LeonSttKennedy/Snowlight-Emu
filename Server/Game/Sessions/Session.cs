@@ -689,6 +689,11 @@ namespace Snowlight.Game.Sessions
             Output.WriteLine("Disposed and released client " + Id + " and associated resources.", OutputLevel.DebugInformation);
         }
 
+        public bool HasHcOrVip()
+        {
+            return (HasRight("club_regular") || HasRight("club_vip"));
+        }
+
         public void SendInfoUpdate()
         {
             if (!Authenticated)

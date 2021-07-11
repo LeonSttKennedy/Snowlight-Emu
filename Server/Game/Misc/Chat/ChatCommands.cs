@@ -23,6 +23,7 @@ using Snowlight.Communication.Outgoing;
 using Snowlight.Communication;
 using Snowlight.Game.Rights;
 using Snowlight.Game.Items;
+using Snowlight.Game.Navigation;
 
 namespace Snowlight.Game.Misc
 {
@@ -555,6 +556,14 @@ namespace Snowlight.Game.Misc
                                         goto End;
                                     }
 
+                                case "navigator":
+                                    {
+                                        ToSend = ExternalTexts.GetValue("command_update_navigator");
+                                        Navigator.ReloadFlatCategories(MySqlClient);
+                                        Navigator.ReloadOfficialItems(MySqlClient);
+                                        goto End;
+                                    }
+
                                 case "serversettings":
                                     {
                                         ToSend = ExternalTexts.GetValue("command_update_serversettings");
@@ -631,8 +640,8 @@ namespace Snowlight.Game.Misc
                             return true;
                         }
 
-                        string Username = Bits[1].Trim();
-                        string BadgeCode = Bits[2].Trim();
+                        string Username = UserInputFilter.FilterString(Bits[1].Trim());
+                        string BadgeCode = UserInputFilter.FilterString(Bits[2].Trim());
 
                         // Verify if badge code is in database
                         Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
@@ -715,7 +724,7 @@ namespace Snowlight.Game.Misc
                             return true;
                         }
 
-                        string BadgeCode = Bits[2];
+                        string BadgeCode = UserInputFilter.FilterString(Bits[2].Trim());
 
                         // Verify if badge code is in database
                         Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
@@ -725,7 +734,7 @@ namespace Snowlight.Game.Misc
                             return true;
                         }
 
-                        string Method = Bits[1];
+                        string Method = UserInputFilter.FilterString(Bits[1].Trim());
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             if (RightsManager.GetRightsForBadge(BadgeToGive).Count == 0)
@@ -763,18 +772,21 @@ namespace Snowlight.Game.Misc
                                             Dictionary<uint, Session> Sessions = SessionManager.Sessions;
                                             foreach (Session TargetSession in Sessions.Values)
                                             {
-                                                if (TargetSession.CharacterId != Session.CharacterId)
+                                                if (TargetSession.Authenticated && !TargetSession.Stopped)
                                                 {
-                                                    if (!TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                                                    if (TargetSession.CharacterId != Session.CharacterId)
                                                     {
-                                                        TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
-                                                        TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
-                                                        TargetSession.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+                                                        if (!TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                                                        {
+                                                            TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
+                                                            TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
+                                                            TargetSession.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
 
-                                                        TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
+                                                            TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
 
-                                                        TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
-                                                        TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_dmbadge_targetuser_success") + "\r\n- " + Session.CharacterInfo.Username));
+                                                            TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
+                                                            TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_dmbadge_targetuser_success") + "\r\n- " + Session.CharacterInfo.Username));
+                                                        }
                                                     }
                                                 }
                                             }
@@ -819,8 +831,8 @@ namespace Snowlight.Game.Misc
                             return true;
                         }
 
-                        int Amount = 0;
-                        string Username = Bits[1];
+                        int Amount;
+                        string Username = UserInputFilter.FilterString(Bits[1].Trim());
 
                         // Verify the user session is connected
                         Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(Username));
@@ -832,7 +844,7 @@ namespace Snowlight.Game.Misc
 
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
-                            string Type = Bits[2];
+                            string Type = UserInputFilter.FilterString(Bits[2].Trim());
                             switch (Type.ToLower())
                             {
                                 case "coins":
@@ -900,8 +912,8 @@ namespace Snowlight.Game.Misc
                         }
 
                         int Amount;
-                        string Type = Bits[1];
-                        string Currency = Bits[2];
+                        string Type = UserInputFilter.FilterString(Bits[1].Trim());
+                        string Currency = UserInputFilter.FilterString(Bits[2].Trim());
 
 
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
@@ -939,11 +951,14 @@ namespace Snowlight.Game.Misc
                                                         Dictionary<uint, Session> Sessions = SessionManager.Sessions;
                                                         foreach (Session TargetSession in Sessions.Values)
                                                         {
-                                                            if (TargetSession.CharacterId != Session.CharacterId)
+                                                            if (TargetSession.Authenticated && !TargetSession.Stopped)
                                                             {
-                                                                TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, Amount);
-                                                                TargetSession.SendData(CreditsBalanceComposer.Compose(TargetSession.CharacterInfo.CreditsBalance));
-                                                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
+                                                                if (TargetSession.CharacterId != Session.CharacterId)
+                                                                {
+                                                                    TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, Amount);
+                                                                    TargetSession.SendData(CreditsBalanceComposer.Compose(TargetSession.CharacterInfo.CreditsBalance));
+                                                                    TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
+                                                                }
                                                             }
                                                         }
                                                         goto End;
@@ -955,7 +970,6 @@ namespace Snowlight.Game.Misc
                                                         return true;
                                                     }
                                             }
-
                                         }
                                         else
                                         {
@@ -994,11 +1008,14 @@ namespace Snowlight.Game.Misc
                                                         Dictionary<uint, Session> Sessions = SessionManager.Sessions;
                                                         foreach (Session TargetSession in Sessions.Values)
                                                         {
-                                                            if (TargetSession.CharacterId != Session.CharacterId)
+                                                            if (TargetSession.Authenticated && !TargetSession.Stopped)
                                                             {
-                                                                TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, Amount);
-                                                                TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, Amount));
-                                                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
+                                                                if (TargetSession.CharacterId != Session.CharacterId)
+                                                                {
+                                                                    TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, Amount);
+                                                                    TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, Amount));
+                                                                    TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
+                                                                }
                                                             }
                                                         }
                                                         goto End;
@@ -1230,7 +1247,7 @@ namespace Snowlight.Game.Misc
 
                         // Total server online time
                         DateTime Now = DateTime.Now;
-                        TimeSpan Uptime = (Now - Program.ServerStarted);
+                        TimeSpan Uptime = Now - Program.ServerStarted;
 
                         string[] Args = { Uptime.Days.ToString(), Uptime.Hours.ToString(), Uptime.Minutes.ToString(), Uptime.Seconds.ToString(),
                             OnlineUsers.Count.ToString(), RoomManager.RoomInstances.Count.ToString(), daily.ToString(), alltime.ToString(),

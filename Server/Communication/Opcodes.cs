@@ -172,8 +172,11 @@ namespace Snowlight.Communication
         public const uint MARKETPLACE_SELL_OK = 610;
         public const uint MARKETPLACE_CAN_SELL = 611;
         public const uint MARKETPLACE_CONFIG = 612;
+        public const uint MARKETPLACE_BUY_OFFER_RESULT = 613;
         public const uint MARKETPLACE_TAKE_BACK = 614;
+        public const uint MARKETPLACE_SERIALIZE_OFFERS = 615;
         public const uint MARKETPLACE_SERIALIZE_OWN_OFFERS = 616;
+        public const uint MARKETPLACE_ITEM_STATS = 617;
         public const uint CATALOG_GIFTS_CONFIG = 620;
         public const uint CATALOG_CAN_GIFT = 622;
         public const uint CATALOG_CLUB_GIFT = 623;

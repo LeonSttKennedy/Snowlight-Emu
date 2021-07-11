@@ -32,13 +32,11 @@ namespace Snowlight.Util
 
                     // Getting all time players peak
                     string alltimeplayerspeak = MySqlClient.ExecuteScalar("SELECT all_time_player_peak FROM server_statistics LIMIT 1").ToString();
-                    int alltime = 0;
-                    int.TryParse(alltimeplayerspeak, out alltime);
+                    int.TryParse(alltimeplayerspeak, out int alltime);
                     
                     // Getting daily player peak
                     string dailyplayerpeak = MySqlClient.ExecuteScalar("SELECT daily_player_peak FROM server_statistics LIMIT 1").ToString();
-                    int daily = 0;
-                    int.TryParse(dailyplayerpeak, out daily);
+                    int.TryParse(dailyplayerpeak, out int daily);
 
                     // Update the number of users online and rooms loaded
                     MySqlClient.SetParameter("totalusersonline", TotalUsersOnline);
@@ -46,7 +44,7 @@ namespace Snowlight.Util
                     MySqlClient.ExecuteNonQuery("UPDATE server_statistics SET active_connections = @totalusersonline, rooms_loaded = @totalroomsloaded LIMIT 1");
 
                     // Checking if the total value of active connections is greater than the value registered in the db
-                    if (SessionManager.ActiveConnections > daily)
+                    if (TotalUsersOnline > daily)
                     {
                         // If it's true, lets update
                         MySqlClient.SetParameter("sval", TotalUsersOnline);
@@ -54,19 +52,22 @@ namespace Snowlight.Util
                     }
 
                     // Checking if the total value of active connections is greater than the value registered in the db
-                    if (SessionManager.ActiveConnections > alltime) 
+                    if (TotalUsersOnline > alltime) 
                     {
                         // If it's true, lets update
                         MySqlClient.SetParameter("sval", TotalUsersOnline);
                         MySqlClient.ExecuteNonQuery("UPDATE server_statistics SET all_time_player_peak = @sval LIMIT 1");
                     }
 
-                    // If the day changes, this will restart the daily players count with the current number of connected players.
                     if (Program.CurrentDay != DateTime.Today)
                     {
+                        // If the day changes, this will restart the daily players count with the current number of connected players.
                         MySqlClient.SetParameter("sval", TotalUsersOnline);
                         MySqlClient.ExecuteNonQuery("UPDATE server_statistics SET daily_player_peak = @sval LIMIT 1");
                         Program.CurrentDay = DateTime.Today;
+
+                        // If the day changes, restart the count of daily_sold in table catalog_marketplace_data ;)
+                        MySqlClient.ExecuteNonQuery("UPDATE catalog_marketplace_data SET daily_sold = '0'");
                     }
                 }
 

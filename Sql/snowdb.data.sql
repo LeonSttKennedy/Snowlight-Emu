@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tempo de Geração: Jul 01, 2021 as 08:14 AM
+-- Tempo de Geração: Jul 11, 2021 as 04:05 PM
 -- Versão do Servidor: 5.5.10
 -- Versão do PHP: 5.3.6
 
@@ -437,7 +437,7 @@ INSERT INTO `bots` (`id`, `ai_type`, `name`, `look`, `motto`, `room_id`, `pos_st
 (13, 'pet', 'Dragon', '', '', 0, '0|0|0', '0|0|0', ' ', 'freeroam', '1', '1', -1, 0, 500, 12),
 (14, 'pet', 'Monkey', ' ', ' ', 0, '0|0|0', '0|0|0', ' ', 'freeroam', '1', '1', -1, 0, 500, 14),
 (15, 'guide', 'Guide Bot', 'hr-828-45.lg-285-64.ch-215-110.hd-180-2.sh-290-62.he-1607-', 'Here to help you out!', 0, '0|0|0', '0|0|0', ' ', 'freeroam', '1', '1', -1, 0, 500, 9999),
-(16, 'generic', 'Harry', 'hd-180-7.sh-290-110.lg-270-91.ch-809-62.hr-828-45', ' Welcome to Uber!', 1, '9|19|0', '0|0|0', ' ', 'freeroam', '1', '1', 2, 0, 500, 10000),
+(16, 'generic', 'Harry', 'hd-180-7.sh-290-110.lg-270-91.ch-809-62.hr-828-45', ' Welcome to Uber!', 1, '9|19|0', '0|0|0', '8|16;9|16;8|17;9|17;8|18;9|18;8|19;9|19;8|20;9|20;6|21;7|21;8|21;9|21;6|22;7|22;8|22;9|22;6|23;7|23;8|23;9|23;8|24;9|24;', 'defined', '1', '1', 2, 0, 500, 10000),
 (17, 'generic', 'Drew', 'sh-290-62.ch-215-73.lg-285-110.hd-180-1.cc-3007-73-62.hr-828-45', 'Hello, hello!', 4, '21|27|2', '0|0|0', '', 'freeroam', '1', '0', 2, 0, 500, 10001),
 (18, 'generic', 'Sandy', 'hr-836-31.sh-907-96.hd-600-7.ch-826-80.lg-715-80', 'I am happy to help you!', 3, '1|10|1', '0|0|0', '', 'freeroam', '1', '0', 2, 0, 500, 10002),
 (19, 'generic', 'Dave', 'hd-180-1.hr-100-61.sh-300-64.ch-875-66-62.lg-270-66', '', 5, '10|7|2', '0|0|0', '', 'freeroam', '1', '1', 2, 0, 500, 10003),
@@ -1863,7 +1863,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1209, 86, 1209, '', 'tiki_sand', 0, 3, '1', 1, 0),
 (1210, 108, 1210, '', 'sound_set_69', 10, 0, '1', 1, 0),
 (1211, 70, 1211, '', 'diner_tray_4', 0, 3, '1', 1, 0),
-(1212, 91, 1212, '', 'svnr_de', 250, 3000, '1', 1, 0),
+(1212, 91, 1212, '', 'svnr_de', 200, 100, '1', 1, 0),
 (1213, 70, 1213, '', 'diner_tray_2', 0, 3, '1', 1, 0),
 (1214, 70, 1214, '', 'diner_rug', 0, 3, '1', 1, 0),
 (1215, 70, 1215, '', 'diner_sofa_2*1', 0, 3, '1', 1, 0),
@@ -1875,7 +1875,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1221, 70, 1221, '', 'diner_sofa_2*7', 0, 3, '1', 1, 0),
 (1222, 70, 1222, '', 'diner_sofa_2*8', 0, 3, '1', 1, 0),
 (1223, 70, 1223, '', 'diner_sofa_2*9', 0, 3, '1', 1, 0),
-(1224, 91, 1224, '', 'svnr_it', 250, 3000, '1', 1, 0),
+(1224, 91, 1224, '', 'svnr_it', 200, 100, '1', 1, 0),
 (1225, 70, 1225, '', 'diner_shaker', 0, 3, '1', 1, 0),
 (1226, 70, 1226, '', 'diner_tray_5', 0, 3, '1', 1, 0),
 (1227, 70, 1227, '', 'diner_cashreg*1', 0, 3, '1', 1, 0),
@@ -1887,7 +1887,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1233, 70, 1233, '', 'diner_cashreg*7', 0, 3, '1', 1, 0),
 (1234, 70, 1234, '', 'diner_cashreg*8', 0, 3, '1', 1, 0),
 (1235, 70, 1235, '', 'diner_cashreg*9', 0, 3, '1', 1, 0),
-(1236, 91, 1236, '', 'svnr_nl', 250, 3000, '1', 1, 0),
+(1236, 91, 1236, '', 'svnr_nl', 200, 100, '1', 1, 0),
 (1237, 70, 1237, '', 'diner_tray_6', 0, 3, '1', 1, 0),
 (1238, 70, 1238, '', 'diner_gumvendor*1', 0, 3, '1', 1, 0),
 (1239, 70, 1239, '', 'diner_gumvendor*2', 0, 3, '1', 1, 0),
@@ -1898,9 +1898,9 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1244, 70, 1244, '', 'diner_gumvendor*7', 0, 3, '1', 1, 0),
 (1245, 70, 1245, '', 'diner_gumvendor*8', 0, 3, '1', 1, 0),
 (1246, 70, 1246, '', 'diner_gumvendor*9', 0, 3, '1', 1, 0),
-(1247, 91, 1247, '', 'svnr_aus', 250, 3000, '1', 1, 0),
+(1247, 91, 1247, '', 'svnr_aus', 200, 100, '1', 1, 0),
 (1248, 70, 1248, '', 'diner_tray_0', 0, 3, '1', 1, 0),
-(1249, 91, 1249, '', 'svnr_uk', 250, 3000, '1', 1, 0),
+(1249, 91, 1249, '', 'svnr_uk', 200, 100, '1', 1, 0),
 (1250, 70, 1250, '', 'diner_tray_1', 0, 3, '1', 1, 0),
 (1251, 70, 1251, '', 'diner_tray_7', 0, 3, '1', 1, 0),
 (1252, 70, 1252, '', 'diner_tray_3', 0, 3, '1', 1, 0),
@@ -2050,7 +2050,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1399, 114, 1399, '', 'penguin_icehockey', 0, 3, '1', 1, 0),
 (1400, 114, 1400, '', 'penguin_clown', 0, 3, '1', 1, 0),
 (1401, 114, 1401, '', 'penguin_wrestler', 0, 3, '1', 1, 0),
-(1402, 91, 1402, '', 'svnr_fi', 250, 3000, '1', 1, 0),
+(1402, 91, 1402, '', 'svnr_fi', 200, 100, '1', 1, 0),
 (1403, 148, 1403, '', 'xmas08_dvdr1', 0, 3, '1', 1, 0),
 (1404, 114, 1404, '', 'penguin_glow', 0, 3, '1', 1, 0),
 (1405, 114, 1405, '', 'penguin_sumo', 0, 3, '1', 1, 0),
@@ -4007,16 +4007,18 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 
 CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
-  `sprite_id` int(7) NOT NULL,
+  `sprite_id` int(7) unsigned NOT NULL,
   `sold` int(7) NOT NULL DEFAULT '0',
+  `daily_sold` int(7) NOT NULL DEFAULT '0',
   `avgprice` int(9) NOT NULL DEFAULT '0',
   `daysago` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `catalog_marketplace_data`
 --
+
 
 -- --------------------------------------------------------
 
@@ -4036,11 +4038,10 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
   `timestamp` double NOT NULL,
   `state` enum('1','2') NOT NULL DEFAULT '1',
   `extra_data` text NOT NULL,
-  `furni_id` int(10) unsigned NOT NULL,
   `limited_number` int(11) NOT NULL DEFAULT '0',
   `limited_stack` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`offer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `catalog_marketplace_offers`
@@ -4133,7 +4134,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `marketplace_tickets` int(11) NOT NULL DEFAULT '0',
   `last_respect_update` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Extraindo dados da tabela `characters`
@@ -4141,6 +4142,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
 
 INSERT INTO `characters` (`id`, `account_uid`, `username`, `real_name`, `motto`, `figure`, `gender`, `credits_balance`, `activity_points_balance`, `activity_points_last_update`, `score`, `privacy_accept_friends`, `home_room`, `auth_ticket`, `last_ip`, `config_volume`, `timestamp_lastvisit`, `timestamp_created`, `moderation_tickets`, `moderation_tickets_abusive`, `moderation_tickets_cooldown`, `moderation_bans`, `moderation_cautions`, `moderation_muted_until_timestamp`, `respect_points`, `respect_credit_humans`, `respect_credit_pets`, `marketplace_tickets`, `last_respect_update`) VALUES
 (1, 1, 'Admin', 'Jane Doe', 'Administrator', 'hr-3194-40-31.cc-3039-100.sh-290-62.hd-3092-1.lg-270-110.fa-1206-62.ha-3129-100', 'M', 100, 2000, 1625094522.9335861, 200, '1', 0, '', '127.0.0.1', 100, 1625094471, 0, 0, 0, 0, 0, 0, 1624495953.6613128, 27, 3, 3, 4, 1625047923.1113982);
+
 -- --------------------------------------------------------
 
 --
@@ -7339,7 +7341,7 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `moderation_chatlogs`
@@ -7508,19 +7510,19 @@ INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `is_category`, 
 (1, 0, 0, '1', '1', 'details', 'Staff Picks', '', 'external', 'officialrooms_hq/staffpickfolder.gif', '', 100, '1'),
 (2, 0, 1, '0', '0', 'banner', 'Welcome Lounge', 'Get a warm welcome to the hotel and meet new people.', 'internal', '', 'Welcome Lounge', 1, '1'),
 (3, 0, 2, '0', '0', 'banner', 'Theatredrome', 'For mass assemblies and gatherings.', 'internal', '', 'Theatredrome', 2, '1'),
-(4, 0, 3, '0', '0', 'details', 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'internal', '', '', 4, '1'),
-(5, 0, 4, '0', '0', 'details', 'Star Lounge', 'Celebrities favourite hangout', 'internal', '', '', 5, '1'),
-(6, 0, 5, '0', '0', 'details', 'The Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'internal', '', '', 6, '1'),
-(7, 0, 6, '0', '0', 'details', 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'internal', '', '', 7, '1'),
-(8, 0, 7, '0', '0', 'details', 'Oriental Tearoom', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'internal', '', '', 8, '1'),
-(9, 0, 8, '0', '0', 'details', 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'internal', '', '', 9, '1'),
-(10, 0, 9, '0', '0', 'details', 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'internal', '', '', 10, '1'),
-(11, 0, 10, '0', '0', 'details', 'Club Orient', 'Tres chic with an eastern twist.', 'internal', '', '', 11, '1'),
-(12, 0, 11, '0', '0', 'details', 'Pizzeria', 'The best pizza in town!', 'internal', '', '', 12, '1'),
-(13, 0, 12, '0', '0', 'details', 'The Park', 'Follow the path...', 'internal', '', '', 13, '1'),
-(14, 0, 13, '0', '0', 'details', 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'internal', '', '', 14, '1'),
-(15, 0, 15, '0', '0', 'details', 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'internal', '', '', 15, '1'),
-(16, 0, 16, '0', '0', 'banner', 'Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'internal', '', 'Library', 3, '1');
+(4, 0, 16, '0', '0', 'banner', 'Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'internal', '', 'Library', 3, '1'),
+(5, 0, 3, '0', '0', 'details', 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'internal', '', '', 4, '1'),
+(6, 0, 4, '0', '0', 'details', 'Star Lounge', 'Celebrities favourite hangout', 'internal', '', '', 5, '1'),
+(7, 0, 5, '0', '0', 'details', 'The Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'internal', '', '', 6, '1'),
+(8, 0, 6, '0', '0', 'details', 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'internal', '', '', 7, '1'),
+(9, 0, 7, '0', '0', 'details', 'Oriental Tearoom', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'internal', '', '', 8, '1'),
+(10, 0, 8, '0', '0', 'details', 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'internal', '', '', 9, '1'),
+(11, 0, 9, '0', '0', 'details', 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'internal', '', '', 10, '1'),
+(12, 0, 10, '0', '0', 'details', 'Club Orient', 'Tres chic with an eastern twist.', 'internal', '', '', 11, '1'),
+(13, 0, 11, '0', '0', 'details', 'Pizzeria', 'The best pizza in town!', 'internal', '', '', 12, '1'),
+(14, 0, 12, '0', '0', 'details', 'The Park', 'Follow the path...', 'internal', '', '', 13, '1'),
+(15, 0, 13, '0', '0', 'details', 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'internal', '', '', 14, '1'),
+(16, 0, 15, '0', '0', 'details', 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'internal', '', '', 15, '1');
 
 -- --------------------------------------------------------
 
@@ -7535,7 +7537,7 @@ CREATE TABLE IF NOT EXISTS `new_items` (
   `item_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `new_items`
@@ -7565,7 +7567,7 @@ CREATE TABLE IF NOT EXISTS `pets` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `pets`
@@ -8160,8 +8162,10 @@ CREATE TABLE IF NOT EXISTS `server_ingame_texts` (
 INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('cannot_ignore_user', 'You can not ignore this user.'),
 ('cannot_place_pet', 'This pet cannot be placed right now. Please try again later.'),
+('catalog_marketplace_base_item_not_found', 'Unable to find item base item!'),
 ('catalog_marketplace_boosting_error', 'To prevent average boosting you cannot purchase your own marketplace offers.'),
 ('catalog_marketplace_error', 'Sorry, this offer has expired.'),
+('catalog_marketplace_offer_not_found', 'Unable to find offer! Sorry!'),
 ('catalog_recycler_disabled', 'The recycler is temporarily disabled. Please check back later.'),
 ('command_club_user_list', 'The following commands are available to club users:'),
 ('command_coords_text', 'Position: %0%, Rotation: %1%'),
@@ -8216,6 +8220,7 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('command_update_error', '''%0%'' isn''t a valid thing to reload.'),
 ('command_update_filter', 'Wordfilter'),
 ('command_update_items', 'Items'),
+('command_update_navigator', 'Navigator'),
 ('command_update_serversettings', 'Server settings'),
 ('command_update_success', '%0% successfully reloaded.'),
 ('command_update_texts', 'External texts'),
@@ -8236,7 +8241,7 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 
 CREATE TABLE IF NOT EXISTS `server_settings` (
   `activitypoints_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
-  `more_activitypoints_for_vip_users` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `more_activitypoints_for_vip_users` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
   `activitypoints_interval` int(11) NOT NULL DEFAULT '1800' COMMENT '1800 = 30 min',
   `activitypoints_credits_amount` int(11) NOT NULL DEFAULT '0',
   `more_activitypoints_credits_amount` int(11) NOT NULL DEFAULT '25',
@@ -8250,8 +8255,15 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
   `moderation_actionlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
   `moderation_chatlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
   `moderation_roomlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  `marketplace_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
   `marketplace_tax` int(2) NOT NULL DEFAULT '1',
+  `marketplace_tokens_price` int(2) NOT NULL DEFAULT '1',
+  `marketplace_premium_tokens` int(2) NOT NULL DEFAULT '10',
+  `marketplace_default_tokens` int(2) NOT NULL DEFAULT '5',
+  `marketplace_min_price` int(2) NOT NULL DEFAULT '1',
   `marketplace_max_price` int(9) NOT NULL DEFAULT '10000',
+  `marketplace_offer_hours` int(2) NOT NULL DEFAULT '48',
+  `marketplace_avarage_days` int(2) NOT NULL DEFAULT '7',
   `max_favorites_per_user` int(2) NOT NULL DEFAULT '30',
   `max_furni_per_room` int(6) NOT NULL DEFAULT '500',
   `max_furni_stacking` int(2) NOT NULL DEFAULT '12',
@@ -8265,8 +8277,8 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
 -- Extraindo dados da tabela `server_settings`
 --
 
-INSERT INTO `server_settings` (`activitypoints_enabled`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_tax`, `marketplace_max_price`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `wordfilter_maximum_count`, `wordfilter_time_muted`) VALUES
-('1', '1', 900, 0, 25, 25, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', 1, 10000, 30, 500, 12, 10, 15, 5, 300);
+INSERT INTO `server_settings` (`activitypoints_enabled`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_enabled`, `marketplace_tax`, `marketplace_tokens_price`, `marketplace_premium_tokens`, `marketplace_default_tokens`, `marketplace_min_price`, `marketplace_max_price`, `marketplace_offer_hours`, `marketplace_avarage_days`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `wordfilter_maximum_count`, `wordfilter_time_muted`) VALUES
+('1', '1', 900, 0, 25, 25, 50, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', '1', 1, 1, 10, 5, 1, 10000, 48, 7, 30, 500, 12, 10, 15, 5, 300);
 
 -- --------------------------------------------------------
 
@@ -8288,7 +8300,7 @@ CREATE TABLE IF NOT EXISTS `server_statistics` (
 --
 
 INSERT INTO `server_statistics` (`server_status`, `server_ver`, `active_connections`, `all_time_player_peak`, `daily_player_peak`, `rooms_loaded`) VALUES
-('0', 'Snowlight Emulator v1.0-dev (Build 10000)', 0, 3, 0, 0);
+('0', 'Snowlight Emulator v1.0-dev (Build 10000)', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -9268,9 +9280,9 @@ INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `size_x`, `si
 (914, 14, 'rooftop_sofa', '1|6|0', 1, 1, 4, 1, '0', '1'),
 (915, 14, 'rooftop_sofab', '7|6|0', 1, 1, 4, 1, '0', '1'),
 (916, 14, 'rooftop_sofa', '8|6|0', 1, 1, 4, 1, '0', '1'),
-(917, 14, 'rooftop_sofab', '0|9|0', 1, 1, 0, 1, '0', '1');
+(917, 14, 'rooftop_sofab', '0|9|0', 1, 1, 0, 1, '0', '1'),
+(918, 14, 'rooftop_sofa', '1|9|0', 1, 1, 0, 1, '0', '1');
 INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `size_x`, `size_y`, `rotation`, `height`, `walkable`, `is_seat`) VALUES
-(918, 14, 'rooftop_sofa', '1|9|0', 1, 1, 0, 1, '0', '1'),
 (919, 14, 'rooftop_sofab', '7|9|0', 1, 1, 0, 1, '0', '1'),
 (920, 14, 'rooftop_sofa', '8|9|0', 1, 1, 0, 1, '0', '1'),
 (921, 15, 'float_dummychair', '24|9|3', 1, 1, 4, 1, '0', '1'),
