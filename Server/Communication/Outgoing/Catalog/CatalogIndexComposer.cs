@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Snowlight.Util;
 using Snowlight.Game.Catalog;
 using Snowlight.Game.Sessions;
 
@@ -65,7 +66,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(Page.Color);
             Message.AppendInt32(Page.Icon);
             Message.AppendInt32(Page.Id);
-            Message.AppendStringWithBreak(Page.Caption + (Page.RequiredRight.Length > 0 ? "*" : string.Empty) + (Page.ComingSoon? " (Coming Soon)" : string.Empty));
+            Message.AppendStringWithBreak(Page.Caption + (Page.RequiredRight.Length > 0 ? "*" : string.Empty) + (Page.ComingSoon? " (" + ExternalTexts.GetValue("catalog_page_coming_soon") + ")" : string.Empty));
             Message.AppendInt32(TreeSize);
         }
 

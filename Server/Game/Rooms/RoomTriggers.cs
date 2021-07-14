@@ -85,22 +85,24 @@ namespace Snowlight.Game.Rooms
             {
                 MySqlClient.SetParameter("triggerid", TriggerId);
                 DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM room_triggers WHERE id = @triggerid");
-
-                RoomTriggerList Trigger = RoomTriggerList.ROLLER;
-                switch ((string)Row["action"])
+                if (Row != null)
                 {
-                    case "roller":
-                        Trigger = RoomTriggerList.ROLLER;
-                        break;
+                    RoomTriggerList Trigger = RoomTriggerList.ROLLER;
+                    switch ((string)Row["action"])
+                    {
+                        case "roller":
+                            Trigger = RoomTriggerList.ROLLER;
+                            break;
 
-                    case "teleport":
-                        Trigger = RoomTriggerList.TELEPORT;
-                        break;
+                        case "teleport":
+                            Trigger = RoomTriggerList.TELEPORT;
+                            break;
+                    }
+
+                    Return = new RoomTriggers((uint)Row["id"], Vector3.FromString((string)Row["room_pos"]),
+                            Trigger, Vector3.FromString((string)Row["to_room_pos"]), (uint)Row["to_room_id"],
+                            (int)Row["to_room_dir"]);
                 }
-
-                Return = new RoomTriggers((uint)Row["id"], Vector3.FromString((string)Row["room_pos"]),
-                        Trigger, Vector3.FromString((string)Row["to_room_pos"]), (uint)Row["to_room_id"],
-                        (int)Row["to_room_dir"]);
             }
 
             return Return;

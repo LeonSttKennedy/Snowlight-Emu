@@ -63,6 +63,12 @@ namespace Snowlight.Game.Rooms
                 // Update actor position if neccessary
                 if (Actor.PositionToSet != null)
                 {
+                    if (Actor.IsSitting)
+                    {
+                        Actor.RemoveStatus("sit");
+                        Actor.IsSitting = false;
+                    }
+
                     // Check if the new position is in the door
                     if (Actor.Type == RoomActorType.UserCharacter && Actor.PositionToSet.X == mCachedModel.DoorPosition.X && Actor.PositionToSet.Y == mCachedModel.DoorPosition.Y)
                     {
@@ -370,7 +376,7 @@ namespace Snowlight.Game.Rooms
                     Actor.UpdateNeeded = true;
                 }
             }
-            else if (CurrentStatusses.ContainsKey("sit"))
+            else if (CurrentStatusses.ContainsKey("sit") && !Actor.IsSitting)
             {
                 Actor.RemoveStatus("sit");
                 Actor.UpdateNeeded = true;

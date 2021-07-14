@@ -582,8 +582,8 @@ namespace Snowlight.Game.Rooms
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
             if (Instance == null) return;
 
-            uint PetId = Message.PopWiredUInt32();
-            RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
+            int PetId = Message.PopWiredInt32();
+            RoomActor Actor = Instance.GetActorByReferenceId(uint.Parse(PetId.ToString()), RoomActorType.AiBot);
             if (Actor == null) return;
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
@@ -599,7 +599,7 @@ namespace Snowlight.Game.Rooms
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
             if (Instance == null) return;
 
-            uint PetId = Message.PopFixedUInt32();
+            uint PetId = Message.PopWiredUInt32();
             RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
             if (Actor == null) return;
 

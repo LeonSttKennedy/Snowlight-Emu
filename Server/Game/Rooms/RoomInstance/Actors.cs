@@ -523,12 +523,7 @@ namespace Snowlight.Game.Rooms
                     }
                     
                     Bot Bot = (Bot)Actor.ReferenceObject;
-                    if(Bot.PetData == null)
-                    {
-                        continue;
-                    }
-
-                    if (Bot.PetData.Name == Name)
+                    if(Bot.PetData != null && Bot.PetData.Name == Name)
                     {
                         return Actor;
                     }
@@ -547,7 +542,9 @@ namespace Snowlight.Game.Rooms
             Bot.Brain.Initialize(Bot);
 
             if (((Bot)BotActor.ReferenceObject).BehaviorType == "guide")
-                this.Info.GuideBotIsCalled = true;
+            {
+                Info.GuideBotIsCalled = true;
+            }
 
             if (BotActor != null)
             {

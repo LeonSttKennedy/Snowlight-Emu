@@ -565,10 +565,10 @@ namespace Snowlight.Game.Rooms
             /*if (MessageText.StartsWith(":") && (ChatCommands.HandleCommand(Session, MessageText.Substring(1)) ||
                 Session.HasRight("moderation_tool")))*/
 
-            if (MessageText.StartsWith(":") && ChatCommands.HandleCommand(Session, MessageText.Substring(1)))
+            if (MessageText.StartsWith(":") && CommandManager.HandleCommand(Session, MessageText))
             {
                 return;
-            }         
+            }
 
             Actor.Chat(MessageText, Shout, Session.HasRight("mute"));
 

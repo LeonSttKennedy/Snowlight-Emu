@@ -88,7 +88,7 @@ namespace Snowlight.Game.Pathfinding
 
             List<Vector2> Path = new List<Vector2>();
 
-            PathFinderNode Nodes = FindPathReversed(mCurrentInstance.Model, mTarget, new Vector2(Actor.Position.X, Actor.Position.Y), false);
+            PathFinderNode Nodes = FindPathReversed(mCurrentInstance.Model, mTarget, new Vector2(Actor.Position.X, Actor.Position.Y), mCurrentInstance.DisableDiagonal);
 
             if (Nodes != null) // make sure we do have a path first
             {
@@ -126,9 +126,9 @@ namespace Snowlight.Game.Pathfinding
                 Current = OpenList.ExtractFirst();
                 Current.InClosed = true;
 
-                for (int i = 0; diag ? i < NoDiagMovePoints.Length : i < MovePoints.Length; i++)
+                for (int i = 0; diag ? i < MovePoints.Length : i < NoDiagMovePoints.Length; i++)
                 {
-                    Tmp = Current.Position + (diag ? NoDiagMovePoints[i] : MovePoints[i]);
+                    Tmp = Current.Position + (diag ? MovePoints[i] : NoDiagMovePoints[i]);
                     bool IsFinalMove = (Tmp.X == end.X && Tmp.Y == end.Y); // are we at the final position?
 
                     if (mCurrentInstance.IsValidStep(new Vector2(Current.Position.X, Current.Position.Y), Tmp, IsFinalMove, new List<RoomActor>[map.Heightmap.SizeX, map.Heightmap.SizeY])) // need to set the from positions

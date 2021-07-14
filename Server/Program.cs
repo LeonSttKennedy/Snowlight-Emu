@@ -33,6 +33,7 @@ using Snowlight.Game.Recycler;
 using Snowlight.Game.Pets;
 using Snowlight.Game.Music;
 using Snowlight.Game.Rooms.Trading;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight
 {
@@ -44,6 +45,9 @@ namespace Snowlight
 
         private static DateTime mCurrentDay;
         internal static DateTime ServerStarted;
+        // Event Command ;)
+        private static DateTime mLastEventHosted;
+
         /// <summary>
         /// Should be used by all non-worker threads to check if they should remain alive, allowing for safe termination.
         /// </summary>
@@ -74,6 +78,20 @@ namespace Snowlight
             }
         }
 
+        // Event Command ;)
+        public static DateTime LastEventHosted
+        {
+            get
+            {
+                return mLastEventHosted;
+            }
+
+            set
+            {
+                mLastEventHosted = value;
+            }
+        }
+
         private delegate bool ConsoleCtrlHandlerDelegate(int sig);
 
         [DllImport("Kernel32")]
@@ -96,11 +114,10 @@ namespace Snowlight
             ServerStarted = DateTime.Now;
 
             // Set up basic output, configuration, etc
-            Output.InitializeStream(true, OutputLevel.DebugInformation);
-            Output.WriteLine("Initializing Snowlight...");
-
             ConfigManager.Initialize(Constants.DataFileDirectory + "\\server-main.cfg");
-            Output.SetVerbosityLevel((OutputLevel)ConfigManager.GetValue("output.verbositylevel"));
+
+            Output.InitializeStream(true, (OutputLevel)ConfigManager.GetValue("output.verbositylevel"));
+            Output.WriteLine("Initializing Snowlight...");
 
             // Process args
             foreach (string arg in args)
@@ -179,6 +196,7 @@ namespace Snowlight
                     InterstitialManager.Initialize(MySqlClient);
                     ChatEmotions.Initialize();
                     ChatWordFilter.Initialize(MySqlClient);
+                    CommandManager.Initialize();
                     EffectsCacheWorker.Initialize();
                     CatalogClubGifts.Initialize(MySqlClient);
                     RecyclerManager.Initialize(MySqlClient);
@@ -236,6 +254,9 @@ namespace Snowlight
         public static void Stop()
         {
             Output.WriteLine("Stopping Snowlight...");
+
+            SessionManager.BroadcastPacket(NotificationMessageComposer.Compose(ExternalTexts.GetValue("server_shutdown_message")));
+            Thread.Sleep(2500);
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {

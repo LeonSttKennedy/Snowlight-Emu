@@ -54,6 +54,8 @@ namespace Snowlight.Game.Rooms
         private int mAntiSpamMessagesSent;
         private int mAntiSpamTicks;
 
+        private bool mIsSitting;
+
         public uint Id
         {
             get
@@ -392,6 +394,19 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public bool IsSitting
+        {
+            get
+            {
+                return mIsSitting;
+            }
+
+            set
+            {
+                mIsSitting = value;
+            }
+        }
+
         public RoomActor(uint Id, RoomActorType Type, uint ReferenceId, object ReferenceObject, Vector3 Position, int Rotation, RoomInstance Instance)
         {
             mId = Id;
@@ -406,6 +421,8 @@ namespace Snowlight.Game.Rooms
             mInstance = Instance;
             mEnableClipping = true;
             mMovementSyncRoot = new object();
+
+            mIsSitting = false;
 
             mPathfinder = PathfinderManager.CreatePathfinderInstance();
             mPathfinder.SetRoomInstance(mInstance, Id);

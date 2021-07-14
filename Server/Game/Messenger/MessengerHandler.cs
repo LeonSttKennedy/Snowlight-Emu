@@ -415,7 +415,8 @@ namespace Snowlight.Game.Messenger
             {
                 if (Info.Type == RoomType.Public && Info.Id == 14)
                 {
-                    Info = RoomInfoLoader.GetRoomInfo(13);
+                    Session.IsTeleporting = true;
+                    Session.TriggerTeleporterId = 31;
                 }
 
                 Session.SendData(MessengerFollowResultComposer.Compose(Info));

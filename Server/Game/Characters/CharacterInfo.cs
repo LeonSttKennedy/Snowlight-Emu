@@ -63,6 +63,8 @@ namespace Snowlight.Game.Characters
         private bool mCalledGuideBot;
         private int mMarketplaceTokens;
 
+        private bool mAllowMimic;
+
         public uint Id
         {
             get
@@ -453,12 +455,25 @@ namespace Snowlight.Game.Characters
             }
         }
 
+        public bool AllowMimic
+        {
+            get
+            {
+                return mAllowMimic;
+            }
+
+            set
+            {
+                mAllowMimic = value;
+            }
+        }
+
         public CharacterInfo(SqlDatabaseClient MySqlClient, uint SessionId, uint Id, string Username, string RealName, string Figure,
             CharacterGender Gender, string Motto, int Credits, int ActivityPoints, double ActivityPointsLastUpdate,
             bool PrivacyAcceptFriends, uint HomeRoom, int Score, int ConfigVolume, int ModerationTickets,
             int ModerationTicketsAbusive, double ModerationTicketCooldown, int ModerationBans, int ModerationCautions,
             double TimestampLastOnline, double TimestampRegistered, int RespectPoints, int RespectCreditHuman,
-            int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, int MarketplaceTokens)
+            int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, int MarketplaceTokens, bool AllowMimic)
         {
             mSessionId = SessionId;
             mId = Id;
@@ -498,6 +513,8 @@ namespace Snowlight.Game.Characters
 
             mWardrobe = new Dictionary<int, WardrobeItem>();
             mTags = new List<string>();
+
+            mAllowMimic = AllowMimic;
 
             if (MySqlClient != null)
             {
@@ -575,6 +592,14 @@ namespace Snowlight.Game.Characters
             MySqlClient.SetParameter("id", mId);
             MySqlClient.SetParameter("aplu", mTimestampLastActivityPointsUpdate);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET activity_points_last_update = @aplu WHERE id = @id LIMIT 1");          
+        }
+
+        public void UpdateMimicPreference(SqlDatabaseClient MySqlClient)
+        {
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("mimic", mAllowMimic ? "1" : "0");
+
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET allow_mimic = @mimic WHERE id = @userid LIMIT 1");
         }
 
         public void UpdateFigure(SqlDatabaseClient MySqlClient, string NewGender, string NewFigure)

@@ -31,6 +31,8 @@ namespace Snowlight.Game.Rooms
         private double mUnloadedTimestamp;
         private int mMarkedEmptyRoom;
 
+        private bool mDiagonalEnabled;
+
         public uint InstanceId
         {
             get
@@ -99,6 +101,18 @@ namespace Snowlight.Game.Rooms
                 return Tags;
             }
         }
+        public bool DisableDiagonal
+        {
+            get 
+            {
+                return mDiagonalEnabled;
+            }
+
+            set
+            {
+                mDiagonalEnabled = value;
+            }
+        }
 
         public RoomInstance(uint InstanceId, RoomInfo Info, RoomModel Model)
         {
@@ -124,6 +138,8 @@ namespace Snowlight.Game.Rooms
             mTradeManager = new TradeManager();
             mRollerItems = new List<Item>[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
             mRoomTriggers = new List<RoomTriggers>();
+
+            mDiagonalEnabled = true;
 
             foreach (Bot Bot in BotManager.GenerateBotInstancesForRoom(RoomId))
             {
