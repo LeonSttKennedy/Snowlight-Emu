@@ -121,8 +121,8 @@ namespace Snowlight.Game.Rooms
                     bool LastStep = !Actor.IsMoving;
 
                     // Check that the next step is valid and allowed
-                    if (NextStep != null && ((!Actor.ClippingEnabled && IsValidPosition(NextStep)) ||
-                        IsValidStep(Actor.Position.GetVector2(), NextStep, LastStep, NewUserGrid)))
+                    if (NextStep != null && ((!Actor.TeleportEnabled && IsValidPosition(NextStep)) ||
+                        IsValidStep(Actor.Position.GetVector2(), NextStep, LastStep, Actor.OverrideClipping, NewUserGrid)))
                     {
                         // Update "mv" status
                         Actor.SetStatus("mv", NextStep.X + "," + NextStep.Y + "," + (Math.Round(GetUserStepHeight(NextStep), 1)).ToString().Replace(',', '.'));

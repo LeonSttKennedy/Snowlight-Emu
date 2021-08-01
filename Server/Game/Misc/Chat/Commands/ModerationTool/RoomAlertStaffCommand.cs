@@ -37,17 +37,8 @@ namespace Snowlight.Game.Misc
             }
 
             string Message = CommandManager.MergeParams(Params, 1).Replace("\\n", "\n");
-            foreach (RoomActor RoomActor in Instance.Actors)
-            {
-                if (!RoomActor.IsBot)
-                {
-                    Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
-                    if (TargetSession.HasRight("moderation_tool"))
-                    {
-                        TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ras_fixed_text") + " " + Session.CharacterInfo.Username + "\r\n" + Message));
-                    }
-                }
-            }
+
+            Instance.BroadcastMessage(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ras_fixed_text") + " " + Session.CharacterInfo.Username + "\r\n" + Message), "moderation_tool");
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {

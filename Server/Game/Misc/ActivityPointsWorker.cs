@@ -91,7 +91,7 @@ namespace Snowlight.Game.Misc
             int CreditsAmount = ServerSettings.ActivityPointsCreditsAmount;
             int PixelsAmount = ServerSettings.ActivityPointsPixelsAmount;
             
-            if (Session.HasRight("club_vip"))
+            if (ServerSettings.MoreActivityPointsForVipUsers && Session.HasRight("club_vip"))
             {
                 CreditsAmount += ServerSettings.MoreActivityPointsCreditsAmount;
                 PixelsAmount += ServerSettings.MoreActivityPointsPixelsAmount;

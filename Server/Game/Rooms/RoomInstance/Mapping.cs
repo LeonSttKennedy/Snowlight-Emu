@@ -70,11 +70,16 @@ namespace Snowlight.Game.Rooms
                 && mUserMovementNodes[To.X, To.Y] != UserMovementNode.Blocked);
         }
 
-        public bool IsValidStep(Vector2 From, Vector2 To, bool EndOfPath, List<RoomActor>[,] ActorBlockGrid = null)
+        public bool IsValidStep(Vector2 From, Vector2 To, bool EndOfPath, bool UserOverride = false, List<RoomActor>[,] ActorBlockGrid = null)
         {
             if (ActorBlockGrid == null)
             {
                 ActorBlockGrid = mUserGrid;
+            }
+
+            if(UserOverride)
+            {
+                return true;
             }
 
             if (!IsValidPosition(To) || mTileStates[To.X, To.Y] == TileState.Blocked || ((!Info.DisableRoomBlocking ||

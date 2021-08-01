@@ -178,6 +178,7 @@ namespace Snowlight.Game.Misc
             Register("empty", new EmptyCommand());
             Register("eventalert", new EventAlertCommand());
             Register("redeemcoins", new RedeemCoinsCommand());
+            Register("teleport", new TeleportCommand());
             Register("mimic", new MimicCommand());
         }
 

@@ -40,14 +40,7 @@ namespace Snowlight.Game.Misc
             string Url = Params[1];
             string Message = CommandManager.MergeParams(Params, 2).Replace("\\n", "\n");
 
-            foreach (RoomActor RoomActor in Instance.Actors)
-            {
-                if (!RoomActor.IsBot)
-                {
-                    Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(RoomActor.Name));
-                    TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ra_fixed_text") + "\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
-                }
-            }
+            Instance.BroadcastMessage(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_ra_fixed_text") + "\r\n" + Message + "\r\n- " + Session.CharacterInfo.Username, Url));
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {

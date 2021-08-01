@@ -124,7 +124,7 @@ namespace Snowlight.Game.Catalog
                 Response.AppendInt32(0); // Days until next gift.
                 Response.AppendInt32(0); // Gifts available.
                 
-                Response.AppendInt32(1);
+                Response.AppendInt32(ClubGifts.Count);
                 {
                     Response.AppendInt32(207);
                     Response.AppendStringWithBreak("throne");
@@ -142,7 +142,7 @@ namespace Snowlight.Game.Catalog
                     Response.AppendInt32(0);
                 }
 
-                Response.AppendInt32(1);
+                Response.AppendInt32(ClubGifts.Count);
                 {
                     Response.AppendInt32(230);
                     Response.AppendBoolean(false);  // is item vip

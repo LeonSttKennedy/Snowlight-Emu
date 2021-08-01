@@ -79,7 +79,7 @@ namespace Snowlight.Game.Catalog
             DataRouter.RegisterHandler(OpcodesIn.CATALOG_MARKETPLACE_REDEEM_CREDITS, new ProcessRequestCallback(MarketplaceClaimCredits));
             DataRouter.RegisterHandler(OpcodesIn.CATALOG_MARKETPLACE_PURCHASE, new ProcessRequestCallback(MarketplacePurchase));
             DataRouter.RegisterHandler(OpcodesIn.CATALOG_MARKETPLACE_TAKE_BACK, new ProcessRequestCallback(MarketplaceTakeBack));
-            DataRouter.RegisterHandler(OpcodesIn.CATALOG_MARKETPLACE_POST_OFFER, new ProcessRequestCallback(MarketPlacePostItem));
+            DataRouter.RegisterHandler(OpcodesIn.CATALOG_MARKETPLACE_POST_OFFER, new ProcessRequestCallback(MarketplacePostItem));
             DataRouter.RegisterHandler(OpcodesIn.CATALOG_MARKETPLACE_GET_OFFERS, new ProcessRequestCallback(MarketplaceGetOffers));
             DataRouter.RegisterHandler(OpcodesIn.CATALOG_MARKETPLACE_OWN_OFFERS, new ProcessRequestCallback(MarketplaceGetOwnOffers));
             DataRouter.RegisterHandler(OpcodesIn.CATALOG_MARKETPLACE_CAN_SELL, new ProcessRequestCallback(MarketplaceCanSell));
@@ -337,7 +337,7 @@ namespace Snowlight.Game.Catalog
                 CatalogManager.Marketplace.Purchase(Session, MySqlClient, ItemId);
             }
         }
-        private static void MarketPlacePostItem(Session Session, ClientMessage Message) 
+        private static void MarketplacePostItem(Session Session, ClientMessage Message) 
         {
             if (Session.InventoryCache != null)
             {

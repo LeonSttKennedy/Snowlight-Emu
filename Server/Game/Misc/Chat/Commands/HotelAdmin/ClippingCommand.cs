@@ -28,7 +28,7 @@ namespace Snowlight.Game.Misc
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {
             Actor.OverrideClipping = !Actor.OverrideClipping;
-            Actor.ApplyEffect(Actor.ClippingEnabled ? 0 : 23);
+            Actor.ApplyEffect(Actor.TeleportEnabled ? 0 : 23);
             Session.CurrentEffect = 0;
         }
     }

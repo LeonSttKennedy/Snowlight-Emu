@@ -2,10 +2,10 @@
 -- version 3.3.9.2
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Jul 14, 2021 at 11:17 AM
--- Server version: 5.5.10
--- PHP Version: 5.3.6
+-- Servidor: localhost
+-- Tempo de Geração: Ago 01, 2021 as 02:49 PM
+-- Versão do Servidor: 5.5.10
+-- Versão do PHP: 5.3.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -16,13 +16,13 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `snowdb`
+-- Banco de Dados: `snowdb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `achievements`
+-- Estrutura da tabela `achievements`
 --
 
 CREATE TABLE IF NOT EXISTS `achievements` (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `achievements` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=117 ;
 
 --
--- Dumping data for table `achievements`
+-- Extraindo dados da tabela `achievements`
 --
 
 INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pixels`, `reward_points`, `progress_needed`) VALUES
@@ -161,7 +161,7 @@ INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pix
 -- --------------------------------------------------------
 
 --
--- Table structure for table `achievements_to_unlock`
+-- Estrutura da tabela `achievements_to_unlock`
 --
 
 CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
@@ -173,14 +173,14 @@ CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `achievements_to_unlock`
+-- Extraindo dados da tabela `achievements_to_unlock`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `avatar_effects`
+-- Estrutura da tabela `avatar_effects`
 --
 
 CREATE TABLE IF NOT EXISTS `avatar_effects` (
@@ -196,14 +196,14 @@ CREATE TABLE IF NOT EXISTS `avatar_effects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `avatar_effects`
+-- Extraindo dados da tabela `avatar_effects`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `badges`
+-- Estrutura da tabela `badges`
 --
 
 CREATE TABLE IF NOT EXISTS `badges` (
@@ -218,7 +218,7 @@ CREATE TABLE IF NOT EXISTS `badges` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `badges`
+-- Extraindo dados da tabela `badges`
 --
 
 INSERT INTO `badges` (`id`, `user_id`, `badge_id`, `source_type`, `source_data`, `slot_id`) VALUES
@@ -227,7 +227,7 @@ INSERT INTO `badges` (`id`, `user_id`, `badge_id`, `source_type`, `source_data`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `badge_definitions`
+-- Estrutura da tabela `badge_definitions`
 --
 
 CREATE TABLE IF NOT EXISTS `badge_definitions` (
@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `badge_definitions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=127 ;
 
 --
--- Dumping data for table `badge_definitions`
+-- Extraindo dados da tabela `badge_definitions`
 --
 
 INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
@@ -372,7 +372,7 @@ INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bans`
+-- Estrutura da tabela `bans`
 --
 
 CREATE TABLE IF NOT EXISTS `bans` (
@@ -387,14 +387,14 @@ CREATE TABLE IF NOT EXISTS `bans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `bans`
+-- Extraindo dados da tabela `bans`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bots`
+-- Estrutura da tabela `bots`
 --
 
 CREATE TABLE IF NOT EXISTS `bots` (
@@ -418,7 +418,7 @@ CREATE TABLE IF NOT EXISTS `bots` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
--- Dumping data for table `bots`
+-- Extraindo dados da tabela `bots`
 --
 
 INSERT INTO `bots` (`id`, `ai_type`, `name`, `look`, `motto`, `room_id`, `pos_start`, `pos_serve`, `pos_defined_range`, `walk_mode`, `enabled`, `kickable`, `rotation`, `effect`, `response_distance`, `pet_type_handler_id`) VALUES
@@ -454,7 +454,7 @@ INSERT INTO `bots` (`id`, `ai_type`, `name`, `look`, `motto`, `room_id`, `pos_st
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bots_speech`
+-- Estrutura da tabela `bots_speech`
 --
 
 CREATE TABLE IF NOT EXISTS `bots_speech` (
@@ -465,14 +465,14 @@ CREATE TABLE IF NOT EXISTS `bots_speech` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `bots_speech`
+-- Extraindo dados da tabela `bots_speech`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bot_responses`
+-- Estrutura da tabela `bot_responses`
 --
 
 CREATE TABLE IF NOT EXISTS `bot_responses` (
@@ -485,14 +485,14 @@ CREATE TABLE IF NOT EXISTS `bot_responses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `bot_responses`
+-- Extraindo dados da tabela `bot_responses`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog`
+-- Estrutura da tabela `catalog`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog` (
@@ -514,7 +514,7 @@ CREATE TABLE IF NOT EXISTS `catalog` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=152 ;
 
 --
--- Dumping data for table `catalog`
+-- Extraindo dados da tabela `catalog`
 --
 
 INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon`, `color`, `required_right`, `visible`, `dummy_page`, `coming_soon`, `template`, `page_strings_1`, `page_strings_2`) VALUES
@@ -654,7 +654,7 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_items`
+-- Estrutura da tabela `catalog_items`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_items` (
@@ -672,7 +672,7 @@ CREATE TABLE IF NOT EXISTS `catalog_items` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50283 ;
 
 --
--- Dumping data for table `catalog_items`
+-- Extraindo dados da tabela `catalog_items`
 --
 
 INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`, `cost_credits`, `cost_pixels`, `enabled`, `amount`, `club_restriction`) VALUES
@@ -2265,7 +2265,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1614, 76, 1614, '', 'SF_chair_blue', 0, 3, '1', 1, 0),
 (1615, 76, 1615, '', 'SF_panel3', 0, 3, '1', 1, 0),
 (1616, 76, 1616, '', 'sf_roller', 0, 3, '1', 1, 0),
-(1617, 91, 1617, '', 'SF_alien', 250, 3000, '1', 1, 0),
+(1617, 91, 1617, '', 'SF_alien', 200, 100, '1', 1, 0),
 (1618, 76, 1618, '', 'SF_floor_2', 0, 3, '1', 1, 0),
 (1619, 76, 1619, '', 'SF_reactor', 0, 3, '1', 1, 0),
 (1620, 76, 1620, '', 'sf_floor', 0, 3, '1', 1, 0),
@@ -4002,7 +4002,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_marketplace_data`
+-- Estrutura da tabela `catalog_marketplace_data`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
@@ -4016,14 +4016,14 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `catalog_marketplace_data`
+-- Extraindo dados da tabela `catalog_marketplace_data`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_marketplace_offers`
+-- Estrutura da tabela `catalog_marketplace_offers`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
@@ -4044,14 +4044,14 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `catalog_marketplace_offers`
+-- Extraindo dados da tabela `catalog_marketplace_offers`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_subscriptions`
+-- Estrutura da tabela `catalog_subscriptions`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_subscriptions` (
@@ -4064,7 +4064,7 @@ CREATE TABLE IF NOT EXISTS `catalog_subscriptions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `catalog_subscriptions`
+-- Extraindo dados da tabela `catalog_subscriptions`
 --
 
 INSERT INTO `catalog_subscriptions` (`id`, `name`, `type`, `cost_credits`, `length_days`) VALUES
@@ -4078,7 +4078,7 @@ INSERT INTO `catalog_subscriptions` (`id`, `name`, `type`, `cost_credits`, `leng
 -- --------------------------------------------------------
 
 --
--- Table structure for table `catalog_subscriptions_gifts`
+-- Estrutura da tabela `catalog_subscriptions_gifts`
 --
 
 CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
@@ -4091,7 +4091,7 @@ CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `catalog_subscriptions_gifts`
+-- Extraindo dados da tabela `catalog_subscriptions_gifts`
 --
 
 INSERT INTO `catalog_subscriptions_gifts` (`item_id`, `item_name`, `sprite_id`, `days_need`, `isvip`) VALUES
@@ -4100,7 +4100,7 @@ INSERT INTO `catalog_subscriptions_gifts` (`item_id`, `item_name`, `sprite_id`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `characters`
+-- Estrutura da tabela `characters`
 --
 
 CREATE TABLE IF NOT EXISTS `characters` (
@@ -4135,19 +4135,17 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `last_respect_update` double NOT NULL DEFAULT '0',
   `allow_mimic` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `characters`
+-- Extraindo dados da tabela `characters`
 --
 
-INSERT INTO `characters` (`id`, `account_uid`, `username`, `real_name`, `motto`, `figure`, `gender`, `credits_balance`, `activity_points_balance`, `activity_points_last_update`, `score`, `privacy_accept_friends`, `home_room`, `auth_ticket`, `last_ip`, `config_volume`, `timestamp_lastvisit`, `timestamp_created`, `moderation_tickets`, `moderation_tickets_abusive`, `moderation_tickets_cooldown`, `moderation_bans`, `moderation_cautions`, `moderation_muted_until_timestamp`, `respect_points`, `respect_credit_humans`, `respect_credit_pets`, `marketplace_tickets`, `last_respect_update`, `allow_mimic`) VALUES
-(1, 1, 'Admin', 'Jane Doe', 'Administrator', 'hr-3194-40-31.cc-3039-100.sh-290-62.hd-3092-1.lg-270-110.fa-1206-62.ha-3129-100', 'M', 100, 2000, 1626260647.2327838, 0, '1', 0, '', '192.168.15.7', 100, 1626259710, 0, 0, 0, 0, 0, 0, 1624495953.6613128, 0, 0, 0, 0, 1626251217.2421036, '1'),;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `drink_sets`
+-- Estrutura da tabela `drink_sets`
 --
 
 CREATE TABLE IF NOT EXISTS `drink_sets` (
@@ -4155,10 +4153,10 @@ CREATE TABLE IF NOT EXISTS `drink_sets` (
   `drinks` varchar(255) COLLATE latin1_german1_ci NOT NULL,
   `internal_comment` text COLLATE latin1_german1_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=10 ;
 
 --
--- Dumping data for table `drink_sets`
+-- Extraindo dados da tabela `drink_sets`
 --
 
 INSERT INTO `drink_sets` (`id`, `drinks`, `internal_comment`) VALUES
@@ -4168,12 +4166,14 @@ INSERT INTO `drink_sets` (`id`, `drinks`, `internal_comment`) VALUES
 (4, '43,7,6,2,5,3,4,34', 'fridges'),
 (5, '8,13,4,10,11,12,17,53', 'coffee machines'),
 (6, '24', 'bubble juice machines'),
-(7, '7', 'water dispensers');
+(7, '7', 'water dispensers'),
+(8, '19', 'Habbo Cola Machine'),
+(9, '9,8,14,15,6,10,11,12,17,13', 'Mochamaster');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `favorites`
+-- Estrutura da tabela `favorites`
 --
 
 CREATE TABLE IF NOT EXISTS `favorites` (
@@ -4185,14 +4185,14 @@ CREATE TABLE IF NOT EXISTS `favorites` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `favorites`
+-- Extraindo dados da tabela `favorites`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `flat_categories`
+-- Estrutura da tabela `flat_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `flat_categories` (
@@ -4206,7 +4206,7 @@ CREATE TABLE IF NOT EXISTS `flat_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
--- Dumping data for table `flat_categories`
+-- Extraindo dados da tabela `flat_categories`
 --
 
 INSERT INTO `flat_categories` (`id`, `title`, `order_num`, `visible`, `enabled`, `allow_trading`) VALUES
@@ -4221,7 +4221,7 @@ INSERT INTO `flat_categories` (`id`, `title`, `order_num`, `visible`, `enabled`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `help_categories`
+-- Estrutura da tabela `help_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `help_categories` (
@@ -4232,7 +4232,7 @@ CREATE TABLE IF NOT EXISTS `help_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Dumping data for table `help_categories`
+-- Extraindo dados da tabela `help_categories`
 --
 
 INSERT INTO `help_categories` (`id`, `name`, `visible`) VALUES
@@ -4246,7 +4246,7 @@ INSERT INTO `help_categories` (`id`, `name`, `visible`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `help_topics`
+-- Estrutura da tabela `help_topics`
 --
 
 CREATE TABLE IF NOT EXISTS `help_topics` (
@@ -4259,7 +4259,7 @@ CREATE TABLE IF NOT EXISTS `help_topics` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Dumping data for table `help_topics`
+-- Extraindo dados da tabela `help_topics`
 --
 
 INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
@@ -4267,8 +4267,8 @@ INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
 (2, 5, 'snowlight.uservoice.com', 'If you have found any bugs, missing features, or have other ideas or feedback, please submit them on our uservoice forum:\r\n\r\nhttp://snowlight.uservoice.com\r\n\r\nThank you!', '2'),
 (3, 4, 'Reporting a user', 'If another user is misbehaving, breaking rules, or behaving inappropiately, it is possible to report the user to the moderators. There are two possible ways to do so:\r\n\r\n1. Select the user, and press ''Report''. The report window will appear.\r\n2. Click the yellow question mark (while in a room), and click ''Report user to the moderators''. Select the offending user. The report window will appear.', '1'),
 (4, 1, 'The Habbo Way (Rules)', 'What is the Habbo Way?\r\nThe Habbo Way is like a code of conduct, a guide to how Habbos should act in the Hotel. Habbos who break the Habbo Way are not welcome in the Hotel and may be banned. The Habbo Way is a simple set of rules for all players to follow in the Habbo.\r\n\r\nThe Habbo Way\r\n1. Do not bully, harass or abuse other players; avoid violent or aggressive behaviour.\r\n2. Do not steal or scam passwords, credits or furniture from other players. \r\n3. Keep your password and personal details secret and never try to gain this information from other players.\r\n4. You may not give away, sell or trade your Habbo account or seek to sell virtual items from Habbo for cash.\r\n5. Do not take part in sexual activities, make sexual proposals or respond to them.\r\n6. Do not use any scripts or third party software to enter, disrupt or modify Habbo.\r\n7. Treat other players as you would wish to be treated! And remember that a crime in a virtual world is as serious as in the real world.\r\n\r\nYou may also wish to review our Terms of Use.\r\n\r\nWhy is there a Habbo Way?\r\nHabbo Hotel is a place where people come to relax, hang out and make new friends in a safe, non-threatening environment. The Habbo Way helps to maintain this safe, non-threatening environment.\r\n\r\nWhat should I do if I see someone break the Habbo Way?\r\nIf you see someone break the Habbo Way and you are uncomfortable with it, you should use the Ignore feature. This prevents their chat from showing up on your screen. Use Ignore for name-calling, mild swearing, or anything else that just doesn''t suit your taste. If the chat is truly offensive, hateful or racist, or if you feel threatened by it, send a ''call for help'' and report them to an on duty Moderator, then leave the room or place the Habbo on Ignore.\r\n\r\nWhat will happen if I break the Habbo Way?\r\nIf you break the Habbo Way you may be alerted, kicked from the room or banned from Habbo Hotel.\r\n\r\nWhy do my words come up as ''*****''?\r\nAll areas of Habbo Hotel have a word filter which takes out offensive words. This covers swearing and racist or sexist language, plus email addresses and phone numbers.  Offensive words are replaced with ''*****''. The filters also work on Habbo names, missions, Stickies and all types of messages sent through the Console.\r\n\r\nWhat happens if I avoid the word filter?\r\nIf you avoid the word filter you may be banned from Habbo Hotel.', '2'),
-(5, 2, 'How do I aquire credits?', 'You can acquire credits by buying exchange furniture from the catalog using pixels or credits. \r\nYou get pixels automatically for playing.\r\n\r\nAnother way is considering to subscribe in VIP club to get 15 credits every 15 minutes while being logged in to the hotel.\r\n\r\nCredits are considered the "premium" currency.', '1'),
-(6, 2, 'How do I aquire pixels?', 'You will receive 25 pixels automatically every 15 minutes. If you''re a VIP club member you receive a bonuses of 25 pixels while logged in hotel.\r\n\r\nYou can earn pixels by unlocking achievements, see what achievements you have to unlock in the ''Achievement'' tab in your toolbar on the left of your screen.', '1'),
+(5, 2, 'How do I aquire credits?', 'You can acquire credits by buying exchange furniture from the catalog using pixels or credits. \r\nYou get pixels automatically for playing.\r\n\r\nAnother way is considering to subscribe in VIP club to get 10 credits every 30 minutes while being logged in to the hotel.\r\n\r\nCredits are considered the "premium" currency.', '1'),
+(6, 2, 'How do I aquire pixels?', 'You will receive 25 pixels automatically every 30 minutes. If you''re a VIP club member you receive a bonuses of 25 pixels while logged in hotel.\r\n\r\nYou can earn pixels by unlocking achievements, see what achievements you have to unlock in the ''Achievement'' tab in your toolbar on the left of your screen.', '1'),
 (7, 6, 'Are all achievements available on uberHotel?', 'We have not yet added all achievements. The ones that are available can be seen under the ''Achievement'' tab in your toolbar on left of your screen.', '0'),
 (8, 6, 'Where is the Infobus?', 'Infobus is currently closed.', '0'),
 (9, 1, 'Staff on uberHotel', 'uberHotel is being maintained and moderated by a relatively small staff team. They are here to make sure everything works correctly and to help our players and keep them safe.\r\n\r\nIn general we do not have any staff openings; if we are looking for staff it will be announced on the homepage, or we will approach players we deem capable.', '2'),
@@ -4278,7 +4278,7 @@ INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ignores`
+-- Estrutura da tabela `ignores`
 --
 
 CREATE TABLE IF NOT EXISTS `ignores` (
@@ -4290,14 +4290,14 @@ CREATE TABLE IF NOT EXISTS `ignores` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `ignores`
+-- Extraindo dados da tabela `ignores`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `interstitials`
+-- Estrutura da tabela `interstitials`
 --
 
 CREATE TABLE IF NOT EXISTS `interstitials` (
@@ -4310,7 +4310,7 @@ CREATE TABLE IF NOT EXISTS `interstitials` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Dumping data for table `interstitials`
+-- Extraindo dados da tabela `interstitials`
 --
 
 INSERT INTO `interstitials` (`id`, `url`, `image`, `views`, `enabled`) VALUES
@@ -4322,7 +4322,7 @@ INSERT INTO `interstitials` (`id`, `url`, `image`, `views`, `enabled`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `items`
+-- Estrutura da tabela `items`
 --
 
 CREATE TABLE IF NOT EXISTS `items` (
@@ -4345,14 +4345,14 @@ CREATE TABLE IF NOT EXISTS `items` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `items`
+-- Extraindo dados da tabela `items`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `item_definitions`
+-- Estrutura da tabela `item_definitions`
 --
 
 CREATE TABLE IF NOT EXISTS `item_definitions` (
@@ -4377,7 +4377,7 @@ CREATE TABLE IF NOT EXISTS `item_definitions` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2911 ;
 
 --
--- Dumping data for table `item_definitions`
+-- Extraindo dados da tabela `item_definitions`
 --
 
 INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `behavior_data`, `stacking_behavior`, `size_x`, `size_y`, `height`, `allow_recycling`, `allow_trading`, `allow_selling`, `allow_gifting`, `allow_inventory_stacking`, `walkable`, `room_limit`) VALUES
@@ -4624,7 +4624,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 (241, 274, 'chair_plasto*13', 's', 'seat', 0, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (242, 275, 'chair_plasto*14', 's', 'seat', 0, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (243, 276, 'table_plasto_4leg*14', 's', 'static', 0, 'normal', 2, 2, 1, '1', '1', '0', '1', '1', '0', 0),
-(244, 277, 'mocchamaster', 's', 'dispenser', 4, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
+(244, 277, 'mocchamaster', 's', 'dispenser', 9, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (245, 278, 'carpet_legocourt', 's', 'switch', 2, 'initiator', 3, 3, 0, '1', '1', '0', '1', '1', '1', 0),
 (246, 279, 'bench_lego', 's', 'seat', 5, 'terminator', 4, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (247, 280, 'legotrophy', 's', 'switch', 2, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
@@ -4655,7 +4655,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 (272, 428, 'house2', 's', 'switch', 2, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (273, 449, 'djesko_turntable', 's', 'static', 2, 'normal', 1, 1, 1, '1', '1', '1', '1', '1', '0', 0),
 (274, 456, 'md_sofa', 's', 'seat', 0, 'terminator', 2, 1, 1, '1', '1', '0', '1', '1', '0', 0),
-(275, 457, 'md_limukaappi', 's', 'dispenser', 4, 'normal', 1, 1, 1, '1', '1', '1', '1', '1', '0', 0),
+(275, 457, 'md_limukaappi', 's', 'dispenser', 8, 'normal', 1, 1, 1, '1', '1', '1', '1', '1', '0', 0),
 (276, 1484, 'table_plasto_4leg*10', 's', 'static', 0, 'normal', 2, 2, 1, '1', '1', '0', '1', '1', '0', 0),
 (277, 1486, 'table_plasto_4leg*15', 's', 'static', 0, 'normal', 2, 2, 1, '1', '1', '0', '1', '1', '0', 0),
 (278, 1487, 'table_plasto_bigsquare*14', 's', 'static', 0, 'normal', 2, 2, 1, '1', '1', '0', '1', '1', '0', 0),
@@ -7291,7 +7291,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `messenger_friendships`
+-- Estrutura da tabela `messenger_friendships`
 --
 
 CREATE TABLE IF NOT EXISTS `messenger_friendships` (
@@ -7304,14 +7304,14 @@ CREATE TABLE IF NOT EXISTS `messenger_friendships` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `messenger_friendships`
+-- Extraindo dados da tabela `messenger_friendships`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_action_log`
+-- Estrutura da tabela `moderation_action_log`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_action_log` (
@@ -7325,14 +7325,14 @@ CREATE TABLE IF NOT EXISTS `moderation_action_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `moderation_action_log`
+-- Extraindo dados da tabela `moderation_action_log`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_chatlogs`
+-- Estrutura da tabela `moderation_chatlogs`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
@@ -7345,14 +7345,14 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `moderation_chatlogs`
+-- Extraindo dados da tabela `moderation_chatlogs`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_presets`
+-- Estrutura da tabela `moderation_presets`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_presets` (
@@ -7363,7 +7363,7 @@ CREATE TABLE IF NOT EXISTS `moderation_presets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Dumping data for table `moderation_presets`
+-- Extraindo dados da tabela `moderation_presets`
 --
 
 INSERT INTO `moderation_presets` (`id`, `type`, `message`) VALUES
@@ -7372,7 +7372,7 @@ INSERT INTO `moderation_presets` (`id`, `type`, `message`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_preset_action_categories`
+-- Estrutura da tabela `moderation_preset_action_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_preset_action_categories` (
@@ -7382,7 +7382,7 @@ CREATE TABLE IF NOT EXISTS `moderation_preset_action_categories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Dumping data for table `moderation_preset_action_categories`
+-- Extraindo dados da tabela `moderation_preset_action_categories`
 --
 
 INSERT INTO `moderation_preset_action_categories` (`id`, `caption`) VALUES
@@ -7396,7 +7396,7 @@ INSERT INTO `moderation_preset_action_categories` (`id`, `caption`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_preset_action_messages`
+-- Estrutura da tabela `moderation_preset_action_messages`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_preset_action_messages` (
@@ -7408,7 +7408,7 @@ CREATE TABLE IF NOT EXISTS `moderation_preset_action_messages` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
--- Dumping data for table `moderation_preset_action_messages`
+-- Extraindo dados da tabela `moderation_preset_action_messages`
 --
 
 INSERT INTO `moderation_preset_action_messages` (`id`, `parent_id`, `caption`, `message_text`) VALUES
@@ -7430,7 +7430,7 @@ INSERT INTO `moderation_preset_action_messages` (`id`, `parent_id`, `caption`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `moderation_tickets`
+-- Estrutura da tabela `moderation_tickets`
 --
 
 CREATE TABLE IF NOT EXISTS `moderation_tickets` (
@@ -7447,14 +7447,14 @@ CREATE TABLE IF NOT EXISTS `moderation_tickets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `moderation_tickets`
+-- Extraindo dados da tabela `moderation_tickets`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `navigator_event_search_categories`
+-- Estrutura da tabela `navigator_event_search_categories`
 --
 
 CREATE TABLE IF NOT EXISTS `navigator_event_search_categories` (
@@ -7464,7 +7464,7 @@ CREATE TABLE IF NOT EXISTS `navigator_event_search_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `navigator_event_search_categories`
+-- Extraindo dados da tabela `navigator_event_search_categories`
 --
 
 INSERT INTO `navigator_event_search_categories` (`query`, `category_id`) VALUES
@@ -7483,7 +7483,7 @@ INSERT INTO `navigator_event_search_categories` (`query`, `category_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `navigator_frontpage`
+-- Estrutura da tabela `navigator_frontpage`
 --
 
 CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
@@ -7504,7 +7504,7 @@ CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- Dumping data for table `navigator_frontpage`
+-- Extraindo dados da tabela `navigator_frontpage`
 --
 
 INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `is_category`, `category_autoexpand`, `display_type`, `name`, `descr`, `image_type`, `image_src`, `banner_label`, `order_num`, `enabled`) VALUES
@@ -7528,7 +7528,7 @@ INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `is_category`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `new_items`
+-- Estrutura da tabela `new_items`
 --
 
 CREATE TABLE IF NOT EXISTS `new_items` (
@@ -7538,17 +7538,17 @@ CREATE TABLE IF NOT EXISTS `new_items` (
   `item_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `new_items`
+-- Extraindo dados da tabela `new_items`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pets`
+-- Estrutura da tabela `pets`
 --
 
 CREATE TABLE IF NOT EXISTS `pets` (
@@ -7571,14 +7571,14 @@ CREATE TABLE IF NOT EXISTS `pets` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `pets`
+-- Extraindo dados da tabela `pets`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pet_races`
+-- Estrutura da tabela `pet_races`
 --
 
 CREATE TABLE IF NOT EXISTS `pet_races` (
@@ -7592,7 +7592,7 @@ CREATE TABLE IF NOT EXISTS `pet_races` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=160 ;
 
 --
--- Dumping data for table `pet_races`
+-- Extraindo dados da tabela `pet_races`
 --
 
 INSERT INTO `pet_races` (`id`, `pet_type`, `data1`, `data2`, `data3`) VALUES
@@ -7748,7 +7748,7 @@ INSERT INTO `pet_races` (`id`, `pet_type`, `data1`, `data2`, `data3`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pet_tricks`
+-- Estrutura da tabela `pet_tricks`
 --
 
 CREATE TABLE IF NOT EXISTS `pet_tricks` (
@@ -7758,7 +7758,7 @@ CREATE TABLE IF NOT EXISTS `pet_tricks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `pet_tricks`
+-- Extraindo dados da tabela `pet_tricks`
 --
 
 INSERT INTO `pet_tricks` (`type`, `trick`) VALUES
@@ -7780,7 +7780,7 @@ INSERT INTO `pet_tricks` (`type`, `trick`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `quests`
+-- Estrutura da tabela `quests`
 --
 
 CREATE TABLE IF NOT EXISTS `quests` (
@@ -7796,7 +7796,7 @@ CREATE TABLE IF NOT EXISTS `quests` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
 
 --
--- Dumping data for table `quests`
+-- Extraindo dados da tabela `quests`
 --
 
 INSERT INTO `quests` (`id`, `category`, `series_number`, `goal_type`, `goal_data`, `name`, `reward`, `data_bit`) VALUES
@@ -7837,7 +7837,7 @@ INSERT INTO `quests` (`id`, `category`, `series_number`, `goal_type`, `goal_data
 -- --------------------------------------------------------
 
 --
--- Table structure for table `recycler_rewards`
+-- Estrutura da tabela `recycler_rewards`
 --
 
 CREATE TABLE IF NOT EXISTS `recycler_rewards` (
@@ -7848,7 +7848,7 @@ CREATE TABLE IF NOT EXISTS `recycler_rewards` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
--- Dumping data for table `recycler_rewards`
+-- Extraindo dados da tabela `recycler_rewards`
 --
 
 INSERT INTO `recycler_rewards` (`id`, `chance_level`, `item_id`) VALUES
@@ -7884,7 +7884,7 @@ INSERT INTO `recycler_rewards` (`id`, `chance_level`, `item_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rights`
+-- Estrutura da tabela `rights`
 --
 
 CREATE TABLE IF NOT EXISTS `rights` (
@@ -7895,7 +7895,7 @@ CREATE TABLE IF NOT EXISTS `rights` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
--- Dumping data for table `rights`
+-- Extraindo dados da tabela `rights`
 --
 
 INSERT INTO `rights` (`id`, `set_id`, `right_id`) VALUES
@@ -7916,7 +7916,7 @@ INSERT INTO `rights` (`id`, `set_id`, `right_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rooms`
+-- Estrutura da tabela `rooms`
 --
 
 CREATE TABLE IF NOT EXISTS `rooms` (
@@ -7948,7 +7948,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
--- Dumping data for table `rooms`
+-- Extraindo dados da tabela `rooms`
 --
 
 INSERT INTO `rooms` (`id`, `type`, `owner_id`, `name`, `description`, `pub_internal_name`, `tags`, `access_type`, `password`, `category`, `current_users`, `max_users`, `swfs`, `score`, `icon`, `model`, `allow_pets`, `allow_pet_eating`, `disable_blocking`, `hide_walls`, `thickness_wall`, `thickness_floor`, `decorations`, `badge_id`) VALUES
@@ -7973,7 +7973,7 @@ INSERT INTO `rooms` (`id`, `type`, `owner_id`, `name`, `description`, `pub_inter
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room_models`
+-- Estrutura da tabela `room_models`
 --
 
 CREATE TABLE IF NOT EXISTS `room_models` (
@@ -7991,7 +7991,7 @@ CREATE TABLE IF NOT EXISTS `room_models` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `room_models`
+-- Extraindo dados da tabela `room_models`
 --
 
 INSERT INTO `room_models` (`id`, `type`, `heightmap`, `enabled`, `door_x`, `door_y`, `door_z`, `door_dir`, `subscription_requirement`, `max_users`) VALUES
@@ -8048,7 +8048,7 @@ INSERT INTO `room_models` (`id`, `type`, `heightmap`, `enabled`, `door_x`, `door
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room_rights`
+-- Estrutura da tabela `room_rights`
 --
 
 CREATE TABLE IF NOT EXISTS `room_rights` (
@@ -8060,14 +8060,14 @@ CREATE TABLE IF NOT EXISTS `room_rights` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `room_rights`
+-- Extraindo dados da tabela `room_rights`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room_triggers`
+-- Estrutura da tabela `room_triggers`
 --
 
 CREATE TABLE IF NOT EXISTS `room_triggers` (
@@ -8082,7 +8082,7 @@ CREATE TABLE IF NOT EXISTS `room_triggers` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
 
 --
--- Dumping data for table `room_triggers`
+-- Extraindo dados da tabela `room_triggers`
 --
 
 INSERT INTO `room_triggers` (`id`, `room_id`, `room_pos`, `action`, `to_room_id`, `to_room_pos`, `to_room_dir`) VALUES
@@ -8126,7 +8126,7 @@ INSERT INTO `room_triggers` (`id`, `room_id`, `room_pos`, `action`, `to_room_id`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `room_visits`
+-- Estrutura da tabela `room_visits`
 --
 
 CREATE TABLE IF NOT EXISTS `room_visits` (
@@ -8139,14 +8139,14 @@ CREATE TABLE IF NOT EXISTS `room_visits` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `room_visits`
+-- Extraindo dados da tabela `room_visits`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `server_ingame_texts`
+-- Estrutura da tabela `server_ingame_texts`
 --
 
 CREATE TABLE IF NOT EXISTS `server_ingame_texts` (
@@ -8157,7 +8157,7 @@ CREATE TABLE IF NOT EXISTS `server_ingame_texts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `server_ingame_texts`
+-- Extraindo dados da tabela `server_ingame_texts`
 --
 
 INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
@@ -8236,6 +8236,8 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('command_staff_user_list', 'The following commands are available to staff users:'),
 ('command_superkick_error', 'Target user ''%0%'' is offline or cannot be kicked.'),
 ('command_targetuser_error', 'Look''s like the character doesn''t exists or maybe not online.'),
+('command_teleport_false', 'Teleporting is now disabled.'),
+('command_teleport_true', 'You''re now teleporting yourself around the room.'),
 ('command_unmute_error', 'Target user ''%0%'' does not exist or is not online.'),
 ('command_unmute_isnt_muted', 'Target user ''%0%'' is not muted.'),
 ('command_unmute_success', 'Target user ''%0%'' was successfully unmuted.'),
@@ -8262,7 +8264,7 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `server_settings`
+-- Estrutura da tabela `server_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `server_settings` (
@@ -8300,16 +8302,16 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `server_settings`
+-- Extraindo dados da tabela `server_settings`
 --
 
 INSERT INTO `server_settings` (`activitypoints_enabled`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `motd_enabled`, `motd_type`, `motd_text`, `login_badge_enabled`, `login_badge_id`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_enabled`, `marketplace_tax`, `marketplace_tokens_price`, `marketplace_premium_tokens`, `marketplace_default_tokens`, `marketplace_min_price`, `marketplace_max_price`, `marketplace_offer_hours`, `marketplace_avarage_days`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `wordfilter_maximum_count`, `wordfilter_time_muted`) VALUES
-('1', '1', 900, 0, 15, 25, 25, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', '1', 1, 1, 10, 5, 1, 10000, 48, 7, 30, 500, 12, 10, 15, 5, 300);
+('1', '1', 1800, 0, 10, 25, 25, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', '1', 33, '1', '1', '1', '1', 1, 1, 10, 5, 1, 10000, 48, 7, 30, 500, 12, 10, 15, 5, 300);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `server_statistics`
+-- Estrutura da tabela `server_statistics`
 --
 
 CREATE TABLE IF NOT EXISTS `server_statistics` (
@@ -8322,7 +8324,7 @@ CREATE TABLE IF NOT EXISTS `server_statistics` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `server_statistics`
+-- Extraindo dados da tabela `server_statistics`
 --
 
 INSERT INTO `server_statistics` (`server_status`, `server_ver`, `active_connections`, `all_time_player_peak`, `daily_player_peak`, `rooms_loaded`) VALUES
@@ -8331,7 +8333,7 @@ INSERT INTO `server_statistics` (`server_status`, `server_ver`, `active_connecti
 -- --------------------------------------------------------
 
 --
--- Table structure for table `songs`
+-- Estrutura da tabela `songs`
 --
 
 CREATE TABLE IF NOT EXISTS `songs` (
@@ -8344,7 +8346,7 @@ CREATE TABLE IF NOT EXISTS `songs` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- Dumping data for table `songs`
+-- Extraindo dados da tabela `songs`
 --
 
 INSERT INTO `songs` (`id`, `name`, `artist`, `song_data`, `length`) VALUES
@@ -8368,7 +8370,7 @@ INSERT INTO `songs` (`id`, `name`, `artist`, `song_data`, `length`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `static_objects`
+-- Estrutura da tabela `static_objects`
 --
 
 CREATE TABLE IF NOT EXISTS `static_objects` (
@@ -8386,7 +8388,7 @@ CREATE TABLE IF NOT EXISTS `static_objects` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=998 ;
 
 --
--- Dumping data for table `static_objects`
+-- Extraindo dados da tabela `static_objects`
 --
 
 INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `size_x`, `size_y`, `rotation`, `height`, `walkable`, `is_seat`) VALUES
@@ -9392,7 +9394,7 @@ INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `size_x`, `si
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tags`
+-- Estrutura da tabela `tags`
 --
 
 CREATE TABLE IF NOT EXISTS `tags` (
@@ -9404,14 +9406,14 @@ CREATE TABLE IF NOT EXISTS `tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `tags`
+-- Extraindo dados da tabela `tags`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_achievements`
+-- Estrutura da tabela `user_achievements`
 --
 
 CREATE TABLE IF NOT EXISTS `user_achievements` (
@@ -9424,14 +9426,14 @@ CREATE TABLE IF NOT EXISTS `user_achievements` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `user_achievements`
+-- Extraindo dados da tabela `user_achievements`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_gifts`
+-- Estrutura da tabela `user_gifts`
 --
 
 CREATE TABLE IF NOT EXISTS `user_gifts` (
@@ -9443,14 +9445,14 @@ CREATE TABLE IF NOT EXISTS `user_gifts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user_gifts`
+-- Extraindo dados da tabela `user_gifts`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_quests`
+-- Estrutura da tabela `user_quests`
 --
 
 CREATE TABLE IF NOT EXISTS `user_quests` (
@@ -9463,14 +9465,14 @@ CREATE TABLE IF NOT EXISTS `user_quests` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `user_quests`
+-- Extraindo dados da tabela `user_quests`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_subscriptions`
+-- Estrutura da tabela `user_subscriptions`
 --
 
 CREATE TABLE IF NOT EXISTS `user_subscriptions` (
@@ -9484,14 +9486,14 @@ CREATE TABLE IF NOT EXISTS `user_subscriptions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `user_subscriptions`
+-- Extraindo dados da tabela `user_subscriptions`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `vouchers`
+-- Estrutura da tabela `vouchers`
 --
 
 CREATE TABLE IF NOT EXISTS `vouchers` (
@@ -9506,14 +9508,14 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `vouchers`
+-- Extraindo dados da tabela `vouchers`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `wardrobe`
+-- Estrutura da tabela `wardrobe`
 --
 
 CREATE TABLE IF NOT EXISTS `wardrobe` (
@@ -9527,14 +9529,14 @@ CREATE TABLE IF NOT EXISTS `wardrobe` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `wardrobe`
+-- Extraindo dados da tabela `wardrobe`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `wordfilter`
+-- Estrutura da tabela `wordfilter`
 --
 
 CREATE TABLE IF NOT EXISTS `wordfilter` (
@@ -9543,7 +9545,7 @@ CREATE TABLE IF NOT EXISTS `wordfilter` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `wordfilter`
+-- Extraindo dados da tabela `wordfilter`
 --
 
 INSERT INTO `wordfilter` (`word`) VALUES

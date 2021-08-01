@@ -68,6 +68,27 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public void BroadcastMessage(ServerMessage Message, string RequiredRight)
+        {
+            lock (mActors)
+            {
+                foreach (RoomActor Actor in mActors.Values)
+                {
+                    if (Actor.Type == RoomActorType.UserCharacter)
+                    {
+                        Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
+                        if (Session == null || (RequiredRight.Length > 0 && !Session.HasRight(RequiredRight)))
+                        {
+                            continue;
+                        }
+
+                        Session.SendData(Message);
+                    }
+                }
+            }
+        }
+
         public void BroadcastEventData()
         {
             BroadcastMessage(RoomEventInfoComposer.Compose(mEvent));

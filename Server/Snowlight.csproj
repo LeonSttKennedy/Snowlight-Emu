@@ -367,6 +367,7 @@
     <Compile Include="Game\Misc\Chat\Commands\ClubVip\RedeemCoinsCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\ClubRegular\StatusCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\ClubRegular\UsersOnlineCommand.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\ClubVip\TeleportCommand.cs" />
     <Compile Include="Game\Misc\CrossdomainPolicy.cs" />
     <Compile Include="Game\Misc\Distance.cs" />
     <Compile Include="Game\Misc\DrinkSet.cs" />
@@ -374,7 +375,7 @@
     <Compile Include="Game\Misc\Items\MoodlightData.cs" />
     <Compile Include="Game\Misc\Items\TeleporterLinkFinder.cs" />
     <Compile Include="Game\Pathfinding\MinHeap.cs" />
-    <Compile Include="Game\Pathfinding\OtherPathfinder.cs" />
+    <Compile Include="Game\Pathfinding\ComplexPathfinder.cs" />
     <Compile Include="Game\Pathfinding\PathfinderNode.cs" />
     <Compile Include="Game\Rooms\RoomTriggers.cs" />
     <Compile Include="Game\Sessions\SingleSignOnAuthenticator.cs" />

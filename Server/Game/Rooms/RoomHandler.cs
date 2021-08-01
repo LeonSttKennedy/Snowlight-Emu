@@ -452,7 +452,7 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            Actor.MoveTo(new Vector2(RequestX, RequestY));
+            Actor.MoveTo(new Vector2(RequestX, RequestY), Actor.TeleportEnabled);
         }
 
         private static void UserWave(Session Session, ClientMessage Message)

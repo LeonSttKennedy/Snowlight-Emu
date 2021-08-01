@@ -25,8 +25,7 @@ namespace Snowlight.Game.Misc
 
                 foreach (string Drink in DrinkData)
                 {
-                    int i = 0;
-                    int.TryParse(Drink, out i);
+                    int.TryParse(Drink, out int i);
 
                     if (i > 0)
                     {
