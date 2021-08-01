@@ -1,0 +1,85 @@
+@charset "UTF-8";
+/* CSS Document */
+/* CODED BY RAREFRAZE OF CLUBHABBOFORUM */
+/* PROPERTY OF WWW.FANSITEDEV.COM */
+
+html, body {	
+	background: url("../images/maintenance/bg.png") no-repeat;
+	background-color:#000000;	
+	font-family: Verdana;	
+	font-size: 11px;	
+	color: #838383;	
+	margin: 0 auto;
+}
+
+A { text-decoration: none; font-weight: bold; color: #838383; }
+img { border: none; }
+
+img{	
+	border: none;
+}
+
+div#wrapper{	
+	width: 573px;	
+	height: auto;	
+	margin: 0 auto;
+}	
+
+div#toptop{				
+	background-image: url("../images/maintenance/toptop.png");			
+	background-repeat: repeat-y;				
+	width: 53px;			
+	height: 99px;	
+	margin-left: 21px;		
+	float: left;						
+}	
+div#top{				
+	background-image: url("../images/maintenance/top.png");			
+	background-repeat: no-repeat;				
+	width: 573px;			
+	height: 90px;			
+	float: left;						
+}	
+div#says{				
+	background-image: url("../images/maintenance/says.png");			
+	background-repeat: no-repeat;				
+	width: 365px;			
+	height: 28px;	
+	margin-top: -47px;
+	margin-left: 90px;	
+	padding: 7px;	
+	float: left;						
+}
+div#progress{				
+	background-image: url("../images/maintenance/progress.gif");			
+	background-repeat: no-repeat;				
+	width: 102px;			
+	height: 67px;	
+	margin-left: 470px;	
+	margin-top: -77px;
+	float: left;						
+}
+div#header{				
+	background-image: url("../images/maintenance/header.png");			
+	background-repeat: no-repeat;				
+	width: 573px;			
+	height: 31px;	
+	float: left;						
+}
+div.sides{				
+	background-image: url("../images/maintenance/sides.png");			
+	background-repeat: repeat-y;				
+	width: 488px;			
+	height: auto;	
+	float: left;	
+	overflow: hidden;
+	padding-left: 80px;		
+	padding-right: 5px;			
+}
+div#footer{				
+	background-image: url("../images/maintenance/footer.png");			
+	background-repeat: no-repeat;				
+	width: 573px;			
+	height: 17px;	
+	float: left;						
+}

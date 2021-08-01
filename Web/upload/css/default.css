@@ -1,0 +1,33 @@
+.dflt-notification
+{
+	height: 35px;
+	border-bottom: 1px solid black;
+	background-color: #F8E0E0;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	text-align: center;
+	z-index: 5000;
+}
+
+.dflt-inner
+{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+	width: 900px;
+	margin-top: -10px;
+	font-size: 16px;
+}
+
+.dflt-inner img
+{
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
+.msg-ok
+{
+	background-color: #ECF8E0;
+}
