@@ -5,6 +5,13 @@ namespace Snowlight.Game.Pathfinding
 {
     public static class Rotation
     {
+        public static int Calculate(Vector2 PositionOne, Vector2 PositionTwo, bool MoonWalk)
+        {
+            int Rotation = Calculate(PositionOne, PositionTwo);
+
+            return (MoonWalk ? CalculateInverse(Rotation) : Rotation);
+        }
+
         public static int Calculate(Vector2 PositionOne, Vector2 PositionTwo)
         {
             if (PositionOne.X > PositionTwo.X && PositionOne.Y > PositionTwo.Y)
@@ -41,6 +48,20 @@ namespace Snowlight.Game.Pathfinding
             }
 
             return 0;
+        }
+
+        public static int CalculateInverse(int Rotation)
+        {
+            if (Rotation > 3)
+            {
+                Rotation -= 4;
+            }
+            else
+            {
+                Rotation += 4;
+            }
+
+            return Rotation;
         }
     }
 }

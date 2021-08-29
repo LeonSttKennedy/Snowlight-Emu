@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Misc
 {
@@ -27,8 +29,14 @@ namespace Snowlight.Game.Misc
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {
+            if (Actor.TeleportEnabled)
+            {
+                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_clipping_error"), 0, ChatType.Whisper));
+                return;
+            }
+
             Actor.OverrideClipping = !Actor.OverrideClipping;
-            Actor.ApplyEffect(Actor.TeleportEnabled ? 0 : 23);
+            Actor.ApplyEffect(Actor.ClippingEnabled ? 0 : 23);
             Session.CurrentEffect = 0;
         }
     }

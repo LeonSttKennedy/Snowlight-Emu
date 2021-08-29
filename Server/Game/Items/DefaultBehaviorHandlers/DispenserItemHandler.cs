@@ -63,7 +63,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                             InteractingActor.PositionToSet = Item.SquareInFront;
 
                             int NewRot = Rotation.Calculate(InteractingActor.Position.GetVector2(),
-                                Item.RoomPosition.GetVector2());
+                                Item.RoomPosition.GetVector2(), InteractingActor.MoonWalkEnabled);
 
                             if (InteractingActor.BodyRotation != NewRot)
                             {
@@ -105,7 +105,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         InteractingActor.CarryItem(DrinkSetManager.GetRandomDrinkForSet(Item.Definition.BehaviorData));
 
                         int NewRot = Rotation.Calculate(InteractingActor.Position.GetVector2(),
-                            Item.RoomPosition.GetVector2());
+                            Item.RoomPosition.GetVector2(), InteractingActor.MoonWalkEnabled);
 
                         if (InteractingActor.BodyRotation != NewRot)
                         {

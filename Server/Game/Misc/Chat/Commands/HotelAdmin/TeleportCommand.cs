@@ -13,7 +13,7 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "club_vip"; }
+            get { return "hotel_admin"; }
         }
 
         public string Parameters
@@ -28,6 +28,12 @@ namespace Snowlight.Game.Misc
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {
+            if (Actor.OverrideClipping)
+            {
+                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_teleport_error"), 0, ChatType.Whisper));
+                return;
+            }
+            
             Actor.TeleportEnabled = !Actor.TeleportEnabled;
             Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_teleport_" + Actor.TeleportEnabled.ToString().ToLower()), 0, ChatType.Whisper));
         }

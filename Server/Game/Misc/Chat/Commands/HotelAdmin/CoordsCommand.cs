@@ -24,7 +24,7 @@ namespace Snowlight.Game.Misc
 
         public string Description
         {
-            get { return "Shows the coords to you."; }
+            get { return "Shows the coords for you."; }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

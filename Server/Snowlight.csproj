@@ -332,6 +332,7 @@
     <Compile Include="Game\Misc\Caches\UserIgnoreCache.cs" />
     <Compile Include="Game\Misc\Chat\ChatEmotions.cs" />
     <Compile Include="Game\Misc\Chat\ChatWordFilter.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\ClubVip\MoonWalkCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\ClubRegular\SitCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\ClubVip\EventAlertCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\Normal\FollowCommand.cs" />
@@ -367,7 +368,7 @@
     <Compile Include="Game\Misc\Chat\Commands\ClubVip\RedeemCoinsCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\ClubRegular\StatusCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\ClubRegular\UsersOnlineCommand.cs" />
-    <Compile Include="Game\Misc\Chat\Commands\ClubVip\TeleportCommand.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\HotelAdmin\TeleportCommand.cs" />
     <Compile Include="Game\Misc\CrossdomainPolicy.cs" />
     <Compile Include="Game\Misc\Distance.cs" />
     <Compile Include="Game\Misc\DrinkSet.cs" />

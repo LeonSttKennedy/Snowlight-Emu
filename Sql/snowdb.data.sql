@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tempo de Geração: Ago 01, 2021 as 02:49 PM
+-- Tempo de Geração: Ago 29, 2021 as 01:27 PM
 -- Versão do Servidor: 5.5.10
 -- Versão do PHP: 5.3.6
 
@@ -215,8 +215,7 @@ CREATE TABLE IF NOT EXISTS `badges` (
   `slot_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
-
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT= 2;
 --
 -- Extraindo dados da tabela `badges`
 --
@@ -2075,7 +2074,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1424, 35, 1424, '', 'fx_flare', 0, 139, '1', 1, 0),
 (1425, 94, 1425, '', 'ads_cltele', 10, 0, '1', 1, 0),
 (1426, 68, 1426, '', 'xmas08_trph2', 0, 3, '1', 1, 0),
-(1427, 91, 1427, '', 'lostc_merdragon', 250, 3000, '1', 1, 0),
+(1427, 91, 1427, '', 'lostc_merdragon', 200, 100, '1', 1, 0),
 (1428, 94, 1428, '', 'ads_cldesk', 10, 0, '1', 1, 0),
 (1429, 94, 1429, '', 'ads_ob_pillow', 10, 0, '1', 1, 0),
 (1430, 94, 1430, '', 'ads_clfloor', 10, 0, '1', 1, 0),
@@ -2111,7 +2110,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1460, 142, 1460, '', 'ads_igor_dsk', 0, 5, '1', 1, 0),
 (1461, 140, 1461, '', 'ads_idol_desk', 0, 10, '1', 1, 0),
 (1462, 140, 1462, '', 'ads_idol_ch', 0, 10, '1', 1, 0),
-(1463, 91, 1463, '', 'lostc_octopus', 250, 3000, '1', 1, 0),
+(1463, 91, 1463, '', 'lostc_octopus', 200, 100, '1', 1, 0),
 (1464, 140, 1464, '', 'ads_idol_tele', 0, 10, '1', 1, 0),
 (1465, 140, 1465, '', 'ads_idol_mic', 0, 10, '1', 1, 0),
 (1466, 94, 1466, '', 'ads_idol_trax', 10, 0, '1', 1, 0),
@@ -2172,7 +2171,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1521, 37, 1521, '', 'bump_road', 1, 89, '1', 1, 0),
 (1522, 94, 1522, '', 'ads_frankb', 10, 0, '1', 1, 0),
 (1523, 94, 1523, '', 'ads_grefusa_cactus', 10, 0, '1', 1, 0),
-(1524, 91, 1524, '', 'totem_leg', 250, 3000, '1', 1, 0),
+(1524, 91, 1524, '', 'totem_leg', 200, 100, '1', 1, 0),
 (1525, 11, 1525, '', 'exe_artlamp', 0, 3, '1', 1, 0),
 (1526, 15, 1526, '', 'env_bushes', 0, 5, '1', 1, 0),
 (1527, 140, 1527, '', 'ads_idol_newsDsk', 0, 10, '1', 1, 0),
@@ -2226,7 +2225,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1575, 77, 1575, '', 'country_corner', 0, 3, '1', 1, 0),
 (1576, 77, 1576, '', 'country_ditch', 0, 3, '1', 1, 0),
 (1577, 77, 1577, '', 'country_patio', 0, 3, '1', 1, 0),
-(1578, 91, 1578, '', 'totem_head', 250, 3000, '1', 1, 0),
+(1578, 91, 1578, '', 'totem_head', 200, 100, '1', 1, 0),
 (1579, 94, 1579, '', 'ads_calip_chair', 10, 0, '1', 1, 0),
 (1580, 101, 1580, '', 'ads_idol_trophy', 10, 0, '1', 1, 0),
 (1581, 90, 1581, '', 'LT_pillar2', 0, 3, '1', 1, 0),
@@ -2255,7 +2254,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1604, 94, 1604, '', 'ads_calip_lava', 10, 0, '1', 1, 0),
 (1605, 94, 1605, '', 'ads_calip_fan', 10, 0, '1', 1, 0),
 (1606, 140, 1606, '', 'transparent_floor', 0, 3, '1', 1, 0),
-(1607, 91, 1607, '', 'totem_planet', 250, 3000, '1', 1, 0),
+(1607, 91, 1607, '', 'totem_planet', 200, 100, '1', 1, 0),
 (1608, 94, 1608, '', 'voting_ch', 10, 0, '1', 1, 0),
 (1609, 145, 1609, '', 'ads_mall_coffeem', 0, 5, '1', 1, 0),
 (1610, 76, 1610, '', 'sf_roof', 0, 3, '1', 1, 0),
@@ -2274,7 +2273,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1623, 145, 1623, '', 'ads_mall_kiosk', 0, 5, '1', 1, 0),
 (1624, 76, 1624, '', 'SF_panel1', 0, 3, '1', 1, 0),
 (1625, 76, 1625, '', 'SF_panel2', 0, 3, '1', 1, 0),
-(1626, 91, 1626, '', 'sf_pod', 250, 3000, '1', 1, 0),
+(1626, 91, 1626, '', 'sf_pod', 200, 100, '1', 1, 0),
 (1627, 76, 1627, '', 'SF_table', 0, 3, '1', 1, 0),
 (1628, 76, 1628, '', 'sf_gate', 0, 3, '1', 1, 0),
 (1629, 76, 1629, '', 'SF_floor_1', 0, 3, '1', 1, 0),
@@ -2328,7 +2327,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1677, 79, 1677, '', 'urban_blocker', 0, 3, '1', 1, 0),
 (1678, 79, 1678, '', 'urban_bsktbll', 0, 3, '1', 1, 0),
 (1679, 79, 1679, '', 'urban_wpost', 0, 3, '1', 1, 0),
-(1680, 91, 1680, '', 'sf_mbar', 250, 3000, '1', 1, 0),
+(1680, 91, 1680, '', 'sf_mbar', 200, 100, '1', 1, 0),
 (1681, 79, 1681, '', 'urban_sidewalk', 0, 3, '1', 1, 0),
 (1682, 79, 1682, '', 'urban_fence_corner', 0, 3, '1', 1, 0),
 (1683, 140, 1683, '', 'ads_idol_l_carpet', 0, 10, '1', 1, 0),
@@ -2337,7 +2336,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1686, 101, 1686, '', 'ads_mtvtrophy_gold', 10, 0, '1', 1, 0),
 (1687, 94, 1687, '', 'ads_spang_sleep', 10, 0, '1', 1, 0),
 (1688, 101, 1688, '', 'ads_mtvtrophy_silver', 10, 0, '1', 1, 0),
-(1689, 91, 1689, '', 'hween09_organ', 250, 3000, '1', 1, 0),
+(1689, 91, 1689, '', 'hween09_organ', 200, 100, '1', 1, 0),
 (1690, 140, 1690, '', 'ads_idol_chmpgn', 0, 10, '1', 1, 0),
 (1691, 79, 1691, '', 'urban_bench_plain', 0, 3, '1', 1, 0),
 (1692, 147, 1692, '', 'hween09_hatch', 0, 3, '1', 1, 0),
@@ -4041,7 +4040,7 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
   `limited_number` int(11) NOT NULL DEFAULT '0',
   `limited_stack` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`offer_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `catalog_marketplace_offers`
@@ -7490,6 +7489,7 @@ CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned NOT NULL DEFAULT '0',
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `connected_rooms` varchar(64) NOT NULL DEFAULT '0|',
   `is_category` enum('1','0') NOT NULL DEFAULT '0',
   `category_autoexpand` enum('0','1') NOT NULL DEFAULT '0',
   `display_type` enum('details','banner') NOT NULL DEFAULT 'details',
@@ -7507,23 +7507,23 @@ CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
 -- Extraindo dados da tabela `navigator_frontpage`
 --
 
-INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `is_category`, `category_autoexpand`, `display_type`, `name`, `descr`, `image_type`, `image_src`, `banner_label`, `order_num`, `enabled`) VALUES
-(1, 0, 0, '1', '1', 'details', 'Staff Picks', '', 'external', 'officialrooms_hq/staffpickfolder.gif', '', 100, '1'),
-(2, 0, 1, '0', '0', 'banner', 'Welcome Lounge', 'Get a warm welcome to the hotel and meet new people.', 'internal', '', 'Welcome Lounge', 1, '1'),
-(3, 0, 2, '0', '0', 'banner', 'Theatredrome', 'For mass assemblies and gatherings.', 'internal', '', 'Theatredrome', 2, '1'),
-(4, 0, 16, '0', '0', 'banner', 'Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'internal', '', 'Library', 3, '1'),
-(5, 0, 3, '0', '0', 'details', 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'internal', '', '', 4, '1'),
-(6, 0, 4, '0', '0', 'details', 'Star Lounge', 'Celebrities favourite hangout', 'internal', '', '', 5, '1'),
-(7, 0, 5, '0', '0', 'details', 'The Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'internal', '', '', 6, '1'),
-(8, 0, 6, '0', '0', 'details', 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'internal', '', '', 7, '1'),
-(9, 0, 7, '0', '0', 'details', 'Oriental Tearoom', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'internal', '', '', 8, '1'),
-(10, 0, 8, '0', '0', 'details', 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'internal', '', '', 9, '1'),
-(11, 0, 9, '0', '0', 'details', 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'internal', '', '', 10, '1'),
-(12, 0, 10, '0', '0', 'details', 'Club Orient', 'Tres chic with an eastern twist.', 'internal', '', '', 11, '1'),
-(13, 0, 11, '0', '0', 'details', 'Pizzeria', 'The best pizza in town!', 'internal', '', '', 12, '1'),
-(14, 0, 12, '0', '0', 'details', 'The Park', 'Follow the path...', 'internal', '', '', 13, '1'),
-(15, 0, 13, '0', '0', 'details', 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'internal', '', '', 14, '1'),
-(16, 0, 15, '0', '0', 'details', 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'internal', '', '', 15, '1');
+INSERT INTO `navigator_frontpage` (`id`, `parent_id`, `room_id`, `connected_rooms`, `is_category`, `category_autoexpand`, `display_type`, `name`, `descr`, `image_type`, `image_src`, `banner_label`, `order_num`, `enabled`) VALUES
+(1, 0, 0, '0|', '1', '1', 'details', 'Staff Picks', '', 'external', 'officialrooms_hq/staffpickfolder.gif', '', 100, '1'),
+(2, 0, 1, '0|', '0', '0', 'banner', 'Welcome Lounge', 'Get a warm welcome to the hotel and meet new people.', 'internal', '', 'Welcome Lounge', 1, '1'),
+(3, 0, 2, '0|', '0', '0', 'banner', 'Theatredrome', 'For mass assemblies and gatherings.', 'internal', '', 'Theatredrome', 2, '1'),
+(4, 0, 16, '0|', '0', '0', 'banner', 'Library', 'Feel the Gothic atmosphere of this temple of knowledge. What mysteries do these dusty books contain?', 'internal', '', 'Library', 3, '1'),
+(5, 0, 3, '0|', '0', '0', 'details', 'Net Cafe', 'Learn a foreign language and win Uber Credits in our quests!', 'internal', '', '', 4, '1'),
+(6, 0, 4, '0|', '0', '0', 'details', 'Star Lounge', 'Celebrities favourite hangout', 'internal', '', '', 5, '1'),
+(7, 0, 5, '0|', '0', '0', 'details', 'The Dirty Duck Pub', 'Grab a stool and hear Dave and Sadie talk about the good old days...', 'internal', '', '', 6, '1'),
+(8, 0, 6, '0|', '0', '0', 'details', 'Uber Cinema', 'Now Showing: The Making of Uber Big Brother', 'internal', '', '', 7, '1'),
+(9, 0, 7, '0|', '0', '0', 'details', 'Oriental Tearoom', 'Try the tea in this Mongol cafe - it is to die for darlings!', 'internal', '', '', 8, '1'),
+(10, 0, 8, '0|', '0', '0', 'details', 'Picnic Fields', 'Enjoy the great outdoors, celebrate mother nature and party!', 'internal', '', '', 9, '1'),
+(11, 0, 9, '0|', '0', '0', 'details', 'Grandfathers Lounge', 'Old, cool, Dusty and the perfect room for the biggest brains in Uber', 'internal', '', '', 10, '1'),
+(12, 0, 10, '0|', '0', '0', 'details', 'Club Orient', 'Tres chic with an eastern twist.', 'internal', '', '', 11, '1'),
+(13, 0, 11, '0|', '0', '0', 'details', 'Pizzeria', 'The best pizza in town!', 'internal', '', '', 12, '1'),
+(14, 0, 12, '17|', '0', '0', 'details', 'The Park', 'Follow the path...', 'internal', '', '', 13, '1'),
+(15, 0, 13, '14|', '0', '0', 'details', 'Rooftop Terrace', 'One of the highest points in Uber Hotel!', 'internal', '', '', 14, '1'),
+(16, 0, 15, '0|', '0', '0', 'details', 'Floating Garden', 'Climb the rocks, chill in the shade and watch for pirate ships!', 'internal', '', '', 15, '1');
 
 -- --------------------------------------------------------
 
@@ -8170,6 +8170,7 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('catalog_page_coming_soon', 'Coming Soon'),
 ('catalog_recycler_disabled', 'The recycler is temporarily disabled. Please check back later.'),
 ('command_alert_error', 'Please enter a message to alert the users.'),
+('command_clipping_error', 'This commands is disabled when Teleport is enabled.'),
 ('command_club_error', 'This command is just for Uber Club member users only!'),
 ('command_club_user_list', 'The following commands are available to club users:'),
 ('command_coords_text', 'Position: %0%, Rotation: %1%'),
@@ -8217,6 +8218,9 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('command_massgive_room_success', 'Command executed successfully, %0% %1% added to all users in current room!'),
 ('command_mimic_error', 'This user (%0%) isn''t online, maybe doesn''t exists or doens''t permited to mimic, please select another user!'),
 ('command_mimic_info', 'The correct use of the command is, ":mimic <username>".\\n\\nYou can copy any user''s clothes, as long as they are registered at our hotel.'),
+('command_moonwalk_error', 'This commands is disabled when Clipping or Teleport is enabled.'),
+('command_moonwalk_false', 'You is no longer walking backwards.'),
+('command_moonwalk_true', 'You''re now wearing the shoes of Michael Jackson, enjoy!!'),
 ('command_mute_error', 'Target user ''%0%'' does not exist, is not online, or cannot be muted.'),
 ('command_mute_maxtime', 'The maximum mute time is one hour.'),
 ('command_mute_success', 'User ''%0%'' has been muted successfully for %1% seconds.'),
@@ -8236,6 +8240,7 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('command_staff_user_list', 'The following commands are available to staff users:'),
 ('command_superkick_error', 'Target user ''%0%'' is offline or cannot be kicked.'),
 ('command_targetuser_error', 'Look''s like the character doesn''t exists or maybe not online.'),
+('command_teleport_error', 'This commands is disabled when Clipping is enabled.'),
 ('command_teleport_false', 'Teleporting is now disabled.'),
 ('command_teleport_true', 'You''re now teleporting yourself around the room.'),
 ('command_unmute_error', 'Target user ''%0%'' does not exist or is not online.'),

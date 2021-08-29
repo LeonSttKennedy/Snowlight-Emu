@@ -45,7 +45,9 @@ namespace Snowlight.Game.Rooms
         private int mIdleTime;
         private bool mIsSleeping;
         private bool mOverrideClipping;
+        private bool mEnableClipping;
         private bool mEnableTeleport;
+        private bool mEnableMoonWalk;
         private object mMovementSyncRoot;
         private bool mWalkingBlocked;
         private uint mMoveToAndInteract;
@@ -319,6 +321,19 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public bool ClippingEnabled
+        {
+            get
+            {
+                return mOverrideClipping ? false : mEnableClipping;
+            }
+
+            set
+            {
+                mEnableClipping = value;
+            }
+        }
+
         public bool OverrideClipping
         {
             get
@@ -331,6 +346,7 @@ namespace Snowlight.Game.Rooms
                 mOverrideClipping = value;
             }
         }
+
         public bool TeleportEnabled
         {
             get
@@ -343,6 +359,20 @@ namespace Snowlight.Game.Rooms
                 mEnableTeleport = value;
             }
         }
+
+        public bool MoonWalkEnabled
+        {
+            get
+            {
+                return mOverrideClipping || mEnableTeleport ? false : mEnableMoonWalk;
+            }
+
+            set
+            {
+                mEnableMoonWalk = value;
+            }
+        }
+
         public uint MoveToAndInteract
         {
             get
@@ -417,7 +447,9 @@ namespace Snowlight.Game.Rooms
             mUpdateNeeded = true;
             mStatusses = new Dictionary<string, string>();
             mInstance = Instance;
+            mEnableClipping = true;
             mEnableTeleport = false;
+            mEnableMoonWalk = false;
             mMovementSyncRoot = new object();
 
             mIsSitting = false;
@@ -502,7 +534,7 @@ namespace Snowlight.Game.Rooms
             mMoveToAndInteractData = RequestData;
         }
 
-        public void MoveTo(Vector2 ToPosition, bool Teleport = false, bool IgnoreCanInitiate = false, bool IgnoreRedirections = false)
+        public void MoveTo(Vector2 ToPosition, bool IgnoreCanInitiate = false, bool IgnoreRedirections = false, bool DisableClipping = false)
         {
             Unidle();
 
@@ -511,12 +543,14 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            if (!TeleportEnabled)
+            mEnableClipping = !DisableClipping;
+
+            if (!ClippingEnabled)
             {
                 IgnoreCanInitiate = true;
             }
 
-            if (Teleport)
+            if (TeleportEnabled)
             {
                 mPositionToSet = ToPosition;
                 mPosition.X = mPositionToSet.X;
@@ -534,7 +568,7 @@ namespace Snowlight.Game.Rooms
 
             if ((ToPosition.X == Position.X && ToPosition.Y == Position.Y) || mForcedLeave ||
                 (!IgnoreCanInitiate && !mInstance.CanInitiateMoveToPosition(ToPosition)) ||
-                (mWalkingBlocked && !Teleport))
+                (mWalkingBlocked && !OverrideClipping))
             {
                 return;
             }

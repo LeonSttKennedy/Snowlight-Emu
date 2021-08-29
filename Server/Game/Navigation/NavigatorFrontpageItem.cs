@@ -33,6 +33,8 @@ namespace Snowlight.Game.Navigation
         private string mBannerLabel;
         private bool mCategoryAutoExpand;
 
+        private List<uint> mConnectedRooms;
+
         public uint Id
         {
             get
@@ -121,9 +123,17 @@ namespace Snowlight.Game.Navigation
             }
         }
 
+        public List<uint> ConnectedRoomsList
+        {
+            get
+            {
+                return mConnectedRooms;
+            }
+        }
+
         public NavigatorOfficialItem(uint Id, uint ParentId, uint RoomId, bool IsCategory,
             NavigatorOfficialItemDisplayType DisplayType, string Name, string Descr, NavigatorOfficialItemImageType ImageType,
-            string Image, string BannerLabel, bool CategoryAutoExpand)
+            string Image, string BannerLabel, bool CategoryAutoExpand, List<uint> ConnectedRoomsList)
         {
             mId = Id;
             mParentId = ParentId;
@@ -136,6 +146,7 @@ namespace Snowlight.Game.Navigation
             mImage = Image;
             mBannerLabel = BannerLabel;
             mCategoryAutoExpand = CategoryAutoExpand;
+            mConnectedRooms = ConnectedRoomsList;
         }
 
         public RoomInstance TryGetRoomInstance()
@@ -150,7 +161,17 @@ namespace Snowlight.Game.Navigation
 
         public int GetTotalUsersInPublicRoom()
         {
-            return (TryGetRoomInstance() != null ? TryGetRoomInstance().CachedNavigatorUserCount : 0);
+            int TotalUsersInThisItem = 0;
+
+            if (GetRoomInfo() != null) TotalUsersInThisItem += GetRoomInfo().CurrentUsers;
+
+            foreach (uint RoomId in mConnectedRooms)
+            {
+                RoomInfo ConnectedRoom = RoomInfoLoader.GetRoomInfo(RoomId);
+                if (mConnectedRooms.Count > 0 && ConnectedRoom != null) TotalUsersInThisItem += ConnectedRoom.CurrentUsers;
+            }
+
+            return TotalUsersInThisItem;
         }
     }
 }

@@ -69,7 +69,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendStringWithBreak(Item.BannerLabel);
             Message.AppendStringWithBreak(Item.ImageType == NavigatorOfficialItemImageType.External ? Item.Image : string.Empty);
             Message.AppendUInt32(Item.ParentId);
-            Message.AppendInt32(Info != null ? Info.CurrentUsers : 0);
+            Message.AppendInt32(Item.GetTotalUsersInPublicRoom());
             Message.AppendInt32(Type);
 
             if (Item.IsCategory)

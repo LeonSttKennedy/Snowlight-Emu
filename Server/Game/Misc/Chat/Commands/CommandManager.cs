@@ -178,8 +178,8 @@ namespace Snowlight.Game.Misc
             Register("empty", new EmptyCommand());
             Register("eventalert", new EventAlertCommand());
             Register("redeemcoins", new RedeemCoinsCommand());
-            Register("teleport", new TeleportCommand());
             Register("mimic", new MimicCommand());
+            Register("moonwalk", new MoonWalkCommand());
         }
 
         private static void RegisterModerationTool()
@@ -207,6 +207,7 @@ namespace Snowlight.Game.Misc
             Register("has", new HotelAlertStaffCommand());
             Register("superkick", new SuperKickCommand());
             Register("clipping", new ClippingCommand());
+            Register("teleport", new TeleportCommand());
             Register("coords", new CoordsCommand());
             Register("update", new UpdateCommand());
             Register("directbadge", new DirectBadgeCommand());

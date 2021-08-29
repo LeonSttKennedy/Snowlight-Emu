@@ -117,12 +117,24 @@ namespace Snowlight.Game.Navigation
 
                 foreach (DataRow Row in Table.Rows)
                 {
+                    List<uint> ConnectedRooms = new List<uint>();
+                    foreach (string RoomIds in Row["connected_rooms"].ToString().Split('|'))
+                    {
+                        uint.TryParse(RoomIds, out uint Result);
+
+                        if (Result > 0 && !ConnectedRooms.Contains(Result))
+                        {
+                            ConnectedRooms.Add(Result);
+                        }
+                    }
+
                     mOfficialItems.Add(new NavigatorOfficialItem((uint)Row["id"], (uint)Row["parent_id"], (uint)Row["room_id"],
                         (Row["is_category"].ToString() == "1"), (Row["display_type"].ToString() == "details" ?
                         NavigatorOfficialItemDisplayType.Detailed : NavigatorOfficialItemDisplayType.Banner),
                         (string)Row["name"], (string)Row["descr"], (Row["image_type"].ToString() == "internal" ?
                         NavigatorOfficialItemImageType.Internal : NavigatorOfficialItemImageType.External),
-                        (string)Row["image_src"], (string)Row["banner_label"], (Row["category_autoexpand"].ToString() == "1")));
+                        (string)Row["image_src"], (string)Row["banner_label"], (Row["category_autoexpand"].ToString() == "1"),
+                        ConnectedRooms));
                     NumberLoaded++;
                 }
             }
@@ -682,7 +694,7 @@ namespace Snowlight.Game.Navigation
                 }
 
                 mOfficialItems.Add(new NavigatorOfficialItem(0, CategoryId, RoomId, false, NavigatorOfficialItemDisplayType.Detailed,
-                    string.Empty, string.Empty, NavigatorOfficialItemImageType.Internal, string.Empty, string.Empty, false));
+                    string.Empty, string.Empty, NavigatorOfficialItemImageType.Internal, string.Empty, string.Empty, false, new List<uint>()));
             }
         }
 

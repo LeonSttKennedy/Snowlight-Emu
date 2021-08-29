@@ -24,7 +24,7 @@ namespace Snowlight.Game.Misc
 
         public string Description
         {
-            get { return "Send a hotel alert for your event."; } // This isn't true
+            get { return "Send a hotel alert for your event."; }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

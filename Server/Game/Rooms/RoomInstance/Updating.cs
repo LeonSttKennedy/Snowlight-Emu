@@ -121,7 +121,8 @@ namespace Snowlight.Game.Rooms
                     bool LastStep = !Actor.IsMoving;
 
                     // Check that the next step is valid and allowed
-                    if (NextStep != null && ((!Actor.TeleportEnabled && IsValidPosition(NextStep)) ||
+                    if (NextStep != null && ((!Actor.ClippingEnabled && IsValidPosition(NextStep)) || 
+                        (!Actor.TeleportEnabled && IsValidPosition(NextStep)) ||
                         IsValidStep(Actor.Position.GetVector2(), NextStep, LastStep, Actor.OverrideClipping, NewUserGrid)))
                     {
                         // Update "mv" status
@@ -149,7 +150,7 @@ namespace Snowlight.Game.Rooms
                         }
 
                         // Update rotation
-                        Actor.BodyRotation = Rotation.Calculate(Actor.Position.GetVector2(), NextStep);
+                        Actor.BodyRotation = Rotation.Calculate(Actor.Position.GetVector2(), NextStep, Actor.MoonWalkEnabled);
                         Actor.HeadRotation = Actor.BodyRotation;
 
                         // Request update for next @B cycle
@@ -293,7 +294,7 @@ namespace Snowlight.Game.Rooms
                         if (Actor.UserStatusses.ContainsKey("sit")) Actor.RemoveStatus("sit");
                         if (Actor.UserStatusses.ContainsKey("lay")) Actor.RemoveStatus("lay");
 
-                        Actor.BodyRotation = Rotation.Calculate(Actor.Position.GetVector2(), NextStep);
+                        Actor.BodyRotation = Rotation.Calculate(Actor.Position.GetVector2(), NextStep, Actor.MoonWalkEnabled);
                         Actor.HeadRotation = Actor.BodyRotation;
                         Actor.UpdateNeeded = true;
                         break;

@@ -452,7 +452,7 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            Actor.MoveTo(new Vector2(RequestX, RequestY), Actor.TeleportEnabled);
+            Actor.MoveTo(new Vector2(RequestX, RequestY));
         }
 
         private static void UserWave(Session Session, ClientMessage Message)
@@ -672,7 +672,7 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            int NewRotation = Rotation.Calculate(Actor.Position.GetVector2(), PositionToFace);
+            int NewRotation = Rotation.Calculate(Actor.Position.GetVector2(), PositionToFace, Actor.MoonWalkEnabled);
 
             if (Actor.BodyRotation != NewRotation)
             {
