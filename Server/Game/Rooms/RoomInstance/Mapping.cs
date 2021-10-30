@@ -77,7 +77,7 @@ namespace Snowlight.Game.Rooms
                 ActorBlockGrid = mUserGrid;
             }
 
-            if(UserOverride)
+            if (UserOverride)
             {
                 return true;
             }

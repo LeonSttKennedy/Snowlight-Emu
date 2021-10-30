@@ -236,7 +236,7 @@ namespace Snowlight.Communication
         public const uint ROOM_MOVE_TO = 75;
         public const uint ITEM_ACTIVATE_DICE_1 = 76;
         public const uint ITEM_ACTIVATE_DICE_2 = 77;
-        public const uint GIFT_OPEN = 78;
+        public const uint OPEN_GIFT = 78;
         public const uint ROOM_CHANGE_ROTATION = 79;
         public const uint OPEN_STICKY = 83;
         public const uint SAVE_STICKY = 84;

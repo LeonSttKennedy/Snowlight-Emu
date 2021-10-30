@@ -15,6 +15,7 @@ using Snowlight.Game.Pets;
 using Snowlight.Game.Bots;
 using Snowlight.Game.Achievements;
 using Snowlight.Communication.Incoming;
+using System.Data;
 
 namespace Snowlight.Game.Rooms
 {
@@ -41,6 +42,8 @@ namespace Snowlight.Game.Rooms
             DataRouter.RegisterHandler(OpcodesIn.PET_TAKE, new ProcessRequestCallback(TakePet));
             DataRouter.RegisterHandler(OpcodesIn.PET_GET_TRAINING_INFO, new ProcessRequestCallback(PetTrainerPanel));
             DataRouter.RegisterHandler(OpcodesIn.PET_RESPECT, new ProcessRequestCallback(RespectPet));
+
+            DataRouter.RegisterHandler(OpcodesIn.OPEN_GIFT, new ProcessRequestCallback(OpenPresent));
         }
 
         private static void PlaceItem(Session Session, ClientMessage Message)
@@ -634,6 +637,88 @@ namespace Snowlight.Game.Rooms
             }
 
             Instance.BroadcastMessage(RoomPetUpdateComposer.Compose(Actor.ReferenceId, PetData));
+        }
+
+        private static void OpenPresent(Session Session, ClientMessage Message)
+        {
+            uint PresentID = Message.PopWiredUInt32();
+            double ExpireTimestamp = 0;
+
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+                if (Instance == null || !Instance.CheckUserRights(Session, true)) return;
+
+                Item GiftItem = Instance.GetItem(PresentID);
+                if (GiftItem == null) return;
+
+                DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM user_gifts WHERE item_id = '" + GiftItem.Id + "' LIMIT 1");
+                if (Row == null) return;
+
+                ItemDefinition BaseItem = ItemDefinitionManager.GetDefinition((uint)Row["base_id"]);
+                GiftItem.RemovePermanently(MySqlClient);
+                Instance.TakeItem(GiftItem.Id);
+                Instance.RegenerateRelativeHeightmap();
+
+                Session.SendData(RoomGiftOpenedComposer.Compose(BaseItem.TypeLetter, BaseItem.SpriteId, BaseItem.Name));
+                if (BaseItem.Behavior == ItemBehavior.Rental)
+                {
+                    ExpireTimestamp = UnixTimestamp.GetCurrent() + 3600;
+                }
+
+                Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
+                List<Item> GeneratedGenericItems = new List<Item>();
+                for (int i = 0; i < (int)Row["amount"]; i++)
+                {
+                    GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, BaseItem.Id,
+                        Session.CharacterInfo.Id, (string)Row["extra_data"], (string)Row["extra_data"], ExpireTimestamp));
+                }
+
+                switch (BaseItem.Behavior)
+                {
+                    case ItemBehavior.Teleporter:
+
+                        Item LinkedItem = ItemFactory.CreateItem(MySqlClient, BaseItem.Id,
+                            Session.CharacterInfo.Id, GeneratedGenericItems[0].Id.ToString(), string.Empty,
+                            ExpireTimestamp);
+
+                        GeneratedGenericItems[0].Flags = LinkedItem.Id.ToString();
+                        GeneratedGenericItems[0].SynchronizeDatabase(MySqlClient, true);
+
+                        GeneratedGenericItems.Add(LinkedItem);
+                        break;
+                }
+
+                foreach (Item GeneratedItem in GeneratedGenericItems)
+                {
+                    Session.InventoryCache.Add(GeneratedItem);
+
+                    int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
+
+                    if (!NewItems.ContainsKey(TabId))
+                    {
+                        NewItems.Add(TabId, new List<uint>());
+                    }
+
+                    NewItems[TabId].Add(GeneratedItem.Id);
+                }
+
+                Session.SendData(InventoryRefreshComposer.Compose());
+                foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
+                {
+                    foreach (uint NewItem in NewItemData.Value)
+                    {
+                        Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
+                    }
+                }
+
+                if (NewItems.Count > 0)
+                {
+                    Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
+                }
+
+                MySqlClient.ExecuteNonQuery("DELETE FROM user_gifts WHERE item_id = '" + GiftItem.Id + "' LIMIT 1");
+            }
         }
     }
 }

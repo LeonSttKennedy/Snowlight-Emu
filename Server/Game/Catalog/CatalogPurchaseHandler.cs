@@ -354,14 +354,13 @@ namespace Snowlight.Game.Catalog
                 {
                     if (TargetSession != null)
                     {
-                        TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
                         AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, "ACH_GiftReceiver", 1);
                     }
                     else
                     {
                         AchievementManager.OfflineProgressUserAchievement(MySqlClient, (uint)GiftUserRow["id"], "ACH_GiftReceiver", 1);
                     }
-                    Session.BadgeCache.ReloadCache(MySqlClient, Session.AchievementCache);
+
                     AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_GiftGiver", 1);
                 }
             }
