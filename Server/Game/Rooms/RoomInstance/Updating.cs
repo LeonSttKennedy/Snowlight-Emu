@@ -315,26 +315,12 @@ namespace Snowlight.Game.Rooms
 
                             Actor.BlockWalking();
 
-                            RoomInstance NewInstance = RoomManager.GetInstanceByRoomId(Action.ToRoomId);
-
-                            if (NewInstance == null && Action.ToRoomId > 0)
-                            {
-                                RoomManager.TryLoadRoomInstance(Action.ToRoomId);
-                                NewInstance = RoomManager.GetInstanceByRoomId(Action.ToRoomId);
-                            }
-
                             RoomInfo Info = RoomInfoLoader.GetRoomInfo(Action.ToRoomId);
-                            if (Info.Type == RoomType.Public)
-                            {
-                                Session.SendData(PublicRoomData.Compose(Info.Id, Info.SWFs));
-                            }
 
-                            if (Instance != NewInstance)
-                            {
-                                Session.IsTeleporting = true;
-                                Session.TriggerTeleporterId = Action.Id;
-                                RoomHandler.PrepareRoom(Session, Action.ToRoomId, string.Empty, true);
-                            }
+                            Session.IsTeleporting = true;
+                            Session.TriggerTeleporterId = Action.Id;
+
+                            Session.SendData(MessengerFollowResultComposer.Compose(Info));
                         }
                         break;
                 }
