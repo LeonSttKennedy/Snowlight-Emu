@@ -63,6 +63,12 @@ namespace Snowlight.Game.Characters
         private bool mCalledGuideBot;
         private int mMarketplaceTokens;
 
+        private int mRegularVisitor;
+
+        private bool mAllowGifting;
+        private DateTime mLastGiftSent;
+        private int mGiftingWarningCounter;
+
         private bool mAllowMimic;
 
         public uint Id
@@ -454,6 +460,55 @@ namespace Snowlight.Game.Characters
                 mMarketplaceTokens = value;
             }
         }
+        public int RegularVisitorinDays
+        {
+            get
+            {
+                return mRegularVisitor;
+            }
+            set
+            {
+                mRegularVisitor = value;
+            }
+        }
+        public bool AllowGifting
+        {
+            get 
+            {
+                return mAllowGifting;
+            }
+            
+            set 
+            {
+                mAllowGifting = value;
+            }
+        }
+
+        public DateTime LastGiftSent
+        {
+            get 
+            {
+                return mLastGiftSent;
+            }
+
+            set
+            {
+                mLastGiftSent = value;
+            }
+        }
+
+        public int GiftWarningCounter
+        {
+            get 
+            {
+                return mGiftingWarningCounter;
+            }
+
+            set
+            {
+                mGiftingWarningCounter = value;
+            }
+        }
 
         public bool AllowMimic
         {
@@ -473,7 +528,7 @@ namespace Snowlight.Game.Characters
             bool PrivacyAcceptFriends, uint HomeRoom, int Score, int ConfigVolume, int ModerationTickets,
             int ModerationTicketsAbusive, double ModerationTicketCooldown, int ModerationBans, int ModerationCautions,
             double TimestampLastOnline, double TimestampRegistered, int RespectPoints, int RespectCreditHuman,
-            int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, int MarketplaceTokens, bool AllowMimic)
+            int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, int MarketplaceTokens, int RegularVisitor, bool AllowMimic)
         {
             mSessionId = SessionId;
             mId = Id;
@@ -510,6 +565,12 @@ namespace Snowlight.Game.Characters
             mLastRespectUpdate = TimestampLastRespectUpdate;
             mCalledGuideBot = false;
             mMarketplaceTokens = MarketplaceTokens;
+
+            mRegularVisitor = RegularVisitor;
+
+            mAllowGifting = true;
+            mLastGiftSent = DateTime.Now;
+            mGiftingWarningCounter = 0;
 
             mWardrobe = new Dictionary<int, WardrobeItem>();
             mTags = new List<string>();
@@ -553,6 +614,12 @@ namespace Snowlight.Game.Characters
             MySqlClient.SetParameter("score", mScore);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET score = @score WHERE id = @userid LIMIT 1");
         }
+        public void UpdateLastOnline(SqlDatabaseClient MySqlClient)
+        {
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("lastonline", UnixTimestamp.GetCurrent());
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET timestamp_lastvisit = @lastonline WHERE id = @userid LIMIT 1");
+        }
         public void UpdateCreditsBalance(SqlDatabaseClient MySqlClient, int Amount)
         {
             CreditsBalance += Amount;
@@ -568,6 +635,14 @@ namespace Snowlight.Game.Characters
             MySqlClient.SetParameter("id", mId);
             MySqlClient.SetParameter("marketplacetokens", MarketplaceTokensTotal);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET marketplace_tickets = @marketplacetokens WHERE id = @id LIMIT 1");
+        }
+        public void UpdateRegularVisitor(SqlDatabaseClient MySqlClient, int Amount)
+        {
+            RegularVisitorinDays = Amount;
+
+            MySqlClient.SetParameter("id", mId);
+            MySqlClient.SetParameter("regularvisitor", RegularVisitorinDays);
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET regular_visitor = @regularvisitor WHERE id = @id LIMIT 1");
         }
         public void UpdateActivityPointsBalance(SqlDatabaseClient MySqlClient, int Amount)
         {

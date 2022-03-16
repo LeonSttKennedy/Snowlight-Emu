@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Snowlight</RootNamespace>
     <AssemblyName>Snowlight</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -40,6 +40,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -49,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Snow.ico</ApplicationIcon>
@@ -123,6 +125,7 @@
     <Compile Include="Communication\Outgoing\Furni\JukeboxPlaylistComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\MoodlightDataComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\MusicPlayingComposer.cs" />
+    <Compile Include="Communication\Outgoing\Infobus\InfobusClosedComposer.cs" />
     <Compile Include="Communication\Outgoing\Pets\PetInfoComposer.cs" />
     <Compile Include="Communication\Outgoing\Pets\PetInventoryComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\RemoveFloorItemComposer.cs" />
@@ -142,8 +145,8 @@
     <Compile Include="Communication\Outgoing\Inventory\UserEffectListComposer.cs" />
     <Compile Include="Communication\Outgoing\Inventory\UserEffectRemovedComposer.cs" />
     <Compile Include="Communication\Outgoing\Messenger\EventStreamComposer.cs" />
-    <Compile Include="Communication\Outgoing\Misc\InfobusQuestionResultComposer.cs" />
-    <Compile Include="Communication\Outgoing\Misc\InfobusQuestionStartComposer.cs" />
+    <Compile Include="Communication\Outgoing\Infobus\InfobusQuestionResultComposer.cs" />
+    <Compile Include="Communication\Outgoing\Infobus\InfobusQuestionStartComposer.cs" />
     <Compile Include="Communication\Outgoing\Moderation\HelpCategoryListComposer.cs" />
     <Compile Include="Communication\Outgoing\Moderation\HelpCfhClosedResultComposer.cs" />
     <Compile Include="Communication\Outgoing\Moderation\HelpCfhDeletedOkComposer.cs" />
@@ -325,7 +328,9 @@
     <Compile Include="Game\Items\StaticObject.cs" />
     <Compile Include="Game\Messenger\MessengerHandler.cs" />
     <Compile Include="Game\Messenger\SessionMessengerCache.cs" />
-    <Compile Include="Game\Misc\ActivityPointsWorker.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\ModerationTool\InfobusCommand.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\ModerationTool\UserInfoCommand.cs" />
+    <Compile Include="Game\Misc\Workers\ActivityPointsWorker.cs" />
     <Compile Include="Game\Misc\Caches\EffectsCacheWorker.cs" />
     <Compile Include="Game\Misc\Caches\NewItemsCache.cs" />
     <Compile Include="Game\Misc\Caches\RatedRoomsCache.cs" />
@@ -375,6 +380,7 @@
     <Compile Include="Game\Misc\DrinkSetManager.cs" />
     <Compile Include="Game\Misc\Items\MoodlightData.cs" />
     <Compile Include="Game\Misc\Items\TeleporterLinkFinder.cs" />
+    <Compile Include="Game\Misc\Workers\DailyStuffWorker.cs" />
     <Compile Include="Game\Pathfinding\MinHeap.cs" />
     <Compile Include="Game\Pathfinding\ComplexPathfinder.cs" />
     <Compile Include="Game\Pathfinding\PathfinderNode.cs" />
@@ -489,7 +495,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Communication\Outgoing\Misc\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

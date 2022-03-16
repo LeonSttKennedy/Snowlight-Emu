@@ -18,6 +18,8 @@ namespace Snowlight.Game.Messenger
         private List<uint> mInner;
         private Dictionary<uint, int> mInnerUpdates;
 
+        private List<MessengerCategories> mInnerCategories;
+
         public ReadOnlyCollection<uint> Friends
         {
             get
@@ -31,11 +33,25 @@ namespace Snowlight.Game.Messenger
             }
         }
 
+        public ReadOnlyCollection<MessengerCategories> Categories
+        {
+            get
+            {
+                lock (mInnerCategories)
+                {
+                    List<MessengerCategories> Copy = new List<MessengerCategories>();
+                    Copy.AddRange(mInnerCategories);
+                    return Copy.AsReadOnly();
+                }
+            }
+        }
+
         public SessionMessengerFriendCache(SqlDatabaseClient MySqlClient, uint UserId)
         {
             mCharacterId = UserId;
             mInner = new List<uint>();
             mInnerUpdates = new Dictionary<uint, int>();
+            mInnerCategories = new List<MessengerCategories>();
 
             ReloadCache(MySqlClient);
         }
@@ -46,8 +62,10 @@ namespace Snowlight.Game.Messenger
             {
                 mInner.Clear();
                 mInnerUpdates.Clear();
+                mInnerCategories.Clear();
 
                 mInner.AddRange(MessengerHandler.GetFriendsForUser(MySqlClient, mCharacterId, 1));
+                mInnerCategories.AddRange(MessengerHandler.GetCategoriesForUser(MySqlClient, mCharacterId));
             }
         }
 
@@ -125,7 +143,7 @@ namespace Snowlight.Game.Messenger
                             continue;
                         }
 
-                        UpdateInfo.Add(new MessengerUpdate(mInnerUpdates[FriendId], Info));
+                        UpdateInfo.Add(new MessengerUpdate(mCharacterId, mInnerUpdates[FriendId], Info));
                     }
 
                     mInnerUpdates.Clear();

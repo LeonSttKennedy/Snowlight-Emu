@@ -14,6 +14,12 @@ namespace Snowlight.Util
         MessageOfTheDayComposer = 1
     }
 
+    public enum InfobusStatus
+    {
+        Closed = 0,
+        Open = 1
+    }
+
     public static class ServerSettings
     {
         private static bool mActivityPointsEnabled;
@@ -23,6 +29,8 @@ namespace Snowlight.Util
         private static int mMoreActivityPointsCreditsAmount;
         private static int mActivityPointsPixelsAmount;
         private static int mMoreActivityPointsPixelsAmount;
+        private static bool mGiftingSystemEnabled;
+        private static InfobusStatus mInfobusStatus;
         private static bool mLoginBadgeEnabled;
         private static uint mLoginBadgeId;
         private static bool mMarketplaceEnabled;
@@ -130,6 +138,29 @@ namespace Snowlight.Util
             set
             {
                 mMoreActivityPointsPixelsAmount = value;
+            }
+        }
+        public static bool GiftingSystemEnabled
+        {
+            get 
+            { 
+                return mGiftingSystemEnabled; 
+            }
+
+            set 
+            { 
+                mGiftingSystemEnabled = value; 
+            }
+        }
+        public static InfobusStatus InfobusStatus
+        {
+            get
+            {
+                return mInfobusStatus;
+            }
+            set
+            {
+                mInfobusStatus = value;
             }
         }
         public static bool LoginBadgeEnabled
@@ -425,6 +456,19 @@ namespace Snowlight.Util
         {
             Output.WriteLine("Loading server settings in database...", OutputLevel.Informational);
             DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM server_settings LIMIT 1");
+
+            InfobusStatus Infobus_Status = InfobusStatus.Closed;
+            switch ((string)Row["infobus_status"])
+            {
+                case "closed":
+                    Infobus_Status = InfobusStatus.Closed;
+                    break;
+
+                case "open":
+                    Infobus_Status = InfobusStatus.Open;
+                    break;
+            }
+
             MotdType Motd_Type = MotdType.MessageOfTheDayComposer;
             switch((string)Row["motd_type"])
             {
@@ -448,6 +492,8 @@ namespace Snowlight.Util
             MoreActivityPointsCreditsAmount = (int)Row["more_activitypoints_credits_amount"];
             ActivityPointsPixelsAmount = (int)Row["activitypoints_pixels_amount"];
             MoreActivityPointsPixelsAmount = (int)Row["more_activitypoints_pixels_amount"];
+            GiftingSystemEnabled = (Row["gifting_system_enabled"].ToString() == "1");
+            InfobusStatus = Infobus_Status;
             LoginBadgeEnabled = (Row["login_badge_enabled"].ToString() == "1");
             LoginBadgeId = (uint)Row["login_badge_id"];
             MarketplaceEnabled = (Row["marketplace_enabled"].ToString() == "1");
@@ -472,6 +518,12 @@ namespace Snowlight.Util
             MotdText = Motd;
             WordFilterMaximumCount = (int)Row["wordfilter_maximum_count"];
             WordFilterTimeToMute = (int)Row["wordfilter_time_muted"];
+        }
+
+        public static void UpdateInfobusStatus(SqlDatabaseClient MySql)
+        {
+            MySql.SetParameter("infobus_status", InfobusStatus.ToString().ToLower());
+            MySql.ExecuteNonQuery("UPDATE server_settings SET infobus_status = @infobus_status");
         }
     }
 }

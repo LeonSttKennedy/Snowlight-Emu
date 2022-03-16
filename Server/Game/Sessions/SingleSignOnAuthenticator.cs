@@ -143,8 +143,7 @@ namespace Snowlight.Game.Sessions
         {
             MySqlClient.SetParameter("id", UserId);
             MySqlClient.SetParameter("lastip", AddressToLog);
-            MySqlClient.SetParameter("lastonline", UnixTimestamp.GetCurrent());
-            MySqlClient.ExecuteNonQuery("UPDATE characters SET auth_ticket = '', last_ip = @lastip, timestamp_lastvisit = @lastonline WHERE id = @id LIMIT 1");
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET auth_ticket = '', last_ip = @lastip WHERE id = @id LIMIT 1");
         }
     }
 }

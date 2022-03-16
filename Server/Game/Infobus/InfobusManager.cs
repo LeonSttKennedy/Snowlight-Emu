@@ -7,6 +7,8 @@ using Snowlight.Game.Rooms;
 using Snowlight.Communication;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication.Incoming;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Infobus
 {
@@ -18,7 +20,7 @@ namespace Snowlight.Game.Infobus
         {
             mInfobusQuestions = new Dictionary<uint, InfobusQuestion>();
 
-            DataRouter.RegisterHandler(OpcodesIn.INFOBUS_ENTER, new ProcessRequestCallback(EnterInfoBus));
+            DataRouter.RegisterHandler(OpcodesIn.INFOBUS_ENTER, new ProcessRequestCallback(EnterInfobus));
             DataRouter.RegisterHandler(OpcodesIn.INFOBUS_SUBMIT_ANSWER, new ProcessRequestCallback(SubmitAnswer));
         }
 
@@ -47,13 +49,13 @@ namespace Snowlight.Game.Infobus
             }
         }
 
-        private static void EnterInfoBus(Session Session, ClientMessage Message)
+        private static void EnterInfobus(Session Session, ClientMessage Message)
         {
-            ServerMessage ServerMessage = new ServerMessage(81);
-            ServerMessage.AppendStringWithBreak("The Infobus is currently closed.");
-            Session.SendData(ServerMessage);
+            if (ServerSettings.InfobusStatus == InfobusStatus.Closed)
+            {
+                Session.SendData(InfobusClosedComposer.Compose(ExternalTexts.GetValue("infobus_closed_message")));
+            }
         }
-
         private static void SubmitAnswer(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);

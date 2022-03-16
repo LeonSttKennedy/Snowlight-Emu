@@ -264,7 +264,7 @@ namespace Snowlight.Game.Rooms
             }
 
             Session.SendData(RoomUrlComposer.Compose("/client/public/" + Instance.Info.ModelName + "/0"));
-            Session.SendData(RoomEntryModelComposer.Compose(Instance.Model.Id, Instance.Info.Id));
+            Session.SendData(RoomEntryModelComposer.Compose(Instance.Model.Name, Instance.Info.Id));
 
             if (Instance.Info.Type == RoomType.Flat)
             {

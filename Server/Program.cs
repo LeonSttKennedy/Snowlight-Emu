@@ -192,6 +192,7 @@ namespace Snowlight
                     CrossdomainPolicy.Initialize("Data\\crossdomain.xml");
                     InfobusManager.Initialize();
                     ActivityPointsWorker.Initialize();
+                    DailyStuffWorker.Initialize();
                     BotManager.Initialize(MySqlClient);
                     InterstitialManager.Initialize(MySqlClient);
                     ChatEmotions.Initialize();

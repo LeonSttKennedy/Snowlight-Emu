@@ -473,9 +473,7 @@ namespace Snowlight.Game.Navigation
 
         public static void GetUserRooms(Session Session, ClientMessage Message)
         {
-            if (Message == null) goto Skip;
-
-            ServerMessage Response = TryGetResponseFromCache(Session.CharacterId, Message);
+            ServerMessage Response = Message == null ? null : TryGetResponseFromCache(Session.CharacterId, Message);
 
             if (Response != null)
             {
@@ -483,14 +481,13 @@ namespace Snowlight.Game.Navigation
                 return;
             }
 
-            Skip:
             List<RoomInfo> Rooms = new List<RoomInfo>();
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 MySqlClient.SetParameter("ownerid", Session.CharacterId);
                 MySqlClient.SetParameter("limit", ServerSettings.MaxRoomsPerUser);
-                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM rooms WHERE owner_id = @ownerid LIMIT @limit");
+                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM rooms WHERE owner_id = @ownerid ORDER BY score DESC LIMIT @limit");
 
                 foreach (DataRow Row in Table.Rows)
                 {
@@ -500,16 +497,12 @@ namespace Snowlight.Game.Navigation
 
             IEnumerable<RoomInfo> RoomsToSend = Rooms.OrderByDescending(U => U.CurrentUsers);
 
+            Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, RoomsToSend.ToList());
             if (Message != null)
             {
-                Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, RoomsToSend.ToList());
                 AddToCacheIfNeeded(Session.CharacterId, Message, Response);
-                Session.SendData(Response);
             }
-            else
-            {
-                Session.SendData(NavigatorRoomListComposer.Compose(0, 5, string.Empty, RoomsToSend.ToList()));
-            }
+            Session.SendData(Response);
         }
 
         private static void AddFavorite(Session Session, ClientMessage Message)

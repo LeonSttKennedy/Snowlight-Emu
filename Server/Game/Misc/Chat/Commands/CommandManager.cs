@@ -189,6 +189,8 @@ namespace Snowlight.Game.Misc
             Register("ral", new RoomAlertLinkCommand());
             Register("ras", new RoomAlertStaffCommand());
             Register("kick", new KickCommand());
+            Register("infobus", new InfobusCommand());
+            Register("userinfo", new UserInfoCommand());
         }
 
         private static void RegisterMute()

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tempo de Geração: Jul 11, 2021 as 04:17 PM
+-- Tempo de Geração: Mar 11, 2022 as 08:42 AM
 -- Versão do Servidor: 5.5.10
 -- Versão do PHP: 5.3.6
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `achievements` (
   `reward_points` int(11) DEFAULT '10',
   `progress_needed` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=117 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=128 ;
 
 -- --------------------------------------------------------
 
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `badges` (
   `slot_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
 
 -- --------------------------------------------------------
 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `badge_definitions` (
   `code` varchar(64) NOT NULL,
   `rights_sets` varchar(128) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`,`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=127 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=138 ;
 
 -- --------------------------------------------------------
 
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `bots` (
   `response_distance` int(11) NOT NULL DEFAULT '5',
   `pet_type_handler_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=44 ;
 
 -- --------------------------------------------------------
 
@@ -210,6 +210,7 @@ CREATE TABLE IF NOT EXISTS `catalog_items` (
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   `amount` int(11) NOT NULL DEFAULT '1',
   `club_restriction` int(11) NOT NULL DEFAULT '0',
+  `catalog_item_order` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50283 ;
 
@@ -250,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
   `limited_number` int(11) NOT NULL DEFAULT '0',
   `limited_stack` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`offer_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=134 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -317,7 +318,9 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `respect_credit_humans` int(11) NOT NULL DEFAULT '3',
   `respect_credit_pets` int(11) NOT NULL DEFAULT '3',
   `marketplace_tickets` int(11) NOT NULL DEFAULT '0',
+  `regular_visitor` int(11) NOT NULL DEFAULT '0',
   `last_respect_update` double NOT NULL DEFAULT '0',
+  `allow_mimic` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
@@ -332,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `drink_sets` (
   `drinks` varchar(255) COLLATE latin1_german1_ci NOT NULL,
   `internal_comment` text COLLATE latin1_german1_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -444,7 +447,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=58 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=119 ;
 
 -- --------------------------------------------------------
 
@@ -502,7 +505,7 @@ CREATE TABLE IF NOT EXISTS `moderation_action_log` (
   `action_detail` text NOT NULL,
   `timestamp` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -517,7 +520,7 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -599,6 +602,7 @@ CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned NOT NULL DEFAULT '0',
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `connected_rooms` varchar(64) NOT NULL DEFAULT '0|',
   `is_category` enum('1','0') NOT NULL DEFAULT '0',
   `category_autoexpand` enum('0','1') NOT NULL DEFAULT '0',
   `display_type` enum('details','banner') NOT NULL DEFAULT 'details',
@@ -610,7 +614,7 @@ CREATE TABLE IF NOT EXISTS `navigator_frontpage` (
   `order_num` int(11) NOT NULL DEFAULT '0',
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 -- --------------------------------------------------------
 
@@ -625,7 +629,7 @@ CREATE TABLE IF NOT EXISTS `new_items` (
   `item_id` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
 
 -- --------------------------------------------------------
 
@@ -650,7 +654,7 @@ CREATE TABLE IF NOT EXISTS `pets` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -722,7 +726,7 @@ CREATE TABLE IF NOT EXISTS `rights` (
   `set_id` int(10) unsigned NOT NULL,
   `right_id` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 -- --------------------------------------------------------
 
@@ -756,7 +760,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   `decorations` varchar(128) NOT NULL DEFAULT 'landscape=0.0',
   `badge_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
 
 -- --------------------------------------------------------
 
@@ -766,6 +770,7 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 
 CREATE TABLE IF NOT EXISTS `room_models` (
   `id` varchar(64) NOT NULL,
+  `name` varchar(64) NOT NULL,
   `type` enum('public','flat') NOT NULL DEFAULT 'flat',
   `heightmap` text NOT NULL,
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
@@ -807,7 +812,7 @@ CREATE TABLE IF NOT EXISTS `room_triggers` (
   `to_room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
   `to_room_dir` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=67 ;
 
 -- --------------------------------------------------------
 
@@ -822,7 +827,7 @@ CREATE TABLE IF NOT EXISTS `room_visits` (
   `timestamp_entered` double NOT NULL DEFAULT '0',
   `timestamp_left` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=379 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=249 ;
 
 -- --------------------------------------------------------
 
@@ -854,6 +859,7 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
   `motd_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
   `motd_type` enum('NotificationMessageComposer','MessageOfTheDayComposer') CHARACTER SET utf8 NOT NULL DEFAULT 'MessageOfTheDayComposer',
   `motd_text` text CHARACTER SET utf8 NOT NULL COMMENT 'Example: Text|Link',
+  `gifting_system_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '1',
   `login_badge_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
   `login_badge_id` int(10) unsigned NOT NULL DEFAULT '33',
   `moderation_actionlogs_enabled` enum('0','1') CHARACTER SET utf8 NOT NULL DEFAULT '0',
@@ -925,7 +931,7 @@ CREATE TABLE IF NOT EXISTS `static_objects` (
   `walkable` enum('0','1') DEFAULT '0',
   `is_seat` enum('0','1') DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=998 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2206 ;
 
 -- --------------------------------------------------------
 
@@ -954,7 +960,7 @@ CREATE TABLE IF NOT EXISTS `user_achievements` (
   `level` int(11) NOT NULL DEFAULT '0',
   `progress` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 -- --------------------------------------------------------
 
@@ -983,7 +989,7 @@ CREATE TABLE IF NOT EXISTS `user_quests` (
   `progress` int(11) NOT NULL DEFAULT '0',
   `is_current` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -1032,7 +1038,7 @@ CREATE TABLE IF NOT EXISTS `wardrobe` (
   `gender` enum('F','M') NOT NULL DEFAULT 'M',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 

@@ -21,9 +21,6 @@ namespace Snowlight.Game.Messenger
         public static void Initialize()
         {
             DataRouter.RegisterHandler(OpcodesIn.MESSENGER_INIT, new ProcessRequestCallback(OnMessengerInit));
-            // com.sulake.habbo.communication.messages.outgoing.friendlist.GetBuddyRequestsMessageComposer;
-            // get buddy requests packet this is used for the messenger so it needs to be implemented properly
-            DataRouter.RegisterHandler(233, new ProcessRequestCallback(OnGetPendingBuddyRequests));
             DataRouter.RegisterHandler(OpcodesIn.MESSENGER_SEARCH, new ProcessRequestCallback(OnMessengerSearch));
             DataRouter.RegisterHandler(OpcodesIn.MESSENGER_SEND_IM, new ProcessRequestCallback(OnSendIm));
             DataRouter.RegisterHandler(OpcodesIn.MESSENGER_FRIEND_REQUEST, new ProcessRequestCallback(OnFriendRequest));
@@ -33,6 +30,10 @@ namespace Snowlight.Game.Messenger
             DataRouter.RegisterHandler(OpcodesIn.MESSENGER_UPDATE, new ProcessRequestCallback(OnMessengerUpdate));
             DataRouter.RegisterHandler(OpcodesIn.MESSENGER_FOLLOW_BUDDY, new ProcessRequestCallback(OnFollowBuddy));
             DataRouter.RegisterHandler(OpcodesIn.MESSENGER_SEND_IM_INVITE, new ProcessRequestCallback(OnInvite));
+
+            // com.sulake.habbo.communication.messages.outgoing.friendlist.GetBuddyRequestsMessageComposer;
+            // get buddy requests packet this is used for the messenger so it needs to be implemented properly
+            DataRouter.RegisterHandler(233, new ProcessRequestCallback(OnGetPendingBuddyRequests));
 
             // new friends stream, needs to be coded & added to Opcodes
             DataRouter.RegisterHandler(500, new ProcessRequestCallback(GetEventStream));
@@ -116,19 +117,42 @@ namespace Snowlight.Game.Messenger
 
             return Friends;
         }
+        public static List<MessengerCategories> GetCategoriesForUser(SqlDatabaseClient MySqlClient, uint UserId)
+        {
+            List<MessengerCategories> Categories = new List<MessengerCategories>();
+
+            MySqlClient.SetParameter("id", UserId);
+            DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM messenger_category WHERE user_id = @id");
+
+            foreach (DataRow Row in Table.Rows)
+            {
+                Categories.Add(new MessengerCategories((uint)Row["id"], (string)Row["label"]));
+            }
+
+            return Categories;
+        }
+        public static uint GetFriendshipCategoryId(SqlDatabaseClient MySqlClient, uint UserId, uint UserId2)
+        {
+            MySqlClient.SetParameter("uid1", UserId);
+            MySqlClient.SetParameter("uid2", UserId2);
+            DataRow Row = MySqlClient.ExecuteQueryRow("SELECT category_id FROM messenger_friendships WHERE user_1_id = @uid1 AND user_2_id = @uid2 AND confirmed = '1'");
+
+            return Row != null? (uint)Row[0] : 0;
+        }
 
         #region Handlers
         private static void OnMessengerInit(Session Session, ClientMessage Message)
         {
             ReadOnlyCollection<uint> Friends = Session.MessengerFriendCache.Friends;
+            ReadOnlyCollection<MessengerCategories> Categories = Session.MessengerFriendCache.Categories;
             List<uint> Requests = new List<uint>(); // todo: move requests to cache as well?
             
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                 Requests = GetFriendsForUser(MySqlClient, Session.CharacterId, 0);
+                Requests = GetFriendsForUser(MySqlClient, Session.CharacterId, 0);
             }
 
-            Session.SendData(MessengerFriendListComposer.Compose(Friends));
+            Session.SendData(MessengerFriendListComposer.Compose(Session.CharacterId, Friends, Categories));
 
             if (Requests.Count > 0)
             {
@@ -372,14 +396,14 @@ namespace Snowlight.Game.Messenger
                     if (DestroyFriendship(MySqlClient, Session.CharacterId, FriendId))
                     {
                         Session.MessengerFriendCache.RemoveFromCache(FriendId);
-                        LocalUpdates.Add(new MessengerUpdate(-1, CharacterInfoLoader.GenerateNullCharacter(FriendId)));
+                        LocalUpdates.Add(new MessengerUpdate(CharacterInfoLoader.GenerateNullCharacter(FriendId).Id, -1, CharacterInfoLoader.GenerateNullCharacter(FriendId)));
 
                         Session TargetSession = SessionManager.GetSessionByCharacterId(FriendId); ;
 
                         if (TargetSession != null)
                         {
                             TargetSession.MessengerFriendCache.RemoveFromCache(Session.CharacterId);
-                            TargetSession.SendData(MessengerUpdateListComposer.Compose(new List<MessengerUpdate>() { new MessengerUpdate(-1, CharacterInfoLoader.GenerateNullCharacter(Session.CharacterId)) }));
+                            TargetSession.SendData(MessengerUpdateListComposer.Compose(new List<MessengerUpdate>() { new MessengerUpdate(CharacterInfoLoader.GenerateNullCharacter(FriendId).Id, -1, CharacterInfoLoader.GenerateNullCharacter(Session.CharacterId)) }));
                         }
                     }
                 }

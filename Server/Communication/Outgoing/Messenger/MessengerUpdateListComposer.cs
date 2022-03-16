@@ -1,14 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using Snowlight.Game.Characters;
+using Snowlight.Game.Messenger;
 using Snowlight.Game.Sessions;
+using Snowlight.Storage;
 
 namespace Snowlight.Communication.Outgoing
 {
     public class MessengerUpdate
     {
+        private uint mCharacterId;
         private int mMode;
         private CharacterInfo mCharacterInfo;
+
+        public uint CharacterId
+        {
+            get
+            { 
+                return mCharacterId; 
+            }
+        }
 
         public int Mode
         {
@@ -26,8 +37,9 @@ namespace Snowlight.Communication.Outgoing
             }
         }
 
-        public MessengerUpdate(int Mode, CharacterInfo CharacterInfo)
+        public MessengerUpdate(uint CharacterId, int Mode, CharacterInfo CharacterInfo)
         {
+            mCharacterId = CharacterId;
             mMode = Mode;
             mCharacterInfo = CharacterInfo;
         }
@@ -39,40 +51,60 @@ namespace Snowlight.Communication.Outgoing
         {
             // @MHIIjhiuZSirBamItsLee...IIIhr-155-45.hd-180-1.ch-235-91.lg-270-91.sh-305-62.wa-2007Htree
             ServerMessage Message = new ServerMessage(OpcodesOut.MESSENGER_UPDATES);
-            Message.AppendInt32(0);
-            Message.AppendInt32(Updates.Count);
 
+            foreach (MessengerUpdate Update in Updates)
+            {
+                Session LinkedSession = SessionManager.GetSessionByCharacterId(Update.CharacterId);
+                int CategoriesCount = LinkedSession != null ? LinkedSession.MessengerFriendCache.Categories.Count : 0;
+                Message.AppendInt32(CategoriesCount);
+
+                if (CategoriesCount > 0)
+                {
+                    foreach (MessengerCategories Cat in LinkedSession.MessengerFriendCache.Categories)
+                    {
+                        Message.AppendUInt32(Cat.CatId);
+                        Message.AppendStringWithBreak(Cat.CatName);
+                    }
+                }
+            }
+
+            Message.AppendInt32(Updates.Count);
             if (Updates.Count > 0)
             {
-                foreach (MessengerUpdate Update in Updates)
+                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
-                    Message.AppendInt32(Update.Mode);
-                    Message.AppendUInt32(Update.CharacterInfo.Id);
-
-                    if (Update.Mode != -1)
+                    foreach (MessengerUpdate Update in Updates)
                     {
-                        Session LinkedSession = SessionManager.GetSessionByCharacterId(Update.CharacterInfo.Id);
+                        Message.AppendInt32(Update.Mode);
+                        Message.AppendUInt32(Update.CharacterInfo.Id);
 
-                        Message.AppendStringWithBreak(Update.CharacterInfo.Username);
-                        Message.AppendBoolean(true);
-                        Message.AppendBoolean(Update.CharacterInfo.HasLinkedSession);
-                        Message.AppendBoolean(LinkedSession != null && LinkedSession.InRoom);
-                        Message.AppendStringWithBreak(Update.CharacterInfo.HasLinkedSession ? Update.CharacterInfo.Figure : string.Empty);
-                        Message.AppendBoolean(false);
-                        Message.AppendStringWithBreak(Update.CharacterInfo.HasLinkedSession ? Update.CharacterInfo.Motto : string.Empty);
-
-                        if (Update.CharacterInfo.HasLinkedSession)
+                        if (Update.Mode != -1)
                         {
+                            Session LinkedSession = SessionManager.GetSessionByCharacterId(Update.CharacterInfo.Id);
+
+                            int CategoryId = (int)MessengerHandler.GetFriendshipCategoryId(MySqlClient, Update.CharacterId, Update.CharacterInfo.Id);
+
+                            Message.AppendStringWithBreak(Update.CharacterInfo.Username);
+                            Message.AppendBoolean(true);
+                            Message.AppendBoolean(Update.CharacterInfo.HasLinkedSession);
+                            Message.AppendBoolean(LinkedSession != null && LinkedSession.InRoom);
+                            Message.AppendStringWithBreak(Update.CharacterInfo.HasLinkedSession ? Update.CharacterInfo.Figure : string.Empty);
+                            Message.AppendInt32(CategoryId);
+                            Message.AppendStringWithBreak(Update.CharacterInfo.HasLinkedSession ? Update.CharacterInfo.Motto : string.Empty);
+
+                            if (Update.CharacterInfo.HasLinkedSession)
+                            {
+                                Message.AppendStringWithBreak(string.Empty);
+                            }
+                            else
+                            {
+                                DateTime LastOnline = UnixTimestamp.GetDateTimeFromUnixTimestamp(Update.CharacterInfo.TimestampLastOnline);
+                                Message.AppendStringWithBreak(LastOnline.ToShortDateString() + " " + LastOnline.ToShortTimeString());
+                            }
+
+                            Message.AppendStringWithBreak(Update.CharacterInfo.RealName);
                             Message.AppendStringWithBreak(string.Empty);
                         }
-                        else
-                        {
-                            DateTime LastOnline = UnixTimestamp.GetDateTimeFromUnixTimestamp(Update.CharacterInfo.TimestampLastOnline);
-                            Message.AppendStringWithBreak(LastOnline.ToShortDateString() + " " + LastOnline.ToShortTimeString());
-                        }
-
-                        Message.AppendStringWithBreak(Update.CharacterInfo.RealName);
-                        Message.AppendStringWithBreak(string.Empty);
                     }
                 }
             }

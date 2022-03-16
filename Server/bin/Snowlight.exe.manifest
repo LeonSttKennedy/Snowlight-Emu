@@ -4,7 +4,7 @@
   <description asmv2:iconFile="Snow.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Snowlight" version="0.1.0.21642" language="neutral" processorArchitecture="x86" />
+    <assemblyIdentity name="Snowlight" version="0.1.0.41694" language="neutral" processorArchitecture="x86" />
     <commandLine file="Snowlight.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -49,20 +49,20 @@
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>bXrvmYdcPVAud07N/Wge8/+rZOI=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>1G9d7teFFd0DWoSgIMe8vDM22K/+6oj7xvuryvYPHec=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Snowlight.exe" size="477696">
-      <assemblyIdentity name="Snowlight" version="0.1.0.21642" language="neutral" processorArchitecture="x86" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Snowlight.exe" size="486400">
+      <assemblyIdentity name="Snowlight" version="0.1.0.41694" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>wzbcnnM/S5NoOBVNBkBXZ/ls8A4=</dsig:DigestValue>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>kWvthUWGpC7KSYwi2WSEFsOdVBIkbpuUsUzyTHpUpsA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -71,17 +71,17 @@
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>7S3RLwD7RdGJKXf8YwPgizMKV6E=</dsig:DigestValue>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>dBNvEn3mx77Kq2yy2iDUtQx/hZh7SW2Chcev1M4F8kc=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="Snowlight.exe.config" size="141">
+  <file name="Snowlight.exe.config" size="144">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
-      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>dZFxrC6iVI5YGbM5q/fROBzin+s=</dsig:DigestValue>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>qocYo5fZcjYk+qYJrTWRjTvg6tHQ3KyuT2t4J5bZJ/E=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

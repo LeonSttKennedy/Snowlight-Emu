@@ -24,10 +24,10 @@ namespace Snowlight.Communication.Outgoing
                 {
                     TargetLevel = TotalLevels;
                 }
-                
+
                 AchievementLevel TargetLevelData = Achievement.Levels[TargetLevel];
 
-                Message.AppendUInt32(Achievement.Id);                                                           // Unknown (ID?)
+                Message.AppendUInt32(Achievement.Id);                                               // Unknown (ID?)
                 Message.AppendInt32(TargetLevel);                                                   // Target level
                 Message.AppendStringWithBreak(Achievement.GroupName + TargetLevel);                 // Target name/desc/badge
                 Message.AppendInt32(TargetLevelData.Requirement);                                   // Progress req/target        

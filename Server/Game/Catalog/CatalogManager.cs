@@ -431,6 +431,12 @@ namespace Snowlight.Game.Catalog
             int Ribbon = Message.PopWiredInt32();
             int Colour = Message.PopWiredInt32();
 
+            if(!ServerSettings.GiftingSystemEnabled)
+            {
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_gift_disabled")));
+                return;
+            }
+
             CatalogPage Page = CatalogManager.GetCatalogPage(PageId);
             if (Page == null || Page.DummyPage || Page.ComingSoon || !Page.Visible || (Page.RequiredRight.Length > 0 &&
                 !Session.HasRight(Page.RequiredRight)))

@@ -87,6 +87,7 @@ namespace Snowlight.Game.Misc
         private static List<int> ToIncrease(Session Session)
         {
             List<int> ToReturn = new List<int>();
+            List<int> EmptyReturn = new List<int> { 0, 0 };
 
             int CreditsAmount = ServerSettings.ActivityPointsCreditsAmount;
             int PixelsAmount = ServerSettings.ActivityPointsPixelsAmount;
@@ -100,7 +101,7 @@ namespace Snowlight.Game.Misc
             ToReturn.Add(CreditsAmount);
             ToReturn.Add(PixelsAmount);
 
-            return ToReturn;
+            return Session.InRoom? ToReturn : EmptyReturn;
         }
     }
 }

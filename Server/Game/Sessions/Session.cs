@@ -395,8 +395,6 @@ namespace Snowlight.Game.Sessions
                     return;
                 }
 
-                mCharacterInfo.TimestampLastOnline = UnixTimestamp.GetCurrent();
-
                 CharacterResolverCache.AddToCache(mCharacterInfo.Id, mCharacterInfo.Username, true);
 
                 mMessengerFriendCache = new SessionMessengerFriendCache(MySqlClient, CharacterId);
@@ -409,7 +407,7 @@ namespace Snowlight.Game.Sessions
                 mQuestCache = new QuestCache(MySqlClient, CharacterId);
                 mPetCache = new PetInventoryCache(MySqlClient, CharacterId);
 
-                // Respect Update
+                // Initial check for a respect update
                 if (Info.NeedsRespectUpdate)
                 {
                     Info.RespectCreditHuman = 3;
@@ -478,6 +476,95 @@ namespace Snowlight.Game.Sessions
                 MessengerHandler.MarkUpdateNeeded(this, 0, true);
                 AchievementManager.VerifyProgressUserAchievement(MySqlClient, this);
 
+                #region ACH_HappyHour
+                TimeSpan ComparassionHour = TimeSpan.Parse(DateTime.Now.ToShortTimeString());
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    TimeSpan StartHappyHourWeekend = TimeSpan.Parse("12:00");
+                    TimeSpan EndHappyHourWeekend = TimeSpan.Parse("13:00");
+
+                    if (ComparassionHour >= StartHappyHourWeekend && ComparassionHour <= EndHappyHourWeekend)
+                    {
+                        AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_HappyHour", 1);
+                    }
+                }
+                else if (DateTime.Now.DayOfWeek == DayOfWeek.Monday || DateTime.Now.DayOfWeek == DayOfWeek.Tuesday || DateTime.Now.DayOfWeek == DayOfWeek.Wednesday || DateTime.Now.DayOfWeek == DayOfWeek.Thursday || DateTime.Now.DayOfWeek == DayOfWeek.Friday)
+                {
+                    TimeSpan StartHappyHour = TimeSpan.Parse("15:00");
+                    TimeSpan EndHappyHour = TimeSpan.Parse("16:00");
+
+                    if (ComparassionHour >= StartHappyHour && ComparassionHour <= EndHappyHour)
+                    {
+                        AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_HappyHour", 1);
+                    }
+                }
+                #endregion
+
+                #region ACH_Login
+                UserAchievement LoginData = mAchievementCache.GetAchievementData("ACH_Login");
+                DateTime LastLogin = UnixTimestamp.GetDateTimeFromUnixTimestamp(Info.TimestampLastOnline);
+
+                if (LastLogin.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
+                {
+                    // If he logged today we will do nothing ;)
+                }
+                else if (LastLogin.ToString("dd-MM-yyyy") == DateTime.Today.AddDays(-1).ToString("dd-MM-yyyy"))
+                {
+                    // He had logged yesterday increase in logining days in a row
+                    Info.RegularVisitorinDays++;
+                    AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_Login", 1);
+                }
+                else
+                {
+                    // He didn't logged yesterday or today, lets restart his login days in a row score
+
+                    Info.RegularVisitorinDays = 1;
+
+                    if (LoginData != null)
+                    {
+                        mAchievementCache.AddOrUpdateData(MySqlClient, LoginData.AchievementGroup, LoginData.Level, 0);
+                    }
+                    
+                    AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_Login", 1);
+                }
+
+                Info.UpdateRegularVisitor(MySqlClient, Info.RegularVisitorinDays);
+                #endregion
+
+                #region ACH_RegistrationDuration
+                /* Currently disabled
+                TimeSpan TotalDaysRegistered = DateTime.Now - UnixTimestamp.GetDateTimeFromUnixTimestamp(Info.TimestampRegistered);
+                UserAchievement RegistrationDurationData = mAchievementCache.GetAchievementData("ACH_RegistrationDuration");
+
+                int IncreaseTotal = RegistrationDurationData != null ? (int)TotalDaysRegistered.TotalDays - RegistrationDurationData.Progress : (int)TotalDaysRegistered.TotalDays;
+
+                if (IncreaseTotal < 100)
+                {
+                    AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_RegistrationDuration", IncreaseTotal);
+                }
+                else
+                {
+                    MySqlClient.SetParameter("increasetotal", (RegistrationDurationData != null ? RegistrationDurationData.Progress + IncreaseTotal : IncreaseTotal));
+                    DataRow AchievementsRow = MySqlClient.ExecuteQueryRow("SELECT * FROM achievements WHERE progress_needed > @increasetotal AND group_name = 'ACH_RegistrationDuration' LIMIT 1");
+                    if(AchievementsRow != null)
+                    {
+                        mAchievementCache.AddOrUpdateData(MySqlClient, "ACH_RegistrationDuration", (int)AchievementsRow["level"], 
+                            (RegistrationDurationData != null ? RegistrationDurationData.Progress + IncreaseTotal : IncreaseTotal) - 1);
+
+                        AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_RegistrationDuration", 1);
+                    }
+                }
+
+                if (IncreaseTotal > 0)
+                {
+                    This shit will disconnect the user if the days total is big
+                    for(int i = 0; i < IncreaseTotal; i++)
+                    {
+                        AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_RegistrationDuration", 1);
+                    }
+                }*/
+                #endregion
+
                 if (ServerSettings.LoginBadgeEnabled)
                 {
                     Badge BadgeToGive = RightsManager.GetBadgeById(ServerSettings.LoginBadgeId);
@@ -490,6 +577,9 @@ namespace Snowlight.Game.Sessions
                         SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
                     }
                 }
+
+                mCharacterInfo.TimestampLastOnline = UnixTimestamp.GetCurrent();
+                mCharacterInfo.UpdateLastOnline(MySqlClient);
             }
         }
 

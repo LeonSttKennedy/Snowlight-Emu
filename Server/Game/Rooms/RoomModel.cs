@@ -15,6 +15,7 @@ namespace Snowlight.Game.Rooms
     public class RoomModel
     {
         private string mId;
+        private string mName;
         private RoomModelType mType;
         private Heightmap mHeightmap;
         private Vector3 mDoorPosition;
@@ -27,6 +28,14 @@ namespace Snowlight.Game.Rooms
             get
             {
                 return mId;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return mName;
             }
         }
 
@@ -77,10 +86,11 @@ namespace Snowlight.Game.Rooms
                 return mMaxUsers;
             }
         }
-        public RoomModel(string Id, RoomModelType Type, Heightmap Heightmap, Vector3 DoorPosition, int DoorRotation,
+        public RoomModel(string Id, string Name, RoomModelType Type, Heightmap Heightmap, Vector3 DoorPosition, int DoorRotation,
             ClubSubscriptionLevel SubscriptionRequirement, int MaxUsers)
         {
             mId = Id;
+            mName = Name;
             mType = Type;
             mHeightmap = Heightmap;
             mDoorPosition = DoorPosition;

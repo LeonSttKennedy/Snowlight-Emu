@@ -17,7 +17,7 @@ namespace Snowlight
         {
             while (Program.Alive)
             {
-                if (Console.ReadKey(true).Key == ConsoleKey.Enter)
+               if (Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
                     Console.Write("$" + Environment.UserName.ToLower() + "@snowlight> ");
                     string Input = Console.ReadLine();
@@ -52,7 +52,7 @@ namespace Snowlight
                     }
                 case "restart":
 
-                    Process.Start(Environment.CurrentDirectory + "\\Snowlight.exe", "\"delay 1500\"");
+                    Process.Start(Environment.CurrentDirectory + "\\Snowlight.exe", "\"delay 2600\"");
                     Program.Stop();
                     return;
 

@@ -238,6 +238,24 @@ namespace Snowlight.Game.Catalog
         {
             lock (mPurchaseSyncRoot)
             {
+                TimeSpan LastGiftSeconds = DateTime.Now - Session.CharacterInfo.LastGiftSent;
+
+                if(LastGiftSeconds.TotalSeconds <= 30.0)
+                {
+                    Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_gift_sent_need_wait_30sec")));
+                    Session.CharacterInfo.GiftWarningCounter += 1;
+                    if(Session.CharacterInfo.GiftWarningCounter >= 20)
+                    {
+                        Session.CharacterInfo.AllowGifting = false;
+                    }
+                    return;
+                }
+
+                if(!Session.CharacterInfo.AllowGifting)
+                {
+                    return;
+                }
+
                 int TotalCreditCost = (SpriteId != 0? 1 + Item.CostCredits : Item.CostCredits);
                 int TotalApCost = Item.CostActivityPoints;
                 DataRow GiftUserRow = MySqlClient.ExecuteQueryRow("SELECT * FROM characters WHERE username = '" + GiftUser + "' LIMIT 1");
@@ -349,6 +367,8 @@ namespace Snowlight.Game.Catalog
                 }
 
                 Session.SendData(CatalogPurchaseResultComposer.Compose(Item));
+
+                Session.CharacterInfo.LastGiftSent = DateTime.Now;
 
                 if (Session.CharacterInfo.Username != GiftUser)
                 {

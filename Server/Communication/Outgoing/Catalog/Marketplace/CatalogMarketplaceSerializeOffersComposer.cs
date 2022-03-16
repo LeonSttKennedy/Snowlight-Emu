@@ -18,7 +18,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(dictionary.Count > 500 ? 500 : dictionary.Count);
             foreach (IGrouping<uint, MarketplaceOffers> offerGroup in dictionary.Take(500))
             {
-                foreach (MarketplaceOffers offer in offerGroup.Take(1))
+                foreach (MarketplaceOffers offer in offerGroup.OrderBy(O => O.TotalPrice).Take(1))
                 {
                     Message.AppendInt32(offer.OfferID);
                     Message.AppendInt32(1);

@@ -87,7 +87,7 @@ namespace Snowlight.Game.Rooms
 
                 foreach (DataRow Row in Table.Rows)
                 {
-                    mRoomModels.Add((string)Row["id"], new RoomModel((string)Row["id"], ((string)Row["type"] == "flat" ?
+                    mRoomModels.Add((string)Row["id"], new RoomModel((string)Row["id"], (string)Row["name"], ((string)Row["type"] == "flat" ?
                         RoomModelType.Flat : RoomModelType.Public), new Heightmap((string)Row["heightmap"]),
                         new Vector3((int)Row["door_x"], (int)Row["door_y"], (double)Row["door_z"]), (int)Row["door_dir"],
                         (ClubSubscriptionLevel)(int.Parse(Row["subscription_requirement"].ToString())), (int)Row["max_users"]));

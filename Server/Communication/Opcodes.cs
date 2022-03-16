@@ -44,6 +44,7 @@ namespace Snowlight.Communication
         public const uint GIFT_WRAPPING_ERROR = 76;
         public const uint INFOBUS_QUESTION_START = 79;
         public const uint INFOBUS_QUESTION_RESULT = 80;
+        public const uint INFOBUS_CLOSED = 81;
         public const uint ROOM_WALL_ITEM_PLACED = 83;
         public const uint ROOM_WALL_ITEM_REMOVED = 84;
         public const uint ROOM_WALL_ITEM_MOVED = 85;

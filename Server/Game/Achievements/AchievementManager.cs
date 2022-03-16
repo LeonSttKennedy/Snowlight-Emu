@@ -65,6 +65,7 @@ namespace Snowlight.Game.Achievements
 
                     mAchievements[Group].AddLevel(new AchievementLevel((int)Row["level"], (int)Row["reward_pixels"],
                         (int)Row["reward_points"], (int)Row["progress_needed"]));
+
                 }
             }
         }
@@ -88,7 +89,7 @@ namespace Snowlight.Game.Achievements
                 AchievementData = mAchievements[AchievementGroup];
             }
 
-            UserAchievement UserData = Session.AchievementCache.GetAchievementData(AchievementGroup);
+            UserAchievement UserData = Session.AchievementCache.GetAchievementData(AchievementData.GroupName);
 
             int TotalLevels = AchievementData.Levels.Count;
 
@@ -121,7 +122,10 @@ namespace Snowlight.Game.Achievements
                 NewTarget++;
 
                 int ProgressRemainder = NewProgress - TargetLevelData.Requirement;
-                NewProgress = 0;
+
+                /* Don't reset the user progress
+                 * NewProgress = 0;
+                 */
 
                 Badge BadgeData = RightsManager.GetBadgeByCode(AchievementGroup + TargetLevel);
 
