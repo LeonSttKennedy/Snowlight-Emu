@@ -13,7 +13,7 @@ body
 	font-size: 14px;
 	text-align: center;
 	background: #EDEDE3;
-	background-image: url('../images/star_sky2.gif');
+	#background-image: url('../images/star_sky2.gif');
 }
 
 h2, h3

@@ -22,10 +22,11 @@ else
 	<li class="<?php if($current_subpage == "account_settings") { echo "selected"; } else {} ?>"><a href="http://<?php echo SITE_DOMAIN; ?>/settings.php">Settings</a></li> 
 
 	<?php
-	if(Users::HasRight($_SESSION['account_name'], "hk_login"))
+	$uid = Users::Name2Id($_SESSION['account_name']);
+	if(Users::HasRight($uid, "hk_login"))
 	{
 	?>
-		<li class=""><a href="http://<?php echo SITE_DOMAIN; ?>/housekeeping/">Housekeeping</a></li> 
+		<li class=""><a href="http://<?php echo SITE_DOMAIN; ?>/manage/">Housekeeping</a></li> 
 	<?php
 	}
 	?>

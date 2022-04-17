@@ -7,7 +7,7 @@
 | This CMS was developed with the permission of Meth0d                      |
 \==========================================================================*/
 
-$query = mysql_query("SELECT * FROM articles ORDER BY id DESC LIMIT 1;");
+$query = mysql_query("SELECT * FROM articles ORDER BY published DESC LIMIT 1");
 $num = mysql_num_rows($query);
 if($num > 0)
 {
@@ -19,14 +19,14 @@ if($num > 0)
 		<div class="inner">
 		<h4>Latest News</h4>
 		<h2>'.$news['title'].'</h2>
-		<p class="wrap">'.$news['shortstory'].'</p><p><a href="http://'.SITE_DOMAIN.'/news.php?id='.$news['id'].'">Read more &raquo;</a></p>
+		<p class="wrap">'.$news['shortstory'].'</p><p><a href="http://'.SITE_DOMAIN.'/news.php?id=' . $news['id'] . '-' . $news['seo_link'] . '">Read more &raquo;</a></p>
 		</div>
 		</div>');
 ?>
 	<div class="newslist">
 		<ul class="newslist-inner">
 		<?php
-		$query = mysql_query("SELECT * FROM articles ORDER BY id DESC LIMIT 3");
+		$query = mysql_query("SELECT * FROM articles ORDER BY published DESC LIMIT 3");
 			while($news = mysql_fetch_assoc($query))
 			{
 				if($color == 'n')
@@ -34,8 +34,8 @@ if($num > 0)
 				else
 				$color='n';
 				TemplateManager::WriteLine('<li class="'.$color.'">
-						<a><a href="http://'.SITE_DOMAIN.'/news.php?id='.$news['id'].'">'.$news['title'].'</a><br />
-						<small>'.@date("D, d M Y h:m:s", $news['published']).'</small><br />
+						<a><a href="http://'.SITE_DOMAIN.'/news.php?id=' . $news['id'] . '-' . $news['seo_link'] . '">'.$news['title'].'</a><br />
+						<small>'.@date("D, d M Y H:i:s", $news['published']).'</small><br />
 					</li>');
 			}
 TemplateManager::WriteLine('<li class="alt">

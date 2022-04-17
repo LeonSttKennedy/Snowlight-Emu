@@ -18,6 +18,8 @@ $GetTemplate->WriteLine("
 <link rel=\"shortcut icon\" href=\"http://".SITE_DOMAIN."/icon.ico\" type=\"image/x-icon\" /> 
 ");
 $GetTemplate->WriteLine("<title>".SITE_NAME." - Client</title>");
+
+$ssousername = $_GET['username'] != null && $GetUsers->HasRight($GetUsers->Name2Id($_SESSION['account_name']), 'hk_external_login') ? $_GET['username'] : $_SESSION['account_name'];
 ?>
 
 <script type="text/javascript">
@@ -34,14 +36,14 @@ $GetTemplate->WriteLine("<title>".SITE_NAME." - Client</title>");
             "client.reload.url" : "http://<?php echo SITE_DOMAIN; ?>/error.php", 
             "client.fatal.error.url" : "http://<?php echo SITE_DOMAIN; ?>/error.php", 
             "client.connection.failed.url" : "http://<?php echo SITE_DOMAIN; ?>/error.php", 
-            "external.variables.txt" : "<?php echo CLIENT_GAMEDATABASE; ?>/external_variables.txt", 
-            "external.texts.txt" : "<?php echo CLIENT_GAMEDATABASE; ?>/external_flash_texts.txt", 
-            "external.override.texts.txt" : "<?php echo CLIENT_GAMEDATABASE; ?>/external_flash_override_texts.txt", 
-            "external.override.variables.txt" : "<?php echo CLIENT_GAMEDATABASE; ?>/external_override_variables.txt", 
-            "productdata.load.url" : "<?php echo CLIENT_GAMEDATABASE; ?>/productdata.txt", 
-            "furnidata.load.url" : "<?php echo CLIENT_GAMEDATABASE; ?>/furnidata.txt", 
+            "external.variables.txt" : "http://<?php echo SITE_DOMAIN; ?>/externals.php?id=external_variables", 
+            "external.texts.txt" : "http://<?php echo SITE_DOMAIN; ?>/externals.php?id=external_flash_texts", 
+            "external.override.texts.txt" : BaseUrl + "/external_flash_override_texts.txt", 
+            "external.override.variables.txt" : BaseUrl + "/external_override_variables.txt", 
+            "productdata.load.url" : BaseUrl + "/productdata.txt", 
+            "furnidata.load.url" : BaseUrl + "/furnidata.txt", 
             "use.sso.ticket" : "<?php echo CLIENT_SSOTICKET; ?>", 
-            "sso.ticket" : "<?php echo $GetUsers->SSO($_SESSION['account_name']); ?>", 
+            "sso.ticket" : "<?php echo $GetUsers->SSO($ssousername); ?>", 
             "processlog.enabled" : "0", 
             "flash.client.url" : BaseUrl, 
             "flash.client.origin" : "<?php echo CLIENT_ORIGIN; ?>" 

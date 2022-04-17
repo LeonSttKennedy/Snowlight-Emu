@@ -24,7 +24,19 @@ if($friendreqs == 'on')
 $friendreqs = "1";
 elseif($friendreqs == '')
 $friendreqs = "0";
-$query = mysql_query("UPDATE characters SET privacy_accept_friends = '".$friendreqs."' WHERE username = '".$_SESSION['account_name']."'");
+
+$mimic = $_POST['mimic'];
+if($mimic == 'on')
+$mimic = "1";
+elseif($mimic == '')
+$mimic = "0";
+
+$gifts = $_POST['gifts'];
+if($gifts == 'on')
+$gifts = "1";
+elseif($gifts == '')
+$gifts = "0";
+$query = mysql_query("UPDATE characters SET privacy_accept_friends = '".$friendreqs."', allow_mimic = '".$mimic."', allow_gifts = '".$gifts."' WHERE username = '".$_SESSION['account_name']."'");
 
 $GetSecurity->Redirect("settings.php");
 exit;

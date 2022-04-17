@@ -7,18 +7,24 @@
 | This CMS was developed with the permission of Meth0d                      |
 \==========================================================================*/
 
+
 if(!isset($_GET['id']))
 {
-	$articleq = mysql_query("SELECT * FROM articles ORDER BY id DESC LIMIT 1");
+	if(!isset($_GET['categoryid']))
+	{
+		$setid = mysql_fetch_assoc(mysql_query("SELECT * FROM articles ORDER BY published DESC LIMIT 1"));
+		TemplateManager::WriteLine("<script type='text/javascript'>window.top.location='http://".SITE_DOMAIN."/news.php?id=" . $setid['id'] . "-" . $setid['seo_link'] ."';</script>");
+	}
 }
-else
-{
-	$articleq = mysql_query("SELECT * FROM articles WHERE id = '".$_GET['id']."' LIMIT 1");
-}
+
+$newsid = explode("-", $_GET['id']);
+$articleqquerystring = isset($_GET['categoryid']) ? "SELECT * FROM articles WHERE category_id = '" . $_GET['categoryid'] . "' ORDER BY published DESC LIMIT 1" : "SELECT * FROM articles WHERE id = '$newsid[0]' LIMIT 1";
+$articleq = mysql_query($articleqquerystring);
 $article = mysql_fetch_array($articleq);
-$authorq = mysql_query("SELECT * FROM characters WHERE id = '".$article['author']."' LIMIT 1");
-$author = mysql_fetch_array($authorq);
-$recentstoriesq = mysql_query("SELECT * FROM articles ORDER BY id DESC LIMIT 25");
+
+$author = mysql_result(mysql_query("SELECT username FROM characters WHERE id = '".$article['author']."' LIMIT 1"), 0);
+$category = mysql_result(mysql_query("SELECT caption FROM articles_categories WHERE id = '".$article['category_id']."' LIMIT 1"), 0);
+$recentstoriesq = isset($_GET['categoryid']) ? "SELECT * FROM articles WHERE category_id = '" . $_GET['categoryid'] . "' ORDER BY published DESC LIMIT 25" : "SELECT * FROM articles ORDER BY published DESC LIMIT 25";
 ?>
 <style type="text/css">
 .charentry { 
@@ -35,12 +41,12 @@ padding: 4px 10px 6px 10px;
 </style>
 <div class="column1" id="column1">
 <h2><?php TemplateManager::WriteLine($article["title"]); ?></h2>
-<small><?php TemplateManager::WriteLine(@date("D, d M Y h:m:s", $article['published'])); ?></small>
+<small><?php TemplateManager::WriteLine(@date("D, d M Y H:i:s", $article['published'])); ?> <a href="<?php TemplateManager::WriteLine('http://' . SITE_DOMAIN . '/news.php?categoryid=' .$article['category_id']); ?>"><?php TemplateManager::WriteLine($category); ?></a></small>
 <p><em><?php TemplateManager::WriteLine($article['shortstory']); ?></em></p>
 <br />
 <?php TemplateManager::WriteLine($article["longstory"]); ?>
 <br />
-<p><h3><?php TemplateManager::WriteLine($author["username"]); ?></strong></h3>
+<p><h3><?php TemplateManager::WriteLine($author); ?></strong></h3>
 <br /><br />
 </div>
 
@@ -50,8 +56,7 @@ padding: 4px 10px 6px 10px;
 <div class="left" style="width: 65%;">
 <h3>Recent news articles</h3><br />
 <?php
-$query = mysql_query("SELECT * FROM articles ORDER BY id DESC LIMIT 1;");
-$num = mysql_num_rows($query);
+$num = mysql_num_rows(mysql_query($recentstoriesq));
 if($num > 0)
 {
 ?>
@@ -60,30 +65,30 @@ if($num > 0)
 	<div id="newslist">
 		<ul class="newslist-inner">
 		<?php
-		$query = mysql_query("SELECT * FROM articles ORDER BY id DESC LIMIT 25");
-			while($news = mysql_fetch_assoc($query))
-			{
-				if($color == 'n')
-				$color='alt';
-				else
-				$color='n';
+		$query = mysql_query($recentstoriesq);
+		while($news = mysql_fetch_assoc($query))
+		{
+			if($color == 'n')
+			$color='alt';
+			else
+			$color='n';
 
-				if($_GET['id'] == $news['id'])
-				{
-					TemplateManager::WriteLine('<li class="'.$color.'">
-							<a><a href="http://'.SITE_DOMAIN.'/news.php?id='.$news['id'].'"><b>'.$news['title'].'</b></a><br />
-							<small>'.@date("D, d M Y h:m:s", $news['published']).'</small><br />
-						</li>');
-				}
-				else
-				{
-					TemplateManager::WriteLine('<li class="'.$color.'">
-							<a><a href="http://'.SITE_DOMAIN.'/news.php?id='.$news['id'].'">'.$news['title'].'</a><br />
-							<small>'.@date("D, d M Y h:m:s", $news['published']).'</small><br />
-						</li>');
-				}
+			if($article['id'] == $news['id'])
+			{
+				TemplateManager::WriteLine('<li class="'.$color.'">
+						<b>'.$news['title'].'</b><br />
+						<small>'.@date("D, d M Y H:i:s", $news['published']).'</small><br />
+					</li>');
 			}
-?>
+			else
+			{
+				TemplateManager::WriteLine('<li class="'.$color.'">
+						<a href="http://'.SITE_DOMAIN.'/news.php?id=' . $news['id'] . '-' . $news['seo_link'] . '">'.$news['title'].'</a><br />
+						<small>'.@date("D, d M Y H:i:s", $news['published']).'</small><br />
+					</li>');
+			}
+		}
+		?>
 		</ul>
 
 	</div>
