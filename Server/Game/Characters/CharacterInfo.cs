@@ -64,12 +64,16 @@ namespace Snowlight.Game.Characters
         private int mMarketplaceTokens;
 
         private int mRegularVisitor;
+        private int mTimeOnline;
 
         private bool mAllowGifting;
         private DateTime mLastGiftSent;
         private int mGiftingWarningCounter;
 
+        private bool mIsOnline;
+
         private bool mAllowMimic;
+        private bool mAllowGifts;
 
         public uint Id
         {
@@ -471,6 +475,17 @@ namespace Snowlight.Game.Characters
                 mRegularVisitor = value;
             }
         }
+        public int TimeOnline
+        {
+            get
+            {
+                return mTimeOnline;
+            }
+            set
+            {
+                mTimeOnline = value;
+            }
+        }
         public bool AllowGifting
         {
             get 
@@ -509,7 +524,17 @@ namespace Snowlight.Game.Characters
                 mGiftingWarningCounter = value;
             }
         }
-
+        public bool Online
+        {
+            get 
+            {
+                return mIsOnline;
+            }
+            set
+            {
+                mIsOnline = value;
+            }
+        }
         public bool AllowMimic
         {
             get
@@ -523,12 +548,26 @@ namespace Snowlight.Game.Characters
             }
         }
 
+        public bool AllowGifts
+        {
+            get
+            {
+                return mAllowGifts;
+            }
+
+            set
+            {
+                mAllowGifts = value;
+            }
+        }
+
         public CharacterInfo(SqlDatabaseClient MySqlClient, uint SessionId, uint Id, string Username, string RealName, string Figure,
             CharacterGender Gender, string Motto, int Credits, int ActivityPoints, double ActivityPointsLastUpdate,
             bool PrivacyAcceptFriends, uint HomeRoom, int Score, int ConfigVolume, int ModerationTickets,
             int ModerationTicketsAbusive, double ModerationTicketCooldown, int ModerationBans, int ModerationCautions,
             double TimestampLastOnline, double TimestampRegistered, int RespectPoints, int RespectCreditHuman,
-            int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, int MarketplaceTokens, int RegularVisitor, bool AllowMimic)
+            int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, int MarketplaceTokens,
+            int RegularVisitor, int TimeOnline, bool Online , bool AllowMimic, bool AllowGifts)
         {
             mSessionId = SessionId;
             mId = Id;
@@ -567,6 +606,7 @@ namespace Snowlight.Game.Characters
             mMarketplaceTokens = MarketplaceTokens;
 
             mRegularVisitor = RegularVisitor;
+            mTimeOnline = TimeOnline;
 
             mAllowGifting = true;
             mLastGiftSent = DateTime.Now;
@@ -575,7 +615,10 @@ namespace Snowlight.Game.Characters
             mWardrobe = new Dictionary<int, WardrobeItem>();
             mTags = new List<string>();
 
+            mIsOnline = Online;
+
             mAllowMimic = AllowMimic;
+            mAllowMimic = AllowGifts;
 
             if (MySqlClient != null)
             {
@@ -587,13 +630,7 @@ namespace Snowlight.Game.Characters
                     mWardrobe.Add((int)Row["slot_id"], new WardrobeItem((string)Row["figure"], (Row["gender"].ToString().ToLower() == "m" ? CharacterGender.Male : CharacterGender.Female)));
                 }
 
-                MySqlClient.SetParameter("userid", mId);
-                DataTable TagsTable = MySqlClient.ExecuteQueryTable("SELECT * FROM tags WHERE user_id = @userid");
-
-                foreach (DataRow Row in TagsTable.Rows)
-                {
-                    mTags.Add((string)Row["tag"]);
-                }
+                UpdateTags(MySqlClient);
             }
         }
 
@@ -605,7 +642,24 @@ namespace Snowlight.Game.Characters
                 return int.Parse(MySqlClient.ExecuteScalar("SELECT COUNT(*) FROM rooms WHERE owner_id = @ownerid LIMIT 1").ToString());
             }
         }
+        public void UpdateTags(SqlDatabaseClient MySqlClient)
+        {
+            mTags.Clear();
 
+            MySqlClient.SetParameter("userid", mId);
+            DataTable TagsTable = MySqlClient.ExecuteQueryTable("SELECT * FROM tags WHERE user_id = @userid");
+
+            foreach (DataRow Row in TagsTable.Rows)
+            {
+                mTags.Add((string)Row["tag"]);
+            }
+        }
+        public void UpdateOnline(SqlDatabaseClient MySqlClient)
+        {
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("online", mIsOnline? "1" : "0");
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET online = @online WHERE id = @userid LIMIT 1");
+        }
         public void UpdateScore(SqlDatabaseClient MySqlClient, int Amount)
         {
             mScore += Amount;
@@ -644,6 +698,14 @@ namespace Snowlight.Game.Characters
             MySqlClient.SetParameter("regularvisitor", RegularVisitorinDays);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET regular_visitor = @regularvisitor WHERE id = @id LIMIT 1");
         }
+        public void UpdateTimeOnline(SqlDatabaseClient MySqlClient, int Amount)
+        {
+            TimeOnline += Amount;
+
+            MySqlClient.SetParameter("id", mId);
+            MySqlClient.SetParameter("timeonline", TimeOnline);
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET time_online = @timeonline WHERE id = @id LIMIT 1");
+        }
         public void UpdateActivityPointsBalance(SqlDatabaseClient MySqlClient, int Amount)
         {
             ActivityPointsBalance += Amount;
@@ -675,6 +737,14 @@ namespace Snowlight.Game.Characters
             MySqlClient.SetParameter("mimic", mAllowMimic ? "1" : "0");
 
             MySqlClient.ExecuteNonQuery("UPDATE characters SET allow_mimic = @mimic WHERE id = @userid LIMIT 1");
+        }
+
+        public void UpdateGiftsPreference(SqlDatabaseClient MySqlClient)
+        {
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("gifts", mAllowGifts ? "1" : "0");
+
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET allow_gifts = @gifts WHERE id = @userid LIMIT 1");
         }
 
         public void UpdateFigure(SqlDatabaseClient MySqlClient, string NewGender, string NewFigure)

@@ -7,10 +7,13 @@ using System.Collections.Generic;
 
 using Snowlight.Storage;
 using Snowlight.Game.Sessions;
+using Snowlight.Game.Achievements;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Characters;
 
 namespace Snowlight.Game.Misc
 {
-    public static class DailyStuffWorker
+    public static class UserStuffWorker
     {
         private static Thread mWorkerThread;
         private static DateTime mCurrentDay;
@@ -34,7 +37,7 @@ namespace Snowlight.Game.Misc
 
             mWorkerThread = new Thread(new ThreadStart(ProcessThread));
             mWorkerThread.Priority = ThreadPriority.Lowest;
-            mWorkerThread.Name = "DailyStuffWorkerThread";
+            mWorkerThread.Name = "UserStuffWorkerThread";
             mWorkerThread.Start();
         }
 
@@ -63,12 +66,11 @@ namespace Snowlight.Game.Misc
                         {
                             foreach (Session Session in Sessions.Values)
                             {
-                                if (!Session.Authenticated || !Session.Stopped)
+                                if (!Session.Authenticated || Session.Stopped || !Session.InRoom)
                                 {
                                     continue;
                                 }
 
-                                // First check if account needs a repect update
                                 if (Session.CharacterInfo.NeedsRespectUpdate)
                                 {
                                     Session.CharacterInfo.RespectCreditHuman = 3;
@@ -76,6 +78,11 @@ namespace Snowlight.Game.Misc
                                     Session.CharacterInfo.SetLastRespectUpdate(MySqlClient);
                                     Session.CharacterInfo.SynchronizeRespectData(MySqlClient);
                                 }
+
+                                Session.CharacterInfo.UpdateTimeOnline(MySqlClient, 1);
+                                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_AllTimeHotelPresence", 1);
+
+                                HabboTags(Session, MySqlClient);
 
                                 if (CurrentDay != DateTime.Today)
                                 {
@@ -85,10 +92,28 @@ namespace Snowlight.Game.Misc
                         }
                     }
 
-                    Thread.Sleep((1800 / 5) * 1000);
+                    Thread.Sleep(60000);
                 }
             }
             catch (ThreadAbortException) { }
+        }
+
+        private static void HabboTags(Session Session, SqlDatabaseClient MySqlClient)
+        {
+            Session.CharacterInfo.UpdateTags(MySqlClient);
+
+            int UserTagsCount = Session.CharacterInfo.Tags.Count;
+            UserAchievement AvatarTagsData = Session.AchievementCache.GetAchievementData("ACH_AvatarTags");
+            int CacheTagsProgress = AvatarTagsData != null ? AvatarTagsData.Progress : 0;
+
+            int AvatarTagsIncrease = UserTagsCount - CacheTagsProgress;
+
+            if (AvatarTagsIncrease > 0)
+            {
+                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_AvatarTags", AvatarTagsIncrease);
+            }
+
+            Session.SendData(RoomUserTagsComposer.Compose(Session.CharacterInfo.Id, Session.CharacterInfo.Tags));
         }
     }
 }

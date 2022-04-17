@@ -9,15 +9,15 @@ namespace Snowlight.Communication.Outgoing
 {
     public class MessengerUpdate
     {
-        private uint mCharacterId;
+        private uint mOriginalCharId;
         private int mMode;
         private CharacterInfo mCharacterInfo;
 
-        public uint CharacterId
+        public uint OriginalCharId
         {
             get
             { 
-                return mCharacterId; 
+                return mOriginalCharId; 
             }
         }
 
@@ -37,9 +37,9 @@ namespace Snowlight.Communication.Outgoing
             }
         }
 
-        public MessengerUpdate(uint CharacterId, int Mode, CharacterInfo CharacterInfo)
+        public MessengerUpdate(uint OriginalCharId, int Mode, CharacterInfo CharacterInfo)
         {
-            mCharacterId = CharacterId;
+            mOriginalCharId = OriginalCharId;
             mMode = Mode;
             mCharacterInfo = CharacterInfo;
         }
@@ -54,7 +54,7 @@ namespace Snowlight.Communication.Outgoing
 
             foreach (MessengerUpdate Update in Updates)
             {
-                Session LinkedSession = SessionManager.GetSessionByCharacterId(Update.CharacterId);
+                Session LinkedSession = SessionManager.GetSessionByCharacterId(Update.OriginalCharId);
                 int CategoriesCount = LinkedSession != null ? LinkedSession.MessengerFriendCache.Categories.Count : 0;
                 Message.AppendInt32(CategoriesCount);
 
@@ -82,7 +82,7 @@ namespace Snowlight.Communication.Outgoing
                         {
                             Session LinkedSession = SessionManager.GetSessionByCharacterId(Update.CharacterInfo.Id);
 
-                            int CategoryId = (int)MessengerHandler.GetFriendshipCategoryId(MySqlClient, Update.CharacterId, Update.CharacterInfo.Id);
+                            int CategoryId = (int)MessengerHandler.GetFriendshipCategoryId(MySqlClient, Update.OriginalCharId, Update.CharacterInfo.Id);
 
                             Message.AppendStringWithBreak(Update.CharacterInfo.Username);
                             Message.AppendBoolean(true);

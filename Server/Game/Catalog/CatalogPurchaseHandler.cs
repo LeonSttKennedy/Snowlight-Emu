@@ -267,6 +267,12 @@ namespace Snowlight.Game.Catalog
                     return;
                 }
 
+                if (!TargetSession.CharacterInfo.AllowGifting || (GiftUserRow["allow_gifts"].ToString() == "0"))
+                {
+                    Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("target_user_disabled_receipt_gifts", GiftUser)));
+                    return;
+                }
+
                 if (Session.CharacterInfo.CreditsBalance < TotalCreditCost || Session.CharacterInfo.ActivityPointsBalance
                     < TotalApCost)
                 {

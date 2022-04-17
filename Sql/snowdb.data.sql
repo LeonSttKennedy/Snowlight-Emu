@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `achievements` (
   `reward_points` int(11) DEFAULT '10',
   `progress_needed` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=118 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=129 ;
 
 --
 -- Extraindo dados da tabela `achievements`
@@ -157,7 +157,18 @@ INSERT INTO `achievements` (`id`, `group_name`, `category`, `level`, `reward_pix
 (114, 'ACH_RegistrationDuration', 'identity', 7, 200, 10, 730),
 (115, 'ACH_RegistrationDuration', 'identity', 8, 200, 10, 1095),
 (116, 'ACH_RegistrationDuration', 'identity', 9, 200, 10, 1460),
-(117, 'ACH_RegistrationDuration', 'identity', 10, 200, 10, 1825);
+(117, 'ACH_RegistrationDuration', 'identity', 10, 200, 10, 1825),
+(118, 'ACH_AllTimeHotelPresence', 'identity', 1, 20, 10, 60),
+(119, 'ACH_AllTimeHotelPresence', 'identity', 2, 20, 10, 180),
+(120, 'ACH_AllTimeHotelPresence', 'identity', 3, 20, 10, 480),
+(121, 'ACH_AllTimeHotelPresence', 'identity', 4, 20, 10, 960),
+(122, 'ACH_AllTimeHotelPresence', 'identity', 5, 20, 10, 2880),
+(123, 'ACH_AllTimeHotelPresence', 'identity', 6, 20, 10, 8640),
+(124, 'ACH_AllTimeHotelPresence', 'identity', 7, 20, 10, 17280),
+(125, 'ACH_AllTimeHotelPresence', 'identity', 8, 20, 10, 34560),
+(126, 'ACH_AllTimeHotelPresence', 'identity', 9, 20, 10, 69120),
+(127, 'ACH_AllTimeHotelPresence', 'identity', 10, 20, 10, 138240),
+(128, 'ACH_Name', 'identity', 1, 50, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -223,7 +234,8 @@ CREATE TABLE IF NOT EXISTS `badges` (
 --
 
 INSERT INTO `badges` (`id`, `user_id`, `badge_id`, `source_type`, `source_data`, `slot_id`) VALUES
-(1, 1, 11, 'static', '', 0);
+(1, 1, 11, 'static', 'ADM', 0);
+
 
 -- --------------------------------------------------------
 
@@ -236,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `badge_definitions` (
   `code` varchar(64) NOT NULL,
   `rights_sets` varchar(128) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`,`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=128 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=141 ;
 
 --
 -- Extraindo dados da tabela `badge_definitions`
@@ -369,7 +381,20 @@ INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
 (124, 'ACH_RegistrationDuration7', ''),
 (125, 'ACH_RegistrationDuration8', ''),
 (126, 'ACH_RegistrationDuration9', ''),
-(127, 'ACH_RegistrationDuration10', '');
+(127, 'ACH_RegistrationDuration10', ''),
+(128, 'ACH_AllTimeHotelPresence1', ''),
+(129, 'ACH_AllTimeHotelPresence2', ''),
+(130, 'ACH_AllTimeHotelPresence3', ''),
+(131, 'ACH_AllTimeHotelPresence4', ''),
+(132, 'ACH_AllTimeHotelPresence5', ''),
+(133, 'ACH_AllTimeHotelPresence6', ''),
+(134, 'ACH_AllTimeHotelPresence7', ''),
+(135, 'ACH_AllTimeHotelPresence8', ''),
+(136, 'ACH_AllTimeHotelPresence9', ''),
+(137, 'ACH_AllTimeHotelPresence10', ''),
+(138, 'ACH_Name1', ''),
+(139, 'WHY', ''),
+(140, 'HUG', '');
 
 -- --------------------------------------------------------
 
@@ -538,28 +563,29 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (1, -1, 1, '1', 'Frontpage', 1, 0, '', '1', '0', '0', 'frontpage3', 'catalog_frontpage_headline2_en|TS_buildhotel.png?|', 'uberHotel BETA |Welcome to uberHotel - powered by Snowlight.|See our opening furniture|uberHotel Economy|The main currency in uberHotel is called pixels - these can be earnt through quests, competitions and just being online. You can buy all furniture with pixels, or you can exchange your pixels into credits to buy more exclusive and limited edition furniture.  You can exchange pixels for credits under the ''Uber Exchange'' tab.|Redeem a voucher code here:|Limited Edition|#FEFEFE|#FEFEFE|Click here for information  >>|http://uberhotel.org/'),
 (2, -1, 2, '1', 'Pixel Furniture', 2, 5, '', '1', '1', '0', 'default_3x3', '', ''),
 (3, -1, 7, '1', 'Uber Exchange', 6, 11, '', '1', '1', '0', 'default_3x3', '', ''),
+(4, 2, 12, '1', 'Black Hole', 125, 0, '', '1', '0', '0', 'default_3x3', 'catalog_header_blackhole|catalog_blackhole_teaser', 'This ingenious furni line has been created for you to create your very own custom room layouts!|Click on an item for details.'),
 (5, -1, 12, '1', 'Staff Furniture', 31, 5, 'moderation_tool', '1', '1', '0', 'default_3x3', '', ''),
 (6, -1, 8, '1', 'Uber Club', 75, 4, '', '1', '0', '0', 'club_buy', 'hc2_clubtitle', ''),
 (7, 6, 2, '1', 'Club Shop', 75, 0, '', '1', '0', '0', 'default_3x3', 'hc2_clubtitle|catalog_hc_teaser|catalog_special_txtbg1', 'As a member of Uber Club, you can shop from this selection of exclusive items. Every now and then we will also be adding items that are currently unavailable in the regular Furni Shop as well!|Click on an item for details.|For Uber Club members only!'),
-(8, 2, 77, '1', 'Windows', 63, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_windows_headline1_en|ctlg_windows_teaser1_en', 'Let the sunshine in with one of our many window designs and give your room a unique, new feel. Don''t forget to watch out for the window cleaner every Tuesday! I heard he''s cheating on your Mum.|Click on an item for more details.'),
-(9, 2, 66, '1', 'Teleporters', 58, 0, '', '1', '0', '0', 'default_3x3', 'catalog_doors_headline1|catalog_door_a', 'A different dimension? Another world? A new universe? ...or maybe just to the other side of the room! You can do it all with our range of teleporters. When trading, make sure you get a linking pair!|Click on an item for more details.'),
-(10, 2, 65, '1', 'Summer', 57, 0, '', '1', '0', '0', 'default_3x3', 'summer|catalog_sum_teaser1', 'Are you a paddler, a swimmer or do you just like lazing on the side? It doesn''t matter with this summer range because you can do it all from your very own room! Don''t forget your sunscreen...|Click on an item for more details.'),
-(11, 2, 24, '1', 'Executive', 27, 0, '', '1', '0', '0', 'default_3x3', 'catalog_exe_headline1_en|catalog_exe_teaser1_en', 'Looking for a professional, sophisticated working environment? You have arrived at the right page, sir. With our sleek range of real-leather furniture you can impress all of your customers and colleagues. Receptionist not included.|Click on an item for more details.'),
-(12, 2, 43, '1', 'Lodge', 37, 0, '', '1', '0', '0', 'default_3x3', 'catalog_lodge_headline1|catalog_lodge_teaser1', 'For that time-honoured cabin effect, try Lodge. This collection is perfect for those with a no-frills, no-spills attitude to décor. Come and appreciate the natural beauty of wood in all its splintered glory.|Click on an item for more details.\r\n'),
-(13, 2, 48, '1', 'Mode', 39, 0, '', '1', '0', '0', 'default_3x3', 'catalog_mode_headline1|catalog_mode_teaser1', 'Steely, cold and really quite uncomfortable. With so many colour choices Mode is no longer limited for use in the morgue! Although, after a nights sleep you sure can tell that’s where the beds came from.|Click on an item for more details.'),
+(8, 2, 79, '1', 'Windows', 63, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_windows_headline1_en|ctlg_windows_teaser1_en', 'Let the sunshine in with one of our many window designs and give your room a unique, new feel. Don''t forget to watch out for the window cleaner every Tuesday! I heard he''s cheating on your Mum.|Click on an item for more details.'),
+(9, 2, 68, '1', 'Teleporters', 58, 0, '', '1', '0', '0', 'default_3x3', 'catalog_doors_headline1|catalog_door_a', 'A different dimension? Another world? A new universe? ...or maybe just to the other side of the room! You can do it all with our range of teleporters. When trading, make sure you get a linking pair!|Click on an item for more details.'),
+(10, 2, 67, '1', 'Summer', 57, 0, '', '1', '0', '0', 'default_3x3', 'summer|catalog_sum_teaser1', 'Are you a paddler, a swimmer or do you just like lazing on the side? It doesn''t matter with this summer range because you can do it all from your very own room! Don''t forget your sunscreen...|Click on an item for more details.'),
+(11, 2, 26, '1', 'Executive', 27, 0, '', '1', '0', '0', 'default_3x3', 'catalog_exe_headline1_en|catalog_exe_teaser1_en', 'Looking for a professional, sophisticated working environment? You have arrived at the right page, sir. With our sleek range of real-leather furniture you can impress all of your customers and colleagues. Receptionist not included.|Click on an item for more details.'),
+(12, 2, 45, '1', 'Lodge', 37, 0, '', '1', '0', '0', 'default_3x3', 'catalog_lodge_headline1|catalog_lodge_teaser1', 'For that time-honoured cabin effect, try Lodge. This collection is perfect for those with a no-frills, no-spills attitude to décor. Come and appreciate the natural beauty of wood in all its splintered glory.|Click on an item for more details.\r\n'),
+(13, 2, 50, '1', 'Mode', 39, 0, '', '1', '0', '0', 'default_3x3', 'catalog_mode_headline1|catalog_mode_teaser1', 'Steely, cold and really quite uncomfortable. With so many colour choices Mode is no longer limited for use in the morgue! Although, after a nights sleep you sure can tell that’s where the beds came from.|Click on an item for more details.'),
 (14, 6, 1, '1', 'Monthly Gifts ', 9, 0, '', '1', '0', '0', 'default_3x3', 'catalog_club_headline1|catalog_hc_teaser|catalog_special_txtbg1', 'As a member of Uber Club, you can shop from this selection of exclusive items. Every now and then we will also be adding items that are currently unavailable in the regular Furni Shop as well!|Click on an item for details.|For Uber Club members only!'),
-(15, 2, 52, '1', 'Plants', 45, 0, '', '1', '0', '0', 'default_3x3', 'catalog_plants_headline1|catalog_plants_teaser1', 'One of the most multifunctional ranges available – perhaps you need a hedge to divide your room? Or maybe a rose to brighten your day? Let''s fight global warming together, buy a Vase of Flowers.|Click on an item for more details..'),
-(16, 2, 53, '1', 'Plastic', 46, 0, '', '1', '0', '0', 'plasto', 'catalog_plasto_headline1', 'Bring some colour into your puny, insignificant life (or not if you choose brown..) with our retro range of 70''s furniture. Pick the piece you want and your favourite colour and you''re ready to feel the vibes.|Click on an item for more details.'),
+(15, 2, 54, '1', 'Plants', 45, 0, '', '1', '0', '0', 'default_3x3', 'catalog_plants_headline1|catalog_plants_teaser1', 'One of the most multifunctional ranges available – perhaps you need a hedge to divide your room? Or maybe a rose to brighten your day? Let''s fight global warming together, buy a Vase of Flowers.|Click on an item for more details..'),
+(16, 2, 55, '1', 'Plastic', 46, 0, '', '1', '0', '0', 'plasto', 'catalog_plasto_headline1', 'Bring some colour into your puny, insignificant life (or not if you choose brown..) with our retro range of 70''s furniture. Pick the piece you want and your favourite colour and you''re ready to feel the vibes.|Click on an item for more details.'),
 (17, 2, 10, '1', 'Bathroom', 17, 0, '', '1', '0', '0', 'default_3x3', 'catalog_bath_headline1|catalog_bath_teaser1', 'Dedicate an area for you and your guests to perform your morning ablutions – couple this furniture range with ''Relax'' and you''ll have a calm, modern and hygienic bathroom ready for.. well.. y''know.|Click on an item for more details.'),
-(18, 2, 41, '1', 'Kitchen', 43, 0, '', '1', '0', '0', 'default_3x3', 'kitchen_header_en|kitchen_teaser_en', 'When the noodles hit the fan, you know what range to choose. Perfect for amateur cooks and professional chefs alike, we have everything you could want in your kitchen all under one roof. Don''t worry, we''ve got your splash-back covered.|Click on an item for more details.'),
+(18, 2, 43, '1', 'Kitchen', 43, 0, '', '1', '0', '0', 'default_3x3', 'kitchen_header_en|kitchen_teaser_en', 'When the noodles hit the fan, you know what range to choose. Perfect for amateur cooks and professional chefs alike, we have everything you could want in your kitchen all under one roof. Don''t worry, we''ve got your splash-back covered.|Click on an item for more details.'),
 (19, 2, 1, '1', 'Accessories', 11, 0, '', '1', '0', '0', 'default_3x3', 'catalog_extra_headline1|catalog_extra_teaser1', 'However you place your prized possessions, it''s the little bits that make the difference.  So, to make a difference, buy the little bits right here!|Click on an item for more details.'),
-(20, 2, 68, '1', 'Trophies', 60, 0, '', '1', '0', '0', 'trophies', 'catalog_trophies_headline1', 'Are you a winner or just a little bit special? Buy yourself a trophy to reward your efforts! Whether you want gold, silver or bronze – it doesn''t matter – we have every trophy in every metal!|Click on an item for more details.'),
-(21, 2, 57, '1', 'Rollers', 96, 0, '', '1', '0', '0', 'default_3x3', 'catalog_roller_headline1|catalog_teaser_rollers_en', 'Rollers make the world go round, literally. For queues, game or businesses we have the right colour choices for you! Rollers are also available in multipacks for discount prices! |Click on an item for more details.'),
-(22, 2, 28, '1', 'Gallery', 47, 0, '', '1', '0', '0', 'default_3x3', 'catalog_gallery_headline1|catalog_posters_teaser1\r\n', 'From Bonnie Blonde to the Queen Mother, we''ve got every famous celebrity poster to complement our collection of scenery and other items of wall paraphernalia.|Click on an item for more information.'),
-(23, 2, 59, '1', 'Rugs', 52, 0, '', '1', '0', '0', 'default_3x3', 'catalog_rugs_headline1|catalog_rugs_teaser1', 'Remember that rug your Grandma used to have? Yeah, well, we''re not on about that one you dirty pervert. All our rugs are non-slip, washable and totally lice free! Buy yours today while they''re still soft and snuggly.|Click on an item for more details.'),
-(24, 2, 25, '1', 'Flags', 47, 1, '', '1', '0', '0', 'default_3x3', 'catalog_flags_headline1|catalog_flags_teaser1|catalog_special_txtbg2', 'If you''re feeling patriotic, get a flag to prove it! Our finest cloth flags will brighten up the dullest walls!|Click on an item for more details.|Flag this section for later!'),
+(20, 2, 70, '1', 'Trophies', 60, 0, '', '1', '0', '0', 'trophies', 'catalog_trophies_headline1', 'Are you a winner or just a little bit special? Buy yourself a trophy to reward your efforts! Whether you want gold, silver or bronze – it doesn''t matter – we have every trophy in every metal!|Click on an item for more details.'),
+(21, 2, 59, '1', 'Rollers', 96, 0, '', '1', '0', '0', 'default_3x3', 'catalog_roller_headline1|catalog_teaser_rollers_en', 'Rollers make the world go round, literally. For queues, game or businesses we have the right colour choices for you! Rollers are also available in multipacks for discount prices! |Click on an item for more details.'),
+(22, 2, 30, '1', 'Gallery', 47, 0, '', '1', '0', '0', 'default_3x3', 'catalog_gallery_headline1|catalog_posters_teaser1\r\n', 'From Bonnie Blonde to the Queen Mother, we''ve got every famous celebrity poster to complement our collection of scenery and other items of wall paraphernalia.|Click on an item for more information.'),
+(23, 2, 61, '1', 'Rugs', 52, 0, '', '1', '0', '0', 'default_3x3', 'catalog_rugs_headline1|catalog_rugs_teaser1', 'Remember that rug your Grandma used to have? Yeah, well, we''re not on about that one you dirty pervert. All our rugs are non-slip, washable and totally lice free! Buy yours today while they''re still soft and snuggly.|Click on an item for more details.'),
+(24, 2, 27, '1', 'Flags', 47, 1, '', '1', '0', '0', 'default_3x3', 'catalog_flags_headline1|catalog_flags_teaser1|catalog_special_txtbg2', 'If you''re feeling patriotic, get a flag to prove it! Our finest cloth flags will brighten up the dullest walls!|Click on an item for more details.|Flag this section for later!'),
 (25, 6, 3, '1', 'VIP Shop', 75, 0, '', '1', '0', '0', 'default_3x3', 'catalog_vipclub_header|catalog_vipclub_teaser', 'As a member of Uber Club or VIP, you can shop from this selection of exclusive items. Every now and then we will also be adding items that are currently unavailable in the regular Furni Shop as well!|Click on an item for details.'),
-(26, 5, 1, '1', 'Ecotron', 26, 3, '', '1', '0', '0', 'default_3x3', 'catalog_recycler_headline3', 'These are the current rewards you can recieve for recycling furniture in the Ecotron.|Click on an item for more details.'),
+(26, 5, 2, '1', 'Ecotron', 26, 3, '', '1', '0', '0', 'default_3x3', 'catalog_recycler_headline3', 'These are the current rewards you can recieve for recycling furniture in the Ecotron.|Click on an item for more details.'),
 (27, -1, 3, '1', 'Pixel Specials', 44, 3, '', '1', '1', '0', 'default_3x3', '', ''),
 (28, -1, 10, '1', 'Ecotron', 7, 3, '', '1', '0', '0', 'recycler_info', 'catalog_recycler_headline3|ctlg_ecotron_box', 'The Ecotron is a furni recycler. Get rid of old furni... what will you get in return? It''s a surprise! Become a Habbo eco-warrior. No refunds!|How to use the Ecotron?|1. Just drag 5 items from your hand to the Ecotron. One item / square. Recyclable items are marked in your inventory with an image. When you have 5 items in the boxes, click the "Recycle" button. You can now find the Ecotron prize box from your hand.\r\n\r\n2. Click the box to see its tag. Open the box, or trade it unopened. The timer shows you how long you have to wait before you can recycle more items. Check the prizes before you recycle- don''t be surprised by the surprise!'),
 (29, -1, 9, '1', 'Games ', 87, 3, '', '1', '1', '0', 'default_3x3', '', ''),
@@ -567,7 +593,7 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (31, 28, 1, '1', 'Ecotron', 26, 3, '', '1', '0', '0', 'recycler', 'catalog_recycler_headline3|ctlg_ecotron_image', 'Had enough of an old bit of furniture but don''t want to just trade it away? Get something more exciting and unique by placing 5 pieces of your old furniture in here. In return, you''ll recieve a brand new piece of furniture!|Click on an item for more details.'),
 (32, 28, 2, '1', 'Rewards', 71, 0, '', '1', '0', '0', 'recycler_prizes', 'catalog_recycler_headline3', 'These are the current rewards you can recieve for recycling furniture in the Ecotron.||What are the prizes? Ecotron may contain one of these:\r\n'),
 (33, 27, 1, '1', 'Limited Edition', 84, 4, '', '1', '0', '0', 'default_3x3', 'catalog_limited_headline1_en|catalog_limited_teaser', 'We''d like to welcome you to uberHotel with these limited edition items! Throw a party and have some fun - quick, before it leaves the catalogue forever!|Click on an item for details.'),
-(34, 2, 36, '1', 'Hello', 35, 0, '', '1', '0', '0', 'default_3x3', 'catalog_hello_header1_en|catalog_hello_teaser1_en', 'This our exclusive noob range - only buyable with pixels. Want a bad quality, trashly, newbie looking room? You my friend, have come to the right place. Fill your room with these pieces for that authentic new user look!|Click on an item for more details.'),
+(34, 2, 38, '1', 'Hello', 35, 0, '', '1', '0', '0', 'default_3x3', 'catalog_hello_header1_en|catalog_hello_teaser1_en', 'This our exclusive noob range - only buyable with pixels. Want a bad quality, trashly, newbie looking room? You my friend, have come to the right place. Fill your room with these pieces for that authentic new user look!|Click on an item for more details.'),
 (35, 27, 5, '1', 'Rentals', 51, 0, '', '1', '0', '0', 'default_3x3', 'catalog_pixelrent_headline1_en|catalog_pxl_teaser3_en', 'Suprise your guests with one of our exciting effects you can rent for you very own room! With pixels, you can rent an effect for an hour (perfect for a party!) and it will automatically disappear when the time is up. Magic, and oh so very simple!|Click on an item for more details.'),
 (36, 27, 6, '1', 'Special Effects', 61, 0, '', '1', '0', '0', 'default_3x3', 'catalog_pixeleffects_headline1_en|catalog_pxl_teaser1_en', 'Want to go rollerskating, hoverboarding or glow bright green? We can make your dreams come true with our amazingly noobish effects! Buy one here and enable it on your effects menu. |Click on an item for more details.'),
 (37, 2, 9, '1', 'Automobiles', 16, 0, '', '1', '0', '0', 'default_3x3', 'catalog_automobile_header1_en|catalog_automobile_teaser1_en', 'Build your own race track, motorway or giant carpark (just like the M25!) with the Automobile range. We have every sign, traffic cone and traffic light we could steal from the Highways Agency!|Click on an item for more details.'),
@@ -584,58 +610,59 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (48, 29, 5, '1', 'Uber Ball', 56, 0, '', '1', '0', '1', 'default_3x3', 'catalog_frontpage_headline2_en|football_teaser', 'Whether you call it soccer, football or futbol... you can enjoy the game right here in Habbo! Get a ball and kick it, bounce it, pass it, control it and steal it!|Click on an item for more details.'),
 (49, 38, 0, '1', 'Offers', 70, 0, '', '1', '0', '0', 'marketplace', 'catalog_marketplace_header_en', 'This page lists all the current offers of furniture people are selling on the hotel. Anything you like the look of?|Click on an item for more details.'),
 (50, 38, 0, '1', 'My Sales', 71, 0, '', '1', '0', '0', 'marketplace_own_items', 'catalog_marketplace_header_en', 'This is a list of all the items you are currently selling on The Marketplace. |Click on an item for more details.'),
-(51, 2, 71, '1', 'USVA', 129, 0, '', '1', '0', '0', 'default_3x3', 'catalog_header_USVA|Catalog_teaser_USVA', 'You don''t need to be in college to use this furni line!|Click on an item for more details.\r\n'),
-(60, 2, 44, '1', 'Look & Feel', 55, 0, '', '1', '0', '0', 'spaces_new', 'look_feel_text', 'Floors, wallpapers, landscapes - get a groovy combination for your room. Use our virtual room preview below to test out the combinations before you buy. Select the design and color you like and click buy.'),
-(61, 2, 72, '1', 'Valentines', 62, 0, '', '1', '0', '0', 'default_3x3', 'Valentines_header|valentines_catalog_teaser', 'Love is in the air, love for the Valentines range that is! We have every essential item you''ll need to make it feel like you actually have someone to love you. No more pretending to be a lonely geek - you can have a pixel love heart, love sofa or even love stickies - yay!|Click on an item for more details.'),
-(62, 2, 12, '1', 'Bling', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_header_bling_en|catalog_teaser_bling11', 'Wanna be de big Daddy and live in a luxxxury penthouse suite? Yeah well, we all know that won''t happen. bubble burst. How about you use some items from this range (if you can even afford them) to dress up your puny council flat instead?|Click on an item for more details.'),
-(63, 2, 23, '1', 'Easter', 25, 0, '', '1', '0', '0', 'default_3x3', 'catalog_easter_headline1|catalog_easter_teaser1', 'Like chocolate? You''ll love Easter. The Easter bunny is right here awaiting his time to shine and deliver some eggy goodness. If you can''t wait, why dont you buy some sneaky Easter eggs anyway? I won''t tell if you don''t!|Click on an item for more details.'),
-(64, 2, 26, '1', 'Flower Power', 73, 0, '', '1', '0', '0', 'default_3x3', 'flowerpower_header_en|flowerpower_teaser_en', 'Funny flowers at the ready people! These flowers may not look very good but atleast they smell like flowers... kinda... I wouldn''t give these to your girlfriends, they might just eat her! (unless that''s what you wanted, ofcourse...) |Click on an item for more details.'),
-(65, 2, 34, '1', 'Halloween', 34, 0, '', '1', '0', '0', 'default_3x3', 'catalog_halloween_headline1|catalog_halloween_teaser_en', 'Spooky... whohohohhoooooo. If you couldn''t tell, that was my ghost impression. We all know ghouls, ghosts and vampies aren''t real but for all the free sweets, is it not worth pretending for just one night?|Click on an item for more details.'),
-(66, 2, 73, '1', 'Virus & Hospital', 42, 0, '', '1', '0', '0', 'default_3x3', 'virus|virus1', 'Popular to contrary belief, there was really no "special epidemic" going around and this furniture is really no different. This is just normal NHS standard equiptment! If your looking for something cleaner, go to the private ward and visit the ''Hospital'' page. |Click on an item for more details.'),
-(67, 2, 74, '1', 'Voodoo', 79, 0, '', '1', '0', '0', 'default_3x3', 'catalog_voodoo_header_en|catalog_voodoo_teaser', 'Have you always wondered about that strange man down the road who practices those suspicous rituals? or maybe that woman across the street who dances around her backgarden with a totem pole? Well, atleast you have some furniture to buy them for their next Birthday now.|Click on an item for more details.'),
-(68, 2, 15, '1', 'Christmas 06', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_xmas_headline2_en|catalog_xmas_teaser', 'Ho, ho ho! Merry Christmas! With the Christmas range your room can have that festive feel 24/7, baby! We''ve got everything for that authentic Christmas spirit - lights, trees and reindeer poo!|Click on an item for more details.'),
-(69, 2, 14, '1', 'Celebration', 91, 0, '', '1', '0', '0', 'default_3x3', 'newyears|catalog_limited_teaser_en', 'Throw a party, have a bash, join in the celebration! You can even buy some fantastic fireworks for special occassions, parties or just for lulz! Snowlight accepts no responsibilty for accidents caused by the misure of virtual fireworks.|Click on an item for more details.'),
-(70, 2, 21, '1', 'Diner', 72, 0, '', '1', '0', '0', 'default_3x3', 'catalog_diner_header_en|catalog_diner_teaser_en', 'Design your own 50''s Diner with this restaurant range in every single colour you could think of! This collection also features many timeless (and tasteless...) dishes for that real greasy spooon atmosphere.|Click on an item for more details.'),
-(71, 2, 32, '1', 'Grunge', 32, 0, '', '1', '0', '0', 'default_3x3', 'catalog_grunge_headline1|catalog_grunge_teaser', 'Homeless, a tramp or maybe just a teenager? If you like laying on AIDS-riden mattresses you found behind your mate''s council flat, why not do it online too? Just remember the 50 credit fine for graffiting the Welcome Lounge please!|Click on an item for more details.'),
-(72, 2, 29, '1', 'Glass', 29, 0, '', '1', '0', '0', 'default_3x3', 'catalog_glass_headline1|catalog_glass_teaser1', 'Recycled glass with rubber non-slip surfaces makes for a strange but professional look. Perfect for high rise buildings and offices to optimise lighting and the feel of openess and space. Don''t worry, its shatterproof safety glass!|Click on an item for more details.'),
-(73, 2, 30, '1', 'Gothic', 30, 0, '', '1', '0', '0', 'default_3x3', 'catalog_gothic_headline1|catalog_gothic_teaser1', 'With this range you can recreate Doomsday, a medieval courtyard or just a really depressing church. This range suits those who lurk in the shadows and crawl out to start their day just as the sun sets. Dim candle light is perfect for those eyes that have never seen the bright light of day.|Click on an item for more details.\r\n|Click on an item for more details.'),
-(74, 2, 58, '1', 'Romantique', 50, 0, '', '1', '0', '0', 'default_3x3', 'catalog_romantique_headline1|catalog_romantique_teaser1', 'Found in the back of an old French warehouse this furniture was stored long ago and forgotten about until found and restored to its former glory. This collection looks great in any budoir or boutique and comes in several different colours!|Click on an item for more details.'),
-(75, 2, 50, '1', 'Neon', 41, 0, '', '1', '0', '0', 'default_3x3', 'catalog_neon_header1_en|catalog_neon_teaser1_en', 'Start up the music and invite some friends over! Install some of our fabulous lights, dance floors and disco balls to get the party going. This is the right range for you party animals out there, so come and get some!|Click on an item for more details.'),
-(76, 2, 61, '1', 'Sci-Fi', 53, 0, '', '1', '0', '0', 'default_3x3', 'sf_header_en|sf_teaser_en', 'Beep bip beeboo bop. Bipbipbip beep bopbop beeeeep bib bob bib. Beeeeb, bopbipbipbob beep, beep, beep.  Bipbipbip beep bopbop beeeeep bib. beep beep beep, boooohhhooooop. Transmission terminated.|Click on an item for more details.'),
-(77, 2, 19, '1', 'Country', 21, 0, '', '1', '0', '0', 'default_3x3', 'country_header1_en_001|country_teaser1_en', 'Red and white weather boards are a symbol of the good life out in the country, so go buy some. This range features all you need for a slow life in the middle of nowhere - crop patches, rain and a broken tractor.|Click on an item for more details.'),
-(78, 2, 56, '1', 'Relax', 49, 0, '', '1', '0', '0', 'default_3x3', 'rela_header_en|rela_teaser_en', 'As one very knowledgeable singer once said - "Relax, take it easy". Take Mika''s advice and do exactly that - build a sanctuary of peace away from your hectic lifestyle to finally take a break and calm down.|Click on an item for more details.'),
-(79, 2, 70, '1', 'Urban', 26, 0, '', '1', '0', '0', 'default_3x3', 'urban_header_en|urban_teaser_en', 'An extentsion of ''Grunge'' this range ties in perfectly for your streets, cities and council estates. Chain link fences are the future of modern British schools in rough areas - stock up before they''ve all gone I tell you!|Click on an item for more details.'),
-(80, 2, 60, '1', 'Runway', 74, 0, '', '1', '0', '0', 'default_3x3', 'runway_header_en|runway_teaser_en', 'Set up a cat walk, fashion show or boutique with the Runway range. It has everything a budding designer needs to create some new threads. You could even use this range in a salon or hairdressers!|Click on an item for more details.'),
-(81, 2, 51, '1', 'Orgie', 235, 0, '', '1', '0', '0', 'default_3x3', 'orgierange|', 'The latest range from Ann Summers, the Orgie line. Made of soft, wipe clean plastic, its perfect for any three, four or fivesome!|Click on an item for more details.'),
+(51, 2, 73, '1', 'USVA', 129, 0, '', '1', '0', '0', 'default_3x3', 'catalog_header_USVA|Catalog_teaser_USVA', 'You don''t need to be in college to use this furni line!|Click on an item for more details.\r\n'),
+(52, 2, 20, '0', 'Coco', 127, 0, '', '1', '0', '0', 'default_3x3', 'catalog_teaser_coco|coconew', 'Wooden yet comfortable furniture that wouldn''t look out of place in a treetop house!|Click on an item for details.'),
+(60, 2, 46, '1', 'Look & Feel', 55, 0, '', '1', '0', '0', 'spaces_new', 'look_feel_text', 'Floors, wallpapers, landscapes - get a groovy combination for your room. Use our virtual room preview below to test out the combinations before you buy. Select the design and color you like and click buy.'),
+(61, 2, 74, '1', 'Valentines', 62, 0, '', '1', '0', '0', 'default_3x3', 'Valentines_header|valentines_catalog_teaser', 'Love is in the air, love for the Valentines range that is! We have every essential item you''ll need to make it feel like you actually have someone to love you. No more pretending to be a lonely geek - you can have a pixel love heart, love sofa or even love stickies - yay!|Click on an item for more details.'),
+(62, 2, 13, '1', 'Bling', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_header_bling_en|catalog_teaser_bling11', 'Wanna be de big Daddy and live in a luxxxury penthouse suite? Yeah well, we all know that won''t happen. bubble burst. How about you use some items from this range (if you can even afford them) to dress up your puny council flat instead?|Click on an item for more details.'),
+(63, 2, 25, '1', 'Easter', 25, 0, '', '1', '0', '0', 'default_3x3', 'catalog_easter_headline1|catalog_easter_teaser1', 'Like chocolate? You''ll love Easter. The Easter bunny is right here awaiting his time to shine and deliver some eggy goodness. If you can''t wait, why dont you buy some sneaky Easter eggs anyway? I won''t tell if you don''t!|Click on an item for more details.'),
+(64, 2, 28, '1', 'Flower Power', 73, 0, '', '1', '0', '0', 'default_3x3', 'flowerpower_header_en|flowerpower_teaser_en', 'Funny flowers at the ready people! These flowers may not look very good but atleast they smell like flowers... kinda... I wouldn''t give these to your girlfriends, they might just eat her! (unless that''s what you wanted, ofcourse...) |Click on an item for more details.'),
+(65, 2, 36, '1', 'Halloween', 34, 0, '', '1', '0', '0', 'default_3x3', 'catalog_halloween_headline1|catalog_halloween_teaser_en', 'Spooky... whohohohhoooooo. If you couldn''t tell, that was my ghost impression. We all know ghouls, ghosts and vampies aren''t real but for all the free sweets, is it not worth pretending for just one night?|Click on an item for more details.'),
+(66, 2, 75, '1', 'Virus & Hospital', 42, 0, '', '1', '0', '0', 'default_3x3', 'virus|virus1', 'Popular to contrary belief, there was really no "special epidemic" going around and this furniture is really no different. This is just normal NHS standard equiptment! If your looking for something cleaner, go to the private ward and visit the ''Hospital'' page. |Click on an item for more details.'),
+(67, 2, 76, '1', 'Voodoo', 79, 0, '', '1', '0', '0', 'default_3x3', 'catalog_voodoo_header_en|catalog_voodoo_teaser', 'Have you always wondered about that strange man down the road who practices those suspicous rituals? or maybe that woman across the street who dances around her backgarden with a totem pole? Well, atleast you have some furniture to buy them for their next Birthday now.|Click on an item for more details.'),
+(68, 2, 16, '1', 'Christmas 06', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_xmas_headline2_en|catalog_xmas_teaser', 'Ho, ho ho! Merry Christmas! With the Christmas range your room can have that festive feel 24/7, baby! We''ve got everything for that authentic Christmas spirit - lights, trees and reindeer poo!|Click on an item for more details.'),
+(69, 2, 15, '1', 'Celebration', 91, 0, '', '1', '0', '0', 'default_3x3', 'newyears|catalog_limited_teaser_en', 'Throw a party, have a bash, join in the celebration! You can even buy some fantastic fireworks for special occassions, parties or just for lulz! Snowlight accepts no responsibilty for accidents caused by the misure of virtual fireworks.|Click on an item for more details.'),
+(70, 2, 23, '1', 'Diner', 72, 0, '', '1', '0', '0', 'default_3x3', 'catalog_diner_header_en|catalog_diner_teaser_en', 'Design your own 50''s Diner with this restaurant range in every single colour you could think of! This collection also features many timeless (and tasteless...) dishes for that real greasy spooon atmosphere.|Click on an item for more details.'),
+(71, 2, 34, '1', 'Grunge', 32, 0, '', '1', '0', '0', 'default_3x3', 'catalog_grunge_headline1|catalog_grunge_teaser', 'Homeless, a tramp or maybe just a teenager? If you like laying on AIDS-riden mattresses you found behind your mate''s council flat, why not do it online too? Just remember the 50 credit fine for graffiting the Welcome Lounge please!|Click on an item for more details.'),
+(72, 2, 31, '1', 'Glass', 29, 0, '', '1', '0', '0', 'default_3x3', 'catalog_glass_headline1|catalog_glass_teaser1', 'Recycled glass with rubber non-slip surfaces makes for a strange but professional look. Perfect for high rise buildings and offices to optimise lighting and the feel of openess and space. Don''t worry, its shatterproof safety glass!|Click on an item for more details.'),
+(73, 2, 32, '1', 'Gothic', 30, 0, '', '1', '0', '0', 'default_3x3', 'catalog_gothic_headline1|catalog_gothic_teaser1', 'With this range you can recreate Doomsday, a medieval courtyard or just a really depressing church. This range suits those who lurk in the shadows and crawl out to start their day just as the sun sets. Dim candle light is perfect for those eyes that have never seen the bright light of day.|Click on an item for more details.\r\n|Click on an item for more details.'),
+(74, 2, 60, '1', 'Romantique', 50, 0, '', '1', '0', '0', 'default_3x3', 'catalog_romantique_headline1|catalog_romantique_teaser1', 'Found in the back of an old French warehouse this furniture was stored long ago and forgotten about until found and restored to its former glory. This collection looks great in any budoir or boutique and comes in several different colours!|Click on an item for more details.'),
+(75, 2, 52, '1', 'Neon', 41, 0, '', '1', '0', '0', 'default_3x3', 'catalog_neon_header1_en|catalog_neon_teaser1_en', 'Start up the music and invite some friends over! Install some of our fabulous lights, dance floors and disco balls to get the party going. This is the right range for you party animals out there, so come and get some!|Click on an item for more details.'),
+(76, 2, 63, '1', 'Sci-Fi', 53, 0, '', '1', '0', '0', 'default_3x3', 'sf_header_en|sf_teaser_en', 'Beep bip beeboo bop. Bipbipbip beep bopbop beeeeep bib bob bib. Beeeeb, bopbipbipbob beep, beep, beep.  Bipbipbip beep bopbop beeeeep bib. beep beep beep, boooohhhooooop. Transmission terminated.|Click on an item for more details.'),
+(77, 2, 21, '1', 'Country', 21, 0, '', '1', '0', '0', 'default_3x3', 'country_header1_en_001|country_teaser1_en', 'Red and white weather boards are a symbol of the good life out in the country, so go buy some. This range features all you need for a slow life in the middle of nowhere - crop patches, rain and a broken tractor.|Click on an item for more details.'),
+(78, 2, 58, '1', 'Relax', 49, 0, '', '1', '0', '0', 'default_3x3', 'rela_header_en|rela_teaser_en', 'As one very knowledgeable singer once said - "Relax, take it easy". Take Mika''s advice and do exactly that - build a sanctuary of peace away from your hectic lifestyle to finally take a break and calm down.|Click on an item for more details.'),
+(79, 2, 72, '1', 'Urban', 26, 0, '', '1', '0', '0', 'default_3x3', 'urban_header_en|urban_teaser_en', 'An extentsion of ''Grunge'' this range ties in perfectly for your streets, cities and council estates. Chain link fences are the future of modern British schools in rough areas - stock up before they''ve all gone I tell you!|Click on an item for more details.'),
+(80, 2, 62, '1', 'Runway', 74, 0, '', '1', '0', '0', 'default_3x3', 'runway_header_en|runway_teaser_en', 'Set up a cat walk, fashion show or boutique with the Runway range. It has everything a budding designer needs to create some new threads. You could even use this range in a salon or hairdressers!|Click on an item for more details.'),
+(81, 2, 53, '1', 'Orgie', 235, 0, '', '1', '0', '0', 'default_3x3', 'orgierange|', 'The latest range from Ann Summers, the Orgie line. Made of soft, wipe clean plastic, its perfect for any three, four or fivesome!|Click on an item for more details.'),
 (82, 5, 4, '1', 'Pixel Collectable', 3, 0, '', '1', '0', '0', 'default_3x3', 'pixel1|catalog_pxl_teaser2_en', 'The Pixel Collectable is the ultimate collectors.|Click on an item for more details.'),
 (83, 2, 8, '1', 'Asian', 15, 0, '', '1', '0', '0', 'default_3x3', 'catalog_asian_headline1|catalog_asian_teaser1', 'Chinese New Year or Chinese takeaway? Who cares when you can have a Chinese themed room every day and any day you want! Please do not disturb other guests or block the corridors with oversized Chinese dragons, thankyou.|Click on an item for more details.'),
-(84, 2, 40, '1', 'Japan', 36, 0, '', '1', '0', '0', 'default_3x3', 'catalog_jap_headline1|catalog_jap_teaser3_en', 'You''ll always feel calm, collected and very slightly fishy with this range. You can line your floors with mats, light the room with lanterns and eat sushi until your little heart is content with this authentic collection of orignal Japanese furniture exported straight to the hotel.|Click on an item for more details.'),
+(84, 2, 42, '1', 'Japan', 36, 0, '', '1', '0', '0', 'default_3x3', 'catalog_jap_headline1|catalog_jap_teaser3_en', 'You''ll always feel calm, collected and very slightly fishy with this range. You can line your floors with mats, light the room with lanterns and eat sushi until your little heart is content with this authentic collection of orignal Japanese furniture exported straight to the hotel.|Click on an item for more details.'),
 (85, 2, 3, '1', 'Alhambra', 12, 0, '', '1', '0', '0', 'default_3x3', 'catalog_alh_headline1_en|dining_area_illustration', 'For those Arabian nights in some far off country with lots of sand, choose Alhambra, atleast it has a tea tray and a pile of deserts to take with you. All our windows come with shutters and are guaranteed for 3 years under our warranty policy.|Click on an item for more details.'),
-(86, 2, 67, '1', 'Tiki', 59, 0, '', '1', '0', '0', 'default_3x3', 'catalog_tiki_header1_en|catalog_tiki_teaser1_en', 'Create a tropical island atmosphere with golden sand, crashing waves and blazing sun. We have all you need for your own tiki paradise or tropical retreat. Perfect the look with with a toucan or a pretty little group of butterflies.|Click on an item for more details.'),
-(87, 2, 31, '1', 'Greek', 31, 0, '', '1', '0', '0', 'default_3x3', 'catalog_greek_header1|catalog_greek_teaser1', 'Ancient Greece was a civilisation of grand, impressive building delicately carved out of the finest stone. We strive to emulate this with this impressive range of well-built and well-made original stone pieces.|Click on an item for more details.'),
-(88, 2, 62, '1', 'Shalimar', 54, 0, '', '1', '0', '0', 'default_3x3', 'catalog_shal_header1_en|catalog_shal_teaser_en', 'This oddly royal collection features stunning floors, beautiful water features and silky soft drapes. If you want to feel like a Bollywood prince or princess just for a day dress up your palace with some Shalimar accessories.|Click on an item for more details.'),
+(86, 2, 69, '1', 'Tiki', 59, 0, '', '1', '0', '0', 'default_3x3', 'catalog_tiki_header1_en|catalog_tiki_teaser1_en', 'Create a tropical island atmosphere with golden sand, crashing waves and blazing sun. We have all you need for your own tiki paradise or tropical retreat. Perfect the look with with a toucan or a pretty little group of butterflies.|Click on an item for more details.'),
+(87, 2, 33, '1', 'Greek', 31, 0, '', '1', '0', '0', 'default_3x3', 'catalog_greek_header1|catalog_greek_teaser1', 'Ancient Greece was a civilisation of grand, impressive building delicately carved out of the finest stone. We strive to emulate this with this impressive range of well-built and well-made original stone pieces.|Click on an item for more details.'),
+(88, 2, 64, '1', 'Shalimar', 54, 0, '', '1', '0', '0', 'default_3x3', 'catalog_shal_header1_en|catalog_shal_teaser_en', 'This oddly royal collection features stunning floors, beautiful water features and silky soft drapes. If you want to feel like a Bollywood prince or princess just for a day dress up your palace with some Shalimar accessories.|Click on an item for more details.'),
 (89, 2, 11, '1', 'Bensalem', 18, 0, '', '1', '0', '0', 'default_3x3', 'catalog_lc_headline2_en|catalog_lc_teaser1_en_001', 'Looking to meet Spongebob, Patrick or maybe even Squidward? You''ll need to plan an appropriate room for them to come and stay in - they''re sea creatures, stupid, they can''t live in the air! The Bensalem range and a moodlight should achieve this effect nicely!|Click on an item for more details.'),
-(90, 2, 45, '1', 'Lost Tribe', 38, 0, '', '1', '0', '0', 'default_3x3', 'LT_header_en|LT_teaser_en', 'A forgotten land, a timeless island, an overlooked, ancient city. Recreate the feel of a Lost Tribe cut off from humanity and left to develop secret traditions and rituals. Enter the land that civilisation and time forgot with this collection of unique items.|Click on an item for more details.'),
-(91, 5, 2, '1', 'Collectables', 3, 0, '', '1', '0', '0', 'default_3x3', 'collectibles_2|catalog_cltbs_teaser_en', 'Collect your way to the riches! Collectables are special furniture sold only for a limited period of time. They cost wee bit more, but make up with amazing trade value.|Click on an item for more details.'),
-(92, 2, 64, '1', 'Sports', 56, 0, '', '1', '0', '0', 'default_3x3', 'catalog_sports_headline1|catalog_sports_teaser1', 'Starting a new excersice program? Planning to go the GYM? Why don''t you build a fitness centre in your own home?! With the sports collection you can do exactly that - get fit without everyone laughing at you on the rowing machine!|Click on an item for more details.'),
-(93, 2, 37, '1', 'Hollywood', 33, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_habbowood_headline1_en|ctlg_habbowood_teaser1_en', '3... 2... 1... You can be the star of the show when you buy a piece from this collection! Your friends will be amazed and it will look spectacular in your room just like those stunning celebrities on the big screen! The end.|Click on an item for more details.'),
-(94, 5, 3, '1', 'Promotional Items', 28, 0, '', '1', '0', '0', 'default_3x3', 'catalog_rares_headline1', 'These items may not all be functional - if you need an item setting please contact an administrator. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click an item for more details.'),
-(96, 5, 1, '1', 'Rares', 69, 0, '', '1', '0', '0', 'default_3x3', 'catalog_rares_headline1|raresteaser', 'All general rares (for staff use only) are found in this catagory. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click on an item for more details.'),
-(97, 2, 38, '1', 'Iced', 72, 0, '', '1', '0', '0', 'default_3x3', 'catalog_iced_headline1|catalog_iced_teaser1', 'Comfy, squidgy and very, very cool. Iced is all of these in one. With so many colours, all you need to worry about is which one you like the most! From shelves to gates, we have everything you need to make a snappy room.|Click on an item for more details.'),
+(90, 2, 47, '1', 'Lost Tribe', 38, 0, '', '1', '0', '0', 'default_3x3', 'LT_header_en|LT_teaser_en', 'A forgotten land, a timeless island, an overlooked, ancient city. Recreate the feel of a Lost Tribe cut off from humanity and left to develop secret traditions and rituals. Enter the land that civilisation and time forgot with this collection of unique items.|Click on an item for more details.'),
+(91, 5, 1, '1', 'Collectables', 3, 0, '', '1', '0', '0', 'default_3x3', 'collectibles_2|catalog_cltbs_teaser_en', 'Collect your way to the riches! Collectables are special furniture sold only for a limited period of time. They cost wee bit more, but make up with amazing trade value.|Click on an item for more details.'),
+(92, 2, 66, '1', 'Sports', 56, 0, '', '1', '0', '0', 'default_3x3', 'catalog_sports_headline1|catalog_sports_teaser1', 'Starting a new excersice program? Planning to go the GYM? Why don''t you build a fitness centre in your own home?! With the sports collection you can do exactly that - get fit without everyone laughing at you on the rowing machine!|Click on an item for more details.'),
+(93, 2, 39, '1', 'Hollywood', 33, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_habbowood_headline1_en|ctlg_habbowood_teaser1_en', '3... 2... 1... You can be the star of the show when you buy a piece from this collection! Your friends will be amazed and it will look spectacular in your room just like those stunning celebrities on the big screen! The end.|Click on an item for more details.'),
+(94, 5, 5, '1', 'Promotional Items', 28, 0, '', '1', '0', '0', 'default_3x3', 'catalog_rares_headline1', 'These items may not all be functional - if you need an item setting please contact an administrator. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click an item for more details.'),
+(96, 5, 8, '1', 'Rares', 69, 0, '', '1', '0', '0', 'default_3x3', 'catalog_rares_headline1|raresteaser', 'All general rares (for staff use only) are found in this catagory. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click on an item for more details.'),
+(97, 2, 40, '1', 'Iced', 72, 0, '', '1', '0', '0', 'default_3x3', 'catalog_iced_headline1|catalog_iced_teaser1', 'Comfy, squidgy and very, very cool. Iced is all of these in one. With so many colours, all you need to worry about is which one you like the most! From shelves to gates, we have everything you need to make a snappy room.|Click on an item for more details.'),
 (98, 2, 7, '1', 'Area', 14, 0, '', '1', '0', '0', 'default_3x3', 'catalog_area_headline1|catalog_area_teaser1', 'Area is a traditionally fashioned, studious collection of furniture. It''s natural woody feel tied with its functionality make for a rather pleasing and atmospheric room. Settle down and snuggle up in one of the sumptious sofas or sit up and buckle down on a stool - it''s your choice with Area.|Click on an item for more details.'),
-(99, 2, 55, '1', 'Pura', 48, 0, '', '1', '0', '0', 'default_3x3', 'catalog_pura_headline1|catalog_pura_teaser1', 'Simple and clean lines make up this beautifully defined but unobtrusive collection of furniture. Modern, sleek and perfect pieces make this range suitable for many applications in everyday life - the home and the workplace.|Click on an item for more details.'),
-(100, 5, 5, '1', 'New Furniture', 10, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', 'New furniture that has been imported into the database and is ready for sorting. These item are not fully functional yet - please do not harass us about this, we know they are here and waiting to be set.|Click an item for details.'),
-(101, 5, 2, '1', 'Rare Trophies', 60, 0, '', '1', '0', '0', 'trophies', 'catalog_trophies_headline1', 'All rare trophies (for staff use only) are found in this catagory. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click on an item for more details.\r\n\r\n'),
-(102, 2, 20, '1', 'Cubie', 100, 0, '', '1', '0', '0', 'default_3x3', 'catalog_cubie_header_en|catalog_cubie_teaser', 'A furturistic but oddly appealing range for younger generations. With bright, bold colours and a chunky, modern feel Cubie is Mode''s big brother and he is here to stay.|Click on an item for more details.'),
-(103, 2, 18, '1', 'City', 106, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', 'From the bright lights of skyscrapers to those charming, classical street corners. You can go to town on your city with this up market selection of metropolitan furniture.|Click on an item for more details.'),
-(104, 2, 75, '1', 'Waasa', 99, 0, '', '1', '0', '0', 'default_3x3', 'waasa_catalogue_header|waasa_catalog_teaser', 'A more traditional range that would blend perfectly into any home office or study. This range has all the essential tools for a professional proscratinator.|Click on an item for more details.'),
-(105, 2, 42, '1', 'Kuurna', 104, 0, '', '1', '0', '0', 'default_3x3', 'kuurna1|kuurnaads', 'A new, clean and comfy range. Perfect for that first room with it''s simple look but comfy, calm feel. Even better - you can buy it with pixels!|Click on an item for more details.'),
+(99, 2, 57, '1', 'Pura', 48, 0, '', '1', '0', '0', 'default_3x3', 'catalog_pura_headline1|catalog_pura_teaser1', 'Simple and clean lines make up this beautifully defined but unobtrusive collection of furniture. Modern, sleek and perfect pieces make this range suitable for many applications in everyday life - the home and the workplace.|Click on an item for more details.'),
+(100, 5, 3, '1', 'New Furniture', 10, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', 'New furniture that has been imported into the database and is ready for sorting. These item are not fully functional yet - please do not harass us about this, we know they are here and waiting to be set.|Click an item for details.'),
+(101, 5, 7, '1', 'Rare Trophies', 60, 0, '', '1', '0', '0', 'trophies', 'catalog_trophies_headline1', 'All rare trophies (for staff use only) are found in this catagory. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click on an item for more details.\r\n\r\n'),
+(102, 2, 22, '1', 'Cubie', 100, 0, '', '1', '0', '0', 'default_3x3', 'catalog_cubie_header_en|catalog_cubie_teaser', 'A furturistic but oddly appealing range for younger generations. With bright, bold colours and a chunky, modern feel Cubie is Mode''s big brother and he is here to stay.|Click on an item for more details.'),
+(103, 2, 19, '1', 'City', 106, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', 'From the bright lights of skyscrapers to those charming, classical street corners. You can go to town on your city with this up market selection of metropolitan furniture.|Click on an item for more details.'),
+(104, 2, 77, '1', 'Waasa', 99, 0, '', '1', '0', '0', 'default_3x3', 'waasa_catalogue_header|waasa_catalog_teaser', 'A more traditional range that would blend perfectly into any home office or study. This range has all the essential tools for a professional proscratinator.|Click on an item for more details.'),
+(105, 2, 44, '1', 'Kuurna', 104, 0, '', '1', '0', '0', 'default_3x3', 'kuurna1|kuurnaads', 'A new, clean and comfy range. Perfect for that first room with it''s simple look but comfy, calm feel. Even better - you can buy it with pixels!|Click on an item for more details.'),
 (106, 2, 5, '1', 'Anna', 104, 0, '', '1', '0', '0', 'default_3x3', 'catalog_anna_header|catalog_anna_teaser|catalog_special_txtbg2', 'Named after Anna, the russian computer virus, this furni range brings you extremely colorful, modern, soviet-built comfort at an affordable price.|Click on an item for more details.|In Soviet Russia, colorful sofa sits on you!'),
-(107, 5, 4, '1', 'Promotional Posters', 28, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', 'These items may not all be functional - if you need an item setting please contact an administrator. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click an item for more details.\r\n'),
-(108, 5, 6, '1', 'System', 5, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', 'All internal furniture, broken furniture and currently un-used furniture. Furniture from this catagory should not be issued to users. If you believe a piece of furniture is here in error, contact an administrator.'),
-(112, 2, 49, '1', 'Moodlights', 115, 0, '', '1', '0', '0', 'default_3x3', 'catalog_dimmers_header_en|dimmers_teaser', 'Our range of moodlights allow you to control the atmosphere and transform your room in just a click. What will your room look like? Click the switch and find out now!|Click on an item for more details.'),
-(113, 2, 22, '1', 'Drago', 110, 0, '', '1', '0', '0', 'default_3x3', 'drago_catalog_header2|drago_catalog_teaser2', 'Deep underground, among secrets and treasures buried for ages and ages... discover the hidden world of Dragons!|Click on an item for details.'),
-(114, 2, 27, '1', 'Frozen', 13, 0, '', '1', '0', '0', 'default_3x3', 'catalog_arc_header1_en|catalog_arc_teaser1_en', 'Looking for a cold-hearted, icy Christmas feel? You''ve come to right place . Freeze right there and take a look at this range. Please note: this range may melt when combined with heat.|Click on an item for more details.'),
+(107, 5, 6, '1', 'Promotional Posters', 28, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', 'These items may not all be functional - if you need an item setting please contact an administrator. Please do not give these out in mass - staff found abusing their access to rare furniture will be punished.|Click an item for more details.\r\n'),
+(108, 5, 9, '1', 'System', 5, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', 'All internal furniture, broken furniture and currently un-used furniture. Furniture from this catagory should not be issued to users. If you believe a piece of furniture is here in error, contact an administrator.'),
+(112, 2, 51, '1', 'Moodlights', 115, 0, '', '1', '0', '0', 'default_3x3', 'catalog_dimmers_header_en|dimmers_teaser', 'Our range of moodlights allow you to control the atmosphere and transform your room in just a click. What will your room look like? Click the switch and find out now!|Click on an item for more details.'),
+(113, 2, 24, '1', 'Drago', 110, 0, '', '1', '0', '0', 'default_3x3', 'drago_catalog_header2|drago_catalog_teaser2', 'Deep underground, among secrets and treasures buried for ages and ages... discover the hidden world of Dragons!|Click on an item for details.'),
+(114, 2, 29, '1', 'Frozen', 13, 0, '', '1', '0', '0', 'default_3x3', 'catalog_arc_header1_en|catalog_arc_teaser1_en', 'Looking for a cold-hearted, icy Christmas feel? You''ve come to right place . Freeze right there and take a look at this range. Please note: this range may melt when combined with heat.|Click on an item for more details.'),
 (115, 118, 13, '1', 'Dragons', 109, 0, '', '1', '0', '0', 'pets', 'catalog_pet_headline1|', 'Keepers of the Dragon, beware... their fire might be lethal, but win a Dragon''s heart and it will be your most loyal companion forever!||Name your Dragon:|Pick a color/breed:'),
 (117, 132, 2, '1', 'Music Discs', 4, 0, '', '1', '0', '0', 'soundmachine', 'catalog_djshop_headline1|catalog_djshop_teaser1', 'These are music discs.|Go listen!'),
 (118, -1, 4, '1', 'Pets Shop', 8, 2, '', '1', '0', '0', 'pets2', 'catalog_pet_headline1|ctlg_pet_note', 'Pets are inhabitants of uberHotel too, so each pet owner needs to know a bit about them. Look after your pet by looking through our key points below.||- You cannot trade or give away pets. Once you purchase them, they will be yours forever.\r\n- You can own as many as you want, but you can have no more than 5 pets per room.\r\n- You can take pets with you to other rooms, should the room owner allow you to do so.\r\n- Your pet needs to be trained before it''ll listen to your commands. By training your pets, you can gain some awesome achievements as well.'),
@@ -656,22 +683,22 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (133, 132, 1, '1', 'Trax Machines', 4, 0, '', '1', '0', '0', 'default_3x3', 'catalog_djshop_headline1|catalog_djshop_teaser1', 'Buy your Trax machines here, ready to load with all your wonderful, musical creations! Check the Sound Sets page for all the discs you could use!|Click on an item for more information.'),
 (134, 6, 4, '1', 'Club Gifts', 75, 0, 'moderation_tool', '1', '0', '0', 'club_gifts', 'hc2_clubtitle|', NULL),
 (135, 3, 1, '1', 'Credits Exchange', 6, 5, '', '1', '0', '0', 'default_3x3', 'catalog_bank_headline1|catalog_bank_teaser|catalog_special_txtbg1', 'Exchange is where you can convert your Credits into a tradable currency. You can then use this currency to trade for Furni or just show off your riches in your room.|Click on an item for more details.|Refundable & Goods'),
-(136, 2, 54, '1', 'Prison', 240, 0, '', '1', '0', '0', 'default_3x3', 'prisonheader|prisonteaser', 'Hey, he''s scaping! Just Kidding, no one''s getting out of these high security cells!|Click on an item for more details.'),
-(137, 2, 47, '1', 'Memorial', 263, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_limited_headline1_en|catalog_limited_teaser|catalog_special_txtbg2', 'Available this week only and NEVER to be sold again, special Memorial Furni. As we have a fond farewell to Old Habbo and welcome New Habbo, bag yourself a highly collectible momento.|Click on an item for more details.|Habbo Memorial'),
-(138, 2, 69, '1', 'Twilight', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_twilight_header_en|catalog_teaser_twilight', 'I''ve never read the book, all I know is it has vampires playing basket ball and some heart throb called Edward Cullen, but the furni looks good!|Click on an item for more details.'),
+(136, 2, 56, '1', 'Prison', 240, 0, '', '1', '0', '0', 'default_3x3', 'prisonheader|prisonteaser', 'Hey, he''s scaping! Just Kidding, no one''s getting out of these high security cells!|Click on an item for more details.'),
+(137, 2, 49, '1', 'Memorial', 263, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_limited_headline1_en|catalog_limited_teaser|catalog_special_txtbg2', 'Available this week only and NEVER to be sold again, special Memorial Furni. As we have a fond farewell to Old Habbo and welcome New Habbo, bag yourself a highly collectible momento.|Click on an item for more details.|Habbo Memorial'),
+(138, 2, 71, '1', 'Twilight', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_twilight_header_en|catalog_teaser_twilight', 'I''ve never read the book, all I know is it has vampires playing basket ball and some heart throb called Edward Cullen, but the furni looks good!|Click on an item for more details.'),
 (139, 2, 2, '1', 'Africa', 233, 0, '', '1', '0', '0', 'default_3x3', 'africaheader|newafrica', 'The new African furniture range is here!|Click on an item for more details.'),
 (140, 2, 4, '1', 'American Idol', 42, 0, '', '1', '0', '0', 'default_3x3', 'catalog_header_AI1_en|catalog_teaser_AI1_en', 'Host your own American Idol show with this replica furniture! All that''s missing is a Randy Jackson lookalike!|Click on an item for more details.'),
-(141, 2, 63, '1', 'Spiderwick', 28, 0, '', '1', '0', '0', 'default_3x3', 'spiderwick|ctlg_teaser_spider', 'The Spiderwick Exhibition has arrived at the "Museum of Invention" in Habbo Hotel. Grab yourself a limited edition souvenir item of Furni below brefore it''s too late.|Click on an item for more details.'),
-(142, 2, 39, '1', 'Igor', 239, 0, '', '1', '0', '0', 'default_3x3', 'catalog_igor_headine2_en|catalog_igor_teaser1_en', 'Igor''s back and he means business. Celebrating the release of IGOR on DVD, he''s Introducing FOUR new additions to the IGOR furni line. These include a Flask, Science Desk, Wall Poster and Evil Bone!|Click on an item for more details.'),
+(141, 2, 65, '1', 'Spiderwick', 28, 0, '', '1', '0', '0', 'default_3x3', 'spiderwick|ctlg_teaser_spider', 'The Spiderwick Exhibition has arrived at the "Museum of Invention" in Habbo Hotel. Grab yourself a limited edition souvenir item of Furni below brefore it''s too late.|Click on an item for more details.'),
+(142, 2, 41, '1', 'Igor', 239, 0, '', '1', '0', '0', 'default_3x3', 'catalog_igor_headine2_en|catalog_igor_teaser1_en', 'Igor''s back and he means business. Celebrating the release of IGOR on DVD, he''s Introducing FOUR new additions to the IGOR furni line. These include a Flask, Science Desk, Wall Poster and Evil Bone!|Click on an item for more details.'),
 (143, 27, 3, '1', 'One Way Gates', 26, 1, '', '1', '0', '0', 'default_3x3', 'catalog_onewaygates_en|', '|Click on an item for more details.'),
-(144, 2, 13, '1', 'CapriSun', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_teaser_capri_sun1|catalog_teaser_capri_sun', 'Mira ese jugo, tal persona quiere tomarlo, ?eh? Hay muchas formas de refrescarse ahora en este verano. Y CapriSun es uno de los mejores refrescos de este verano 2010. ?Pruebalo!|Click on an item for more details.'),
-(145, 2, 33, '1', 'Habbo Mall', 28, 0, '', '1', '0', '0', 'default_3x3', 'mall85.png?|feature_cata_vert_mallbundle3.png?', '|Click on an item for more details.'),
-(146, 2, 76, '1', 'Wedding', 238, 0, '', '1', '0', '0', 'default_3x3', 'wedding1|catalog_teaser_wedding', 'Habbo''s just wouldn''t be the same without a wedding to attend every now and again!|Click on an item for more details.'),
-(147, 2, 35, '1', 'Haunted House', 242, 0, '', '1', '0', '0', 'default_3x3', 'catalog_halloween_headline2|catalog_halloween_teaser2_en', 'The creepy house on top of the hill has swung open its haunted doors to let you inside. With creaky floors and even creakier doors, you better watch your step in this eerie haunted mansion.|Click on an item for more details.'),
+(144, 2, 14, '1', 'CapriSun', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_teaser_capri_sun1|catalog_teaser_capri_sun', 'Mira ese jugo, tal persona quiere tomarlo, ?eh? Hay muchas formas de refrescarse ahora en este verano. Y CapriSun es uno de los mejores refrescos de este verano 2010. ?Pruebalo!|Click on an item for more details.'),
+(145, 2, 35, '1', 'Habbo Mall', 28, 0, '', '1', '0', '0', 'default_3x3', 'mall85.png?|feature_cata_vert_mallbundle3.png?', '|Click on an item for more details.'),
+(146, 2, 78, '1', 'Wedding', 238, 0, '', '1', '0', '0', 'default_3x3', 'wedding1|catalog_teaser_wedding', 'Habbo''s just wouldn''t be the same without a wedding to attend every now and again!|Click on an item for more details.'),
+(147, 2, 37, '1', 'Haunted House', 242, 0, '', '1', '0', '0', 'default_3x3', 'catalog_halloween_headline2|catalog_halloween_teaser2_en', 'The creepy house on top of the hill has swung open its haunted doors to let you inside. With creaky floors and even creakier doors, you better watch your step in this eerie haunted mansion.|Click on an item for more details.'),
 (148, 2, 6, '1', 'Arctic', 13, 0, '', '1', '0', '0', 'default_3x3', 'catalog_arc_header1_en|catalog_arc_teaser1_en', 'Stay cool (or warm with our campfire!) and create your own Winter Wonderland or Humble Homeland for your penguins.|Click on an item for more details.'),
-(149, 2, 16, '1', 'Christmas 07', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_xmas_headline2_en|catalog_xmas_teaser', 'Ho, ho ho! Merry Christmas! With the Christmas range your room can have that festive feel 24/7, baby! We''ve got everything for that authentic Christmas spirit - lights, trees and reindeer poo!|Click on an item for more details.'),
-(150, 2, 17, '1', 'Christmas 09', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_xmas_headline2_en|xmas2009_catalogue', 'Ho, ho ho! Merry Christmas! With the Christmas range your room can have that festive feel 24/7, baby! We''ve got everything for that authentic Christmas spirit - lights, trees and reindeer poo!|Click on an item for more details.'),
-(151, 2, 46, '1', 'Love', 144, 0, '', '1', '0', '0', 'default_3x3', 'catalog_love_headline1|catalog_love_teaser1', 'It is Valentine''s Day and time to express your love and affection for your friends. Go wild and leave anonymous Heart Stickies all over the hotel.|Click on an item for more details.');
+(149, 2, 17, '1', 'Christmas 07', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_xmas_headline2_en|catalog_xmas_teaser', 'Ho, ho ho! Merry Christmas! With the Christmas range your room can have that festive feel 24/7, baby! We''ve got everything for that authentic Christmas spirit - lights, trees and reindeer poo!|Click on an item for more details.'),
+(150, 2, 18, '1', 'Christmas 09', 64, 0, '', '1', '0', '0', 'default_3x3', 'catalog_xmas_headline2_en|xmas2009_catalogue', 'Ho, ho ho! Merry Christmas! With the Christmas range your room can have that festive feel 24/7, baby! We''ve got everything for that authentic Christmas spirit - lights, trees and reindeer poo!|Click on an item for more details.'),
+(151, 2, 48, '1', 'Love', 144, 0, '', '1', '0', '0', 'default_3x3', 'catalog_love_headline1|catalog_love_teaser1', 'It is Valentine''s Day and time to express your love and affection for your friends. Go wild and leave anonymous Heart Stickies all over the hotel.|Click on an item for more details.');
 
 -- --------------------------------------------------------
 
@@ -2429,7 +2456,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1755, 81, 1755, '', 'org_lamppnk', 0, 3, '1', 1, 0, 0),
 (1756, 81, 1756, '', 'org_chairblk', 0, 3, '1', 1, 0, 0),
 (1757, 81, 1757, '', 'org_chrpnk', 0, 3, '1', 1, 0, 0),
-(1758, 1, 1758, '', 'xm09_trophy', 10, 0, '1', 1, 0, 0),
+(1758, 101, 1758, '', 'xm09_trophy', 10, 0, '1', 1, 0, 0),
 (1759, 81, 1759, '', 'org_tblpnk', 0, 3, '1', 1, 0, 0),
 (1760, 81, 1760, '', 'org_lampblk', 0, 3, '1', 1, 0, 0),
 (1761, 81, 1761, '', 'org_chairpnk', 0, 3, '1', 1, 0, 0),
@@ -2584,7 +2611,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (1909, 48, 1909, '', 'fball_ptch8', 3, 0, '1', 1, 0, 0),
 (1910, 48, 1910, '', 'fball_crnr', 3, 0, '1', 1, 0, 0),
 (1911, 48, 1911, '', 'fball_ptch4', 3, 0, '1', 1, 0, 0),
-(1912, 48, 1912, '', 'fball_trophy', 3, 0, '1', 1, 0, 0),
+(1912, 101, 1912, '', 'fball_trophy', 3, 0, '1', 1, 0, 0),
 (1913, 48, 1913, '', 'fball_score_y', 3, 0, '1', 1, 0, 0),
 (1914, 48, 1914, '', 'fball_cote', 3, 0, '1', 1, 0, 0),
 (1915, 48, 1915, '', 'fball_ball', 3, 0, '1', 1, 0, 0),
@@ -2905,7 +2932,7 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (2230, 73, 2230, '', 'gothic_bed', 0, 3, '1', 1, 0, 0),
 (2231, 73, 2231, '', 'gothic_candles', 0, 3, '1', 1, 0, 0),
 (2232, 73, 2232, '', 'gothic_desk', 0, 3, '1', 1, 0, 0),
-(2233, 94, 2233, '', 'ads_grefu_trophy', 10, 0, '1', 1, 0, 0),
+(2233, 101, 2233, '', 'ads_grefu_trophy', 10, 0, '1', 1, 0, 0),
 (2234, 73, 2234, '', 'gothic_bowl', 0, 3, '1', 1, 0, 0),
 (2235, 108, 2235, '', 'nest_frog', 10, 0, '1', 1, 0, 0),
 (2236, 108, 2236, '', 'pond', 10, 0, '1', 1, 0, 0),
@@ -3822,6 +3849,28 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (5189, 33, 1549, '', 'ads_idol_lamp', 1, 10, '1', 1, 0, 0),
 (5190, 16, 242, '', 'chair_plasto*14', 0, 5, '0', 1, 0, 1),
 (5191, 16, 243, '', 'table_plasto_4leg*14', 0, 5, '0', 1, 0, 1),
+(5192, 4, 2911, '', 'hole', 0, 5, '1', 1, 0, 1),
+(5193, 4, 2911, '', 'hole', 0, 25, '1', 5, 0, 2),
+(5194, 108, 2912, '', 'petfood25', 10, 0, '1', 1, 0, 0),
+(5195, 79, 2814, '', 'avatar_effect71', 0, 139, '1', 1, 1, 0),
+(5196, 79, 2815, '', 'avatar_effect72', 1, 0, '1', 1, 0, 0),
+(5197, 79, 2913, '', 'sb_rail', 0, 2, '1', 1, 0, 0),
+(5198, 79, 2913, '', 'sb_10rail', 0, 15, '1', 10, 0, 0),
+(5199, 79, 2914, '', 'sb_ramp', 0, 3, '1', 1, 0, 0),
+(5200, 79, 2914, '', 'sb_6ramp', 0, 14, '1', 6, 0, 0),
+(5201, 79, 2915, '', 'sb_block', 0, 4, '1', 1, 0, 0),
+(5202, 79, 2916, '', 'sb_cans', 0, 4, '1', 1, 0, 0),
+(5203, 79, 2917, '', 'sb_tile', 0, 3, '1', 1, 0, 0),
+(5204, 79, 2917, '', 'sb_5tile', 0, 10, '1', 5, 0, 0),
+(5205, 79, 2918, '', 'sb_tag1', 0, 3, '1', 1, 0, 0),
+(5206, 79, 2919, '', 'sb_wall', 0, 3, '1', 1, 0, 0),
+(5207, 79, 2920, '', 'sb_tag2', 0, 3, '1', 1, 0, 0),
+(5208, 79, 2921, '', 'sb_tag3', 0, 3, '1', 1, 0, 0),
+(5209, 20, 2922, '', 'prizetrophy_skate_g', 0, 12, '1', 1, 0, 0),
+(5210, 20, 2923, '', 'prizetrophy_skate_s', 0, 10, '1', 1, 0, 0),
+(5211, 20, 2924, '', 'prizetrophy_skate_b', 0, 8, '1', 1, 0, 0),
+(5212, 94, 2925, '', 'lm_crystal_skull', 10, 0, '1', 1, 0, 0),
+(5213, 94, 2926, '', 'lm_bananadrink', 10, 0, '1', 1, 0, 0),
 (50002, 18, 2410, '', 'ktchn_wall', 0, 40, '1', 10, 0, 0),
 (50003, 148, 1413, '', 'xmas08_icerug', 0, 15, '1', 6, 0, 0),
 (50004, 63, 2624, '', 'easter11_grasspatch', 0, 15, '1', 6, 0, 0),
@@ -4149,6 +4198,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `last_ip` varchar(64) NOT NULL DEFAULT '',
   `config_volume` int(11) NOT NULL DEFAULT '100',
   `timestamp_lastvisit` double(11,0) NOT NULL DEFAULT '0',
+  `online` enum('0','1') NOT NULL DEFAULT '0',
   `timestamp_created` double NOT NULL DEFAULT '0',
   `moderation_tickets` int(11) NOT NULL DEFAULT '0',
   `moderation_tickets_abusive` int(11) NOT NULL DEFAULT '0',
@@ -4161,8 +4211,10 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `respect_credit_pets` int(11) NOT NULL DEFAULT '3',
   `marketplace_tickets` int(11) NOT NULL DEFAULT '0',
   `regular_visitor` int(11) NOT NULL DEFAULT '0',
+  `time_online` int(11) NOT NULL DEFAULT '0',
   `last_respect_update` double NOT NULL DEFAULT '0',
   `allow_mimic` enum('0','1') NOT NULL DEFAULT '1',
+  `allow_gifts` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -4182,7 +4234,7 @@ CREATE TABLE IF NOT EXISTS `drink_sets` (
   `drinks` varchar(255) COLLATE latin1_german1_ci NOT NULL,
   `internal_comment` text COLLATE latin1_german1_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci AUTO_INCREMENT=11 ;
 
 --
 -- Extraindo dados da tabela `drink_sets`
@@ -4197,7 +4249,8 @@ INSERT INTO `drink_sets` (`id`, `drinks`, `internal_comment`) VALUES
 (6, '24', 'bubble juice machines'),
 (7, '7', 'water dispensers'),
 (8, '19', 'Habbo Cola Machine'),
-(9, '9,8,14,15,6,10,11,12,17,13', 'Mochamaster');
+(9, '9,8,14,15,6,10,11,12,17,13', 'Mochamaster'),
+(10, '66', 'Banana Drink Machine');
 
 -- --------------------------------------------------------
 
@@ -4336,17 +4389,12 @@ CREATE TABLE IF NOT EXISTS `interstitials` (
   `views` int(11) NOT NULL,
   `enabled` enum('1','0') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `interstitials`
 --
 
-INSERT INTO `interstitials` (`id`, `url`, `image`, `views`, `enabled`) VALUES
-(2, 'http://www.uberhotel.org', 'http://cdn.uber.meth0d.org/interstitials/1.png', 2, '0'),
-(3, 'http://www.uberhotel.org', 'http://cdn.uber.meth0d.org/interstitials/2.png', 0, '0'),
-(4, 'http://www.uberhotel.org', 'http://cdn.uber.meth0d.org/interstitials/3.png', 1, '0'),
-(5, 'http://www.uberhotel.org', 'http://cdn.uber.meth0d.org/interstitials/4.png', 3, '0');
 
 -- --------------------------------------------------------
 
@@ -4403,7 +4451,7 @@ CREATE TABLE IF NOT EXISTS `item_definitions` (
   `walkable` enum('1','2','0') NOT NULL DEFAULT '0',
   `room_limit` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2911 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2927 ;
 
 --
 -- Extraindo dados da tabela `item_definitions`
@@ -6273,7 +6321,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 (1863, 3456, 'runway_dvdr', 's', 'static', 2, 'terminator', 2, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (1864, 3457, 'runway_display', 's', 'static', 2, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
 (1865, 3458, 'hc2_frplc', 's', 'switch', 2, 'terminator', 1, 2, 1, '1', '1', '0', '1', '1', '0', 0),
-(1866, 3459, 'hc2_duvan', 's', 'bed', 2, 'terminator', 1, 3, 1.2, '1', '1', '0', '1', '1', '0', 0),
+(1866, 3459, 'hc2_dvn', 's', 'bed', 2, 'terminator', 1, 3, 1.2, '1', '1', '0', '1', '1', '0', 0),
 (1867, 3460, 'runway_table_1', 's', 'switch', 3, 'terminator', 3, 2, 1, '1', '1', '0', '1', '1', '0', 0),
 (1868, 3461, 'hc3_dc', 's', 'bed', 2, 'terminator', 1, 3, 1.2, '1', '1', '0', '1', '1', '0', 0),
 (1869, 3462, 'runway_bigchr_1', 's', 'seat', 5, 'terminator', 1, 1, 0.8, '1', '1', '0', '1', '1', '0', 0),
@@ -7219,8 +7267,8 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 (2811, 68, 'avatar_effect68', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
 (2812, 69, 'avatar_effect69', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
 (2813, 70, 'avatar_effect70', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
-(2814, 1, 'avatar_effect1', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
-(2815, 2, 'avatar_effect2', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
+(2814, 71, 'avatar_effect71', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
+(2815, 72, 'avatar_effect72', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
 (2816, 3, 'avatar_effect3', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
 (2817, 4, 'avatar_effect4', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
 (2818, 5, 'avatar_effect5', 'e', 'switch', 2, 'normal', 0, 0, 0, '1', '1', '0', '0', '1', '0', 0),
@@ -7315,7 +7363,23 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `type`, `behavior`, `
 (2907, 1543, 'pet9', 'p', 'pet', 9, 'normal', 1, 1, 1, '0', '0', '0', '0', '0', '0', 5),
 (2908, 1543, 'pet10', 'p', 'pet', 10, 'normal', 1, 1, 1, '0', '0', '0', '0', '0', '0', 5),
 (2909, 1543, 'pet11', 'p', 'pet', 11, 'normal', 1, 1, 1, '0', '0', '0', '0', '0', '0', 5),
-(2910, 1543, 'pet14', 'p', 'pet', 14, 'normal', 1, 1, 1, '0', '0', '0', '0', '0', '0', 5);
+(2910, 1543, 'pet14', 'p', 'pet', 14, 'normal', 1, 1, 1, '0', '0', '0', '0', '0', '0', 5),
+(2911, 4071, 'hole', 's', 'switch', 2, 'disable', 2, 2, 0, '1', '1', '0', '1', '1', '0', 0),
+(2912, 4070, 'petfood25', 's', 'switch', 5, 'normal', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
+(2913, 4030, 'sb_rail', 's', 'static', 2, 'terminator', 1, 1, 0.35, '1', '1', '0', '1', '1', '1', 0),
+(2914, 4031, 'sb_ramp', 's', 'static', 2, 'normal', 2, 1, 1, '1', '1', '0', '1', '1', '1', 0),
+(2915, 4032, 'sb_block', 's', 'static', 2, 'normal', 2, 2, 0.5, '1', '1', '0', '1', '1', '1', 0),
+(2916, 4033, 'sb_cans', 's', 'static', 2, 'terminator', 1, 1, 0.3, '1', '1', '0', '1', '1', '0', 0),
+(2917, 4034, 'sb_tile', 's', 'static', 2, 'normal', 2, 2, 0, '1', '1', '0', '1', '1', '1', 0),
+(2918, 4406, 'sb_tag1', 'i', 'switch', 2, 'normal', 0, 0, 1, '1', '1', '0', '1', '1', '0', 0),
+(2919, 4407, 'sb_wall', 'i', 'static', 2, 'normal', 0, 0, 1, '1', '1', '0', '1', '1', '0', 0),
+(2920, 4408, 'sb_tag2', 'i', 'switch', 2, 'normal', 0, 0, 1, '1', '1', '0', '1', '1', '0', 0),
+(2921, 4409, 'sb_tag3', 'i', 'switch', 2, 'normal', 0, 0, 1, '1', '1', '0', '1', '1', '0', 0),
+(2922, 4027, 'prizetrophy_skate*1', 's', 'prizetrophy', 2, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
+(2923, 4028, 'prizetrophy_skate*2', 's', 'prizetrophy', 2, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
+(2924, 4029, 'prizetrophy_skate*3', 's', 'prizetrophy', 2, 'terminator', 1, 1, 1, '1', '1', '0', '1', '1', '0', 0),
+(2925, 4067, 'lm_crystal_skull', 's', 'static', 2, 'normal', 1, 1, 0.35, '1', '1', '1', '1', '1', '0', 0),
+(2926, 4068, 'lm_bananadrink', 's', 'dispenser', 10, 'normal', 1, 1, 3, '1', '1', '1', '1', '1', '0', 0);
 
 -- --------------------------------------------------------
 
@@ -7328,7 +7392,7 @@ CREATE TABLE IF NOT EXISTS `messenger_category` (
   `user_id` int(11) NOT NULL,
   `label` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `messenger_category`
@@ -8191,12 +8255,12 @@ CREATE TABLE IF NOT EXISTS `room_triggers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `room_id` int(10) unsigned NOT NULL,
   `room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
-  `action` enum('roller','teleport') CHARACTER SET utf8 NOT NULL DEFAULT 'roller',
+  `action` enum('roller','teleport','infobusdoor') CHARACTER SET utf8 NOT NULL DEFAULT 'roller',
   `to_room_id` int(10) unsigned NOT NULL,
   `to_room_pos` varchar(16) CHARACTER SET utf8 NOT NULL DEFAULT '0|0|0',
   `to_room_dir` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=67 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=68 ;
 
 --
 -- Extraindo dados da tabela `room_triggers`
@@ -8233,42 +8297,43 @@ INSERT INTO `room_triggers` (`id`, `room_id`, `room_pos`, `action`, `to_room_id`
 (28, 12, '28|8|0', 'roller', 0, '28|7|0', 0),
 (29, 12, '28|7|0', 'roller', 0, '28|6|0', 0),
 (30, 12, '28|6|0', 'roller', 0, '28|5|0', 0),
-(31, 13, '9|3|4', 'teleport', 14, '4|10|0', 0),
-(32, 13, '9|4|4', 'teleport', 14, '4|10|0', 0),
-(33, 13, '10|4|4', 'teleport', 14, '4|10|0', 0),
-(34, 14, '3|11|0', 'teleport', 13, '10|5|4', 4),
-(35, 14, '4|11|0', 'teleport', 13, '10|5|4', 4),
-(36, 14, '5|11|0', 'teleport', 13, '10|5|4', 4),
-(37, 24, '9|0|2', 'teleport', 25, '17|23|0', 0),
-(38, 24, '10|0|2', 'teleport', 25, '17|23|0', 0),
-(39, 24, '11|0|2', 'teleport', 25, '17|23|0', 0),
-(40, 24, '14|0|2', 'teleport', 25, '17|23|0', 0),
-(41, 24, '15|0|2', 'teleport', 25, '17|23|0', 0),
-(42, 24, '16|0|2', 'teleport', 25, '17|23|0', 0),
-(43, 24, '17|0|2', 'teleport', 25, '17|23|0', 0),
-(44, 24, '18|0|2', 'teleport', 25, '17|23|0', 0),
-(45, 24, '19|0|2', 'teleport', 25, '17|23|0', 0),
-(46, 24, '23|0|2', 'teleport', 25, '17|23|0', 0),
-(47, 24, '24|0|2', 'teleport', 25, '17|23|0', 0),
-(48, 25, '15|24|0', 'teleport', 24, '16|2|2', 4),
-(49, 25, '16|24|0', 'teleport', 24, '16|2|2', 4),
-(50, 25, '17|24|0', 'teleport', 24, '16|2|2', 4),
-(51, 25, '18|24|0', 'teleport', 24, '16|2|2', 4),
-(52, 32, '9|32|4', 'teleport', 33, '2|12|4', 2),
-(53, 32, '10|32|4', 'teleport', 33, '2|12|4', 2),
-(54, 32, '11|32|4', 'teleport', 33, '2|12|4', 2),
-(55, 33, '1|10|5', 'teleport', 32, '10|30|5', 0),
-(56, 33, '1|11|5', 'teleport', 32, '10|30|5', 0),
-(57, 33, '1|12|5', 'teleport', 32, '10|30|5', 0),
-(58, 33, '1|13|5', 'teleport', 32, '10|30|5', 0),
-(59, 34, '14|0|4', 'teleport', 35, '4|24|3', 0),
-(60, 34, '15|0|4', 'teleport', 35, '4|24|3', 0),
-(61, 35, '4|25|3', 'teleport', 34, '15|1|4', 4),
-(62, 35, '5|25|3', 'teleport', 34, '15|1|4', 4),
-(63, 37, '21|23|0', 'teleport', 38, '3|23|0', 2),
-(64, 37, '21|24|0', 'teleport', 38, '3|23|0', 2),
-(65, 37, '21|25|0', 'teleport', 38, '3|23|0', 2),
-(66, 38, '0|22|0', 'teleport', 37, '19|24|0', 6);
+(31, 12, '28|5|0', 'infobusdoor', 17, '10|2|0', 6),
+(32, 13, '9|3|4', 'teleport', 14, '4|10|0', 0),
+(33, 13, '9|4|4', 'teleport', 14, '4|10|0', 0),
+(34, 13, '10|4|4', 'teleport', 14, '4|10|0', 0),
+(35, 14, '3|11|0', 'teleport', 13, '10|5|4', 4),
+(36, 14, '4|11|0', 'teleport', 13, '10|5|4', 4),
+(37, 14, '5|11|0', 'teleport', 13, '10|5|4', 4),
+(38, 24, '9|0|2', 'teleport', 25, '17|23|0', 0),
+(39, 24, '10|0|2', 'teleport', 25, '17|23|0', 0),
+(40, 24, '11|0|2', 'teleport', 25, '17|23|0', 0),
+(41, 24, '14|0|2', 'teleport', 25, '17|23|0', 0),
+(42, 24, '15|0|2', 'teleport', 25, '17|23|0', 0),
+(43, 24, '16|0|2', 'teleport', 25, '17|23|0', 0),
+(44, 24, '17|0|2', 'teleport', 25, '17|23|0', 0),
+(45, 24, '18|0|2', 'teleport', 25, '17|23|0', 0),
+(46, 24, '19|0|2', 'teleport', 25, '17|23|0', 0),
+(47, 24, '23|0|2', 'teleport', 25, '17|23|0', 0),
+(48, 24, '24|0|2', 'teleport', 25, '17|23|0', 0),
+(49, 25, '15|24|0', 'teleport', 24, '16|2|2', 4),
+(50, 25, '16|24|0', 'teleport', 24, '16|2|2', 4),
+(51, 25, '17|24|0', 'teleport', 24, '16|2|2', 4),
+(52, 25, '18|24|0', 'teleport', 24, '16|2|2', 4),
+(53, 32, '9|32|4', 'teleport', 33, '2|12|4', 2),
+(54, 32, '10|32|4', 'teleport', 33, '2|12|4', 2),
+(55, 32, '11|32|4', 'teleport', 33, '2|12|4', 2),
+(56, 33, '1|10|5', 'teleport', 32, '10|30|5', 0),
+(57, 33, '1|11|5', 'teleport', 32, '10|30|5', 0),
+(58, 33, '1|12|5', 'teleport', 32, '10|30|5', 0),
+(59, 33, '1|13|5', 'teleport', 32, '10|30|5', 0),
+(60, 34, '14|0|4', 'teleport', 35, '4|24|3', 0),
+(61, 34, '15|0|4', 'teleport', 35, '4|24|3', 0),
+(62, 35, '4|25|3', 'teleport', 34, '15|1|4', 4),
+(63, 35, '5|25|3', 'teleport', 34, '15|1|4', 4),
+(64, 37, '21|23|0', 'teleport', 38, '3|23|0', 2),
+(65, 37, '21|24|0', 'teleport', 38, '3|23|0', 2),
+(66, 37, '21|25|0', 'teleport', 38, '3|23|0', 2),
+(67, 38, '0|22|0', 'teleport', 37, '19|24|0', 6);
 
 -- --------------------------------------------------------
 
@@ -8330,6 +8395,8 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('command_disablediagonal_error', 'Oops, only the owner of this room can run this command!'),
 ('command_disablediagonal_false', 'Diagonal walking is now disabled in this room.'),
 ('command_disablediagonal_true', 'Diagonal walking is now enable in this room.'),
+('command_disablegifts_false', 'You''re no longer able to receive gifts.'),
+('command_disablegifts_true', 'You''re now able to receiving gifts.'),
 ('command_disablemimic_false', 'You''re no longer able to be mimicked.'),
 ('command_disablemimic_true', 'You''re now able to be mimiced.'),
 ('command_dmbadge_badge_error', 'Badge code doesn''t exists in database.'),
@@ -8357,8 +8424,19 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('command_give_targetuser_success', 'Do you received %0% %1%. Enjoy!!'),
 ('command_has_fixed_text', 'Message from Staff User:'),
 ('command_ha_fixed_text', 'Message from Hotel Management:'),
-('command_infobus_info', 'The correct use of the command is ":infobus <open/close/pool>"'),
+('command_infobus_add_info', 'The correct use of the command is, ":infobus add <options/question>".'),
+('command_infobus_add_option_empty', 'Option cannot be empty.'),
+('command_infobus_add_question_empty', 'Question cannot be empty.'),
+('command_infobus_info', 'Infobus Command Help:\\n\\n:infobus open\\n:infobus close\\n:infobus pool\\n:infobus add <question/option>\\n:infobus reset\\n:infobus status\\n:infobus help'),
 ('command_infobus_opened', 'Infobus now is opened.\\nGet in this trip and enjoy your stay!'),
+('command_infobus_options_empty', 'Options isn''t set'),
+('command_infobus_option_added', 'Option added: %0%'),
+('command_infobus_pool_option_error', 'You need to add some options for the question: :infobus add <option> [answer]'),
+('command_infobus_pool_question_error', 'You need to set a question: :infobus add <question> [question]'),
+('command_infobus_question_empty', 'Question isn''t set'),
+('command_infobus_question_set', 'Now infobus question is: %0%'),
+('command_infobus_reset', 'Reseted question, options and votes.'),
+('command_infobus_status', 'Infobus Status:\\n\\nCurrent users in bus: %0%\\nQuestion: %1%\\nOptions: %2%'),
 ('command_invalid_syntax', 'Invalid syntax'),
 ('command_kick_error', 'Target user ''%0%'' is offline, not in a room, or cannot be kicked.'),
 ('command_kick_targetuser_message', 'You have been kicked from the room by a community staff member.'),
@@ -8421,6 +8499,7 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('server_shutdown_message', 'The server is shutting down.'),
 ('staffpick_add_success', 'This room has been added to the staff picked rooms successfully.'),
 ('staffpick_remove_success', 'This room has been removed from the staff picked rooms successfully.'),
+('target_user_disabled_receipt_gifts', '%0% doesn''t wanna to receive gifts. '),
 ('wordfilter_replacement_word', 'bobba');
 
 -- --------------------------------------------------------

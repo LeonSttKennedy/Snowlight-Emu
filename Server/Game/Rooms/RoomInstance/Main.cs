@@ -209,6 +209,10 @@ namespace Snowlight.Game.Rooms
                         case "teleport":
                             Trigger = RoomTriggerList.TELEPORT;
                             break;
+
+                        case "infobusdoor":
+                            Trigger = RoomTriggerList.INFOBUSDOOR;
+                            break;
                     }
 
                     mRoomTriggers.Add(new RoomTriggers((uint)Row["id"], Vector3.FromString((string)Row["room_pos"]),

@@ -192,7 +192,7 @@ namespace Snowlight
                     CrossdomainPolicy.Initialize("Data\\crossdomain.xml");
                     InfobusManager.Initialize();
                     ActivityPointsWorker.Initialize();
-                    DailyStuffWorker.Initialize();
+                    UserStuffWorker.Initialize();
                     BotManager.Initialize(MySqlClient);
                     InterstitialManager.Initialize(MySqlClient);
                     ChatEmotions.Initialize();
@@ -236,7 +236,7 @@ namespace Snowlight
             MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
             MySqlClient.ExecuteNonQuery("UPDATE room_visits SET timestamp_left = @timestamp WHERE timestamp_left = 0");
             
-            MySqlClient.ExecuteNonQuery("UPDATE characters SET auth_ticket = ''");
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET auth_ticket = '', online = '0'");
             
             MySqlClient.SetParameter("status", ServerStatus.ToString());
             MySqlClient.SetParameter("version", PrettyVersion);

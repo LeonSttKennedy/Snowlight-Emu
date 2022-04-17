@@ -12,7 +12,8 @@ namespace Snowlight.Game.Rooms
     public enum RoomTriggerList
     {
         ROLLER = 0,
-        TELEPORT = 1
+        TELEPORT = 1,
+        INFOBUSDOOR = 2
     }
     public class RoomTriggers
     {
@@ -96,6 +97,10 @@ namespace Snowlight.Game.Rooms
 
                         case "teleport":
                             Trigger = RoomTriggerList.TELEPORT;
+                            break;
+                        
+                        case "infobusdoor":
+                            Trigger = RoomTriggerList.INFOBUSDOOR;
                             break;
                     }
 

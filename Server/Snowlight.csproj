@@ -328,8 +328,10 @@
     <Compile Include="Game\Items\StaticObject.cs" />
     <Compile Include="Game\Messenger\MessengerHandler.cs" />
     <Compile Include="Game\Messenger\SessionMessengerCache.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\HotelAdmin\TestCommand .cs" />
     <Compile Include="Game\Misc\Chat\Commands\ModerationTool\InfobusCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\ModerationTool\UserInfoCommand.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\Normal\DisableGiftsCommand.cs" />
     <Compile Include="Game\Misc\Workers\ActivityPointsWorker.cs" />
     <Compile Include="Game\Misc\Caches\EffectsCacheWorker.cs" />
     <Compile Include="Game\Misc\Caches\NewItemsCache.cs" />
@@ -380,7 +382,7 @@
     <Compile Include="Game\Misc\DrinkSetManager.cs" />
     <Compile Include="Game\Misc\Items\MoodlightData.cs" />
     <Compile Include="Game\Misc\Items\TeleporterLinkFinder.cs" />
-    <Compile Include="Game\Misc\Workers\DailyStuffWorker.cs" />
+    <Compile Include="Game\Misc\Workers\UserStuffWorker.cs" />
     <Compile Include="Game\Pathfinding\MinHeap.cs" />
     <Compile Include="Game\Pathfinding\ComplexPathfinder.cs" />
     <Compile Include="Game\Pathfinding\PathfinderNode.cs" />

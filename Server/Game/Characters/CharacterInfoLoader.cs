@@ -116,13 +116,14 @@ namespace Snowlight.Game.Characters
                 (int)Row["moderation_bans"], (int)Row["moderation_cautions"], (double)Row["timestamp_lastvisit"],
                 (double)Row["timestamp_created"], (int)Row["respect_points"], (int)Row["respect_credit_humans"],
                 (int)Row["respect_credit_pets"], (double)Row["last_respect_update"], (double)Row["moderation_muted_until_timestamp"],
-                (int)Row["marketplace_tickets"], (int)Row["regular_visitor"], (Row["allow_mimic"].ToString() == "1"));
+                (int)Row["marketplace_tickets"], (int)Row["regular_visitor"], (int)Row["time_online"], (Row["online"].ToString() == "1"),
+                (Row["allow_mimic"].ToString() == "1"), (Row["allow_gifts"].ToString() == "1"));
         }
 
         public static CharacterInfo GenerateNullCharacter(uint Id)
         {
             return new CharacterInfo(null, 0, Id, "Unknown", string.Empty, string.Empty, CharacterGender.Male, string.Empty,
-                0, 0, 0, false, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,true);
+                0, 0, 0, false, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, true, true, true);
         }
     }
 }

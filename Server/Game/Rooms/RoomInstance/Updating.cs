@@ -323,6 +323,14 @@ namespace Snowlight.Game.Rooms
                             Session.SendData(MessengerFollowResultComposer.Compose(Info));
                         }
                         break;
+
+                    case RoomTriggerList.INFOBUSDOOR:
+                        
+                        if (ServerSettings.InfobusStatus == InfobusStatus.Open)
+                        {
+                            goto case RoomTriggerList.TELEPORT;
+                        }
+                        break;
                 }
             }
         }

@@ -17,7 +17,7 @@ namespace Snowlight
         {
             while (Program.Alive)
             {
-               if (Console.ReadKey(true).Key == ConsoleKey.Enter)
+              if (Console.ReadKey(true).Key == ConsoleKey.Enter)
                 {
                     Console.Write("$" + Environment.UserName.ToLower() + "@snowlight> ");
                     string Input = Console.ReadLine();

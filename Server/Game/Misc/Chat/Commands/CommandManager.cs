@@ -161,6 +161,7 @@ namespace Snowlight.Game.Misc
         {
             Register("about", new AboutCommand());
             Register("disablemimic", new DisableMimicCommand());
+            Register("disablegifts", new DisableGiftsCommand());
             Register("disablediagonal", new DisableDiagonalCommand());
             Register("follow", new FollowCommand());
             Register("pickall", new PickallCommand());

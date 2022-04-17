@@ -9,16 +9,32 @@ using Snowlight.Game.Sessions;
 using Snowlight.Communication.Incoming;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Util;
+using System.Collections.ObjectModel;
 
 namespace Snowlight.Game.Infobus
 {
     public static class InfobusManager
     {
         private static Dictionary<uint, InfobusQuestion> mInfobusQuestions;
+        private static List<string> mInfobusPoolOptions;
+
+        public static List<string> InfobusPoolOptions
+        {
+            get
+            {
+                return mInfobusPoolOptions;
+            }
+
+            set
+            {
+                mInfobusPoolOptions = value;
+            }
+        }
 
         public static void Initialize()
         {
             mInfobusQuestions = new Dictionary<uint, InfobusQuestion>();
+            mInfobusPoolOptions = new List<string>();
 
             DataRouter.RegisterHandler(OpcodesIn.INFOBUS_ENTER, new ProcessRequestCallback(EnterInfobus));
             DataRouter.RegisterHandler(OpcodesIn.INFOBUS_SUBMIT_ANSWER, new ProcessRequestCallback(SubmitAnswer));

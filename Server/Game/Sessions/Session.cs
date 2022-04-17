@@ -386,6 +386,9 @@ namespace Snowlight.Game.Sessions
 
                 mCharacterInfo = Info;
 
+                mCharacterInfo.Online = true;
+                mCharacterInfo.UpdateOnline(MySqlClient);
+
                 mAchievementCache = new AchievementCache(MySqlClient, CharacterId);
                 mBadgeCache = new BadgeCache(MySqlClient, CharacterId, mAchievementCache);
 
@@ -502,6 +505,8 @@ namespace Snowlight.Game.Sessions
 
                 #region ACH_Login
                 UserAchievement LoginData = mAchievementCache.GetAchievementData("ACH_Login");
+                int LoginUserProgress = LoginData != null ? LoginData.Progress : 0;
+
                 DateTime LastLogin = UnixTimestamp.GetDateTimeFromUnixTimestamp(Info.TimestampLastOnline);
 
                 if (LastLogin.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
@@ -511,58 +516,80 @@ namespace Snowlight.Game.Sessions
                 else if (LastLogin.ToString("dd-MM-yyyy") == DateTime.Today.AddDays(-1).ToString("dd-MM-yyyy"))
                 {
                     // He had logged yesterday increase in logining days in a row
-                    Info.RegularVisitorinDays++;
-                    AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_Login", 1);
+                    Info.UpdateRegularVisitor(MySqlClient, Info.RegularVisitorinDays + 1);
                 }
                 else
                 {
                     // He didn't logged yesterday or today, lets restart his login days in a row score
-
-                    Info.RegularVisitorinDays = 1;
-
-                    if (LoginData != null)
-                    {
-                        mAchievementCache.AddOrUpdateData(MySqlClient, LoginData.AchievementGroup, LoginData.Level, 0);
-                    }
-                    
-                    AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_Login", 1);
+                    Info.UpdateRegularVisitor(MySqlClient, 1);
                 }
 
-                Info.UpdateRegularVisitor(MySqlClient, Info.RegularVisitorinDays);
+                int LoginToIncrease = Info.RegularVisitorinDays - LoginUserProgress;
+                if (LoginToIncrease > 0)
+                {
+                    AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_Login", LoginToIncrease);
+                }
                 #endregion
 
                 #region ACH_RegistrationDuration
-                /* Currently disabled
                 TimeSpan TotalDaysRegistered = DateTime.Now - UnixTimestamp.GetDateTimeFromUnixTimestamp(Info.TimestampRegistered);
                 UserAchievement RegistrationDurationData = mAchievementCache.GetAchievementData("ACH_RegistrationDuration");
 
                 int IncreaseTotal = RegistrationDurationData != null ? (int)TotalDaysRegistered.TotalDays - RegistrationDurationData.Progress : (int)TotalDaysRegistered.TotalDays;
 
-                if (IncreaseTotal < 100)
+                if (IncreaseTotal < 2)
                 {
                     AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_RegistrationDuration", IncreaseTotal);
                 }
                 else
                 {
-                    MySqlClient.SetParameter("increasetotal", (RegistrationDurationData != null ? RegistrationDurationData.Progress + IncreaseTotal : IncreaseTotal));
+                    MySqlClient.SetParameter("increasetotal", RegistrationDurationData != null ? RegistrationDurationData.Progress + IncreaseTotal : IncreaseTotal);
                     DataRow AchievementsRow = MySqlClient.ExecuteQueryRow("SELECT * FROM achievements WHERE progress_needed > @increasetotal AND group_name = 'ACH_RegistrationDuration' LIMIT 1");
-                    if(AchievementsRow != null)
-                    {
-                        mAchievementCache.AddOrUpdateData(MySqlClient, "ACH_RegistrationDuration", (int)AchievementsRow["level"], 
-                            (RegistrationDurationData != null ? RegistrationDurationData.Progress + IncreaseTotal : IncreaseTotal) - 1);
 
-                        AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_RegistrationDuration", 1);
+                    int UserCurrentLevel = RegistrationDurationData != null ? RegistrationDurationData.Level : 0;
+                    int AchLevel = (int)AchievementsRow["level"];
+
+                    MySqlClient.SetParameter("currentlevel", UserCurrentLevel);
+                    MySqlClient.SetParameter("newlevel", AchLevel);
+                    DataTable BonusesTable = MySqlClient.ExecuteQueryTable("SELECT * FROM achievements WHERE level > @currentlevel AND level <= @newlevel AND group_name = 'ACH_RegistrationDuration'");
+
+                    int PixelsBonuses = 0;
+                    int PointsBonuses = 0;
+
+                    foreach (DataRow BonusesRow in BonusesTable.Rows)
+                    {
+                        PixelsBonuses += (int)BonusesRow["reward_pixels"];
+                        PointsBonuses += (int)BonusesRow["reward_points"];
+                    }
+
+                    int ToIncreaseAch = (RegistrationDurationData != null ? RegistrationDurationData.Progress + IncreaseTotal : IncreaseTotal);
+                    mAchievementCache.AddOrUpdateData(MySqlClient, "ACH_RegistrationDuration", AchLevel, ToIncreaseAch);
+
+                    if (UserCurrentLevel < AchLevel)
+                    {
+                        Achievement AchievementData = AchievementManager.GetAchievement("ACH_RegistrationDuration");
+                        UserAchievement UserData = mAchievementCache.GetAchievementData(AchievementData.GroupName);
+                        Badge BadgeData = RightsManager.GetBadgeByCode(AchievementData.GroupName + AchLevel);
+
+                        SendData(AchievementUnlockedComposer.Compose(AchievementData, UserData.Level, PointsBonuses, PixelsBonuses));
+
+                        Info.UpdateActivityPointsBalance(MySqlClient, PixelsBonuses);
+                        SendData(ActivityPointsBalanceComposer.Compose(Info.ActivityPointsBalance,
+                            PixelsBonuses));
+
+                        Info.UpdateScore(MySqlClient, PointsBonuses);
+                        SendData(AchievementScoreUpdateComposer.Compose(Info.Score));
+
+                        mMessengerFriendCache.BroadcastToFriends(MessengerFriendEventComposer.Compose(Info.Id,
+                            MessengerFriendEventType.AchievementUnlocked, BadgeData.Code));
+
+                        mBadgeCache.UpdateAchievementBadge(MySqlClient, AchievementData.GroupName, BadgeData);
+                        mNewItemsCache.MarkNewItem(MySqlClient, 4, BadgeData.Id);
+                        SendData(InventoryNewItemsComposer.Compose(4, BadgeData.Id));
+
+                        SendInfoUpdate();
                     }
                 }
-
-                if (IncreaseTotal > 0)
-                {
-                    This shit will disconnect the user if the days total is big
-                    for(int i = 0; i < IncreaseTotal; i++)
-                    {
-                        AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_RegistrationDuration", 1);
-                    }
-                }*/
                 #endregion
 
                 if (ServerSettings.LoginBadgeEnabled)
@@ -737,6 +764,8 @@ namespace Snowlight.Game.Sessions
 
             if (Authenticated)
             {
+                mCharacterInfo.Online = false;
+                mCharacterInfo.UpdateOnline(MySqlClient);
                 mCharacterInfo.SynchronizeStatistics(MySqlClient);
 
                 if (CurrentRoomId > 0)
