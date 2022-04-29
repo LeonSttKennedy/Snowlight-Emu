@@ -34,7 +34,7 @@ if($num > 0)
 				else
 				$color='n';
 				TemplateManager::WriteLine('<li class="'.$color.'">
-						<a><a href="http://'.SITE_DOMAIN.'/news.php?id=' . $news['id'] . '-' . $news['seo_link'] . '">'.$news['title'].'</a><br />
+						<a href="http://'.SITE_DOMAIN.'/news.php?id=' . $news['id'] . '-' . $news['seo_link'] . '">'.$news['title'].'</a><br />
 						<small>'.@date("D, d M Y H:i:s", $news['published']).'</small><br />
 					</li>');
 			}

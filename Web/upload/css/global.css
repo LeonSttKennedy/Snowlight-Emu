@@ -121,8 +121,71 @@ color: #FFFFFF;
 	padding: 20px;
 }
 
-#navi { width: 100%; }
-ul.navilist { list-style: none; text-shadow: #FAFAFA 1px 1px 1px; }
+div.serverstatus {
+  float:right;
+  display: inline-block;
+}
+
+div.serverstatus > .onlinecounter 
+{ 
+  border: 1px solid #F2F2F2;
+  font-size: 85%;
+  text-align: center;
+  padding: 5px;
+  background-color: #FAFAFA;
+  border-radius: 5px;
+  float:right;
+  margin-right:20px;
+  margin-top:12px;
+}
+
+div.serverstatus > button {
+  background-color: #FAFAFA;
+  border: 1px solid #F2F2F2;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 85%;
+  padding: 5px;
+  float:right;
+  position: relative;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  margin-right:5px;
+  margin-top:12px;
+}
+
+div.serverstatus > button.lightgreen {
+  background-color: #FAFAFA;
+  border: 1px solid #F2F2F2;
+}
+
+div.serverstatus > button.lightgreen:hover {
+  background-color: #90ee90;
+  border: 1px solid #008000;
+  color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+div.serverstatus > button.red {
+  background-color: #FAFAFA;
+  border: 1px solid #F2F2F2;
+}
+
+div.serverstatus > button.red:hover {
+  background-color: #ff0000;
+  border: 1px solid #e50000;
+  color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+div.serverstatus > .disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#navi {  width: 100%; }
+ul.navilist { float:left; list-style: none; text-shadow: #FAFAFA 1px 1px 1px; }
 ul.navilist li { padding-top: 15px; padding-bottom: 15px; float: left; margin-left: 20px; margin-right: 20px; }
 ul.navilist li a { font-size: 120%; }
 ul.navilist li.selected  a { color: #045FB4; }

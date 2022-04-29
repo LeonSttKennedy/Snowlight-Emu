@@ -1,10 +1,11 @@
 
 <?php About(); ?>
 
-<!DOCTYPE html> 
+<!DOCTYPE html /> 
 <html lang="en" dir="ltr"> 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
 <head> 
+<title><?php echo SITE_NAME; ?> - The free alternative Habbo</title>
 <link rel="shortcut icon" href="http://<?php echo SITE_DOMAIN; ?>/icon.ico" type="image/x-icon" /> 
 <style type="text/css" media="all"> 
   @import url("http://<?php echo SITE_DOMAIN; ?>/css/global.css");
