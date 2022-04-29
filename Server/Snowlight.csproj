@@ -126,6 +126,8 @@
     <Compile Include="Communication\Outgoing\Furni\MoodlightDataComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\MusicPlayingComposer.cs" />
     <Compile Include="Communication\Outgoing\Infobus\InfobusClosedComposer.cs" />
+    <Compile Include="Communication\Outgoing\Pets\PetAddExperiencePointsComposer.cs" />
+    <Compile Include="Communication\Outgoing\Pets\PetRespectComposer.cs" />
     <Compile Include="Communication\Outgoing\Pets\PetInfoComposer.cs" />
     <Compile Include="Communication\Outgoing\Pets\PetInventoryComposer.cs" />
     <Compile Include="Communication\Outgoing\Furni\RemoveFloorItemComposer.cs" />
@@ -210,7 +212,7 @@
     <Compile Include="Communication\Outgoing\Rooms\RoomKickedComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomMutedComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomOpenFlatComposer.cs" />
-    <Compile Include="Communication\Outgoing\Rooms\RoomPetUpdateComposer.cs" />
+    <Compile Include="Communication\Outgoing\Pets\PetUpdateComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomRatingInfoComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomRelativeHeightmapComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomRightsComposers.cs" />

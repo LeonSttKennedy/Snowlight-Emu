@@ -38,7 +38,8 @@ namespace Snowlight.Game.Items
         Dispenser = 32,
         Fireworks = 33,
         MusicDisk = 34,
-        Rental = 35
+        Rental = 35,
+        Gift = 36
     }
 
     public static class ItemBehaviorUtil
@@ -182,6 +183,10 @@ namespace Snowlight.Game.Items
                 case "wallpaper":
 
                     return ItemBehavior.Wallpaper;
+
+                case "gift":
+
+                    return ItemBehavior.Gift;
 
                 default:
 

@@ -3,7 +3,7 @@ using Snowlight.Game.Pets;
 
 namespace Snowlight.Communication.Outgoing
 {
-    public static class RoomPetUpdateComposer
+    public static class PetUpdateComposer
     {
         public static ServerMessage Compose(uint DisplayId, Pet Pet)
         {

@@ -507,14 +507,27 @@ namespace Snowlight.Game.Rooms
 
         private static void PlacePet(Session Session, ClientMessage Message)
         {
+            uint PetId = Message.PopWiredUInt32();
+            int X = Message.PopWiredInt32();
+            int Y = Message.PopWiredInt32();
+
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-            if (Instance == null || (!Instance.CheckUserRights(Session, true) && !Instance.Info.AllowPets)) return;
+            if (Instance == null || (!Instance.CheckUserRights(Session, true) && !Instance.Info.AllowPets))
+            {
+                return;
+            }
 
-            Pet Pet = Session.PetInventoryCache.GetPet(Message.PopWiredUInt32());
-            if (Pet == null) return;
+            Pet Pet = Session.PetInventoryCache.GetPet(PetId);
+            if (Pet == null || Pet.RoomId != 0)
+            {
+                return;
+            }
 
-            Vector2 DesiredPosition = new Vector2(Message.PopWiredInt32(), Message.PopWiredInt32());
-            if (!Instance.IsValidPosition(DesiredPosition)) return;
+            Vector2 DesiredPosition = new Vector2(X, Y);
+            if (!Instance.IsValidPosition(DesiredPosition)) 
+            {
+                return;
+            }
 
             Bot BotDefinition = BotManager.GetHandlerDefinitionForPetType(Pet.Type);
             if (BotDefinition == null)
@@ -597,25 +610,35 @@ namespace Snowlight.Game.Rooms
 
         private static void RespectPet(Session Session, ClientMessage Message)
         {
-            if (Session.CharacterInfo.RespectCreditPets <= 0) return;
+            if (Session.CharacterInfo.RespectCreditPets <= 0)
+            {
+                return;
+            }
 
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-            if (Instance == null) return;
+            if (Instance == null)
+            {
+                return;
+            }
 
             uint PetId = Message.PopWiredUInt32();
             RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
-            if (Actor == null) return;
+            if (Actor == null)
+            {
+                return;
+            }
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-            if (PetData == null) return;
-
-            Session.CharacterInfo.RespectCreditPets--;
-            PetData.Score++;
+            if (PetData == null)
+            {
+                return;
+            }
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
+                Session.CharacterInfo.RespectCreditPets--;
                 Session.CharacterInfo.SynchronizeRespectData(MySqlClient);
-                PetData.SynchronizeDatabase(MySqlClient);
+                PetData.OnRespect(MySqlClient, Instance, int.Parse(Actor.Id.ToString()));
 
                 Session TargetSession = SessionManager.GetSessionByCharacterId(PetData.OwnerId);
                 if (TargetSession != null) 
@@ -636,7 +659,10 @@ namespace Snowlight.Game.Rooms
                 }
             }
 
-            Instance.BroadcastMessage(RoomPetUpdateComposer.Compose(Actor.ReferenceId, PetData));
+            Actor.SetStatus("std", "");
+            Actor.SetStatus("gst sml", "");
+            Actor.UpdateNeeded = true;
+            Instance.BroadcastMessage(PetUpdateComposer.Compose(Actor.ReferenceId, PetData));
         }
 
         private static void OpenPresent(Session Session, ClientMessage Message)

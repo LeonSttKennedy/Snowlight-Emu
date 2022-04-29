@@ -169,6 +169,7 @@ namespace Snowlight.Communication
         public const uint INVENTORY_PET_ADDED = 603;
         public const uint INVENTORY_PET_REMOVED = 604;
         public const uint PET_TRAINING_PANEL = 605;
+        public const uint PET_RESPECT = 606;
         public const uint ROOM_PET_UPDATE = 609;
         public const uint MARKETPLACE_SELL_OK = 610;
         public const uint MARKETPLACE_CAN_SELL = 611;

@@ -5,6 +5,7 @@ using Snowlight.Storage;
 using Snowlight.Util;
 using Snowlight.Game.Rooms;
 using System.Collections.Generic;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Pets
 {
@@ -280,6 +281,30 @@ namespace Snowlight.Game.Pets
         {
             mRoomId = RoomId;
             mRoomPosition = RoomPosition;
+        }
+        public void OnRespect(SqlDatabaseClient MySqlClient, RoomInstance Instance, int VirtualId)
+        {
+            mScore++;
+
+            if (mExperience <= PET_EXP_LEVELS[PET_EXP_LEVELS.Count - 1])
+            {
+                AddExperience(MySqlClient, Instance, VirtualId, 10);
+            }
+
+            Instance.BroadcastMessage(PetRespectComposer.Compose(mId, this));
+        }
+        public void AddExperience(SqlDatabaseClient MySqlClient, RoomInstance Instance, int VirtualId, int Amount)
+        {
+            if(mExperience + Amount >= ExperienceTarget && Level != TotalLevels)
+            {
+                mEnergy = PET_ENERGY_LEVELS[Level];
+            }
+
+            mExperience += Amount;
+
+            Instance.BroadcastMessage(PetAddExperiencePointsComposer.Compose(mId, VirtualId, Amount));
+
+            SynchronizeDatabase(MySqlClient);
         }
         public void SynchronizeDatabase(SqlDatabaseClient MySqlClient)
         {

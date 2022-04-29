@@ -9,10 +9,25 @@ namespace Snowlight.Communication.Outgoing
         public static void SerializeFloorItem(ServerMessage Message, Item Item)
         {
             uint SecondaryId = 0;
+            string ItemFlags = Item.DisplayFlags;
 
             if (Item.Definition.Behavior == ItemBehavior.MusicDisk)
-            {
+            { 
                 uint.TryParse(Item.DisplayFlags, out SecondaryId);
+            }
+            
+            if (Item.Definition.Behavior == ItemBehavior.Gift)
+            {
+                string[] CurrentFlags = Item.DisplayFlags.Split('|');
+
+                if (CurrentFlags.Length > 0)
+                {
+                    ItemFlags = CurrentFlags[0];
+                    if (Item.Definition.BehaviorData == 2)
+                    { 
+                        SecondaryId = uint.Parse(CurrentFlags[2]) * 1000 + uint.Parse(CurrentFlags[3]);
+                    }
+                }
             }
 
             Message.AppendUInt32(Item.Id);
@@ -22,7 +37,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(Item.RoomRotation);
             Message.AppendRawDouble(Item.RoomPosition.Z);
             Message.AppendUInt32(SecondaryId);
-            Message.AppendStringWithBreak(Item.DisplayFlags);
+            Message.AppendStringWithBreak(ItemFlags);
             Message.AppendInt32(Item.PendingExpiration ? (int)((double)(Math.Ceiling(Item.ExpireTimeLeft / 60))) + 1 : 0); // Rental expire
             Message.AppendBoolean(Item.Definition.Usable); // Since RELEASE63-33578-33561 => "Use" button
         }

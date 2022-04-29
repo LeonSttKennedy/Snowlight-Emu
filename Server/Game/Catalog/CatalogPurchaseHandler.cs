@@ -234,7 +234,7 @@ namespace Snowlight.Game.Catalog
             }
         }
         public static void HandlePurchaseGift(SqlDatabaseClient MySqlClient, Session Session, CatalogItem Item,
-            string ItemFlags, string GiftUser, string GiftMessage, int SpriteId, int Ribbon, int Colour)
+            string ItemFlags, string GiftUser, string GiftMessage, int SpriteId, int GiftBoxId, int Ribbon)
         {
             lock (mPurchaseSyncRoot)
             {
@@ -309,8 +309,7 @@ namespace Snowlight.Game.Catalog
                 if (SpriteId == 0) 
                     SpriteId = (int)GeneratePresent().SpriteId;
 
-                string ED = GiftUser + "|" + GiftMessage + "|" + Session.CharacterInfo.Id + "|" + Item.Definition.Id + "|" + SpriteId + "|" + Ribbon + "|" + Colour;
-                string ED2 = "!" + GiftMessage;
+                string ED = "!" + GiftMessage + "|" + SpriteId + "|" + GiftBoxId + "|" + Ribbon;
 
                 Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
                 List<Item> GeneratedGenericItems = new List<Item>();
@@ -324,7 +323,7 @@ namespace Snowlight.Game.Catalog
                 DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM item_definitions WHERE sprite_id = "+ SpriteId + " LIMIT 1");
 
                 GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, (uint)Row["id"],
-                    (uint)GiftUserRow["id"], ED2, ED2, ExpireTimestamp));
+                    (uint)GiftUserRow["id"], ED, ED, ExpireTimestamp));
 
                 
                 foreach (Item GeneratedItem in GeneratedGenericItems)

@@ -171,7 +171,7 @@ namespace Snowlight.Game.Rooms
                             if (mRoomInstances.ContainsKey(UnloadId))
                             {
                                 mRoomInstances[UnloadId].Unload();
-                                Output.WriteLine("[RoomMgr] Request -> Unload idle room instance: "+ UnloadId + ". (RoomID: " + mRoomInstances[UnloadId].RoomId + ")", OutputLevel.UserInformational);
+                                Output.WriteLine("[RoomMgr] Request to unload idle room instance: "+ UnloadId + ". (RoomID: " + mRoomInstances[UnloadId].RoomId + ")", OutputLevel.UserInformational);
                             }
                         }
 

@@ -428,8 +428,8 @@ namespace Snowlight.Game.Catalog
             string GiftUser = UserInputFilter.FilterString(Message.PopString());
             string GiftMessage = UserInputFilter.FilterString(Message.PopString());
             int SpriteId = Message.PopWiredInt32();
+            int GiftBoxId = Message.PopWiredInt32();
             int Ribbon = Message.PopWiredInt32();
-            int Colour = Message.PopWiredInt32();
 
             if(!ServerSettings.GiftingSystemEnabled)
             {
@@ -456,7 +456,7 @@ namespace Snowlight.Game.Catalog
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                CatalogPurchaseHandler.HandlePurchaseGift(MySqlClient, Session, Item, ExtraData, GiftUser, GiftMessage, SpriteId, Ribbon, Colour);
+                CatalogPurchaseHandler.HandlePurchaseGift(MySqlClient, Session, Item, ExtraData, GiftUser, GiftMessage, SpriteId, GiftBoxId, Ribbon);
             }
         }
         private static void GetPresentsData(Session Session, ClientMessage Message)
