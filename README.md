@@ -29,10 +29,11 @@ of this project and other existent projects. (Skylight, PlusEMU, Uber, Phoenix, 
 
 # FEATURES
 
-Server Release -> *RELEASE63-35255-34886-201108111108*
 
 **Server**
 
+Release<br>
+ -> *RELEASE63-35255-34886-201108111108*
 - Translatable for anny language only edditing database texts
 - Fully customisable settings in database
 
