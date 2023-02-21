@@ -31,12 +31,12 @@ of this project and other existent projects. (Skylight, PlusEMU, Uber, Phoenix, 
 
 Server Release -> *RELEASE63-35255-34886-201108111108*
 
-** Server **
+**Server**
 
 - Translatable for anny language only edditing database texts
 - Fully customisable settings in database
 
-** User **
+**User**
 
 - User stuff delivering:
 -> Credits / Extra currency / Repects (users & pets)
@@ -49,12 +49,12 @@ Server Release -> *RELEASE63-35255-34886-201108111108*
 - User can personalize gifts
 - Only users with Trade achievement and enable trade status can trading
 
-** Inventory **
+**Inventory**
 
 - Posters shows her name
 - Personalized gifts are displayed as he are (including in trading)
 
-** Rooms ** 
+**Rooms** 
 
 - Enter room
 - Win badge when enter in a room
@@ -76,14 +76,14 @@ Server Release -> *RELEASE63-35255-34886-201108111108*
 - Games working:
 -> Roller Skating, Ice Tag, Puzzle box
 
-** Navigator **
+**Navigator**
 
 - Room deletion
 - Public rooms sorted by current users
 - All Public Rooms from this release version (including her static room items)
 - More stuff from Snowlight framework
 
-** Messenger **
+**Messenger**
 
 - Add friend
 - Remove friend
@@ -96,7 +96,7 @@ Server Release -> *RELEASE63-35255-34886-201108111108*
 - Follow friend
 - Fully functional Event stream (enable / disable / like / events: achievement/friend made/room like/motto changed) (habbo head figure doesn't load)
 
-** Catalog ** 
+**Catalog** 
 
 - Catalog page comming soon
 - Catalog deals
@@ -109,19 +109,19 @@ Server Release -> *RELEASE63-35255-34886-201108111108*
 - You can bought gifts personalized or defaults
 - Voucher redeem (gives reward credits, extra currency and furnis)
 
-** Achievements **
+**Achievements**
 
 - Seasonal currency reward support added
 - Added offline unlock support
 - Achivement list that are working (correctly):
 -> ACH_MOTTO, ACH_AVATARTAGS, ACH_AVATARLOOKS, ACH_STUDENT, ACH_BASICCLUB, ACH_VIPCLUB, ACH_RESPECTEARNED, ACH_GIFTGIVER, ACH_GIFTRECEIVER, ACH_SPR, ACH_PETLOVER, ACH_PETRESPECTRECEIVER, ACH_PETRESPECTGIVER, ACH_ROOMENTRY, ACH_HAPPYHOUR, ACH_LOGIN, ACH_REGISTRATIONDURATION, ACH_ALLTIMEHOTELPRESENCE, ACH_NAME, ACH_PETLEVELUP
 
-** Quests **
+**Quests**
 
 - Seasonal currency reward support added
 - Corrected some user quests that couldn't possible to be completed
 
-** Pets ** 
+**Pets** 
 
 - Can drink
 - If pet levels up pet command tool will update
