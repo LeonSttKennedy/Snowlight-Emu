@@ -73,7 +73,7 @@ Server Release -> *RELEASE63-35255-34886-201108111108*
 - Public room magic tiles (Teleport, Queue)
 - Personalized gifts are displayed as he are
 - Open gifts
-- Games working:
+- Games working:<br>
 -> Roller Skating, Ice Tag, Puzzle box
 
 **Navigator**
@@ -113,7 +113,7 @@ Server Release -> *RELEASE63-35255-34886-201108111108*
 
 - Seasonal currency reward support added
 - Added offline unlock support
-- Achivement list that are working (correctly):
+- Achivement list that are working (correctly):<br>
 -> ACH_MOTTO, ACH_AVATARTAGS, ACH_AVATARLOOKS, ACH_STUDENT, ACH_BASICCLUB, ACH_VIPCLUB, ACH_RESPECTEARNED, ACH_GIFTGIVER, ACH_GIFTRECEIVER, ACH_SPR, ACH_PETLOVER, ACH_PETRESPECTRECEIVER, ACH_PETRESPECTGIVER, ACH_ROOMENTRY, ACH_HAPPYHOUR, ACH_LOGIN, ACH_REGISTRATIONDURATION, ACH_ALLTIMEHOTELPRESENCE, ACH_NAME, ACH_PETLEVELUP
 
 **Quests**
@@ -130,7 +130,7 @@ Server Release -> *RELEASE63-35255-34886-201108111108*
 - Pets in rooms that you aren't the owner will return for your inventory
 - Guests can do commands (Sit, Down, Jump, Speak) 
 - Available commands Count: 40
-- Available command list:
+- Available command list:<br>
 -> Free, Sit, Down, Here, Come Here, Beg, Play Dead, Stand, Jump, Speak, Silent, Nest, Drink, Play, Stay, Wag tail, Move Forward, Turn Left, Turn Right, Triple jump, Chicken dance, High jump, Bounce, Spin, Dance, Flat, Relax, Croak, Wave, Dip, Mambo, Roll, Hang, Breathe fire, Ring of fire, Spread wings, Swing, Follow, Follow Left, Follow Right
 
 # Screenshots
