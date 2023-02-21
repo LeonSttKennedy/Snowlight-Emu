@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 
 namespace Snowlight.Communication
@@ -23,6 +25,7 @@ namespace Snowlight.Communication
         public const uint ROOM_CHAT_SHOUT = 26;
         public const uint ROOM_MUTED = 27;
         public const uint ROOM_USER_LIST = 28;
+        public const uint REMOVE_USER_FROM_ROOM = 29;
         public const uint ROOM_STATIC_OBJECTS = 30;
         public const uint ROOM_HEIGHTMAP = 31;
         public const uint ROOM_FLOOR_OBJECTS = 32;
@@ -49,6 +52,7 @@ namespace Snowlight.Communication
         public const uint ROOM_WALL_ITEM_REMOVED = 84;
         public const uint ROOM_WALL_ITEM_MOVED = 85;
         public const uint ROOM_FLOOR_ITEM_UPDATE_FLAGS = 88;
+        public const uint DICE_STATUS = 90;
         public const uint ROOM_DOORBELL = 91;
         public const uint ROOM_ITEM_PLACED = 93;
         public const uint ROOM_REMOVE_FLOOR_ITEM = 94;
@@ -74,6 +78,7 @@ namespace Snowlight.Communication
         public const uint INVENTORY = 140;
         public const uint NOTIFICATION = 161;
         public const uint ROOM_URL = 166;
+        public const uint PUBLIC_ROOM_ADS = 208;
         public const uint CATALOG_REDEEM_OK = 212;
         public const uint CATALOG_REDEEM_ERROR = 213;
         public const uint NAVIGATOR_FLAT_CATEGORIES = 221;
@@ -90,10 +95,19 @@ namespace Snowlight.Communication
         public const uint CLUB_GIFT_READY = 280;
         public const uint MESSENGER_FOLLOW_RESULT = 286;
         public const uint DISCONNECT_REASON = 287;
+        public const uint AVAILABILITY_STATUS = 290;
+        public const uint HOTEL_CLOSING_MESSAGE = 291;
+        public const uint HOTEL_CLOSED_MESSAGE = 292;
+        public const uint LOGIN_FAILED_HOTEL_CLOSED = 294;
+        public const uint CATALOG_PURCHASE_ERROR = 296;
         public const uint ROOM_FURNI_CAMPAIGNS = 297;
         public const uint SONG_DATA = 300;
         public const uint CLIENT_CONFIG = 308;
         public const uint ROOM_GROUP_BADGES = 309;
+        public const uint ROOM_GROUP_INFO = 311;
+        public const uint ONE_WAY_GATE_STATUS = 312;
+        public const uint ROOM_POLL_REQUEST = 316;
+        public const uint ROOM_POLL_QUESTIONS = 317;
         public const uint HELP_SUBMIT_CFH_RESULT = 321;
         public const uint MESSENGER_REQUESTS_LIST = 314;
         public const uint HELP_CFH_DELETED_OK = 320;
@@ -141,6 +155,7 @@ namespace Snowlight.Communication
         public const uint ROOM_USER_CARRY = 482;
         public const uint ROOM_USER_EFFECT = 485;
         public const uint ROOM_USER_SLEEP = 486;
+        public const uint PARK_INFOBUS_DOOR = 503;
         public const uint CATALOG_RECYCLER_REWARDS = 506;
         public const uint CATALOG_RECYLCER_CONFIG = 507;
         public const uint CATALOG_RECYCLER_RESULT = 508;
@@ -148,7 +163,7 @@ namespace Snowlight.Communication
         public const uint ROOM_RIGHTS_REMOVED_CONFIRMATION = 511;
         public const uint ROOM_CAN_CREATE_RESULT = 512;
         public const uint ROOM_ITEM_PLACEMENT_ERROR = 516;
-        public const uint LOGIN_UNKNOWN_1 = 517;
+        public const uint INFO_FEED_ENABLE = 517;
         public const uint HELP_HOMEPAGE = 518;
         public const uint HELP_CATEGORY_LIST = 519;
         public const uint HELP_TOPIC = 520;
@@ -164,13 +179,21 @@ namespace Snowlight.Communication
         public const uint MODERATION_ROOM_VISITS = 537;
         public const uint MODERATION_ROOM_INFO = 538;
         public const uint HELP_CFH_CLOSED_RESULT = 540;
+        public const uint CHANGE_USERNAME_RESULT = 570;
+        public const uint CHECK_USERNAME_RESULT = 571;
+        public const uint SEND_NEW_USERNAME = 572;
+        public const uint CHANGE_USERNAME_WINDOW = 573;
+        public const uint TUTORIAL_STATUS = 575;
         public const uint INVENTORY_PETS = 600;
         public const uint ROOM_PET_INFO = 601;
+        public const uint PET_LEVEL_UP = 602;
         public const uint INVENTORY_PET_ADDED = 603;
         public const uint INVENTORY_PET_REMOVED = 604;
         public const uint PET_TRAINING_PANEL = 605;
         public const uint PET_RESPECT = 606;
-        public const uint ROOM_PET_UPDATE = 609;
+        public const uint PET_RECEIVED = 607;
+        public const uint PET_PLACING_ERROR = 608;
+        public const uint ROOM_PET_ADD_EXPERIENCE = 609;
         public const uint MARKETPLACE_SELL_OK = 610;
         public const uint MARKETPLACE_CAN_SELL = 611;
         public const uint MARKETPLACE_CONFIG = 612;
@@ -180,13 +203,18 @@ namespace Snowlight.Communication
         public const uint MARKETPLACE_SERIALIZE_OWN_OFFERS = 616;
         public const uint MARKETPLACE_ITEM_STATS = 617;
         public const uint CATALOG_GIFTS_CONFIG = 620;
+        public const uint PET_SCRATCHING_ERROR = 621;
         public const uint CATALOG_CAN_GIFT = 622;
         public const uint CATALOG_CLUB_GIFT = 623;
         public const uint CATALOG_REEDEM_CLUB_GIFT = 624;
         public const uint CATALOG_CLUB_OFFERS = 625;
         public const uint ACHIEVEMENT_DATA_LIST = 627;
+        public const uint SAZONAL_ACTIVITY_POINTS_BALANCE = 628;
         public const uint FIREWORKS_CHARGE_INFO = 629;
+        public const uint SUBSCRIPTION_OFFER = 630;
         public const uint WIRED_FURNI_TRIGGER = 650;
+        public const uint WIRED_FURNI_ACTION = 651;
+        public const uint WIRED_FURNI_CONDITION = 652;
         public const uint QUEST_LIST = 800;
         public const uint QUEST_COMPLETED = 801;
         public const uint QUEST_STARTED = 802;
@@ -194,10 +222,12 @@ namespace Snowlight.Communication
         public const uint USER_ALERT_MODERN = 808;
         public const uint MESSAGE_OF_THE_DAY = 810;
         public const uint CATALOG_PET_DATA = 827;
+        public const uint WELCOME_GIFT_WINDOW = 829;
         public const uint FRIEND_BAR_RESULT = 831;
         public const uint INVENTORY_NEW_ITEM = 832;
         public const uint MESSENGER_FRIEND_EVENT = 833;
         public const uint ACHIEVEMENTS_PROGRESS_UPDATE = 913;
+        public const uint ROOM_USER_GROUPS_LIST = 915;
         public const uint GET_STREAM_EVENT = 950;
     }
 
@@ -235,6 +265,7 @@ namespace Snowlight.Communication
         public const uint ROOM_TRADE_INITIATE = 71;
         public const uint ROOM_TRADE_OFFER = 72;
         public const uint ROOM_MOVE_FLOOR_ITEM = 73;
+        public const uint ROOM_SAVE_BRANDING = 74;
         public const uint ROOM_MOVE_TO = 75;
         public const uint ITEM_ACTIVATE_DICE_1 = 76;
         public const uint ITEM_ACTIVATE_DICE_2 = 77;
@@ -256,6 +287,7 @@ namespace Snowlight.Communication
         public const uint CATALOG_GET_PAGE = 102;
         public const uint INFOBUS_SUBMIT_ANSWER = 112;
         public const uint INFOBUS_ENTER = 113;
+        public const uint ROOM_GET_ROOM_ADVERTISEMENT = 126;
         public const uint CATALOG_REDEEM_VOUCHER = 129;
         public const uint NAVIGATOR_GET_CATEGORIES = 151;
         public const uint ROOM_RIGHTS_TAKE_ALL = 155;
@@ -276,8 +308,12 @@ namespace Snowlight.Communication
         public const uint SESSION_SOUND_SETTING = 228;
         public const uint SESSION_CLIENT_CONFIGURATION = 229;
         public const uint ROOM_GET_GROUP_BADGES = 230;
+        public const uint ROOM_GROUP_INFO = 231;
         public const uint ITEM_ACTIVATE_ONE_WAY_GATE = 232;
         public const uint NAVIGATOR_ENTER_ROOM_INQUIRED_UNKNOWN = 233;
+        public const uint ROOM_POLL_GET_QUESTIONS = 234;
+        public const uint ROOM_POLL_CANCEL = 235;
+        public const uint ROOM_POLL_PROCESS_ANSWER = 236;
         public const uint HELP_DELETE_PENDING_CFH = 238;
         public const uint ITEM_ACTIVATE_HABBO_WHEEL = 247;
         public const uint JUKEBOX_GET_DISKS = 259;
@@ -361,14 +397,20 @@ namespace Snowlight.Communication
         public const uint MODERATION_USER_MESSAGE = 462;
         public const uint MODERATION_KICK = 463;
         public const uint MODERATION_BAN = 464;
+        public const uint SAVE_SELECTED_USERNAME = 470;
+        public const uint CHECK_ENTERED_USERNAME = 471;
         public const uint CATALOG_GIFT_ITEM = 472;
         public const uint CATALOG_GIFT_CONFIG = 473;
-        public const uint CATALOG_CLUB_GIFT = 474;
-        public const uint CATALOG_SELECTED_CLUB_GIFT = 475;
+        public const uint CATALOG_CLUB_GIFTS = 474;
+        public const uint SELECT_CLUB_GIFT = 475;
+        public const uint SET_FOOTBALL_GATE_DATA = 480;
         public const uint SESSION_DEBUG_EVENT = 482;
         public const uint ROOM_ADD_TO_STAFF_PICKED = 483;
         public const uint USER_CHANGE_MOTTO = 484;
         public const uint FRIEND_BAR_FIND_NEW_FRIENDS = 490;
+        public const uint FRIEND_STREAM_GET_EVENTS = 500;
+        public const uint ALLOW_FRIEND_STREAM_EVENTS = 501;
+        public const uint FRIEND_STREAM_LIKE_EVENT = 502;
         public const uint SESSION_DISCONNECT_EVENT = 512;
         public const uint USER_TRY_LOGIN = 756;
         public const uint UNIQUE_ID = 813; // Shockwave ID. No longer seems to function. Maybe because we're not using Shockwave.
@@ -394,6 +436,11 @@ namespace Snowlight.Communication
         public const uint CATALOG_MARKETPLACE_ITEM_STATS = 3020;
         public const uint CATALOG_CAN_GIFT = 3030;
         public const uint CATALOG_GET_CLUB_OFFERS = 3031;
+        public const uint PURCHASE_VIP_CLUB_OFFER = 3036;
+        public const uint PURCHASE_BASIC_CLUB_OFFER = 3037;
+        public const uint UPDATE_WIRED_TRIGGER = 3050;
+        public const uint UPDATE_WIRED_EFFECT = 3051;
+        public const uint UPDATE_WIRED_CONDITION = 3052;
         public const uint QUESTS_GET_LIST = 3101;
         public const uint QUESTS_ACTIVATE = 3102;
         public const uint QUESTS_CANCEL = 3106;
@@ -401,5 +448,9 @@ namespace Snowlight.Communication
         public const uint MESSAGE_OF_THE_DAY = 3110;
         public const uint USER_INVENTORY_MARK_TAB_READ = 3111;
         public const uint ROOM_ITEM_PLACE_STICKY = 3254;
+        public const uint JOIN_GROUP = 3257;
+        public const uint SET_GROUP_FAVORITE = 3258;
+        public const uint REMOVE_GROUP_FAVORITE = 3259;
+        public const uint LOAD_USER_GROUPS = 3260;
     }
 }
