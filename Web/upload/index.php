@@ -10,6 +10,7 @@
 // Requires all Classes and some Security Settings
 require_once 'brain.php';
 
+define("CURRENT_PAGE", "frontpage");
 // Requires
 $GetSecurity->IF_LogIN();
 

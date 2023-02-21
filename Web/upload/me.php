@@ -10,6 +10,8 @@
 // Requires all Classes and some Security Settings
 require_once 'brain.php';
 
+define("CURRENT_PAGE", "home");
+
 // Requires
 // Actions
 $PageAction = $_GET["pa"]; // Gets the Page Action
