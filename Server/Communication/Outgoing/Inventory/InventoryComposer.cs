@@ -55,6 +55,25 @@ namespace Snowlight.Communication.Outgoing
                     TypeNumber = 4;
                     break;
 
+                case ItemBehavior.Poster:
+
+                    TypeNumber = 6;
+                    break;
+
+                case ItemBehavior.Gift:
+
+                    string[] CurrentFlags = Item.DisplayFlags.Split('|');
+
+                    if (CurrentFlags.Length > 1)
+                    {
+                        if (Item.Definition.BehaviorData == 2)
+                        {
+                            string Flag = (uint.Parse(CurrentFlags[2]) * 1000 + uint.Parse(CurrentFlags[3])).ToString();
+                            uint.TryParse(Flag, out SecondaryId);
+                        }
+                    }
+                    break;
+
                 case ItemBehavior.MusicDisk:
 
                     TypeNumber = 8;

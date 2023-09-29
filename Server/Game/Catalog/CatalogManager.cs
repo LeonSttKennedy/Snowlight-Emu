@@ -1,38 +1,75 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Data;
 using System.Linq;
+using System.Collections.Generic;
 
-using Snowlight.Communication;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Sessions;
+using Snowlight.Util;
+using Snowlight.Config;
 using Snowlight.Storage;
-
 using Snowlight.Game.Misc;
+using Snowlight.Game.Pets;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Items;
-using Snowlight.Communication.ResponseCache;
 using Snowlight.Game.Rights;
-using Snowlight.Game.Pets;
+using Snowlight.Communication;
+using Snowlight.Game.Sessions;
 using Snowlight.Communication.Incoming;
-using Snowlight.Config;
-using Snowlight.Util;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Communication.ResponseCache;
 
 namespace Snowlight.Game.Catalog
 {
     public static class CatalogManager
     {
-        private static MarketplaceManager Marketplace;
         private static Dictionary<int, CatalogPage> mPages;
 
         private static Dictionary<int, List<CatalogItem>> mCatalogItems;
         private static Dictionary<uint, CatalogItem> mCatalogItemsIdIndex;
         private static Dictionary<string, CatalogItem> mCatalogItemsNameIndex;
 
+        private static Dictionary<uint, MarketplaceOffers> mMarketplaceOffers;
+        private static Dictionary<uint, List<MarketplaceAvarage>> mMarketplaceAvarages;
+
         private static Dictionary<uint, CatalogClubOffer> mClubOffers;
+
+        private static Dictionary<int, ItemRotationSettings> mRotationPages;
 
         private static ResponseCacheController mCacheController;
 
+        public static Dictionary<uint, CatalogClubOffer> ClubOffers
+        {
+            get
+            {
+                return mClubOffers;
+            }
+        }
+
+        public static Dictionary<uint, MarketplaceOffers> MarketplaceOffers
+        {
+            get
+            {
+                return mMarketplaceOffers;
+            }
+
+            set
+            {
+                mMarketplaceOffers = value;
+            }
+        }
+
+        public static Dictionary<uint, List<MarketplaceAvarage>> MarketplaceAvarages
+        {
+            get
+            {
+                return mMarketplaceAvarages;
+            }
+
+            set
+            {
+                mMarketplaceAvarages = value;
+            }
+        }
         public static bool CacheEnabled
         {
             get
@@ -51,12 +88,17 @@ namespace Snowlight.Game.Catalog
 
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
-            Marketplace = new MarketplaceManager();
             mPages = new Dictionary<int, CatalogPage>();
             mCatalogItems = new Dictionary<int, List<CatalogItem>>();
             mCatalogItemsIdIndex = new Dictionary<uint, CatalogItem>();
             mCatalogItemsNameIndex = new Dictionary<string, CatalogItem>();
+
+            mMarketplaceOffers = new Dictionary<uint, MarketplaceOffers>();
+            mMarketplaceAvarages = new Dictionary<uint, List<MarketplaceAvarage>>();
+            
             mClubOffers = new Dictionary<uint, CatalogClubOffer>();
+
+            mRotationPages = new Dictionary<int, ItemRotationSettings>();
 
             if ((bool)ConfigManager.GetValue("cache.catalog.enabled"))
             {
@@ -102,7 +144,7 @@ namespace Snowlight.Game.Catalog
             mCacheController.AddIfNeeded(GroupId, Request, Response);
         }
 
-         public static void ClearCacheGroup(uint GroupId)
+        public static void ClearCacheGroup(uint GroupId)
         {
             if (!CacheEnabled)
             {
@@ -123,34 +165,81 @@ namespace Snowlight.Game.Catalog
                 mCatalogItemsNameIndex.Clear();
                 mPages.Clear();
                 mClubOffers.Clear();
+                mRotationPages.Clear();
 
                 mPages.Add(-1, new CatalogPage(-1, 0, string.Empty, 0, 0, string.Empty, true, true, false, string.Empty, null, null, new List<CatalogItem>())); // root category
 
                 MySqlClient.SetParameter("enabled", "1");
-                DataTable ItemTable = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_items WHERE enabled = @enabled ORDER BY catalog_item_order ASC, name ASC");
+                DataTable ItemTable = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_items WHERE enabled = @enabled ORDER BY parent_id ASC, order_id ASC, name ASC");
 
                 foreach (DataRow Row in ItemTable.Rows)
                 {
                     int PageId = (int)Row["page_id"];
+                    int ParentId = (int)Row["parent_id"];
 
-                    if (!mCatalogItems.ContainsKey(PageId))
+                    if (ParentId == -1 && !mCatalogItems.ContainsKey(PageId))
                     {
                         mCatalogItems[PageId] = new List<CatalogItem>();
                     }
 
-                    CatalogItem Item = new CatalogItem((uint)Row["id"], (uint)Row["base_id"], (string)Row["name"],
-                        (int)Row["cost_credits"], (int)Row["cost_pixels"], (int)Row["amount"], (string)Row["preset_flags"],
-                        (int)Row["club_restriction"]);
+                    CatalogItem Item = new CatalogItem((uint)Row["id"], (int)Row["base_id"],
+                        (string)Row["name"], (int)Row["cost_credits"], (int)Row["cost_activitypoints"],
+                        SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()),
+                        (int)Row["amount"], (string)Row["preset_flags"], (int)Row["club_restriction"],
+                        (string)Row["badge_code"]);
 
-                    if (Item.Definition == null)
+                    if (Item.DefinitionId > 0 && Item.Definition == null)
                     {
                         Output.WriteLine("Warning: Catalog item " + (uint)Row["id"] + " has an invalid base_id reference.", OutputLevel.Warning);
                         continue;
                     }
 
-                    mCatalogItems[PageId].Add(Item);
-                    mCatalogItemsIdIndex[Item.Id] = Item;
-                    mCatalogItemsNameIndex[Item.DisplayName] = Item;
+                    if (ParentId == -1)
+                    {
+                        mCatalogItems[PageId].Add(Item);
+                        mCatalogItemsIdIndex[Item.Id] = Item;
+                        mCatalogItemsNameIndex[Item.DisplayName] = Item;
+                    }
+                    else
+                    {
+                        uint _ParentId = uint.Parse(ParentId.ToString());
+                        CatalogItem ParentItem = GetCatalogItemByAbsoluteId(_ParentId);
+                        ParentItem.AddItem(Item);
+                    }
+                }
+
+                MySqlClient.SetParameter("enabled", "1");
+                DataTable RotationSettingsTable = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_items_rotation_settings WHERE enabled = @enabled");
+                
+                foreach(DataRow Row in RotationSettingsTable.Rows)
+                {
+                    int PageId = (int)Row["page_id"];
+
+                    RotationType Type;
+                    switch (Row["rotation_type"].ToString().ToLower())
+                    {
+                        default:
+                        case "day":
+
+                            Type = RotationType.Daily;
+                            break;
+
+                        case "month":
+
+                            Type = RotationType.Monthly;
+                            break;
+                    }
+
+                    ItemRotationSettings RotationSettings = new ItemRotationSettings((uint)Row["id"],
+                        (int)Row["page_id"], (int)Row["page_to_copy"], (int)Row["rotation_time"], Type,
+                        (double)Row["timestamp_last_rotation"], (int)Row["last_index"]);
+
+                    if(!mRotationPages.ContainsKey(PageId))
+                    {
+                        mRotationPages.Add(PageId, RotationSettings);
+                    }
+
+                    UpdateItemIndex(PageId);
                 }
 
                 MySqlClient.SetParameter("enabled", "1");
@@ -196,6 +285,8 @@ namespace Snowlight.Game.Catalog
                     mClubOffers.Add((uint)Row["id"], new CatalogClubOffer((uint)Row["id"], (string)Row["name"],
                         (int)Row["cost_credits"], (int)Row["length_days"], OfferType));
                 }
+
+                ReloadMarketplaceData(MySqlClient);
             }
 
             Output.WriteLine("Loaded " + CountLoaded + " catalog page(s).", OutputLevel.DebugInformation);
@@ -203,6 +294,43 @@ namespace Snowlight.Game.Catalog
             if (NotifyUsers)
             {
                 SessionManager.BroadcastPacket(CatalogUpdatedNotificationComposer.Compose());
+            }
+        }
+
+        public static void ReloadMarketplaceData(SqlDatabaseClient MySqlClient)
+        {
+            mMarketplaceOffers.Clear();
+            mMarketplaceAvarages.Clear();
+
+            DataTable MarketplaceOffers = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_marketplace_offers");
+
+            foreach (DataRow Row in MarketplaceOffers.Rows)
+            {
+                MarketplaceOffers Offer = new MarketplaceOffers((uint)Row["offer_id"], (uint)Row["user_id"],
+                    (uint)Row["item_id"], int.Parse(Row["state"].ToString()), (uint)Row["sprite_id"],
+                    (string)Row["extra_data"],(int)Row["asking_price"], (int)Row["total_price"],
+                    int.Parse(Row["item_type"].ToString()),(double)Row["timestamp"], (int)Row["limited_number"],
+                    (int)Row["limited_stack"]);
+
+                Offer.CheckForExpiracy(MySqlClient);
+
+                mMarketplaceOffers.Add((uint)Row["offer_id"], Offer);
+            }
+
+            DataTable MarketplaceAvarages = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_marketplace_data");
+            foreach (DataRow Row in MarketplaceAvarages.Rows)
+            {
+                uint SpriteID = (uint)Row["sprite_id"];
+
+                if (!mMarketplaceAvarages.ContainsKey(SpriteID))
+                {
+                    mMarketplaceAvarages[SpriteID] = new List<MarketplaceAvarage>();
+                }
+
+                MarketplaceAvarage MarketplaceData = new MarketplaceAvarage((uint)Row["id"], (uint)Row["sprite_id"], Row["extra_data"].ToString(),
+                    (int)Row["sold_price"], int.Parse(Row["item_type"].ToString()), UnixTimestamp.GetDateTimeFromUnixTimestamp((double)Row["sold_timestamp"]));
+
+                mMarketplaceAvarages[SpriteID].Add(MarketplaceData);
             }
         }
 
@@ -255,14 +383,40 @@ namespace Snowlight.Game.Catalog
 
             return null;
         }
+        public static void UpdateItemIndex(int PageId)
+        {
+            ItemRotationSettings Settings = mRotationPages[PageId];
 
+            if (!mCatalogItems.ContainsKey(PageId))
+            {
+                mCatalogItems[PageId] = new List<CatalogItem>();
+            }
+
+            if (mCatalogItems.ContainsKey(PageId))
+            {
+                mCatalogItems[PageId].Clear();
+            }
+
+            if (Settings.ExecuteRotation)
+            {
+                Settings.LastIndex++;
+                if (Settings.LastIndex >= mCatalogItems[Settings.PageToCopy].Count)
+                {
+                    Settings.LastIndex = 0;
+                }
+
+                Settings.UpdateInDatabase();
+            }
+
+            mCatalogItems[PageId].Add(mCatalogItems[Settings.PageToCopy][Settings.LastIndex]);
+        }
         public static void MarketplaceBuyTickets(Session Session, ClientMessage Message)
         {
             bool CreditsError = false;
 
-            if (Session.CharacterInfo.MarketplaceTokensTotal < 0)
+            if (Session.CharacterInfo.MarketplaceTokens < 0)
             {
-                Session.CharacterInfo.MarketplaceTokensTotal = 0;
+                Session.CharacterInfo.MarketplaceTokens = 0;
             }
 
             if (Session.CharacterInfo.CreditsBalance <= 0)
@@ -281,7 +435,8 @@ namespace Snowlight.Game.Catalog
                 {
                     Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, -ServerSettings.MarketplaceTokensPrice);
                     Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                    Session.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, Session.HasHcOrVip() ? ServerSettings.MarketplacePremiumTokens : ServerSettings.MarketplaceNormalTokens);
+                    Session.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, Session.HasRight("club_vip") ?
+                        ServerSettings.MarketplacePremiumTokens : ServerSettings.MarketplaceNormalTokens);
                 }
 
                 MarketplaceCanSell(Session, Message);
@@ -290,10 +445,15 @@ namespace Snowlight.Game.Catalog
 
         public static void MarketplaceItemStats(Session Session, ClientMessage Message)
         {
+            // Posters has same SpriteId, so how can i count her ExtraData??
+
             int ItemType = Message.PopWiredInt32();
             uint Sprite = Message.PopWiredUInt32();
 
-            Session.SendData(CatalogMarketplaceItemStatsComposer.Compose(CatalogManager.Marketplace.OfferCountForSprite(Sprite), Sprite, ItemType));
+            int OfferCount = MarketplaceManager.CountForSprite(Sprite);
+            int Average = MarketplaceManager.AveragePriceForItem(ItemType, Sprite);
+
+            Session.SendData(CatalogMarketplaceItemStatsComposer.Compose(Average, OfferCount, Sprite, ItemType));
         }
 
         public static void MarketplaceConfig(Session Session, ClientMessage Message)
@@ -308,7 +468,7 @@ namespace Snowlight.Game.Catalog
             string SearchQuery = Message.PopString();
             int FilterMode = Message.PopWiredInt32();
 
-            CatalogManager.Marketplace.SerializeOffers(Session, MinPrice, MaxPrice, SearchQuery, FilterMode);
+            MarketplaceManager.SerializeOffers(Session, MinPrice, MaxPrice, SearchQuery, FilterMode);
         }
 
         private static void MarketplaceTakeBack(Session Session, ClientMessage Message)
@@ -316,28 +476,28 @@ namespace Snowlight.Game.Catalog
             uint ItemId = Message.PopWiredUInt32();
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                CatalogManager.Marketplace.CancelOffer(Session, MySqlClient, ItemId);
+                MarketplaceManager.CancelOffer(Session, MySqlClient, ItemId);
             }
         }
 
         private static void MarketplaceCanSell(Session Session, ClientMessage Message)
         {
-            if (Session.CharacterInfo.MarketplaceTokensTotal < 0)
+            if (Session.CharacterInfo.MarketplaceTokens < 0)
             {
-                Session.CharacterInfo.MarketplaceTokensTotal = 0;
+                Session.CharacterInfo.MarketplaceTokens = 0;
             }
 
-            Session.SendData(CatalogMarketplaceCanSellComposer.Compose(Session.CharacterInfo.MarketplaceTokensTotal));
+            Session.SendData(CatalogMarketplaceCanSellComposer.Compose(Session));
         }
-        private static void MarketplacePurchase(Session Session, ClientMessage Event)
+        private static void MarketplacePurchase(Session Session, ClientMessage Message)
         {
-            uint ItemId = Event.PopWiredUInt32();
+            uint ItemId = Message.PopWiredUInt32();
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                CatalogManager.Marketplace.Purchase(Session, MySqlClient, ItemId);
+                MarketplaceManager.Purchase(Session, MySqlClient, ItemId);
             }
         }
-        private static void MarketplacePostItem(Session Session, ClientMessage Message) 
+        private static void MarketplacePostItem(Session Session, ClientMessage Message)
         {
             if (Session.InventoryCache != null)
             {
@@ -350,25 +510,26 @@ namespace Snowlight.Game.Catalog
                     }
                 }
 
-                int sellingPrice = Message.PopWiredInt32();
-                int junk = Message.PopWiredInt32();
-                uint itemId = Message.PopWiredUInt32();
+                int AskingPrice = Message.PopWiredInt32();
+                int ItemType = Message.PopWiredInt32();
+                uint Id = Message.PopWiredUInt32();
 
-                Item UserItem = Session.InventoryCache.GetItem(itemId);
-                if (UserItem != null && CatalogManager.Marketplace.CanSellItem(UserItem))
+                Item UserItem = Session.InventoryCache.GetItem(Id);
+                if (UserItem != null && MarketplaceManager.CanSellItem(UserItem))
                 {
-                    CatalogManager.Marketplace.SellItem(Session, itemId, sellingPrice);
+                    MarketplaceManager.SellItem(Session, Id, ItemType, AskingPrice);
                 }
             }
         }
 
         private static void MarketplaceClaimCredits(Session Session, ClientMessage Message)
         {
-            CatalogManager.Marketplace.RedeemCredits(Session);
+            MarketplaceManager.RedeemCredits(Session);
         }
 
         private static void MarketplaceGetOwnOffers(Session Session, ClientMessage Message)
         {
+            MarketplaceManager.SerializeOffers(Session, -1, -1, "", 0);
             Session.SendData(CatalogMarketplaceSerializeOwnOffersComposer.Compose(Session.CharacterId));
         }
 
@@ -431,7 +592,7 @@ namespace Snowlight.Game.Catalog
             int GiftBoxId = Message.PopWiredInt32();
             int Ribbon = Message.PopWiredInt32();
 
-            if(!ServerSettings.GiftingSystemEnabled)
+            if (!ServerSettings.GiftingSystemEnabled)
             {
                 Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_gift_disabled")));
                 return;
@@ -446,8 +607,8 @@ namespace Snowlight.Game.Catalog
             }
 
             CatalogItem Item = Page.GetItem(ItemId);
-            if (Item == null || !Item.Definition.AllowGift || Item.Definition.TypeLetter.ToLower() == "e" || 
-            (Item.ClubRestriction == 1 && !Session.HasRight("club_regular")) || 
+            if (Item == null || !Item.CanGift() ||
+            (Item.ClubRestriction == 1 && !Session.HasRight("club_regular")) ||
             (Item.ClubRestriction == 2 && !Session.HasRight("club_vip")))
             {
                 Session.SendData(CatalogGiftsWrappingErrorComposer.Composer());
@@ -487,7 +648,7 @@ namespace Snowlight.Game.Catalog
                 }
 
                 CorrectedOffers.Add(Offer);
-            }      
+            }
 
             Response = CatalogClubOffersComposer.Compose(CorrectedOffers,
                 Session.SubscriptionManager.IsActive ?
@@ -500,7 +661,7 @@ namespace Snowlight.Game.Catalog
         {
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                Session.SendData(VoucherManager.TryRedeemVoucher(MySqlClient, Session, Message.PopString()) ? 
+                Session.SendData(VoucherManager.TryRedeemVoucher(MySqlClient, Session, Message.PopString()) ?
                     CatalogRedeemOkComposer.Compose() : CatalogRedeemErrorComposer.Compose(0));
             }
         }
@@ -515,12 +676,19 @@ namespace Snowlight.Game.Catalog
                 PetItem = mCatalogItemsNameIndex[ItemName];
             }
 
-            if (PetItem == null || PetItem.Definition.Behavior != ItemBehavior.Pet)
+            if (PetItem == null)
             {
                 return;
             }
 
-            int PetType = PetItem.Definition.BehaviorData;
+            ItemDefinition Def = PetItem.Definition;
+
+            if (Def == null || Def.Behavior != ItemBehavior.Pet)
+            {
+                return;
+            }
+
+            int PetType = Def.BehaviorData;
 
             Session.SendData(CatalogPetDataComposer.Compose(PetItem, PetDataManager.GetRaceDataForType(PetType), PetType));
         }

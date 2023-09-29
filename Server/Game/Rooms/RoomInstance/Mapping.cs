@@ -22,6 +22,7 @@ namespace Snowlight.Game.Rooms
         private TileState[,] mTileStates;
         private List<RoomActor>[,] mUserGrid;
         private UserMovementNode[,] mUserMovementNodes;
+        private uint[,] mFurniMap;
 
         public string RelativeHeightmap
         {
@@ -38,12 +39,25 @@ namespace Snowlight.Game.Rooms
                 return mCachedModel;
             }
         }
+        public List<RoomActor>[,] RoomActorGrid
+        {
+            get
+            {
+                return mUserGrid;
+            }
+        }
+        public uint[,] FurniMap
+        {
+            get
+            {
+                return mFurniMap;
+            }
+        }
 
         public Vector2 GetRedirectedTarget(Vector2 Target)
         {
             return (mRedirectGrid[Target.X, Target.Y] != null ? mRedirectGrid[Target.X, Target.Y] : Target);
         }
-
         public bool IsValidPosition(Vector2 Position)
         {
             return (Position.X >= 0 && Position.Y >= 0 && Position.X < mCachedModel.Heightmap.SizeX &&
@@ -70,28 +84,30 @@ namespace Snowlight.Game.Rooms
                 && mUserMovementNodes[To.X, To.Y] != UserMovementNode.Blocked);
         }
 
-        public bool IsValidStep(Vector2 From, Vector2 To, bool EndOfPath, bool UserOverride = false, List<RoomActor>[,] ActorBlockGrid = null)
+        public bool IsValidStep(Vector2 From, Vector2 To, bool EndOfPath, bool EnableClipping = false, List<RoomActor>[,] ActorBlockGrid = null)
         {
             if (ActorBlockGrid == null)
             {
                 ActorBlockGrid = mUserGrid;
             }
 
-            if (UserOverride)
-            {
-                return true;
-            }
-
-            if (!IsValidPosition(To) || mTileStates[To.X, To.Y] == TileState.Blocked || ((!Info.DisableRoomBlocking ||
-                EndOfPath) && ActorBlockGrid[To.X, To.Y] != null) || mUserMovementNodes[To.X, To.Y] == UserMovementNode.Blocked ||
-                (mUserMovementNodes[To.X, To.Y] == UserMovementNode.WalkableEndOfRoute && !EndOfPath))
+            if(!IsValidPosition(To))
             {
                 return false;
             }
 
-            double HeightDiff = GetUserStepHeight(To) - GetUserStepHeight(From);
+            double HeightDiff = GetUserStepHeight(From) - GetUserStepHeight(To);
 
-            if (HeightDiff > 1.5 || (Info.Type == RoomType.Public && HeightDiff < -1.5))
+            if (EnableClipping)
+            {
+                return true;
+            }
+
+            if (mTileStates[To.X, To.Y] == TileState.Blocked || 
+                ((!Info.DisableRoomBlocking || EndOfPath) && ActorBlockGrid[From.X, From.Y] != null) ||
+                mUserMovementNodes[To.X, To.Y] == UserMovementNode.Blocked ||
+                (mUserMovementNodes[To.X, To.Y] == UserMovementNode.WalkableEndOfRoute && !EndOfPath) ||
+                HeightDiff > 1.5 || (Info.Type == RoomType.Public && HeightDiff < -1.5))
             {
                 return false;
             }
@@ -113,6 +129,7 @@ namespace Snowlight.Game.Rooms
             {
                 mGuestsCanPlaceStickies = false;
 
+                mFurniMap = new uint[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mStackHeight = new double[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mStackTopItemHeight = new double[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mUserMovementNodes = new UserMovementNode[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
@@ -141,7 +158,7 @@ namespace Snowlight.Game.Rooms
                         continue;
                     }
 
-                    double TotalItemStackHeight = Item.RoomPosition.Z + Math.Round(Item.Definition.Height, 1);
+                    double TotalItemStackHeight = Item.RoomPosition.Z + Math.Round(Item.ActiveHeight, 1);
                     List<Vector2> AffectedTiles = CalculateAffectedTiles(Item, Item.RoomPosition.GetVector2(), Item.RoomRotation);
 
                     RoomTileEffect Effect = new RoomTileEffect();
@@ -153,7 +170,7 @@ namespace Snowlight.Game.Rooms
                         case ItemBehavior.LoveShuffler:
 
                             Effect = new RoomTileEffect(RoomTileEffectType.Sit, Item.RoomRotation,
-                                new Vector2(Item.RoomPosition.X, Item.RoomPosition.Y), Item.Definition.Height, 0,
+                                new Vector2(Item.RoomPosition.X, Item.RoomPosition.Y), Item.ActiveHeight, 0,
                                 Item.DefinitionId);
                             MovementNode = UserMovementNode.WalkableEndOfRoute;
                             break;
@@ -161,7 +178,7 @@ namespace Snowlight.Game.Rooms
                         case ItemBehavior.Bed:
 
                             Effect = new RoomTileEffect(RoomTileEffectType.Lay, Item.RoomRotation,
-                                new Vector2(Item.RoomPosition.X, Item.RoomPosition.Y), Item.Definition.Height, 0,
+                                new Vector2(Item.RoomPosition.X, Item.RoomPosition.Y), Item.ActiveHeight, 0,
                                 Item.DefinitionId);
                             MovementNode = UserMovementNode.WalkableEndOfRoute;
                             break;
@@ -200,6 +217,7 @@ namespace Snowlight.Game.Rooms
                             mStackTopItemHeight[Tile.X, Tile.Y] = Item.Definition.Height;
                             mUserMovementNodes[Tile.X, Tile.Y] = MovementNode;
                             mTileEffects[Tile.X, Tile.Y] = Effect;
+                            mFurniMap[Tile.X, Tile.Y] = Item.Id;
 
                             if (Item.Definition.Behavior == ItemBehavior.Bed)
                             {
@@ -228,7 +246,7 @@ namespace Snowlight.Game.Rooms
                     double TotalItemStackHeightOld = mCachedModel.Heightmap.FloorHeight[Object.Position.X, Object.Position.Y] + Object.Height;
                     double TotalItemStackHeight = Object.Position.Z + Math.Round(Object.Height, 1);
 
-                    List<Vector2> AffectedTiles = NegativeStaticObjectCalculateAffectedTiles(Object, Object.Position.GetVector2(), Object.Rotation);
+                    List<Vector2> AffectedTiles = CalculateAffectedTiles(Object, Object.Position.GetVector2(), Object.Rotation);
                     UserMovementNode MovimentNode = UserMovementNode.Blocked;
 
                     if (Object.Walkable)

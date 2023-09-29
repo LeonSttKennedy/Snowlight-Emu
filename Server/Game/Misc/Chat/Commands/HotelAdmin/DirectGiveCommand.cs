@@ -33,7 +33,7 @@ namespace Snowlight.Game.Misc
         {
             if (Params.Length < 4)
             {
-                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_invalid_syntax") + " - :directgive <username> <type: coins/credits or pixels> <quantity>", 0, ChatType.Whisper));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_invalid_syntax") + " - :directgive <username> <type: coins/credits, pixels, snowflake, hearts, giftpoints or shells> <quantity>"));
                 return;
             }
 
@@ -60,7 +60,7 @@ namespace Snowlight.Game.Misc
                             {
                                 TargetSession.CharacterInfo.UpdateCreditsBalance(MySqlClient, Amount);
                                 TargetSession.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
                                 goto End;
                             }
                             else
@@ -74,8 +74,89 @@ namespace Snowlight.Game.Misc
                         {
                             if (int.TryParse(Params[3], out Amount))
                             {
-                                TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, Amount);
-                                TargetSession.SendData(ActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPointsBalance, Amount));
+                                TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, SeasonalCurrencyList.Pixels, Amount);
+                                TargetSession.SendData(UpdatePixelsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPoints[0], Amount));
+                                TargetSession.SendData(UserActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPoints));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                goto End;
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
+                    case "snowflakes":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, SeasonalCurrencyList.Snowflakes, Amount);
+                                TargetSession.SendData(UserActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPoints));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                goto End;
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
+                    case "hearts":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, SeasonalCurrencyList.Hearts, Amount);
+                                TargetSession.SendData(UserActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPoints));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                goto End;
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
+                    case "giftpoints":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, SeasonalCurrencyList.Giftpoints, Amount);
+                                TargetSession.SendData(UserActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPoints));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                goto End;
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
+                    case "shells":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, SeasonalCurrencyList.Shells, Amount);
+                                TargetSession.SendData(UserActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPoints));
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                goto End;
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
+                    case "diamonds":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, SeasonalCurrencyList.Diamonds, Amount);
+                                TargetSession.SendData(UserActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPoints));
                                 TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
                                 goto End;
                             }

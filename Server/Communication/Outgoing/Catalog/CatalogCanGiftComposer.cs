@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowlight.Util;
+using System;
 
 namespace Snowlight.Communication.Outgoing
 {
@@ -8,7 +9,7 @@ namespace Snowlight.Communication.Outgoing
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.CATALOG_CAN_GIFT);
             Message.AppendUInt32(ItemId);
-            Message.AppendBoolean(CanGift);
+            Message.AppendBoolean(ServerSettings.GiftingSystemEnabled ? CanGift : false);
             return Message;
         }
     }

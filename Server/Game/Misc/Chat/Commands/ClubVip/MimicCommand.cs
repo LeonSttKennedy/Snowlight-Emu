@@ -9,6 +9,7 @@ using Snowlight.Storage;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Characters;
 
 namespace Snowlight.Game.Misc
 {
@@ -41,26 +42,12 @@ namespace Snowlight.Game.Misc
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
                     string Username = Params[1];
-                    DataRow Data = null;
-                    Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(Username));
-                    if (TargetSession == null)
-                    {
-                        MySqlClient.SetParameter("username", Username);
-                        Data = MySqlClient.ExecuteQueryRow("SELECT * FROM characters WHERE username LIKE @username LIMIT 1");
-                        if (Data == null)
-                        {
-                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_mimic_error", Username), 4, ChatType.Whisper));
-                            return;
-                        }
-                    }
 
-                    bool MimicPermitted = Data != null ? Data["allow_mimic"].ToString() == "1" : TargetSession.CharacterInfo.AllowMimic;
+                    CharacterInfo Info = CharacterInfoLoader.GetCharacterInfo(MySqlClient, CharacterResolverCache.GetUidFromName(Username));
 
-                    if (MimicPermitted)
+                    if (Info.AllowMimic)
                     {
-                        Session.CharacterInfo.UpdateFigure(MySqlClient,
-                            (Data != null ? (string)Data["gender"] : TargetSession.CharacterInfo.Gender.ToString()),
-                            (Data != null ? UserInputFilter.FilterString((string)Data["figure"]) : TargetSession.CharacterInfo.Figure));
+                        Session.CharacterInfo.UpdateFigure(MySqlClient, Info.Gender.ToString(), Info.Figure);
 
                         Session.SendInfoUpdate();
                     }

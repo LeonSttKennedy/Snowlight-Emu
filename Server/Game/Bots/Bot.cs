@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using Snowlight.Specialized;
 using Snowlight.Game.Bots.Behavior;
 using Snowlight.Game.Pets;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Bots
 {
@@ -40,7 +41,7 @@ namespace Snowlight.Game.Bots
         {
             get
             {
-                return mId;
+                return IsPet ? mPetData.Id : mId;
             }
         }
 
@@ -64,7 +65,7 @@ namespace Snowlight.Game.Bots
         {
             get
             {
-                return (IsPet ? mPetData.Name : mName);
+                return IsPet ? mPetData.Name : mName;
             }
         }
 
@@ -72,7 +73,7 @@ namespace Snowlight.Game.Bots
         {
             get
             {
-                return (IsPet ? mPetData.Look : mLook);
+                return IsPet ? mPetData.Look : mLook;
             }
         }
 
@@ -80,7 +81,7 @@ namespace Snowlight.Game.Bots
         {
             get
             {
-                return (IsPet ? string.Empty : mMotto); 
+                return IsPet ? string.Empty : mMotto; 
             }
         }
 
@@ -138,7 +139,7 @@ namespace Snowlight.Game.Bots
         {
             get
             {
-                return mRotation;
+                return IsPet ? mPetData.RoomRotation : mRotation;
             }
         }
 

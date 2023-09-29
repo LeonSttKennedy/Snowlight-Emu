@@ -1,21 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using System.Linq;
+using System.Collections.Generic;
+using System.Security.Cryptography;
 
-using Snowlight.Communication;
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Items;
-using Snowlight.Specialized;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Storage;
 using Snowlight.Util;
+using Snowlight.Storage;
 using Snowlight.Game.Misc;
 using Snowlight.Game.Pets;
 using Snowlight.Game.Bots;
+using Snowlight.Game.Items;
+using Snowlight.Specialized;
+using Snowlight.Game.Rights;
+using Snowlight.Game.Catalog;
+using Snowlight.Communication;
+using Snowlight.Game.Sessions;
 using Snowlight.Game.Achievements;
+using Snowlight.Game.Quests;
+using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
-using System.Data;
+using Snowlight.Game.Characters;
 
 namespace Snowlight.Game.Rooms
 {
@@ -44,6 +49,14 @@ namespace Snowlight.Game.Rooms
             DataRouter.RegisterHandler(OpcodesIn.PET_RESPECT, new ProcessRequestCallback(RespectPet));
 
             DataRouter.RegisterHandler(OpcodesIn.OPEN_GIFT, new ProcessRequestCallback(OpenPresent));
+
+            DataRouter.RegisterHandler(OpcodesIn.ROOM_SAVE_BRANDING, new ProcessRequestCallback(SaveBranding));
+
+            DataRouter.RegisterHandler(OpcodesIn.SET_FOOTBALL_GATE_DATA, new ProcessRequestCallback(SetFootballGateData));
+
+            DataRouter.RegisterHandler(OpcodesIn.UPDATE_WIRED_TRIGGER, new ProcessRequestCallback(SaveWired));
+            DataRouter.RegisterHandler(OpcodesIn.UPDATE_WIRED_EFFECT, new ProcessRequestCallback(SaveWired));
+            DataRouter.RegisterHandler(OpcodesIn.UPDATE_WIRED_CONDITION, new ProcessRequestCallback(SaveWired));
         }
 
         private static void PlaceItem(Session Session, ClientMessage Message)
@@ -136,23 +149,42 @@ namespace Snowlight.Game.Rooms
                     {
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
-                            Item.MoveToRoom(MySqlClient, Instance.RoomId, FinalizedPosition, Rotation);                        
-                        }
+                            Item.MoveToRoom(MySqlClient, Instance.RoomId, FinalizedPosition, Rotation);
 
-                        Instance.RegenerateRelativeHeightmap();
 
-                        Session.InventoryCache.RemoveItem(Item.Id);
-                        Session.SendData(InventoryItemRemovedComposer.Compose(Item.Id));
+                            Instance.RegenerateRelativeHeightmap();
 
-                        ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Placed);
+                            Session.InventoryCache.RemoveItem(Item.Id);
+                            Session.SendData(InventoryItemRemovedComposer.Compose(Item.Id));
 
-                        Instance.BroadcastMessage(RoomFloorItemPlacedComposer.Compose(Item));
+                            ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Placed);
 
-                        QuestManager.ProgressUserQuest(Session, QuestType.FURNI_PLACE);
+                            Instance.BroadcastMessage(RoomFloorItemPlacedComposer.Compose(Item));
 
-                        if (FinalizedPosition.Z > Instance.Model.Heightmap.FloorHeight[FinalizedPosition.X, FinalizedPosition.Y])
-                        {
-                            QuestManager.ProgressUserQuest(Session, QuestType.FURNI_STACK);
+                            QuestManager.ProgressUserQuest(Session, QuestType.FURNI_PLACE);
+
+                            if (FinalizedPosition.Z > Instance.Model.Heightmap.FloorHeight[FinalizedPosition.X, FinalizedPosition.Y])
+                            {
+                                QuestManager.ProgressUserQuest(Session, QuestType.FURNI_STACK);
+                            }
+
+                            if (Item.Definition.Behavior.Equals(ItemBehavior.BlackHole))
+                            {
+                                string HoleACH = "ACH_RoomDecoHoleFurniCount";
+
+                                UserAchievement HoleCountAchData = Session.AchievementCache.GetAchievementData(HoleACH);
+
+                                int HoleCountAchData_Progress = HoleCountAchData != null ? HoleCountAchData.Progress : 0;
+
+                                int ActualRoomHoleCount = Instance.GetFloorItems().Where(I => I.Definition.Behavior.Equals(ItemBehavior.BlackHole)).Count();
+
+                                int Difference = ActualRoomHoleCount - HoleCountAchData_Progress;
+
+                                if (Difference > 0)
+                                {
+                                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, HoleACH, Difference);
+                                }
+                            }
                         }
                     }
                     
@@ -174,19 +206,38 @@ namespace Snowlight.Game.Rooms
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
                             Item.MoveToRoom(MySqlClient, Instance.RoomId, new Vector3(0, 0, 0), 0, WallPos);
-                        }
 
-                        Session.InventoryCache.RemoveItem(Item.Id);
-                        Session.SendData(InventoryItemRemovedComposer.Compose(Item.Id));
 
-                        ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Placed);
+                            Session.InventoryCache.RemoveItem(Item.Id);
+                            Session.SendData(InventoryItemRemovedComposer.Compose(Item.Id));
 
-                        Instance.BroadcastMessage(RoomWallItemPlacedComposer.Compose(Item));
+                            ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Placed);
 
-                        if (IsPlacingGuestStickie)
-                        {
-                            Instance.GiveTemporaryStickieRights(Item.Id, Session.CharacterId);
-                            Session.SendData(StickyDataComposer.Compose(Item));
+                            Instance.BroadcastMessage(RoomWallItemPlacedComposer.Compose(Item));
+
+                            if (IsPlacingGuestStickie)
+                            {
+                                Instance.GiveTemporaryStickieRights(Item.Id, Session.CharacterId);
+                                Session.SendData(StickyDataComposer.Compose(Item));
+
+                                CharacterInfo OwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, Instance.Info.OwnerId);
+
+                                if (OwnerInfo.HasLinkedSession)
+                                {
+                                    Session OwnerSession = SessionManager.GetSessionByCharacterId(Instance.Info.OwnerId);
+
+                                    AchievementManager.ProgressUserAchievement(MySqlClient, OwnerSession, "ACH_NotesReceived", 1);
+                                }
+                                else
+                                {
+                                    AchievementManager.OfflineProgressUserAchievement(MySqlClient, Instance.Info.OwnerId, "ACH_NotesReceived", 1);
+                                }
+
+                                if (Session.CharacterId != Instance.Info.OwnerId)
+                                {
+                                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_NotesLeft", 1);
+                                }
+                            }
                         }
                     }
 
@@ -507,6 +558,12 @@ namespace Snowlight.Game.Rooms
 
         private static void PlacePet(Session Session, ClientMessage Message)
         {
+            if(!Session.HasRight("hotel_admin") && !ServerSettings.PetsEnabled)
+            {
+                Session.SendData(PetPlacementErrorComposer.Compose(PetPlacingError.PetsDisabledInThisHotel));
+                return;
+            }
+
             uint PetId = Message.PopWiredUInt32();
             int X = Message.PopWiredInt32();
             int Y = Message.PopWiredInt32();
@@ -514,18 +571,25 @@ namespace Snowlight.Game.Rooms
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
             if (Instance == null || (!Instance.CheckUserRights(Session, true) && !Instance.Info.AllowPets))
             {
+                Session.SendData(PetPlacementErrorComposer.Compose(PetPlacingError.PetsDisabledInThisRoom));
                 return;
             }
 
-            Pet Pet = Session.PetInventoryCache.GetPet(PetId);
-            if (Pet == null || Pet.RoomId != 0)
-            {
-                return;
-            }
+            bool IsOwner = Instance.CheckUserRights(Session, true);
 
-            Vector2 DesiredPosition = new Vector2(X, Y);
-            if (!Instance.IsValidPosition(DesiredPosition)) 
+            Pet Pet = Session.InventoryCache.GetPet(PetId);
+            if (Pet == null || Pet.IsInRoom) return;
+
+            RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+            if (Actor == null) return;
+
+            Vector2 DesiredPosition = IsOwner ? new Vector2(X, Y) : Actor.SquareInFront;
+            if (!Instance.CanInitiateMoveToPosition(DesiredPosition)) 
             {
+                PetPlacingError Code = IsOwner ? PetPlacingError.RoomOwnerPlacingError :
+                    PetPlacingError.GuestPetPlacingError;
+
+                Session.SendData(PetPlacementErrorComposer.Compose(Code));
                 return;
             }
 
@@ -536,9 +600,9 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            if (!Instance.CanPlacePet(Instance.CheckUserRights(Session, true)))
+            if (!Instance.CanPlacePet(IsOwner))
             {
-                Session.SendData(RoomItemPlacementErrorComposer.Compose(RoomItemPlacementErrorCode.PetLimitReached));
+                Session.SendData(PetPlacementErrorComposer.Compose(PetPlacingError.ReachPetLimitForThisRoom));
                 return;
             }
 
@@ -547,12 +611,19 @@ namespace Snowlight.Game.Rooms
             Pet.MoveToRoom(Instance.RoomId, Position);
             Instance.AddBotToRoom(BotManager.CreateNewInstance(BotDefinition, Instance.RoomId, Position, Pet));
 
-            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-            {
-                Pet.SynchronizeDatabase(MySqlClient);
-            }
+            RoomManager.MarkWriteback(Pet);
 
+            Session.InventoryCache.RemovePet(Pet.Id);
             Session.SendData(InventoryPetRemovedComposer.Compose(Pet.Id));
+
+            if(Instance.Info.OwnerId != Session.CharacterId)
+            {
+                QuestManager.ProgressUserQuest(Session, QuestType.PET_TO_OTHER_ROOM, 1);
+                if(Instance.PetActorCount > 1)
+                {
+                    QuestManager.ProgressUserQuest(Session, QuestType.PETS_IN_ROOM, (uint)Instance.PetActorCount);
+                }
+            }
         }
 
         private static void GetPetInfo(Session Session, ClientMessage Message)
@@ -560,14 +631,17 @@ namespace Snowlight.Game.Rooms
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
             if (Instance == null) return;
 
-            uint ActorRefId = Message.PopWiredUInt32();
-            RoomActor Actor = Instance.GetActorByReferenceId(ActorRefId, RoomActorType.AiBot);
+            uint PetId = Message.PopWiredUInt32();
+            RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
             if (Actor == null) return;
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
             if (PetData == null) return;
 
-            Session.SendData(PetInfoComposer.Compose(Actor.ReferenceId, PetData));
+            Session.SendData(PetInfoComposer.Compose(PetData));
+            Session.SendData(PetTrainingPanelComposer.Compose(PetData));
+
+            QuestManager.ProgressUserQuest(Session, QuestType.FIND_A_PET_TYPE, (uint)PetData.Type);
         }
 
         private static void TakePet(Session Session, ClientMessage Message)
@@ -582,15 +656,12 @@ namespace Snowlight.Game.Rooms
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
             if (PetData == null || (PetData.OwnerId != Session.CharacterId && !Session.HasRight("hotel_admin"))) return;
 
+            PetData.MoveToUserInventory();
+            RoomManager.MarkWriteback(PetData);
+
             Instance.RemoveActorFromRoom(Actor.Id);
 
-            PetData.MoveToUserInventory(Session.CharacterId);
-            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-            {
-                PetData.SynchronizeDatabase(MySqlClient);
-            }
-
-            Session.PetInventoryCache.Add(PetData);
+            Session.InventoryCache.Add(PetData);
             Session.SendData(InventoryPetAddedComposer.Compose(PetData));
         }
         private static void PetTrainerPanel(Session Session, ClientMessage Message)
@@ -598,71 +669,71 @@ namespace Snowlight.Game.Rooms
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
             if (Instance == null) return;
 
-            int PetId = Message.PopWiredInt32();
-            RoomActor Actor = Instance.GetActorByReferenceId(uint.Parse(PetId.ToString()), RoomActorType.AiBot);
+            uint PetId = Message.PopWiredUInt32();
+            RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
             if (Actor == null) return;
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
             if (PetData == null) return;
-            
-            Session.SendData(PetTrainingPanelComposer.Compose(Actor.ReferenceId, PetData));
+
+            Session.SendData(PetTrainingPanelComposer.Compose(PetData));
         }
 
         private static void RespectPet(Session Session, ClientMessage Message)
         {
-            if (Session.CharacterInfo.RespectCreditPets <= 0)
+            if (Session.CharacterInfo.RespectCreditPets <= 0) return;
+
+            TimeSpan TotalDaysRegistered = DateTime.Now - UnixTimestamp.GetDateTimeFromUnixTimestamp(Session.CharacterInfo.TimestampRegistered);
+            if(ServerSettings.PetScratchingAccountDaysOldEnabled &&
+                TotalDaysRegistered.Days < ServerSettings.PetScratchingAccountDaysOld)
             {
+                Session.SendData(PetRespectErrorComposer.Compose(TotalDaysRegistered.Days));
                 return;
             }
 
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-            if (Instance == null)
-            {
-                return;
-            }
+            if (Instance == null) return;
 
             uint PetId = Message.PopWiredUInt32();
             RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
-            if (Actor == null)
-            {
-                return;
-            }
+            if (Actor == null) return;
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-            if (PetData == null)
-            {
-                return;
-            }
+            if (PetData == null) return;
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 Session.CharacterInfo.RespectCreditPets--;
                 Session.CharacterInfo.SynchronizeRespectData(MySqlClient);
-                PetData.OnRespect(MySqlClient, Instance, int.Parse(Actor.Id.ToString()));
+                PetData.OnRespect(MySqlClient, Instance);
 
-                Session TargetSession = SessionManager.GetSessionByCharacterId(PetData.OwnerId);
-                if (TargetSession != null) 
+                CharacterInfo OwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, PetData.OwnerId);
+
+                if (OwnerInfo.HasLinkedSession)
                 {
-                    if (TargetSession.CharacterInfo.Id != Session.CharacterInfo.Id)
+                    Session TargetSession = SessionManager.GetSessionByCharacterId(OwnerInfo.Id);
+
+                    if (TargetSession.CharacterId != Session.CharacterId)
                     {
                         AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, "ACH_PetRespectReceiver", 1);
                     }
                 }
                 else
                 {
-                    AchievementManager.OfflineProgressUserAchievement(MySqlClient, PetData.OwnerId, "ACH_PetRespectReceiver", 1);
+                    AchievementManager.OfflineProgressUserAchievement(MySqlClient, OwnerInfo.Id, "ACH_PetRespectReceiver", 1);
                 }
 
-                if (Session.CharacterInfo.Id != PetData.OwnerId)
+                if (Session.CharacterId != PetData.OwnerId)
                 {
                     AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_PetRespectGiver", 1);
                 }
+
+                QuestManager.ProgressUserQuest(Session, QuestType.SCRATCH_A_PET, 1);
             }
 
             Actor.SetStatus("std", "");
             Actor.SetStatus("gst sml", "");
             Actor.UpdateNeeded = true;
-            Instance.BroadcastMessage(PetUpdateComposer.Compose(Actor.ReferenceId, PetData));
         }
 
         private static void OpenPresent(Session Session, ClientMessage Message)
@@ -673,78 +744,278 @@ namespace Snowlight.Game.Rooms
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-                if (Instance == null || !Instance.CheckUserRights(Session, true)) return;
+                if (Instance == null || !Instance.CheckUserRights(Session, true))
+                {
+                    return;
+                }
 
                 Item GiftItem = Instance.GetItem(PresentID);
-                if (GiftItem == null) return;
+                if (GiftItem == null)
+                {
+                    return;
+                }
 
-                DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM user_gifts WHERE item_id = '" + GiftItem.Id + "' LIMIT 1");
-                if (Row == null) return;
+                MySqlClient.SetParameter("itemid", GiftItem.Id);
+                DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM user_gifts WHERE item_id = @itemid LIMIT 1");
+                if (Row == null)
+                {
+                    return;
+                }
 
-                ItemDefinition BaseItem = ItemDefinitionManager.GetDefinition((uint)Row["base_id"]);
                 GiftItem.RemovePermanently(MySqlClient);
                 Instance.TakeItem(GiftItem.Id);
                 Instance.RegenerateRelativeHeightmap();
 
-                Session.SendData(RoomGiftOpenedComposer.Compose(BaseItem.TypeLetter, BaseItem.SpriteId, BaseItem.Name));
-                if (BaseItem.Behavior == ItemBehavior.Rental)
+                string[] RowItemIds = ((string)Row["base_ids"]).Split('|');
+                string[] RowAmounts = ((string)Row["amounts"]).Split('|');
+
+                for(int i = 0; i < RowItemIds.Length; i++)
                 {
-                    ExpireTimestamp = UnixTimestamp.GetCurrent() + 3600;
-                }
+                    int Amount = int.Parse(RowAmounts[i]);
 
-                Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
-                List<Item> GeneratedGenericItems = new List<Item>();
-                for (int i = 0; i < (int)Row["amount"]; i++)
-                {
-                    GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, BaseItem.Id,
-                        Session.CharacterInfo.Id, (string)Row["extra_data"], (string)Row["extra_data"], ExpireTimestamp));
-                }
+                    ItemDefinition BaseItem = ItemDefinitionManager.GetDefinition(uint.Parse(RowItemIds[i]));
 
-                switch (BaseItem.Behavior)
-                {
-                    case ItemBehavior.Teleporter:
+                    Session.SendData(RoomGiftOpenedComposer.Compose(BaseItem.TypeLetter, BaseItem.SpriteId, BaseItem.Name));
 
-                        Item LinkedItem = ItemFactory.CreateItem(MySqlClient, BaseItem.Id,
-                            Session.CharacterInfo.Id, GeneratedGenericItems[0].Id.ToString(), string.Empty,
-                            ExpireTimestamp);
-
-                        GeneratedGenericItems[0].Flags = LinkedItem.Id.ToString();
-                        GeneratedGenericItems[0].SynchronizeDatabase(MySqlClient, true);
-
-                        GeneratedGenericItems.Add(LinkedItem);
-                        break;
-                }
-
-                foreach (Item GeneratedItem in GeneratedGenericItems)
-                {
-                    Session.InventoryCache.Add(GeneratedItem);
-
-                    int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
-
-                    if (!NewItems.ContainsKey(TabId))
+                    switch (BaseItem.Behavior)
                     {
-                        NewItems.Add(TabId, new List<uint>());
+                        case ItemBehavior.Rental:
+
+                            ExpireTimestamp = UnixTimestamp.GetCurrent() + 3600;
+                            break;
+
+                        case ItemBehavior.DuckHC:
+                        case ItemBehavior.DuckVIP:
+
+                            string BasicAchievement = "ACH_BasicClub";
+                            string VipAchievement = "ACH_VipClub";
+
+                            double Length = 86400 * BaseItem.BehaviorData;
+
+                            ClubSubscriptionLevel Level = BaseItem.Behavior == ItemBehavior.DuckVIP ?
+                                ClubSubscriptionLevel.VipClub : BaseItem.Behavior == ItemBehavior.DuckHC ?
+                                ClubSubscriptionLevel.BasicClub : ClubSubscriptionLevel.None;
+
+                            if (Session.SubscriptionManager.IsActive &&
+                                Session.SubscriptionManager.SubscriptionLevel == ClubSubscriptionLevel.VipClub)
+                            {
+                                Level = ClubSubscriptionLevel.VipClub;
+                            }
+
+                            // Extend membership
+                            Session.SubscriptionManager.AddOrExtend((int)Level, Length);
+
+                            // Check if we need to manually award basic/vip badges
+                            bool NeedsBasicUnlock = !Session.BadgeCache.ContainsCodeWith(BasicAchievement)
+                                && Level >= ClubSubscriptionLevel.BasicClub;
+
+                            bool NeedsVipUnlock = !Session.BadgeCache.ContainsCodeWith(VipAchievement)
+                                && Level == ClubSubscriptionLevel.VipClub;
+
+                            // Reload the badge cache (reactivating any disabled subscription badges)
+                            Session.BadgeCache.ReloadCache(MySqlClient, Session.AchievementCache);
+
+                            // Virtually unlock the basic achievement without reward if needed
+                            if (NeedsBasicUnlock)
+                            {
+                                Achievement Achievement = AchievementManager.GetAchievement(BasicAchievement);
+
+                                if (Achievement != null)
+                                {
+                                    UserAchievement UserAchievement = Session.AchievementCache.GetAchievementData(
+                                        BasicAchievement);
+
+                                    if (UserAchievement != null)
+                                    {
+                                        Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
+                                            0, 0));
+                                    }
+                                }
+                            }
+
+                            // Virtually unlock the VIP achievement without reward if needed
+                            if (NeedsVipUnlock)
+                            {
+                                Achievement Achievement = AchievementManager.GetAchievement(VipAchievement);
+
+                                if (Achievement != null)
+                                {
+                                    UserAchievement UserAchievement = Session.AchievementCache.GetAchievementData(
+                                        VipAchievement);
+
+                                    if (UserAchievement != null)
+                                    {
+                                        Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
+                                            0, 0));
+                                    }
+                                }
+                            }
+
+                            // Disable any VIP badges if they still aren't valid
+                            if (Session.SubscriptionManager.SubscriptionLevel < ClubSubscriptionLevel.VipClub)
+                            {
+                                Session.BadgeCache.DisableSubscriptionBadge(VipAchievement);
+                            }
+
+                            // Synchronize equipped badges if the user has unlocked anything
+                            if (NeedsVipUnlock || NeedsBasicUnlock)
+                            {
+                                if (Instance != null)
+                                {
+                                    Instance.BroadcastMessage(RoomUserBadgesComposer.Compose(Session.CharacterId,
+                                        Session.BadgeCache.EquippedBadges));
+                                }
+                            }
+
+                            Session.SubscriptionManager.UpdateUserBadge();
+
+                            // Clear catalog cache for user (in case of changes)
+                            CatalogManager.ClearCacheGroup(Session.CharacterId);
+
+                            // Send new data to client
+                            Session.SendData(FuseRightsListComposer.Compose(Session));
+                            Session.SendData(SubscriptionStatusComposer.Compose(Session.SubscriptionManager, true));
+
+                            if (Session.SubscriptionManager.GiftPoints > 0)
+                            {
+                                Session.SendData(ClubGiftReadyComposer.Compose(Session.SubscriptionManager.GiftPoints));
+                            }
+
+                            break;
                     }
 
-                    NewItems[TabId].Add(GeneratedItem.Id);
-                }
+                    Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
+                    List<Item> GeneratedGenericItems = new List<Item>();
+                    for (int a = 0; a < Amount; a++)
+                    {
+                        GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, BaseItem.Id,
+                            Session.CharacterInfo.Id, (string)Row["extra_data"], (string)Row["extra_data"], ExpireTimestamp));
+                    }
 
+                    switch (BaseItem.Behavior)
+                    {
+                        case ItemBehavior.Teleporter:
+
+                            Item LinkedItem = ItemFactory.CreateItem(MySqlClient, BaseItem.Id,
+                                Session.CharacterInfo.Id, GeneratedGenericItems[0].Id.ToString(), string.Empty,
+                                ExpireTimestamp);
+
+                            GeneratedGenericItems[0].Flags = LinkedItem.Id.ToString();
+                            GeneratedGenericItems[0].SynchronizeDatabase(MySqlClient, true);
+
+                            GeneratedGenericItems.Add(LinkedItem);
+                            break;
+                    }
+
+                    foreach (Item GeneratedItem in GeneratedGenericItems)
+                    {
+                        Session.InventoryCache.Add(GeneratedItem);
+
+                        int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
+
+                        if (!NewItems.ContainsKey(TabId))
+                        {
+                            NewItems.Add(TabId, new List<uint>());
+                        }
+
+                        NewItems[TabId].Add(GeneratedItem.Id);
+                    }
+
+                    foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
+                    {
+                        foreach (uint NewItem in NewItemData.Value)
+                        {
+                            Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
+                        }
+                    }
+
+                    if (NewItems.Count > 0)
+                    {
+                        Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
+                    }
+                }
+                
                 Session.SendData(InventoryRefreshComposer.Compose());
-                foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                {
-                    foreach (uint NewItem in NewItemData.Value)
-                    {
-                        Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                    }
-                }
 
-                if (NewItems.Count > 0)
-                {
-                    Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-                }
-
-                MySqlClient.ExecuteNonQuery("DELETE FROM user_gifts WHERE item_id = '" + GiftItem.Id + "' LIMIT 1");
+                MySqlClient.SetParameter("itemid", GiftItem.Id);
+                MySqlClient.ExecuteNonQuery("DELETE FROM user_gifts WHERE item_id = @itemid LIMIT 1");
             }
+        }
+
+        private static void SaveBranding(Session Session, ClientMessage Message)
+        {
+            uint ItemId = Message.PopWiredUInt32();
+            uint Data = Message.PopWiredUInt32();
+            
+            string Brand = Message.PopString();
+            string Brand2 = Message.PopString();
+            string Brand3 = Message.PopString();
+            string Brand4 = Message.PopString();
+            string Brand5 = Message.PopString();
+            string Brand6 = Message.PopString();
+            string Brand7 = Message.PopString();
+            string Brand8 = Message.PopString();
+            string Brand9 = Message.PopString();
+            string Brand10 = Message.PopString();
+            string BrandData = Brand + "=" + Brand2 + Convert.ToChar(9) + Brand3 + "=" + Brand4 + Convert.ToChar(9) + Brand5 + "=" + Brand6 + Convert.ToChar(9) + Brand7 + "=" + Brand8 + Convert.ToChar(9) + Brand9 + "=" + Brand10 + Convert.ToChar(9) + "state=0";
+
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+            Item Item = Instance.GetItem(ItemId);
+
+            Item.Flags = BrandData;
+            Item.DisplayFlags = BrandData;
+            RoomManager.MarkWriteback(Item, true);
+
+            Item.BroadcastStateUpdate(Instance);
+
+            Instance.RegenerateRelativeHeightmap();
+        }
+        private static void SetFootballGateData(Session Session, ClientMessage Message)
+        {
+            uint ItemId = Message.PopWiredUInt32();
+            string CharGender = Message.PopString().ToUpper();
+            string Figure = UserInputFilter.FilterString(Message.PopString());
+            Figure = Figure.Replace("hd-99999-99999.", "");
+
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+
+            if (Instance != null)
+            {
+                Item RoomItem = Instance.GetItem(ItemId);
+                if (RoomItem != null)
+                {
+                    string[] ItemExtraData = RoomItem.Flags.Split(',');
+                    switch (CharGender.ToUpper())
+                    {
+                        case "M":
+
+                            ItemExtraData[0] = "hd-99999-99999." + Figure;
+                            break;
+
+                        case "F":
+
+                            ItemExtraData[1] = "hd-99999-99999." + Figure;
+                            break;
+
+                        default:
+
+                            return;
+                    }
+
+                    RoomItem.Flags = string.Join(",", ItemExtraData);
+                    RoomItem.DisplayFlags = RoomItem.Flags;
+                    RoomManager.MarkWriteback(RoomItem, true);
+
+                    RoomItem.BroadcastStateUpdate(Instance);
+
+                    Instance.RegenerateRelativeHeightmap();
+                }
+            }
+        }
+        private static void SaveWired(Session Session, ClientMessage Message)
+        {
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+            Instance.WiredManager.HandleSave(Session, Message);
         }
     }
 }

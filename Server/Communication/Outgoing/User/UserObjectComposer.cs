@@ -18,13 +18,10 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendStringWithBreak(Session.CharacterInfo.Motto);
             Message.AppendStringWithBreak(Session.CharacterInfo.RealName);
             Message.AppendInt32(0);
-            Message.AppendStringWithBreak("");
-            Message.AppendInt32(0);
-            Message.AppendInt32(0);
             Message.AppendInt32(Session.CharacterInfo.RespectPoints);
             Message.AppendInt32(Session.CharacterInfo.RespectCreditHuman);
             Message.AppendInt32(Session.CharacterInfo.RespectCreditPets);
-            Message.AppendUInt32(24708);
+            Message.AppendBoolean(Session.CharacterInfo.AllowFriendStream);
             return Message;
         }
     }

@@ -12,6 +12,8 @@ using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
 using Snowlight.Config;
+using Snowlight.Util;
+using Snowlight.Specialized;
 
 namespace Snowlight.Game.Moderation
 {
@@ -151,11 +153,11 @@ namespace Snowlight.Game.Moderation
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
             if (Instance == null || !Instance.CheckUserRights(Session, true)) return;
 
-            Bot Guide = BotManager.GetBotByBehavior("guide");
+            Bot GuideBotDefinition = BotManager.GetBotByBehavior("guide");
 
-            if (Guide == null)
+            if (GuideBotDefinition == null)
             {
-                Session.SendData(NotificationMessageComposer.Compose("There are not Guide Bots in the database!"));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("guide_bot_not_found")));
                 return;
             }
 
@@ -171,13 +173,16 @@ namespace Snowlight.Game.Moderation
                 return;
             }
 
-            RoomModel Model = Instance.Model;
-            Instance.AddBotToRoom(BotManager.CreateNewInstance(Guide, Instance.InstanceId, 
-                new Specialized.Vector3(Model.DoorPosition.X, Model.DoorPosition.Y, Model.DoorPosition.Z)));
-            
+            Vector3 Position = new Vector3(Instance.Model.DoorPosition.X, Instance.Model.DoorPosition.Y,
+                Instance.Model.DoorPosition.Z);
+
+            Bot GuideBotInstance = BotManager.CreateNewInstance(GuideBotDefinition, Instance.InstanceId,
+                Position);
+
+            Instance.AddBotToRoom(GuideBotInstance);
+
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                Session.BadgeCache.ReloadCache(MySqlClient, Session.AchievementCache);
                 AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_Student", 1);
             }
 

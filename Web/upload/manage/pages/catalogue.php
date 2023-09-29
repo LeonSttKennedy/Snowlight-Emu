@@ -116,8 +116,7 @@ require_once "top.php";
 	This tool you can see all pages from catalogue.
 </p>
 
-<h2>Catalogue Management</h2><br />
-<p><strong>Search a catalogue page:</strong></p><br />
+<h2>Search a catalogue page</h2><br />
 <form method="post">
 Page title:&nbsp;&nbsp;<input type="text" name="title" value="<?php echo ((strlen($searchparams['title']) > 0) ?  $searchparams['title'] : ''); ?>"><br /><br />
 Parent page:&nbsp;&nbsp;<select name="parent_id">
@@ -138,6 +137,7 @@ Enabled:&nbsp;&nbsp;<input type="radio" name="enabled" <?php echo ((is_numeric($
 </form>
 <br />
 <hr />
+<h2>Catalogue Pages List</h2>
 <br />
 <table border="1" width="100%">
 	<thead>
@@ -169,7 +169,7 @@ Enabled:&nbsp;&nbsp;<input type="radio" name="enabled" <?php echo ((is_numeric($
 		echo '<td>' . ((is_numeric($searchparams['parent_id']) && $searchparams['title'] == "" && $searchparams['coming_soon'] == "" && $searchparams['enabled'] == "") ? '<input style="text-align: center; font-weight: bold; margin: 2px;" type="text" size="3" value="' . $catalogue['order_num'] . '" name="ord-' . $catalogue['id'] . '">' : $catalogue["order_num"]) . '</td>';
 		echo '<td>' . ($catalogue["enabled"] == "1" ? 'Yes' : 'No') . '</td>';
 		echo '<td>' . $catalogue["title"] . '</td>';
-		echo '<td>' . $catalogue["icon"]  . '</td>';
+		echo '<td>&nbsp;<img src="' . CLIENT_BASE . '/c_images/catalogue/icon_' . $catalogue["icon"]  . '.png" /></td>';
 		echo '<td>' . $catalogue["color"] . '</td>';
 		echo '<td>' . $catalogue["required_right"] . '</td>';
 		echo '<td>' . ($catalogue["visible"] == "1" ? 'Yes' : 'No') . '</td>';
@@ -178,7 +178,7 @@ Enabled:&nbsp;&nbsp;<input type="radio" name="enabled" <?php echo ((is_numeric($
 		echo '<td>' . $catalogue["template"] . '</td>';
 		echo '<td>' . substr($catalogue["page_strings_1"], 0, 10) . (strlen($catalogue["page_strings_1"]) > 0 ?  '...' : '-') . '</td>';
 		echo '<td>' . substr($catalogue["page_strings_2"], 0, 10) . (strlen($catalogue["page_strings_2"]) > 0 ?  '...' : '-') . '</td>';
-		echo '<td><input type="button" value="Edit" onclick="window.location = \'index.php?_cmd=catalogueedit&pageId=' . $catalogue["id"] . '\';"><input type="button" value="Delete" onclick="if(confirm(\'Do you really want to delete the page ' . $catalogue["title"] . ' ( #' . $catalogue["id"] . ' )\ ?\')){window.location = \'index.php?_cmd=catalogue&doDel=' . $catalogue["id"] . '\';}"></td>';
+		echo '<td><input type="button" value="Edit" onclick="window.location = \'index.php?_cmd=catalogueedit&pageId=' . $catalogue["id"] . '\';">&nbsp;<input type="button" value="Delete" onclick="if(confirm(\'Do you really want to delete the page ' . $catalogue["title"] . ' ( #' . $catalogue["id"] . ' )\ ?\')){window.location = \'index.php?_cmd=catalogue&doDel=' . $catalogue["id"] . '\';}"></td>';
 		echo '</tr>';
 	}
 	
@@ -189,16 +189,12 @@ if(strlen($allwhreCase) > 0)
 {
 	foreach($searchparams as $searchkey => $searchvalue) 
 	{
-		if(is_numeric($searchvalue))
-		{
-			$ss[] = "$searchvalue-$searchkey";
-		}
-		
-		if(strlen($searchvalue) > 0 && !is_numeric($searchvalue))
+		if(strlen($searchvalue) > 0)
 		{
 			$ss[] = "$searchvalue-$searchkey";
 		}
 	}
+	
 	$squery = "&query=" . join(",", $ss);
 }
 
@@ -210,31 +206,27 @@ $next = $page +1;
 
 if ($page > 1) 
 {
-	$pagesstring .= "<a href='index.php?_cmd=catalogue" . $squery . "&page=1'>First Page</a> <a href='index.php?_cmd=catalogue" . $squery . "&page=$prev'>&laquo; Previous</a> ";
+	$pagesstring .= "<li><a href='index.php?_cmd=catalogue$squery&page=1'>First Page</a></li>";
+	$pagesstring .= "<li><a href='index.php?_cmd=catalogue$squery&page=$prev'>&laquo;</a></li>";
 }
 $rightindex = 3;
 $leftindex = ($page > 2) ? 2 : $page - 1;
 for($i = $page - $leftindex; $i < $page + $rightindex; $i++)
 {
-	if($page == $i)
+	if($i >= 1 && $i <= $tp)
 	{
-		$pagesstring .= ' <b>' . $i . '</b>';
-	}
-	else
-	{
-		if($i >= 1 && $i <= $tp)
-		{
-			$pagesstring .= " <a href='index.php?_cmd=catalogue" . $squery . "&page=$i'>" . $i . "</a>";
-		}
+		$pagesstring .= "<li><a" . ($page == $i? ' class="active" ' : '' ) . " href='index.php?_cmd=catalogue$squery&page=$i'>$i</a></li>";
 	}
 }
 
 if ($page < $tp) 
 {
-	$pagesstring .= " <a href='index.php?_cmd=catalogue" . $squery . "&page=$next'>Next &raquo;</a> <a href='index.php?_cmd=catalogue" . $squery . "&page=$tp'>Last Page</a>";
+	$pagesstring .= "<li><a href='index.php?_cmd=catalogue$squery&page=$next'>&raquo;</a></li>";
+	$pagesstring .= "<li><a href='index.php?_cmd=catalogue$squery&page=$tp'>Last Page</a></li>";
 }
 
-echo ((is_numeric($searchparams['parent_id']) && $searchparams['title'] == "" && $searchparams['coming_soon'] == "" && $searchparams['enabled'] == "") ? '<br /><input type="submit" name="update-order" value="Save page order"> or <input type="button" value="Cancel/Reset" onclick="location.reload(true);"></form>' : '') . '<center style="width: 100%; padding: 10px; font-size: 115%;">' . $pagesstring . '</center>';
+echo ((is_numeric($searchparams['parent_id']) && $searchparams['title'] == "" && $searchparams['coming_soon'] == "" && $searchparams['enabled'] == "") ? '<br /><input type="submit" name="update-order" value="Save page order"> or <input type="button" value="Cancel/Reset" onclick="location.reload(true);"></form>' : '');
+echo '<div class="center"><ul class="pagination">' . $pagesstring . '</ul></div>';
 
 require_once "bottom.php";
 ?>

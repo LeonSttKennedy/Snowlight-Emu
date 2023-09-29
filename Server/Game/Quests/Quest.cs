@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Snowlight.Game.Items;
+using Snowlight.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Snowlight.Game.Achievements
+namespace Snowlight.Game.Quests
 {
     public enum QuestType
     {
@@ -24,7 +26,15 @@ namespace Snowlight.Game.Achievements
         PROFILE_CHANGE_LOOK = 14,
         PROFILE_CHANGE_MOTTO = 15,
         PROFILE_BADGE = 16,
-        EXPLORE_FIND_ITEM = 17
+        EXPLORE_FIND_SPECIFIC_ITEM = 17,
+        EXPLORE_FIND_ITEM_BEHAVIOR = 18,
+        GIVE_FOOD_TO_PET = 19,
+        GIVE_WATER_TO_PET = 20,
+        LEVEL_UP_A_PET = 21,
+        PET_TO_OTHER_ROOM = 22,
+        PETS_IN_ROOM = 23,
+        SCRATCH_A_PET = 24,
+        FIND_A_PET_TYPE = 25
     }
 
     public class Quest
@@ -34,7 +44,9 @@ namespace Snowlight.Game.Achievements
         private int mSeriesNumber;
         private QuestType mGoalType;
         private uint mGoalData;
+        private ItemBehavior mGoalDataBehavior;
         private string mName;
+        private SeasonalCurrencyList mSeasonalCurrency;
         private int mReward;
         private string mDataBit;
 
@@ -75,6 +87,14 @@ namespace Snowlight.Game.Achievements
             get
             {
                 return mGoalData;
+            }
+        }
+
+        public ItemBehavior GoalDataBehavior
+        {
+            get
+            {
+                return mGoalDataBehavior;
             }
         }
 
@@ -152,8 +172,17 @@ namespace Snowlight.Game.Achievements
 
                         return "MOVE_ITEM";
 
+                    case QuestType.GIVE_WATER_TO_PET:
+
+                        return "PET_DRINK";
+
+                    case QuestType.GIVE_FOOD_TO_PET:
+
+                        return "PET_EAT";
+
                     default:
-                    case QuestType.EXPLORE_FIND_ITEM:
+                    case QuestType.EXPLORE_FIND_SPECIFIC_ITEM:
+                    case QuestType.EXPLORE_FIND_ITEM_BEHAVIOR:
 
                         return "FIND_STUFF";
                 }
@@ -165,6 +194,14 @@ namespace Snowlight.Game.Achievements
             get
             {
                 return mName;
+            }
+        }
+
+        public SeasonalCurrencyList SeasonalCurrency
+        {
+            get
+            {
+                return mSeasonalCurrency;
             }
         }
 
@@ -184,15 +221,17 @@ namespace Snowlight.Game.Achievements
             }
         }
 
-        public Quest(uint Id, string Category, int Number, QuestType GoalType, uint GoalData, string Name, int Reward,
-            string DataBit)
+        public Quest(uint Id, string Category, int Number, QuestType GoalType, uint GoalData, ItemBehavior GoalDataBehavior,
+            string Name, SeasonalCurrencyList SeasonalCurrency, int Reward, string DataBit)
         {
             mId = Id;
             mCategory = Category;
             mSeriesNumber = Number;
             mGoalType = GoalType;
             mGoalData = GoalData;
+            mGoalDataBehavior = GoalDataBehavior;
             mName = Name;
+            mSeasonalCurrency = SeasonalCurrency;
             mReward = Reward;
             mDataBit = DataBit;
         }
@@ -205,7 +244,9 @@ namespace Snowlight.Game.Achievements
 
                     return (UserProgress >= mGoalData);
 
-                case QuestType.EXPLORE_FIND_ITEM:
+                case QuestType.EXPLORE_FIND_SPECIFIC_ITEM:
+                case QuestType.EXPLORE_FIND_ITEM_BEHAVIOR:
+                case QuestType.FIND_A_PET_TYPE:
 
                     return (UserProgress >= 1);
             }

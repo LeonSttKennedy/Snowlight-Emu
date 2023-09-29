@@ -7,7 +7,7 @@ namespace Snowlight.Communication.Outgoing
         public static ServerMessage Compose()
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.SESSION_PARAMS);
-            Message.AppendInt32(9);
+            /*Message.AppendInt32(9);
             Message.AppendInt32(0);
             Message.AppendInt32(0);
             Message.AppendInt32(1);
@@ -24,7 +24,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(0);
             Message.AppendInt32(8);
             Message.AppendStringWithBreak("http://hotel-us");
-            Message.AppendInt32(9);
+            Message.AppendInt32(9);*/
             Message.AppendInt32(0);
             return Message;
         }

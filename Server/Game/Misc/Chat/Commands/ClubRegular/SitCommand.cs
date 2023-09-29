@@ -28,39 +28,25 @@ namespace Snowlight.Game.Misc
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {
-            List<RoomActor> ActorsToUpdate = new List<RoomActor>();
             if (!Actor.UserStatusses.ContainsKey("sit"))
             {
-                if ((Actor.BodyRotation % 2) == 0)
-                {
-                    Actor.SetStatus("sit", Math.Round((Actor.Position.Z + 1.0) / 2.0 - Actor.Position.Z * 0.5, 1).ToString().Replace(',', '.'));
-                    Actor.IsSitting = true;
-                    Actor.UpdateNeeded = true;
-                }
-                else
+                if ((Actor.BodyRotation % 2) != 0)
                 {
                     Actor.BodyRotation--;
-                    Actor.SetStatus("sit", Math.Round((Actor.Position.Z + 1.0) / 2.0 - Actor.Position.Z * 0.5, 1).ToString().Replace(',', '.'));
-                    Actor.IsSitting = true;
-                    Actor.UpdateNeeded = true;
                 }
 
-                ActorsToUpdate.Add(Actor);
+                Actor.SetStatus("sit", Math.Round((Actor.Position.Z + 1.0) / 2.0 - Actor.Position.Z * 0.5, 1).ToString().Replace(',', '.'));
+                Actor.IsSitting = true;
+                Actor.UpdateNeeded = true;
             }
             else
             {
                 Actor.RemoveStatus("sit");
                 Actor.IsSitting = false;
                 Actor.UpdateNeeded = true;
-
-                ActorsToUpdate.Add(Actor);
             }
 
-            if (ActorsToUpdate.Count > 0)
-            {
-                Instance.BroadcastMessage(RoomUserStatusListComposer.Compose(ActorsToUpdate));
-                ActorsToUpdate.Clear();
-            }
+            Instance.BroadcastMessage(RoomUserStatusListComposer.Compose(new List<RoomActor>() { Actor }));
         }
     }
 }

@@ -33,7 +33,7 @@ require_once "top.php";
 echo '<h1>External variables (overrides)</h1>';
 echo '<p>This tool can be used to override external variables keys.</p><br />';
 
-echo '<a href="http://192.168.15.72/cdn.classichabbo.com/r38/gordon/RELEASE63-34888-34886-201107192308_9e5b377e2ee4333b61eb9d20d356936d/external_variables.txt" id="">Current external variables</a>';
+echo '<a href="' . CLIENT_BASE . '/external_variables.txt" id="">Current external variables</a>';
 
 echo '<table border="1" width="100%">';
 echo '<thead>';

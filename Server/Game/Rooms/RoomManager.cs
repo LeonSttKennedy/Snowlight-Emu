@@ -386,6 +386,27 @@ namespace Snowlight.Game.Rooms
             return null;
         }
 
+        public static RoomInstance GetInstanceByModelName(string ModelName)
+        {
+            lock (mRoomInstances)
+            {
+                foreach (RoomInstance Instance in mRoomInstances.Values)
+                {
+                    if (Instance.Unloaded)
+                    {
+                        continue;
+                    }
+
+                    if (Instance.Info.ModelName.Equals(ModelName))
+                    {
+                        return Instance;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public static uint CreateRoom(uint OwnerId, string Name, string Model)
         {
             string Result = string.Empty;
@@ -410,6 +431,15 @@ namespace Snowlight.Game.Rooms
             MySqlClient.SetParameter("id", RoomId);
             MySqlClient.ExecuteNonQuery("DELETE FROM navigator_frontpage WHERE room_id = @id");
             
+            MySqlClient.SetParameter("id", RoomId);
+            MySqlClient.ExecuteNonQuery("DELETE FROM room_rights WHERE room_id = @id");
+            
+            MySqlClient.SetParameter("id", RoomId);
+            MySqlClient.ExecuteNonQuery("DELETE FROM user_favorites WHERE room_id = @id");
+
+            MySqlClient.SetParameter("id", RoomId);
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET home_room = '0' WHERE home_room = @id");
+
             RoomInfoLoader.RemoveFromCache(RoomId);
             Navigator.ReloadOfficialItems(MySqlClient);
         }

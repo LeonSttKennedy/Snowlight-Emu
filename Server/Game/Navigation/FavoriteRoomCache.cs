@@ -43,7 +43,7 @@ namespace Snowlight.Game.Navigation
 
                 MySqlClient.SetParameter("characterid", mCharacterId);
                 MySqlClient.SetParameter("limit", ServerSettings.MaxFavoritesPerUser);
-                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT room_id FROM favorites WHERE user_id = @characterid LIMIT @limit");
+                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT room_id FROM user_favorites WHERE user_id = @characterid LIMIT @limit");
 
                 foreach (DataRow Row in Table.Rows)
                 {
@@ -74,7 +74,7 @@ namespace Snowlight.Game.Navigation
                 {
                     MySqlClient.SetParameter("userid", mCharacterId);
                     MySqlClient.SetParameter("roomid", RoomId);
-                    MySqlClient.ExecuteNonQuery("INSERT INTO favorites (user_id,room_id) VALUES (@userid,@roomid)");
+                    MySqlClient.ExecuteNonQuery("INSERT INTO user_favorites (user_id,room_id) VALUES (@userid,@roomid)");
                 }
 
                 mInner.Add(RoomId);
@@ -96,7 +96,7 @@ namespace Snowlight.Game.Navigation
                 {
                     MySqlClient.SetParameter("userid", mCharacterId);
                     MySqlClient.SetParameter("roomid", RoomId);
-                    MySqlClient.ExecuteNonQuery("DELETE FROM favorites WHERE user_id = @userid AND room_id = @roomid LIMIT 1");
+                    MySqlClient.ExecuteNonQuery("DELETE FROM user_favorites WHERE user_id = @userid AND room_id = @roomid LIMIT 1");
                 }
 
                 mInner.Remove(RoomId);

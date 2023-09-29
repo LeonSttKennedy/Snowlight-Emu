@@ -20,6 +20,7 @@ function usingConfig($file){ require_once INCLUDES . $file.'.config.php'; }
 ######################################################################
 
 usingClass("connection");
+usingClass("core");
 usingClass("hotel");
 usingClass("security");
 usingClass("users");
@@ -30,6 +31,7 @@ usingConfig("client");
 usingConfig("website");
 
 $GetConnection = new MysqlConnection(); 
+$GetCore = new Core(); 
 $GetTemplate = new TemplateManager();
 $GetUsers = new Users();
 $GetHotel = new Hotel(); 

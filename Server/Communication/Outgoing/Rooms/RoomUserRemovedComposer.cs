@@ -6,7 +6,7 @@ namespace Snowlight.Communication.Outgoing
     {
         public static ServerMessage Compose(uint Id)
         {
-            ServerMessage Message = new ServerMessage(29);
+            ServerMessage Message = new ServerMessage(OpcodesOut.REMOVE_USER_FROM_ROOM);
             Message.AppendRawUInt32(Id);
             return Message;
         }

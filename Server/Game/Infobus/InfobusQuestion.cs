@@ -8,6 +8,7 @@ using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Sessions;
 using Snowlight.Game.Rooms;
+using Snowlight.Storage;
 
 namespace Snowlight.Game.Infobus
 {
@@ -144,6 +145,25 @@ namespace Snowlight.Game.Infobus
 
                 BroadcastDataToParticipants(InfobusQuestionResultComposer.Compose(mQuestionText, mAnswers, ResponseCount,
                     ValidVoters));
+
+                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                {
+                    List<string> Result = new List<string>();
+                    foreach(KeyValuePair<int, int> PoolResult in ResponseCount)
+                    {
+                        if (mAnswers[PoolResult.Key] == null)
+                        {
+                            break;
+                        }
+
+                        Result.Add(mAnswers[PoolResult.Key] + " (ID: " + PoolResult.Key + "): " + PoolResult.Value + " vote" + (PoolResult.Value > 1 ? "s" : string.Empty));
+                    }
+
+                    MySqlClient.SetParameter("roomid", mInstance.RoomId);
+                    MySqlClient.SetParameter("question", mQuestionText);
+                    MySqlClient.SetParameter("results", string.Join("|", Result));
+                    MySqlClient.ExecuteNonQuery("INSERT INTO room_infobus_questions (room_id, question, result) VALUES (@roomid, @question, @results)");
+                }
 
                 mCompleted = true;
             }

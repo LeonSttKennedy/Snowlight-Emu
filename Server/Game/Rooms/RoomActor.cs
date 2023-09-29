@@ -12,6 +12,7 @@ using Snowlight.Game.Bots;
 using Snowlight.Game.Moderation;
 using Snowlight.Storage;
 using Snowlight.Game.Items;
+using Snowlight.Game.Pets;
 
 namespace Snowlight.Game.Rooms
 {
@@ -55,7 +56,7 @@ namespace Snowlight.Game.Rooms
         private bool mAvatarEffectByItem;
         private int mAntiSpamMessagesSent;
         private int mAntiSpamTicks;
-
+        private uint mFurniOnId;
         private bool mIsSitting;
 
         public uint Id
@@ -63,6 +64,19 @@ namespace Snowlight.Game.Rooms
             get
             {
                 return mId;
+            }
+        }
+
+        public uint FurniOnId
+        {
+            get
+            {
+                return mFurniOnId;
+            }
+
+            set
+            {
+                mFurniOnId = value;
             }
         }
 
@@ -199,7 +213,190 @@ namespace Snowlight.Game.Rooms
                 mHeadRotation = value;
             }
         }
+        public Vector2 SquareInFront
+        {
+            get
+            {
+                Vector2 NewPosition = mPosition.GetVector2();
+                int Rot = mBodyRotation;
 
+                if (Rot == 4)
+                {
+                    NewPosition.Y++;
+                }
+                else if (Rot == 0)
+                {
+                    NewPosition.Y--;
+                }
+                else if (Rot == 6)
+                {
+                    NewPosition.X--;
+                }
+                else if (Rot == 2)
+                {
+                    NewPosition.X++;
+                }
+                else if (Rot == 3)
+                {
+                    NewPosition.X++;
+                    NewPosition.Y++;
+                }
+                else if (Rot == 1)
+                {
+                    NewPosition.X++;
+                    NewPosition.Y--;
+                }
+                else if (Rot == 7)
+                {
+                    NewPosition.X--;
+                    NewPosition.Y--;
+                }
+                else if (Rot == 5)
+                {
+                    NewPosition.X--;
+                    NewPosition.Y++;
+                }
+                return NewPosition;
+            }
+        }
+        public Vector2 SquareBehind
+        {
+            get
+            {
+                Vector2 NewPosition = mPosition.GetVector2();
+                int Rot = mBodyRotation;
+
+                if (Rot == 4)
+                {
+                    NewPosition.Y--;
+                }
+                else if (Rot == 0)
+                {
+                    NewPosition.Y++;
+                }
+                else if (Rot == 6)
+                {
+                    NewPosition.X++;
+                }
+                else if (Rot == 2)
+                {
+                    NewPosition.X--;
+                }
+                else if (Rot == 3)
+                {
+                    NewPosition.X--;
+                    NewPosition.Y--;
+                }
+                else if (Rot == 1)
+                {
+                    NewPosition.X--;
+                    NewPosition.Y++;
+                }
+                else if (Rot == 7)
+                {
+                    NewPosition.X++;
+                    NewPosition.Y++;
+                }
+                else if (Rot == 5)
+                {
+                    NewPosition.X++;
+                    NewPosition.Y--;
+                }
+                return NewPosition;
+            }
+        }
+        public Vector2 SquareRight
+        {
+            get
+            {
+                Vector2 NewPosition = mPosition.GetVector2();
+                int Rot = mBodyRotation;
+
+                if (Rot == 4)
+                {
+                    NewPosition.X--;
+                }
+                else if (Rot == 0)
+                {
+                    NewPosition.X++;
+                }
+                else if (Rot == 6)
+                {
+                    NewPosition.Y--;
+                }
+                else if (Rot == 2)
+                {
+                    NewPosition.Y++;
+                }
+                else if (Rot == 3)
+                {
+                    NewPosition.X--;
+                    NewPosition.Y++;
+                }
+                else if (Rot == 1)
+                {
+                    NewPosition.X++;
+                    NewPosition.Y++;
+                }
+                else if (Rot == 7)
+                {
+                    NewPosition.X++;
+                    NewPosition.Y--;
+                }
+                else if (Rot == 5)
+                {
+                    NewPosition.X--;
+                    NewPosition.Y--;
+                }
+                return NewPosition;
+            }
+        }
+        public Vector2 SquareLeft
+        {
+            get
+            {
+                Vector2 NewPosition = mPosition.GetVector2();
+                int Rot = mBodyRotation;
+
+                if (Rot == 4)
+                {
+                    NewPosition.X++;
+                }
+                else if (Rot == 0)
+                {
+                    NewPosition.X--;
+                }
+                else if (Rot == 6)
+                {
+                    NewPosition.Y++;
+                }
+                else if (Rot == 2)
+                {
+                    NewPosition.Y--;
+                }
+                else if (Rot == 3)
+                {
+                    NewPosition.X++;
+                    NewPosition.Y--;
+                }
+                else if (Rot == 1)
+                {
+                    NewPosition.X--;
+                    NewPosition.Y--;
+                }
+                else if (Rot == 7)
+                {
+                    NewPosition.X--;
+                    NewPosition.Y++;
+                }
+                else if (Rot == 5)
+                {
+                    NewPosition.X++;
+                    NewPosition.Y++;
+                }
+                return NewPosition;
+            }
+        }
         public bool UpdateNeeded
         {
             get
@@ -435,7 +632,8 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public RoomActor(uint Id, RoomActorType Type, uint ReferenceId, object ReferenceObject, Vector3 Position, int Rotation, RoomInstance Instance)
+        public RoomActor(uint Id, RoomActorType Type, uint ReferenceId, object ReferenceObject, Vector3 Position,
+            int Rotation, RoomInstance Instance)
         {
             mId = Id;
             mType = Type;
@@ -451,7 +649,6 @@ namespace Snowlight.Game.Rooms
             mEnableTeleport = false;
             mEnableMoonWalk = false;
             mMovementSyncRoot = new object();
-
             mIsSitting = false;
 
             mPathfinder = PathfinderManager.CreatePathfinderInstance();
@@ -642,6 +839,7 @@ namespace Snowlight.Game.Rooms
 
             }
         }
+
         public Vector2 GetNextStep()
         {
             lock (mMovementSyncRoot)
@@ -870,6 +1068,11 @@ namespace Snowlight.Game.Rooms
                     IncrecementAntiSpam(MySqlClient);
                 }
             }
+        }
+
+        public void UpdateSleepingState()
+        {
+            mIsSleeping = !mIsSleeping;
         }
 
         public void SetTypingState(bool IsNowTyping)

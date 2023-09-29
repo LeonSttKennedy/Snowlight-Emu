@@ -25,11 +25,11 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendBoolean(SubscriptionManager.IsActive); // 1 if not expired
             Message.AppendInt32(DisplayMonths); // months left after the current month
             Message.AppendInt32(BoughtFromCatalog ? 2 : 1); // was true even w/o subscription
-            Message.AppendInt32(1); // Unknown (Gift points?)
+            Message.AppendBoolean(true); // Unknown
             Message.AppendBoolean(SubscriptionManager.IsActive && SubscriptionManager.SubscriptionLevel == ClubSubscriptionLevel.VipClub); // Is VIP (boolean)
-            Message.AppendInt32((int)(SubscriptionManager.PastHcTime / 86400)); // Past HC Days
-            Message.AppendInt32((int)(SubscriptionManager.PastVipTime / 86400)); // Past VIP Days
-            Message.AppendInt32(0); // Discount message enable (boolean)
+            Message.AppendInt32(SubscriptionManager.PastHcTimeInDays); // Past HC Days
+            Message.AppendInt32(SubscriptionManager.PastVipTimeInDays); // Past VIP Days
+            Message.AppendBoolean(false); // Discount message enable (boolean)
             Message.AppendInt32(30); // Discount message => "Regular price"
             Message.AppendInt32(25); // Discount message => "Your price"
             return Message;

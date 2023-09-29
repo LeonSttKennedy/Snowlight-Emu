@@ -69,7 +69,7 @@ class Users extends Security
 		$initial_figure = "hr-3194-40-31.cc-3039-100.sh-290-62.hd-3092-1.lg-270-110.fa-1206-62.ha-3129-100"; // Figure
 		$initial_motto = "uberHotel Newbie"; // Motto
 		$initial_credits = "100"; // Credits
-		$initial_pixels = "1500"; // Pixels
+		$initial_pixels = "0,1500"; // 0 = Pixels | , = Separator char | 1500 = Initial Value
 
 		mysql_query("INSERT INTO users (account_name, account_password, account_email) VALUES ('".$entered_username."', '".$sha1_password."', '".$entered_email."');");
 		$last = mysql_insert_id();
@@ -224,6 +224,38 @@ class Users extends Security
 		$result = mysql_query("SELECT $value FROM characters WHERE account_uid = '$uid' LIMIT 1");
 		$user_data = mysql_fetch_array($result);
 		echo $user_data[''.$value.''];
+	}
+	
+	public function GetActivityPointsValue($uid, $seasonalcurrency)
+	{
+		//$return = "Not Found Information";
+		
+		$result = mysql_result(mysql_query("SELECT activity_points_balance FROM characters WHERE account_uid = '$uid' LIMIT 1"), 0);
+		
+		if(strpos($result, "|"))
+		{
+			$uapd = explode("|", $result);
+		}
+		else
+		{
+			$uapd[] = $result;
+		}
+		
+		foreach($uapd as $string)
+		{
+			$currencyinfo = explode(",", $string);
+			if(!isset($array[$currencyinfo[0]]))
+			{
+				$array[$currencyinfo[0]] = $currencyinfo[1];
+			}
+		}
+
+		if(isset($array[$seasonalcurrency]))
+		{
+			$return = $array[$seasonalcurrency];
+		}
+		
+		echo $return;
 	}
 	
 	public function Name2Id($username)

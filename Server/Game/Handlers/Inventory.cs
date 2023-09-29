@@ -13,8 +13,11 @@ using Snowlight.Specialized;
 using Snowlight.Game.Rights;
 using Snowlight.Game.AvatarEffects;
 using Snowlight.Game.Achievements;
+using Snowlight.Game.Quests;
 using Snowlight.Storage;
 using Snowlight.Communication.Incoming;
+using Snowlight.Game.Messenger;
+using Snowlight.Game.FriendStream;
 
 namespace Snowlight.Game.Handlers
 {
@@ -47,7 +50,7 @@ namespace Snowlight.Game.Handlers
 
         private static void GetPetInventory(Session Session, ClientMessage Message)
         {
-            Session.SendData(PetInventoryComposer.Compose(Session.PetInventoryCache.Pets));
+            Session.SendData(PetInventoryComposer.Compose(Session.InventoryCache.GetPets().Values.ToList()));
         }
 
         private static void GetBadgeInventory(Session Session, ClientMessage Message)
@@ -144,6 +147,11 @@ namespace Snowlight.Game.Handlers
             {
                 Session.CharacterInfo.UpdateMotto(MySqlClient, NewMotto);
                 AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_Motto", 1);
+
+                if (Session.CharacterInfo.AllowFriendStream)
+                {
+                    FriendStreamHandler.InsertNewEvent(Session.CharacterId, EventStreamType.MottoChanged, NewMotto);
+                }
             }
 
             QuestManager.ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_MOTTO);

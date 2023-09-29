@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
 
-using Snowlight.Specialized;
 using Snowlight.Storage;
+using Snowlight.Specialized;
 
 namespace Snowlight.Game.Pets
 {
@@ -17,10 +17,9 @@ namespace Snowlight.Game.Pets
             MySqlClient.SetParameter("color", Color);
             MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
 
-            string RawId = MySqlClient.ExecuteScalar("INSERT INTO pets (user_id,type,name,race,color,timestamp) VALUES (@userid,@type,@name,@race,@color,@timestamp); SELECT LAST_INSERT_ID();").ToString();
+            string RawId = MySqlClient.ExecuteScalar("INSERT INTO user_pets (user_id,type,name,race,color,timestamp) VALUES (@userid,@type,@name,@race,@color,@timestamp); SELECT LAST_INSERT_ID();").ToString();
 
-            uint Id = 0;
-            uint.TryParse(RawId, out Id);
+            uint.TryParse(RawId, out uint Id);
 
             if (Id == 0)
             {

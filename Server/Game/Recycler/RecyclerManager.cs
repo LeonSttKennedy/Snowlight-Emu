@@ -37,7 +37,7 @@ namespace Snowlight.Game.Recycler
         {
             lock (mSyncRoot)
             {
-                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM recycler_rewards");
+                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_recycler_rewards");
 
                 int UniqueLevels = 0;
 
@@ -193,7 +193,10 @@ namespace Snowlight.Game.Recycler
 
                     NewItems[TabId].Add(GeneratedItem.Id);
                     Session.SendData(RecyclerResultComposer.Compose(true, GeneratedItem.Id));
-                    DataTable Table = MySqlClient.ExecuteQueryTable("INSERT INTO user_gifts(item_id, base_id, amount, extra_data) VALUES('" + GeneratedItem.Id + "', '" + Reward.Id + "', '1', '')");
+                    
+                    MySqlClient.SetParameter("item_id", GeneratedItem.Id);
+                    MySqlClient.SetParameter("reward_id", Reward.Id);
+                    MySqlClient.ExecuteNonQuery("INSERT INTO user_gifts(item_id, base_ids, amounts, extra_data) VALUES(@item_id, @reward_id, '1', '')");
                 }
 
                 if (NewItems.Count > 0)

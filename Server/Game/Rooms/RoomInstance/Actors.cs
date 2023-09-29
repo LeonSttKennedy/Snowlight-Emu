@@ -14,6 +14,8 @@ using Snowlight.Game.Rooms.Trading;
 using Snowlight.Config;
 using Snowlight.Util;
 using Snowlight.Game.Pets;
+using System.Collections.Concurrent;
+using System.Linq;
 
 namespace Snowlight.Game.Rooms
 {
@@ -53,6 +55,32 @@ namespace Snowlight.Game.Rooms
                         }
 
                         c++;
+                    }
+                }
+
+                return c;
+            }
+        }
+
+        public int PetActorCount
+        {
+            get
+            {
+                int c = 0;
+
+                lock (mActors)
+                {
+                    foreach (RoomActor Actor in mActors.Values)
+                    {
+                        if (!Actor.IsBot)
+                        {
+                            continue;
+                        }
+
+                        if (Actor.IsBot && ((Bot)Actor.ReferenceObject).IsPet)
+                        {
+                            c++;
+                        }
                     }
                 }
 
@@ -222,7 +250,7 @@ namespace Snowlight.Game.Rooms
                 }
 
                 mActors.Add(Actor.Id, Actor);
-                BroadcastMessage(RoomUserObjectListComposer.Compose(new List<RoomActor>() { Actor }));
+                BroadcastMessage(RoomUserObjectListComposer.Compose(mActors.Values.ToList()));
                 MarkActorCountSyncNeeded();
 
                 foreach (RoomActor _Actor in mActors.Values)
@@ -238,6 +266,11 @@ namespace Snowlight.Game.Rooms
                             ((Bot)_Actor.ReferenceObject).Brain.OnUserEnter(this, Actor);
                         }
                     }
+                }
+
+                if (Actor.Type == RoomActorType.UserCharacter)
+                {
+                    WiredManager.HandleEnterRoom(Actor);
                 }
 
                 return true;
@@ -264,7 +297,7 @@ namespace Snowlight.Game.Rooms
             mActorCountSyncNeeded = true;
         }
 
-        public void BanUser(uint UserId)
+        public void BanUser(uint UserId, double ExpireTimestamp = 0)
         {
             lock (mActorSyncRoot)
             {
@@ -285,15 +318,7 @@ namespace Snowlight.Game.Rooms
                     }
                 }
 
-                double Timestamp = UnixTimestamp.GetCurrent();
-
-                if (mBannedUsers.ContainsKey(UserId))
-                {
-                    mBannedUsers[UserId] = Timestamp;
-                    return;
-                }
-
-                mBannedUsers.Add(UserId, Timestamp);
+                AddBanToDatabase(UserId, ExpireTimestamp);
             }
 
             SoftKickUser(UserId, true);
@@ -350,11 +375,13 @@ namespace Snowlight.Game.Rooms
                     return false;
                 }
 
-                double TimeBanned = UnixTimestamp.GetCurrent() - mBannedUsers[UserId];
+                double TimespanExpire = mBannedUsers[UserId];
+                bool RemoveBan = TimespanExpire > 0 && UnixTimestamp.GetCurrent() > TimespanExpire;
 
-                if (TimeBanned >= 900)
+                if (RemoveBan)
                 {
                     mBannedUsers.Remove(UserId);
+                    CleanDatabaseBans();
                     return false;
                 }
             }
@@ -391,14 +418,6 @@ namespace Snowlight.Game.Rooms
             return false;
         }
 
-        public void RemovePetFromRoomToInventory(uint PetId)
-        {
-            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-            {
-                MySqlClient.SetParameter("petid", PetId);
-                MySqlClient.ExecuteNonQuery("UPDATE pets SET room_id = 0 WHERE id = @petid");
-            }
-        }
         /// <summary>
         /// Removes an actor from the room instance. DO NOT CALL DIRECTLY FOR HUMAN CHARACTERS.
         /// </summary>
@@ -407,6 +426,7 @@ namespace Snowlight.Game.Rooms
         public bool RemoveActorFromRoom(uint ActorId)
         {
             bool Success = false;
+            List<uint> ActorsToRemove = new List<uint>();
 
             lock (mActorSyncRoot)
             {
@@ -447,15 +467,19 @@ namespace Snowlight.Game.Rooms
                             }
                         }
                     }
+
+                    ActorsToRemove.Add(Actor.Id);
                 }
 
                 foreach (RoomActor _Actor in mActors.Values)
                 {
                     if (_Actor.Type == RoomActorType.AiBot)
                     {
+                        Bot SelfBot = ((Bot)_Actor.ReferenceObject);
+
                         if (_Actor.Id == Actor.Id)
                         {
-                            Bot SelfBot = ((Bot)_Actor.ReferenceObject);
+                            ActorsToRemove.Add(_Actor.Id);
                             SelfBot.Brain.OnSelfLeaveRoom(this);
 
                             if (SelfBot.IsPet)
@@ -465,17 +489,31 @@ namespace Snowlight.Game.Rooms
                         }
                         else
                         {
-                            ((Bot)_Actor.ReferenceObject).Brain.OnUserLeave(this, Actor);
+                            if(SelfBot.IsPet && SelfBot.PetData.OwnerId.Equals(Actor.ReferenceId) && Info.OwnerId != Actor.ReferenceId)
+                            {
+                                ActorsToRemove.Add(_Actor.Id);
+                                SelfBot.Brain.OnUserLeave(this, Actor);
+                                
+                                if (SelfBot.IsPet)
+                                {
+                                    mPetCount--;
+                                }
+                            }
                         }
                     }
                 }
 
-                Success = mActors.Remove(ActorId);
-
-                if (Success)
+                if(ActorsToRemove.Count > 0)
                 {
-                    BroadcastMessage(RoomUserRemovedComposer.Compose(ActorId));
-                    MarkActorCountSyncNeeded();
+                    foreach (uint _ActorId in ActorsToRemove)
+                    {
+                        Success = mActors.Remove(_ActorId);
+                        if (Success)
+                        {
+                            BroadcastMessage(RoomUserRemovedComposer.Compose(_ActorId));
+                            MarkActorCountSyncNeeded();
+                        }
+                    }
                 }
             }
 
@@ -538,10 +576,11 @@ namespace Snowlight.Game.Rooms
             uint ActorId = GenerateActorId();
 
             RoomActor BotActor = RoomActor.TryCreateActor(ActorId, RoomActorType.AiBot, Bot.Id, Bot,
-                new Vector3(Bot.InitialPosition.X, Bot.InitialPosition.Y, Bot.InitialPosition.Z), 2, this);
+                new Vector3(Bot.InitialPosition.X, Bot.InitialPosition.Y, Bot.InitialPosition.Z), Bot.Rotation, this);
+            
             Bot.Brain.Initialize(Bot);
 
-            if (((Bot)BotActor.ReferenceObject).BehaviorType == "guide")
+            if (Bot.BehaviorType == "guide")
             {
                 Info.GuideBotIsCalled = true;
             }
@@ -552,6 +591,7 @@ namespace Snowlight.Game.Rooms
 
                 if (Bot.IsPet)
                 {
+                    Bot.PetData.SetVirtualId(ActorId);
                     mPetCount++;
                 }
 
@@ -588,6 +628,35 @@ namespace Snowlight.Game.Rooms
             }
 
             return mInfo.AllowPets || IsOwner;
+        }
+
+        public void AddBanToDatabase(uint UserId, double ExpireTimestamp)
+        {
+            if (mBannedUsers.ContainsKey(UserId))
+            {
+                mBannedUsers[UserId] = ExpireTimestamp;
+                return;
+            }
+
+            mBannedUsers.Add(UserId, ExpireTimestamp);
+
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                MySqlClient.SetParameter("userid", UserId);
+                MySqlClient.SetParameter("roomid", RoomId);
+                MySqlClient.SetParameter("expiretimestamp", ExpireTimestamp);
+                MySqlClient.ExecuteNonQuery("INSERT INTO room_bans (user_id, room_id, expire) VALUES (@userid,@roomid,@expiretimestamp)");
+            }
+        }
+
+        public void CleanDatabaseBans()
+        {
+            using(SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient()) 
+            {
+                MySqlClient.SetParameter("id", RoomId);
+                MySqlClient.SetParameter("currenttimestamp", UnixTimestamp.GetCurrent());
+                MySqlClient.ExecuteNonQuery("DELETE FROM room_bans WHERE room_id = @id AND expire > 0 AND expire < @currenttimestamp");
+            }
         }
     }
 }

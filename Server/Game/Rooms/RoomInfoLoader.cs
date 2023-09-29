@@ -170,7 +170,7 @@ namespace Snowlight.Game.Rooms
                 (Row["allow_pets"].ToString() == "1"), (Row["allow_pet_eating"].ToString() == "1"),
                 (Row["disable_blocking"].ToString() == "1"), (Row["hide_walls"].ToString() == "1"),
                 (string)Row["pub_internal_name"], (int)Row["thickness_wall"], (int)Row["thickness_floor"], Decorations,
-                (uint)Row["badge_id"]);
+                (string)Row["badge_code"]);
         }
     }
 }

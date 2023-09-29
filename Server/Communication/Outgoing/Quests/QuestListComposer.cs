@@ -3,21 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 using Snowlight.Game.Sessions;
-using Snowlight.Game.Achievements;
+using Snowlight.Game.Quests;
 
 namespace Snowlight.Communication.Outgoing
 {
     public static class QuestListComposer
     {
-        public enum QuestRewardType
-        {
-            Pixels = 0,
-            Snowflakes = 1,
-            Love = 2,
-            PixelsBROKEN = 3,
-            Seashells = 4
-        }
-
         public static ServerMessage Compose(Session Session, ReadOnlyCollection<Quest> Quests, bool Send)
         {
             Dictionary<string, int> UserQuestGoals = new Dictionary<string, int>();
@@ -97,7 +88,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendStringWithBreak(Category);
             Message.AppendInt32(Number); // Quest progress in this cat
             Message.AppendInt32(AmountInCat); // Total quests in this cat
-            Message.AppendInt32((int)QuestRewardType.Pixels); // Reward type (1 = Snowflakes, 2 = Love hearts, 3 = Pixels, 4 = Seashells, everything else is pixels
+            Message.AppendInt32(Quest == null ? 0 : (int)Quest.SeasonalCurrency); // Reward type (1 = Snowflakes, 2 = Love hearts, 3 = Pixels, 4 = Seashells, everything else is pixels
             Message.AppendUInt32(Quest == null ? 0 : Quest.Id); // Quest id
             Message.AppendBoolean(Quest == null ? false : Session.QuestCache.CurrentQuestId == Quest.Id); // Quest started
             Message.AppendStringWithBreak(Quest == null ? string.Empty : Quest.ActionName);

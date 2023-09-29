@@ -133,6 +133,82 @@ table td
 {
 	padding: 3px;
 }
+
+.hideradio {
+	position: relative;
+	height: 125px;
+	width: 100%;
+
+}
+
+/* HIDE RADIO */
+.hideradio > input[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+.hideradio > input[type=radio] + label {
+	cursor: pointer;
+}
+
+/* CHECKED STYLES */
+.hideradio > input[type=radio]:checked + label {
+	outline:2px solid #f00;
+}
+
+.hideradio > label {
+	display: block;
+	position: static;
+	width:200px;
+	float: left;
+	margin: 0 10px 5px 5px;
+	padding:3px;
+	text-align:center;
+}
+
+/* PAGINATION */
+div.center {
+    text-align: center;
+	padding-top:15px;
+}
+
+ul.pagination {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination li {display: inline;}
+
+ul.pagination li a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+}
+
+.pagination li:first-child a {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.pagination li:last-child a {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+ul.pagination li a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+}
+
+ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 </style>
 <script type="text/javascript">
 
@@ -309,9 +385,9 @@ function popSsoClient(username)
 			<a href="#" onclick="Toggle('cata'); return false"><div class="plus" id="plus-cata">-</div></a>		
 		</h2>
 		<ul id="list-cata" class="listmnu">
-			<li><a href="index.php?_cmd=ot-def">Item defenitions</a></li>
+			<li><a href="index.php?_cmd=itemdefs">Item defenitions</a></li>
 			<li><a href="index.php?_cmd=catalogue">Catalogue pages</a></li>
-			<li><a href="index.php?_cmd=ot-cata-items">Catalogue items</a></li>
+			<li><a href="index.php?_cmd=catalogueitems">Catalogue items</a></li>
 			<li><a href="index.php?_cmd=furnifinder">New/missing furni finder</a></li>
 			<li><a href="index.php?_cmd=vouchers">Vouchers</a></li>
 		</ul>	

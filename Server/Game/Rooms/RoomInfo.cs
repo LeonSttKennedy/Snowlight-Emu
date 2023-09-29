@@ -48,7 +48,7 @@ namespace Snowlight.Game.Rooms
         private int mFloorThickness;
         private string mPubInternalName;
         private Dictionary<string, string> mDecorations;
-        private uint mBadgeId;
+        private string mBadgeCode;
         private object mSyncRoot;
 
         private bool mGuideBotIsCalled;
@@ -317,11 +317,11 @@ namespace Snowlight.Game.Rooms
                 }
             }
         }
-        public uint BadgeId
+        public string BadgeCode
         {
             get 
             {
-                return mBadgeId;
+                return mBadgeCode;
             }
         }
 
@@ -329,7 +329,7 @@ namespace Snowlight.Game.Rooms
             RoomAccessType AccessType, string Password, RoomIcon Icon, int CategoryId, int MaxUsers, string Swfs,
             int Score, string ModelName, bool AllowPets, bool AllowPetEating, bool DisableBlocking, bool HideWalls,
             string PubInternalName, int WallThickness, int FloorThickness, Dictionary<string, string> Decorations,
-            uint BadgeId)
+            string BadgeCode)
         {
             mId = Id;
             mType = Type;
@@ -354,7 +354,7 @@ namespace Snowlight.Game.Rooms
             mWallThickness = WallThickness;
             mFloorThickness = FloorThickness;
             mDecorations = Decorations;
-            mBadgeId = BadgeId;
+            mBadgeCode = BadgeCode;
             mSyncRoot = new object();
         }
 

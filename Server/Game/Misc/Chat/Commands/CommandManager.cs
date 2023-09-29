@@ -169,6 +169,7 @@ namespace Snowlight.Game.Misc
 
         private static void RegisterClub()
         {
+            Register("afk", new AfkCommand());
             Register("sit", new SitCommand());
             Register("status", new StatusCommand());
             Register("online", new UsersOnlineCommand());
@@ -176,11 +177,15 @@ namespace Snowlight.Game.Misc
         
         private static void RegisterVip()
         {
+            Register("drink", new DrinkCommand());
             Register("empty", new EmptyCommand());
+            Register("enable", new EnableCommand());
             Register("eventalert", new EventAlertCommand());
-            Register("redeemcoins", new RedeemCoinsCommand());
+            Register("flagme", new FlagmeCommand());
+            Register("give", new GiveCommand());
             Register("mimic", new MimicCommand());
             Register("moonwalk", new MoonWalkCommand());
+            Register("redeemcoins", new RedeemCoinsCommand());
         }
 
         private static void RegisterModerationTool()
@@ -192,6 +197,7 @@ namespace Snowlight.Game.Misc
             Register("kick", new KickCommand());
             Register("infobus", new InfobusCommand());
             Register("userinfo", new UserInfoCommand());
+            Register("makesay", new MakeSayCommand());
         }
 
         private static void RegisterMute()
@@ -217,6 +223,8 @@ namespace Snowlight.Game.Misc
             Register("massbadge", new MassBadgeCommand());
             Register("directgive", new DirectGiveCommand());
             Register("massgive", new MassGiveCommand());
+            Register("shutdown", new ShutdownCommand());
+            Register("test", new TestCommand());
         }
 
         public static void Register(string CommandText, IChatCommand Command)

@@ -1,16 +1,18 @@
-﻿using Snowlight.Communication;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Infobus;
-using Snowlight.Game.Rooms;
-using Snowlight.Game.Sessions;
-using Snowlight.Storage;
-using Snowlight.Util;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+using Snowlight.Util;
+using Snowlight.Storage;
+using Snowlight.Game.Rooms;
+using Snowlight.Game.Infobus;
+using Snowlight.Game.Sessions;
+using Snowlight.Communication;
+using Snowlight.Game.Advertisements;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Misc
 {
@@ -50,7 +52,7 @@ namespace Snowlight.Game.Misc
             {
                 switch (InfobusCommand.ToLower())
                 {
-                    case "pool":
+                    case "poll":
                         {
                             if(InfobusPoolQuestion != string.Empty && InfobusPoolQuestion != null)
                             {
@@ -142,15 +144,15 @@ namespace Snowlight.Game.Misc
                             ServerSettings.UpdateInfobusStatus(MySqlClient);
                             ServerSettings.Initialize(MySqlClient);
 
-                            /* IDK how to open infobus door. 
-                             * Old versions the header is 71 
-                             * KEPLER by Quackster (Alex)*/
-                            ServerMessage SM = new ServerMessage(71);
-                            SM.AppendStringWithBreak("bus open");
-                            Instance.BroadcastMessage(SM);
+                            RoomInstance ParkRoomInstance = RoomManager.GetInstanceByModelName("park_a");
 
-                            //Instance.RegenerateRelativeHeightmap();
-                            Instance.BroadcastMessage(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_infobus_opened")));
+                            if (ParkRoomInstance != null)
+                            {
+                                ParkRoomInstance.BroadcastMessage(ParkInfobusDoorComposer.Compose((int)ServerSettings.InfobusStatus));
+                                ParkRoomInstance.BroadcastMessage(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_infobus_opened")));
+                            }
+
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_infobus_open_successyfully"), 0, ChatType.Whisper));
                             return;
                         }
 
@@ -159,13 +161,14 @@ namespace Snowlight.Game.Misc
                             ServerSettings.InfobusStatus = InfobusStatus.Closed;
                             ServerSettings.UpdateInfobusStatus(MySqlClient);
                             ServerSettings.Initialize(MySqlClient);
+                            RoomInstance ParkRoomInstance = RoomManager.GetInstanceByModelName("park_a");
 
-                            /* IDK how to open infobus door. 
-                             * Old versions the header is 71 
-                             * KEPLER by Quackster (Alex)
-                            ServerMessage SM = new ServerMessage(71);
-                            SM.AppendStringWithBreak("bus close");
-                            Instance.BroadcastMessage(SM);*/
+                            if (ParkRoomInstance != null)
+                            {
+                                ParkRoomInstance.BroadcastMessage(ParkInfobusDoorComposer.Compose((int)ServerSettings.InfobusStatus));
+                            }
+
+                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_infobus_close_successyfully"), 0, ChatType.Whisper));
                             return;
                         }
 

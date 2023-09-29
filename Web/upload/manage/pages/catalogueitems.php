@@ -58,6 +58,34 @@ function ClubRestrictionString($restrictionid)
 	return $restriction;
 }
 
+function SeasonalCurrency($currency)
+{
+	switch($currency)
+	{
+		case "pixels":
+			$str_retun = 'Pixels';
+			break;
+				
+		case "snowflakes":
+			$str_retun = 'Snowflakes';
+			break;
+				
+		case "hearts":
+			$str_retun = 'Hearts';
+			break;
+							
+		case "giftpoints":
+			$str_retun = 'Gift Points';
+			break;
+										
+		case "shells":
+			$str_retun = 'Shells';
+			break;
+	}
+	
+	return $str_retun;
+}
+
 $limit = 15;
 $page = ((isset($_GET['page'])) ? $_GET['page'] : 1);
 
@@ -265,11 +293,11 @@ Enabled:&nbsp;&nbsp;<input type="radio" name="enabled" <?php echo ((is_numeric($
 <table border="1" width="100%">
 	<thead>
 		<td>ID</td>		
-		<td>Parent Page</td>
-		<td>Catalog Order</td>
-		<td>Item definition</td>
+		<td>Page Name</td>
+		<td>Order</td>
 		<td>Item Name</td>
 		<td>Cost</td>
+		<td>Sazonal Currency</td>
 		<td>Enabled</td>
 		<td>Amount</td>
 		<td>Sale Availability</td>
@@ -286,9 +314,9 @@ Enabled:&nbsp;&nbsp;<input type="radio" name="enabled" <?php echo ((is_numeric($
 		echo '<td>#' . $item["id"] . '</td>';
 		echo '<td>' . (strlen($parentpagecaption) > 0 ?  $parentpagecaption : '-') . '</td>';
 		echo '<td>' . ((is_numeric($searchparams['page_id']) && $searchparams['name'] == "" && $searchparams['cost_credits_min'] < 1 && $searchparams['cost_credits_max'] < 1  && $searchparams['cost_pixels_max'] < 1 && $searchparams['cost_pixels_min'] < 1 && $searchparams['enabled'] == "") ? '<input style="text-align: center; font-weight: bold; margin: 2px;" type="text" size="3" value="' . $item['catalog_item_order'] . '" name="ord-' . $item['id'] . '">' : $item["catalog_item_order"]) . '</td>';
-		echo '<td><a href ="index.php?_cmd=itemdefsedit&defId=' . $item["base_id"] . '">' . $item["base_id"] . '</a></td>';
 		echo '<td>' . $item["name"] . '</td>';
-		echo '<td><center><img src="http://'. SITE_DOMAIN .'/images/bar_creditIcon.png" />&nbsp;' . $item["cost_credits"] . '&nbsp;&nbsp;<img src="http://'. SITE_DOMAIN .'/images/bar_pixelIcon.png" />&nbsp;' . $item["cost_pixels"] . '</center></td>';
+		echo '<td><center>' . $item["cost_credits"] . '&nbsp;CR&nbsp;&&nbsp;' . $item["cost_activitypoints"] . '&nbsp;AP</center></td>';
+		echo '<td><center>'. SeasonalCurrency($item["seasonal_currency"]) . '</center></td>';
 		echo '<td>' . ($item["enabled"] == "1" ? 'Yes' : 'No') . '</td>';
 		echo '<td>' . $item["amount"] . '</td>';
 		echo '<td>' . ClubRestrictionString($item['club_restriction']) . '</td>';

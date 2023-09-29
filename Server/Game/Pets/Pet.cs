@@ -1,11 +1,17 @@
 ﻿using System;
-
-using Snowlight.Specialized;
-using Snowlight.Storage;
-using Snowlight.Util;
-using Snowlight.Game.Rooms;
 using System.Collections.Generic;
+
+using Snowlight.Util;
+using Snowlight.Storage;
+using Snowlight.Game.Bots;
+using Snowlight.Game.Rooms;
+using Snowlight.Specialized;
+using Snowlight.Game.Sessions;
+using Snowlight.Game.Achievements;
+using Snowlight.Game.Quests;
 using Snowlight.Communication.Outgoing;
+using System.Linq;
+using Snowlight.Game.Characters;
 
 namespace Snowlight.Game.Pets
 {
@@ -24,11 +30,13 @@ namespace Snowlight.Game.Pets
         private uint mOwnerId;
         private uint mRoomId;
         private Vector3 mRoomPosition;
+        private int mRoomRotation;
         private double mTimestamp;
         private int mExperience;
         private int mEnergy;
         private int mHappiness;
         private int mScore;
+        private uint mVirtualId;
 
         public uint Id
         {
@@ -94,6 +102,13 @@ namespace Snowlight.Game.Pets
             }
         }
 
+        public bool IsInRoom
+        {
+            get
+            {
+                return mRoomId > 0;
+            }
+        }
         public Vector3 RoomPosition
         {
             get
@@ -102,6 +117,13 @@ namespace Snowlight.Game.Pets
             }
         }
 
+        public int RoomRotation
+        {
+            get
+            {
+                return mRoomRotation;
+            }
+        }
         public double Timestamp
         {
             get
@@ -252,6 +274,29 @@ namespace Snowlight.Game.Pets
                 mScore = value;
             }
         }
+        public List<PetCommands> CommandList
+        {
+            get
+            {
+                return PetDataManager.GetCommandsForType(mType);
+            }
+        }
+
+        public List<PetCommands> AvailablePetCommands
+        {
+            get
+            {
+                return CommandList.Where(C => Level >= C.MinLevel).ToList();
+            }
+        }
+
+        public uint VirtualId
+        {
+            get
+            {
+                return mVirtualId;
+            }
+        }
 
         public Pet(uint Id, string Name, int PetType, int Race, string Color, uint UserId, uint RoomId, Vector3 RoomPosition,
             double Timestamp, int Experience, int Energy, int Happiness, int Score)
@@ -271,51 +316,174 @@ namespace Snowlight.Game.Pets
             mScore = Score;
         }
 
-        public void MoveToUserInventory(uint UserId)
+        public void MoveToUserInventory()
         {
             mRoomId = 0;
             mRoomPosition = new Vector3(0, 0, 0);
         }
 
-        public void MoveToRoom(uint RoomId, Vector3 RoomPosition)
+        public void MoveToRoom(uint RoomId, Vector3 RoomPosition, int RoomRotation = 4)
         {
             mRoomId = RoomId;
             mRoomPosition = RoomPosition;
+            mRoomRotation = RoomRotation;
         }
-        public void OnRespect(SqlDatabaseClient MySqlClient, RoomInstance Instance, int VirtualId)
+        public void OnRespect(SqlDatabaseClient MySqlClient, RoomInstance Instance)
         {
             mScore++;
 
-            if (mExperience <= PET_EXP_LEVELS[PET_EXP_LEVELS.Count - 1])
+            Instance.BroadcastMessage(PetRespectComposer.Compose(this));
+
+            if (mExperience >= PET_EXP_LEVELS[PET_EXP_LEVELS.Count - 1])
             {
-                AddExperience(MySqlClient, Instance, VirtualId, 10);
+                return;
             }
 
-            Instance.BroadcastMessage(PetRespectComposer.Compose(mId, this));
+            AddExperience(MySqlClient, Instance, 10);
         }
-        public void AddExperience(SqlDatabaseClient MySqlClient, RoomInstance Instance, int VirtualId, int Amount)
+        public void AddExperience(SqlDatabaseClient MySqlClient, RoomInstance Instance, int Amount)
         {
-            if(mExperience + Amount >= ExperienceTarget && Level != TotalLevels)
-            {
-                mEnergy = PET_ENERGY_LEVELS[Level];
-            }
+            int CurrentExperienceTarget = ExperienceTarget;
 
             mExperience += Amount;
 
-            Instance.BroadcastMessage(PetAddExperiencePointsComposer.Compose(mId, VirtualId, Amount));
+            if (mExperience >= CurrentExperienceTarget && Level != TotalLevels)
+            {
+                CharacterInfo OwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, mOwnerId);
 
-            SynchronizeDatabase(MySqlClient);
+                if(OwnerInfo.HasLinkedSession)
+                {
+                    Session OwnerSession = SessionManager.GetSessionByCharacterId(mOwnerId);
+
+                    if (OwnerSession.CurrentRoomId.Equals(mRoomId))
+                    {
+                        OwnerSession.SendData(PetLevelUpComposer.Compose(this));
+                    }
+
+                    AchievementManager.ProgressUserAchievement(MySqlClient, OwnerSession, "ACH_PetLevelUp", 1);
+                    QuestManager.ProgressUserQuest(OwnerSession, QuestType.LEVEL_UP_A_PET, 1);
+                }
+                else
+                {
+                    AchievementManager.OfflineProgressUserAchievement(MySqlClient, mOwnerId, "ACH_PetLevelUp", 1);
+                }                
+
+                mEnergy = PET_ENERGY_LEVELS[Level + 1];
+
+                RoomActor Actor = Instance.GetActor(mVirtualId);
+                if (Actor != null)
+                {
+                    Actor.SetStatus("gst", "exp");
+                    Actor.UpdateNeeded = true;
+                }
+
+                Instance.BroadcastMessage(RoomChatComposer.Compose(mVirtualId, "*leveled up to level " + Level + "*", 0, ChatType.Say));
+            }
+
+            Instance.BroadcastMessage(PetAddExperiencePointsComposer.Compose(this, Amount));
+            RoomManager.MarkWriteback(this);
         }
+
+        public void PetHappiness(int Add)
+        {
+            int AditionalHappiness = Happiness + Add;
+
+            Happiness = AditionalHappiness >= HappinessLimit ? HappinessLimit: AditionalHappiness;
+
+            RoomManager.MarkWriteback(this);
+        }
+
+        public void PetEnergy(bool Add, bool Isfood = false, RoomInstance Instance = null)
+        {
+            int MaxE;
+            if (Add)
+            {
+                if (Energy == EnergyLimit)
+                {
+                    return;
+                }
+
+                if (Energy > 85)
+                {
+                    MaxE = EnergyLimit - Energy;
+                }
+                else
+                {
+                    MaxE = 10;
+                }
+
+            }
+            else
+            {
+                MaxE = 15;
+            }
+
+            if (MaxE <= 4)
+            {
+                MaxE = 15;
+            }
+
+            int Random = RandomGenerator.GetNext(4, MaxE);
+
+            if (!Add)
+            {
+                Energy -= Random;
+
+                if (Energy < 0)
+                {
+                    Energy = 1;
+                    Random = 1;
+                }
+            }
+            else
+            {
+                Energy += Random;
+
+                RoomActor Actor = Instance.GetActor(mVirtualId);
+                if (Actor != null)
+                {
+                    Actor.SetStatus("gst", "nrg");
+                    Actor.UpdateNeeded = true;
+                }
+
+                if(Isfood)
+                {
+                    using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                    {
+                        CharacterInfo RoomOwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, Instance.Info.OwnerId);
+
+                        if(RoomOwnerInfo.HasLinkedSession) 
+                        {
+                            Session TargetSession = SessionManager.GetSessionByCharacterId(RoomOwnerInfo.Id);
+                            AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, "ACH_PetFeeding", Random);
+                        }
+                        else
+                        {
+                            AchievementManager.OfflineProgressUserAchievement(MySqlClient, RoomOwnerInfo.Id, "ACH_PetFeeding", Random);
+                        }
+                    }
+                }
+            }
+
+            RoomManager.MarkWriteback(this);
+        }
+
+        public void SetVirtualId(uint VirtualId)
+        {
+            mVirtualId = VirtualId;
+        }
+
         public void SynchronizeDatabase(SqlDatabaseClient MySqlClient)
         {
             MySqlClient.SetParameter("id", mId);
             MySqlClient.SetParameter("roomid", mRoomId);
             MySqlClient.SetParameter("roompos", mRoomPosition.ToString());
+            MySqlClient.SetParameter("roomrot", mRoomRotation);
             MySqlClient.SetParameter("exp", mExperience);
             MySqlClient.SetParameter("energy", mEnergy);
             MySqlClient.SetParameter("happy", mHappiness);
             MySqlClient.SetParameter("score", mScore);
-            MySqlClient.ExecuteNonQuery("UPDATE pets SET room_id = @roomid, room_pos = @roompos, experience = @exp, energy = @energy, happiness = @happy, score = @score WHERE id = @id LIMIT 1");
+            MySqlClient.ExecuteNonQuery("UPDATE user_pets SET room_id = @roomid, room_pos = @roompos, room_rot = @roomrot, experience = @exp, energy = @energy, happiness = @happy, score = @score WHERE id = @id LIMIT 1");
         }
     }
 }

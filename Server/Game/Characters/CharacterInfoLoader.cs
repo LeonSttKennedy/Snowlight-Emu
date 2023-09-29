@@ -109,21 +109,22 @@ namespace Snowlight.Game.Characters
         {
             return new CharacterInfo(MySqlClient, LinkedClientId, (uint)Row["id"], (string)Row["username"], (string)Row["real_name"],
                 (string)Row["figure"], (Row["gender"].ToString() == "M" ? CharacterGender.Male : CharacterGender.Female),
-                (string)Row["motto"], (int)Row["credits_balance"], (int)Row["activity_points_balance"],
+                (string)Row["motto"], (int)Row["credits_balance"], (string)Row["activity_points_balance"],
                 (double)Row["activity_points_last_update"], (Row["privacy_accept_friends"].ToString() == "1"),
                 (uint)Row["home_room"], (int)Row["score"], (int)Row["config_volume"],
                 (int)Row["moderation_tickets"], (int)Row["moderation_tickets_abusive"], (double)Row["moderation_tickets_cooldown"],
                 (int)Row["moderation_bans"], (int)Row["moderation_cautions"], (double)Row["timestamp_lastvisit"],
                 (double)Row["timestamp_created"], (int)Row["respect_points"], (int)Row["respect_credit_humans"],
-                (int)Row["respect_credit_pets"], (double)Row["last_respect_update"], (double)Row["moderation_muted_until_timestamp"],
-                (int)Row["marketplace_tickets"], (int)Row["regular_visitor"], (int)Row["time_online"], (Row["online"].ToString() == "1"),
-                (Row["allow_mimic"].ToString() == "1"), (Row["allow_gifts"].ToString() == "1"));
+                (int)Row["respect_credit_pets"], (double)Row["last_respect_update"], (double)Row["moderation_muted_until_timestamp"], (double)Row["last_name_change"],
+                (int)Row["marketplace_tickets"], (int)Row["regular_visitor"], (int)Row["time_online"], (int)Row["favorite_group_id"],
+                (Row["online"].ToString() == "1"), (Row["allow_eventstream"].ToString() == "1"), (Row["allow_mimic"].ToString() == "1"), (Row["allow_gifts"].ToString() == "1"),
+                (Row["allow_trade"].ToString() == "1"));
         }
 
         public static CharacterInfo GenerateNullCharacter(uint Id)
         {
             return new CharacterInfo(null, 0, Id, "Unknown", string.Empty, string.Empty, CharacterGender.Male, string.Empty,
-                0, 0, 0, false, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, true, true, true);
+                0, string.Empty, 0, false, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, true, false, true, true, false);
         }
     }
 }

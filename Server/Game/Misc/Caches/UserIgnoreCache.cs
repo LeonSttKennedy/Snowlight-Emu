@@ -42,7 +42,7 @@ namespace Snowlight.Game.Misc
                 mInner.Clear();
 
                 MySqlClient.SetParameter("user_id", mUserId);
-                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT ignore_id FROM ignores WHERE user_id = @user_id");
+                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT ignore_id FROM user_ignores WHERE user_id = @user_id");
 
                 foreach (DataRow Row in Table.Rows)
                 {
@@ -75,7 +75,7 @@ namespace Snowlight.Game.Misc
                     {
                         MySqlClient.SetParameter("user_id", mUserId);
                         MySqlClient.SetParameter("ignore_id", UserId);
-                        MySqlClient.ExecuteNonQuery("INSERT INTO ignores (user_id,ignore_id) VALUES (@user_id,@ignore_id)");
+                        MySqlClient.ExecuteNonQuery("INSERT INTO user_ignores (user_id,ignore_id) VALUES (@user_id,@ignore_id)");
                     }
                 }
             }
@@ -93,7 +93,7 @@ namespace Snowlight.Game.Misc
                     {
                         MySqlClient.SetParameter("user_id", mUserId);
                         MySqlClient.SetParameter("ignore_id", UserId);
-                        MySqlClient.ExecuteNonQuery("DELETE FROM ignores WHERE user_id = @user_id AND ignore_id = @ignore_id LIMIT 1");
+                        MySqlClient.ExecuteNonQuery("DELETE FROM user_ignores WHERE user_id = @user_id AND ignore_id = @ignore_id LIMIT 1");
                     }
                 }
             }

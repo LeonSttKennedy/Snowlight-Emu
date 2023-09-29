@@ -12,4 +12,10 @@
 
 	// Site name
 	define('SITE_NAME', "uberHotel");
+	
+	
+	// Mus information
+	define('MUS_ENABLED', true); // MUS Enable
+	define('MUS_HOST', '192.168.15.72'); // MUS Server IP
+	define('MUS_PORT', 38100); // MUS Server port
 ?>

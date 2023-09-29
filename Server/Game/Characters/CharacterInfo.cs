@@ -12,6 +12,7 @@ using Snowlight.Game.Achievements;
 using Snowlight.Specialized;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Moderation;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Characters
 {
@@ -32,7 +33,7 @@ namespace Snowlight.Game.Characters
         private string mMotto;
 
         private int mCredits;
-        private int mActivityPoints;
+        private Dictionary<int, int> mActivityPoints;
 
         private uint mHomeRoom;
         private int mScore;
@@ -45,6 +46,7 @@ namespace Snowlight.Game.Characters
 
         private Dictionary<int, WardrobeItem> mWardrobe;
         private List<string> mTags;
+        private List<uint> mFilledPolls;
 
         private static Dictionary<string, int> mInFractions;
         private int mModerationTickets;
@@ -58,6 +60,7 @@ namespace Snowlight.Game.Characters
         private double mTimestampLastOnline;
         private double mTimestampRegistered;
         private double mTimestampLastActivityPointsUpdate;
+        private double mTimestampLastNameChange;
 
         private double mLastRespectUpdate;
         private bool mCalledGuideBot;
@@ -70,10 +73,14 @@ namespace Snowlight.Game.Characters
         private DateTime mLastGiftSent;
         private int mGiftingWarningCounter;
 
+        private int mFavoriteGroupId;
+
         private bool mIsOnline;
 
+        private bool mAllowFriendStream;
         private bool mAllowMimic;
         private bool mAllowGifts;
+        private bool mAllowTrade;
 
         public uint Id
         {
@@ -143,7 +150,7 @@ namespace Snowlight.Game.Characters
             }
         }
 
-        public int ActivityPointsBalance
+        public Dictionary<int, int> ActivityPoints
         {
             get
             {
@@ -406,6 +413,14 @@ namespace Snowlight.Game.Characters
             }
         }
 
+        public DateTime DateTimeLastLogin
+        {
+            get
+            {
+                return UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastOnline);
+            }
+        }
+
         public double TimestampRegistered
         {
             get
@@ -413,6 +428,7 @@ namespace Snowlight.Game.Characters
                 return mTimestampRegistered;
             }
         }
+
         public double TimeSinceLastRespectPointsUpdate
         {
             get
@@ -424,36 +440,42 @@ namespace Snowlight.Game.Characters
                 mLastRespectUpdate = value;
             }
         }
-        internal Boolean NeedsRespectUpdate
+        public DateTime DateTimeNextRespectPointsUpdate
         {
             get
             {
-                if (TimeSinceLastRespectPointsUpdate == 0)
-                {
-                    return true;
-                }
-                double Time = (UnixTimestamp.GetCurrent() - TimeSinceLastRespectPointsUpdate);
-                TimeSpan Diff = TimeSpan.FromSeconds(Time);
-                Boolean NeedsUpdate = false;
-
-                if (SessionManager.GetSessionByCharacterId(Id).HasRight("club_vip") && Diff.TotalHours >= 2) { NeedsUpdate = true; }
-                if (!SessionManager.GetSessionByCharacterId(Id).HasRight("club_vip") && Diff.TotalDays >= 1) { NeedsUpdate = true; }
-
-                return (NeedsUpdate && (this.RespectCreditPets < 3 || this.RespectCreditHuman < 3));
+                DateTime DT = UnixTimestamp.GetDateTimeFromUnixTimestamp(mLastRespectUpdate);
+                return SessionManager.GetSessionByCharacterId(mId).HasRight("club_vip") ? DT.AddHours(2) : DT.AddDays(1);
+            }
+        }
+        public DateTime NextNameChange
+        {
+            get
+            {
+                DateTime DT = UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastNameChange);
+                return DT.AddDays(ServerSettings.NameChangeWaitDays);
+            }
+        }
+        public bool NeedsRespectUpdate
+        {
+            get
+            {
+                int Compare = DateTime.Compare(DateTime.Now, DateTimeNextRespectPointsUpdate);
+                return Compare > -1 && (mRespectCreditPets < 3 || mRespectCreditHuman < 3) || mLastRespectUpdate == 0;
             }
         }
         public bool CalledGuideBot
         {
-            get 
+            get
             {
                 return mCalledGuideBot;
             }
-            set 
+            set
             {
                 mCalledGuideBot = value;
             }
         }
-        public int MarketplaceTokensTotal
+        public int MarketplaceTokens
         {
             get
             {
@@ -486,14 +508,25 @@ namespace Snowlight.Game.Characters
                 mTimeOnline = value;
             }
         }
+        public bool AllowFriendStream
+        {
+            get
+            {
+                return mAllowFriendStream;
+            }
+            set
+            {
+                mAllowFriendStream = value;
+            }
+        }
         public bool AllowGifting
         {
-            get 
+            get
             {
                 return mAllowGifting;
             }
-            
-            set 
+
+            set
             {
                 mAllowGifting = value;
             }
@@ -501,7 +534,7 @@ namespace Snowlight.Game.Characters
 
         public DateTime LastGiftSent
         {
-            get 
+            get
             {
                 return mLastGiftSent;
             }
@@ -514,7 +547,7 @@ namespace Snowlight.Game.Characters
 
         public int GiftWarningCounter
         {
-            get 
+            get
             {
                 return mGiftingWarningCounter;
             }
@@ -524,9 +557,16 @@ namespace Snowlight.Game.Characters
                 mGiftingWarningCounter = value;
             }
         }
+        public int FavoriteGroupId
+        {
+            get
+            {
+                return mFavoriteGroupId;
+            }
+        }
         public bool Online
         {
-            get 
+            get
             {
                 return mIsOnline;
             }
@@ -560,14 +600,50 @@ namespace Snowlight.Game.Characters
                 mAllowGifts = value;
             }
         }
+        public bool AllowTrade
+        {
+            get
+            {
+                return mAllowTrade;
+            }
 
+            set
+            {
+                mAllowTrade = value;
+            }
+        }
+        public bool AllowChangeName
+        {
+            get
+            {
+                bool Allow = false;
+                int Compare = DateTime.Compare(DateTime.Now, NextNameChange);
+
+                if (Compare > -1)
+                {
+                    Allow = true;
+                }
+
+                return Allow || mTimestampLastNameChange == 0;
+            }
+        }
+
+        public ReadOnlyCollection<uint> FilledPolls
+        {
+            get
+            {
+                List<uint> Copy = new List<uint>();
+                Copy.AddRange(mFilledPolls);
+                return Copy.AsReadOnly();
+            }
+        }
         public CharacterInfo(SqlDatabaseClient MySqlClient, uint SessionId, uint Id, string Username, string RealName, string Figure,
-            CharacterGender Gender, string Motto, int Credits, int ActivityPoints, double ActivityPointsLastUpdate,
+            CharacterGender Gender, string Motto, int Credits, string ActivityPoints, double ActivityPointsLastUpdate,
             bool PrivacyAcceptFriends, uint HomeRoom, int Score, int ConfigVolume, int ModerationTickets,
             int ModerationTicketsAbusive, double ModerationTicketCooldown, int ModerationBans, int ModerationCautions,
             double TimestampLastOnline, double TimestampRegistered, int RespectPoints, int RespectCreditHuman,
-            int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, int MarketplaceTokens,
-            int RegularVisitor, int TimeOnline, bool Online , bool AllowMimic, bool AllowGifts)
+            int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, double TimestampLastNameChange, int MarketplaceTokens,
+            int RegularVisitor, int TimeOnline, int FavoriteGroupId, bool Online, bool AllowFriendStream, bool AllowMimic, bool AllowGifts, bool AllowTrade)
         {
             mSessionId = SessionId;
             mId = Id;
@@ -578,7 +654,7 @@ namespace Snowlight.Game.Characters
             mMotto = Motto;
             mCredits = Credits;
 
-            mActivityPoints = ActivityPoints;
+            mActivityPoints = SeasonalCurrency.ActivityPointsToDictionary(ActivityPoints);
             mPrivacyAcceptFriends = PrivacyAcceptFriends;
             mHomeRoom = HomeRoom;
             mScore = Score;
@@ -601,6 +677,8 @@ namespace Snowlight.Game.Characters
             mTimestampLastOnline = TimestampLastOnline;
             mTimestampRegistered = TimestampRegistered;
 
+            mTimestampLastNameChange = TimestampLastNameChange;
+
             mLastRespectUpdate = TimestampLastRespectUpdate;
             mCalledGuideBot = false;
             mMarketplaceTokens = MarketplaceTokens;
@@ -615,19 +693,36 @@ namespace Snowlight.Game.Characters
             mWardrobe = new Dictionary<int, WardrobeItem>();
             mTags = new List<string>();
 
+            mFavoriteGroupId = FavoriteGroupId;
+
             mIsOnline = Online;
 
+            mAllowFriendStream = AllowFriendStream;
             mAllowMimic = AllowMimic;
             mAllowMimic = AllowGifts;
+            mAllowTrade = AllowTrade;
+
+            mFilledPolls = new List<uint>();
 
             if (MySqlClient != null)
             {
                 MySqlClient.SetParameter("userid", mId);
-                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM wardrobe WHERE user_id = @userid LIMIT 10");
+                DataTable WardrobeTable = MySqlClient.ExecuteQueryTable("SELECT * FROM user_wardrobe WHERE user_id = @userid LIMIT 10");
 
-                foreach (DataRow Row in Table.Rows)
+                foreach (DataRow Row in WardrobeTable.Rows)
                 {
                     mWardrobe.Add((int)Row["slot_id"], new WardrobeItem((string)Row["figure"], (Row["gender"].ToString().ToLower() == "m" ? CharacterGender.Male : CharacterGender.Female)));
+                }
+
+                MySqlClient.SetParameter("userid", mId);
+                DataTable PollResultsTable = MySqlClient.ExecuteQueryTable("SELECT poll_id FROM room_poll_results WHERE user_id = @userid GROUP BY poll_id");
+                foreach (DataRow Row in PollResultsTable.Rows)
+                {
+                    uint PollResultId = (uint)Row["poll_id"];
+                    if (!mFilledPolls.Contains(PollResultId))
+                    {
+                        mFilledPolls.Add(PollResultId);
+                    }
                 }
 
                 UpdateTags(MySqlClient);
@@ -647,7 +742,7 @@ namespace Snowlight.Game.Characters
             mTags.Clear();
 
             MySqlClient.SetParameter("userid", mId);
-            DataTable TagsTable = MySqlClient.ExecuteQueryTable("SELECT * FROM tags WHERE user_id = @userid");
+            DataTable TagsTable = MySqlClient.ExecuteQueryTable("SELECT * FROM user_tags WHERE user_id = @userid");
 
             foreach (DataRow Row in TagsTable.Rows)
             {
@@ -657,7 +752,7 @@ namespace Snowlight.Game.Characters
         public void UpdateOnline(SqlDatabaseClient MySqlClient)
         {
             MySqlClient.SetParameter("userid", mId);
-            MySqlClient.SetParameter("online", mIsOnline? "1" : "0");
+            MySqlClient.SetParameter("online", mIsOnline ? "1" : "0");
             MySqlClient.ExecuteNonQuery("UPDATE characters SET online = @online WHERE id = @userid LIMIT 1");
         }
         public void UpdateScore(SqlDatabaseClient MySqlClient, int Amount)
@@ -678,16 +773,24 @@ namespace Snowlight.Game.Characters
         {
             CreditsBalance += Amount;
 
-            MySqlClient.SetParameter("id", Id);
+            MySqlClient.SetParameter("id", mId);
             MySqlClient.SetParameter("credits", CreditsBalance);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET credits_balance = @credits WHERE id = @id LIMIT 1");
         }
-        public void UpdateMarketplaceTokens(SqlDatabaseClient MySqlClient, int Amount)
+        public void UpdateFavoriteGroup(SqlDatabaseClient MySqlClient, int GroupId)
         {
-            MarketplaceTokensTotal += Amount;
+            mFavoriteGroupId = GroupId;
 
             MySqlClient.SetParameter("id", mId);
-            MySqlClient.SetParameter("marketplacetokens", MarketplaceTokensTotal);
+            MySqlClient.SetParameter("groupid", mFavoriteGroupId);
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET favorite_group_id = @groupid WHERE id = @id LIMIT 1");
+        }
+        public void UpdateMarketplaceTokens(SqlDatabaseClient MySqlClient, int Amount)
+        {
+            MarketplaceTokens += Amount;
+
+            MySqlClient.SetParameter("id", mId);
+            MySqlClient.SetParameter("marketplacetokens", MarketplaceTokens);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET marketplace_tickets = @marketplacetokens WHERE id = @id LIMIT 1");
         }
         public void UpdateRegularVisitor(SqlDatabaseClient MySqlClient, int Amount)
@@ -706,13 +809,20 @@ namespace Snowlight.Game.Characters
             MySqlClient.SetParameter("timeonline", TimeOnline);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET time_online = @timeonline WHERE id = @id LIMIT 1");
         }
-        public void UpdateActivityPointsBalance(SqlDatabaseClient MySqlClient, int Amount)
+        public void UpdateActivityPointsBalance(SqlDatabaseClient MySqlClient, SeasonalCurrencyList Currency, int Amount)
         {
-            ActivityPointsBalance += Amount;
+            if (ActivityPoints.ContainsKey((int)Currency))
+            {
+                ActivityPoints[(int)Currency] += Amount;
+            }
+            else
+            {
+                ActivityPoints.Add((int)Currency, Amount);
+            }
 
             MySqlClient.SetParameter("id", Id);
-            MySqlClient.SetParameter("ap", ActivityPointsBalance);
-            MySqlClient.ExecuteNonQuery("UPDATE characters SET activity_points_balance = @ap WHERE id = @id LIMIT 1");
+            MySqlClient.SetParameter("apb", SeasonalCurrency.ActivityPointsToString(ActivityPoints));
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET activity_points_balance = @apb WHERE id = @id LIMIT 1");
         }
         public void SetLastRespectUpdate(SqlDatabaseClient MySqlClient)
         {
@@ -728,7 +838,7 @@ namespace Snowlight.Game.Characters
 
             MySqlClient.SetParameter("id", mId);
             MySqlClient.SetParameter("aplu", mTimestampLastActivityPointsUpdate);
-            MySqlClient.ExecuteNonQuery("UPDATE characters SET activity_points_last_update = @aplu WHERE id = @id LIMIT 1");          
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET activity_points_last_update = @aplu WHERE id = @id LIMIT 1");
         }
 
         public void UpdateMimicPreference(SqlDatabaseClient MySqlClient)
@@ -738,7 +848,13 @@ namespace Snowlight.Game.Characters
 
             MySqlClient.ExecuteNonQuery("UPDATE characters SET allow_mimic = @mimic WHERE id = @userid LIMIT 1");
         }
+        public void UpdateFriendStreamPreference(SqlDatabaseClient MySqlClient)
+        {
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("eventstream", mAllowFriendStream ? "1" : "0");
 
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET allow_eventstream = @eventstream WHERE id = @userid LIMIT 1");
+        }
         public void UpdateGiftsPreference(SqlDatabaseClient MySqlClient)
         {
             MySqlClient.SetParameter("userid", mId);
@@ -781,12 +897,12 @@ namespace Snowlight.Game.Characters
                 if (!mWardrobe.ContainsKey(SlotId))
                 {
                     mWardrobe.Add(SlotId, Item);
-                    MySqlClient.ExecuteNonQuery("INSERT INTO wardrobe (user_id,slot_id,figure,gender) VALUES (@userid,@slotid,@figure,@gender)");
+                    MySqlClient.ExecuteNonQuery("INSERT INTO user_wardrobe (user_id,slot_id,figure,gender) VALUES (@userid,@slotid,@figure,@gender)");
                     return;
                 }
 
-                mWardrobe[SlotId] = Item;                             
-                MySqlClient.ExecuteNonQuery("UPDATE wardrobe SET figure = @figure, gender = @gender WHERE user_id = @userid AND slot_id = @slotid LIMIT 1");                        
+                mWardrobe[SlotId] = Item;
+                MySqlClient.ExecuteNonQuery("UPDATE user_wardrobe SET figure = @figure, gender = @gender WHERE user_id = @userid AND slot_id = @slotid LIMIT 1");
             }
         }
 
@@ -832,13 +948,49 @@ namespace Snowlight.Game.Characters
                 MySqlClient.ExecuteNonQuery("UPDATE characters SET moderation_muted_until_timestamp = @mutetime WHERE id = @id LIMIT 1");
             }
         }
-        
+
         public void Unmute(SqlDatabaseClient MySqlClient)
         {
             mModerationMutedUntil = 0;
 
             MySqlClient.SetParameter("id", mId);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET moderation_muted_until_timestamp = 0 WHERE id = @id LIMIT 1");
+        }
+
+        public void UpdateUsername(SqlDatabaseClient MySqlClient, string NewUsername)
+        {
+            mUsername = NewUsername;
+
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("username", mUsername);
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET username = @username WHERE id = @userid LIMIT 1");
+        }
+
+        public void SetPollFilled(uint PollId)
+        {
+            if (!mFilledPolls.Contains(PollId))
+            {
+                mFilledPolls.Add(PollId);
+            }
+        }
+
+        public void SetAnswer(SqlDatabaseClient MySqlClient, uint PollId, int PollQuestionId = -1, string PollAnswer = "")
+        {
+            MySqlClient.SetParameter("pollid", PollId);
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("questionid", PollQuestionId);
+            MySqlClient.SetParameter("answer", PollAnswer);
+            MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
+            MySqlClient.ExecuteNonQuery("INSERT INTO room_poll_results (poll_id,user_id,question_id,answer,timestamp) VALUES (@pollid,@userid,@questionid,@answer,@timestamp)");
+        }
+
+        public void UpdateLastNameChange(SqlDatabaseClient MySqlClient)
+        {
+            mTimestampLastNameChange = UnixTimestamp.GetCurrent();
+
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("lnc", mTimestampLastNameChange);
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET timestamp_last_name_change = @lnc WHERE id = @userid LIMIT 1");
         }
     }
 }

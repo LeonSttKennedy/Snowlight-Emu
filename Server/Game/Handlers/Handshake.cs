@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
+using Snowlight.Util;
+using Snowlight.Game.Misc;
+using Snowlight.Game.Catalog;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Game.Characters;
 using Snowlight.Communication.Outgoing;
-using Snowlight.Util;
-using System.Collections.Generic;
 using Snowlight.Communication.Incoming;
 
 namespace Snowlight.Game.Handlers
@@ -35,7 +38,8 @@ namespace Snowlight.Game.Handlers
 
         private static void SsoLogin(Session Session, ClientMessage Message)
         {
-            if (Session.Authenticated)
+            if (Session.Authenticated ||
+                ShutdownCommandWorker.Shutdown && ShutdownCommandWorker.Comparassion.Minutes <= 5)
             {
                 return;
             }
@@ -53,12 +57,27 @@ namespace Snowlight.Game.Handlers
         private static void GetBalance(Session Session, ClientMessage Message)
         {
             Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-            Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, 0));
+            Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
+            //Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0], 0));
         }
 
         private static void GetSubscriptionData(Session Session, ClientMessage Message)
         {
             Session.SendData(SubscriptionStatusComposer.Compose(Session.SubscriptionManager));
+
+            if (Session.SubscriptionManager.IsActive && Session.SubscriptionManager.GiftPoints > 0)
+            {
+                Session.SendData(ClubGiftReadyComposer.Compose(Session.SubscriptionManager.GiftPoints));
+            }
+
+            SubscriptionOffer SubscriptionOffer = SubscriptionOfferManager.CheckForSubOffer(Session.SubscriptionManager.SubscriptionLevel, Session.CharacterId);
+            if (SubscriptionOffer != null)
+            {
+                CatalogClubOffer CatalogClubOffer = CatalogManager.ClubOffers.Values.Where(O => O.Level == SubscriptionOffer.OffertedLevel && O.LengthDays == 31).FirstOrDefault();
+                SubscriptionOffer.SetClubSubscriptionOffer(CatalogClubOffer);
+
+                Session.SendData(SubscriptionOfferComposer.Compose(Session.SubscriptionManager, SubscriptionOffer));
+            }
         }
 
         private static void GetIgnoredUsers(Session Session, ClientMessage Message)

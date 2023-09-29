@@ -13,7 +13,7 @@ if (!HK_LOGGED_IN || !$GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hotel_
 if (isset($_POST['hatext']))
 {
 	fMessage('ok', 'Message sent:<br />"' . $_POST['hatext'] . '"');
-	//$core->Mus('ha', $_POST['hatext']);
+	//$GetCore->Mus('ha', $_POST['hatext']);
 }
 
 require_once "top.php";

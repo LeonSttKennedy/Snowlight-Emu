@@ -9,27 +9,25 @@ using System.Collections.ObjectModel;
 using Snowlight.Specialized;
 using Snowlight.Game.Pets;
 using Snowlight.Util;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Rooms;
 
 namespace Snowlight.Game.Bots
 {
     public static class BotManager
     {
         private static Dictionary<uint, Bot> mBotDefinitions;
-        private static Dictionary<uint, Bot> mBotInstances;
         private static Dictionary<uint, List<BotResponse>> mDefinedResponses;
-        private static Dictionary<uint, List<string>> mDefinedSpeech;
+        private static Dictionary<uint, List<BotRandomSpeech>> mDefinedSpeech;
         private static Dictionary<int, Bot> mPetHandlerIndex;
-        private static uint mBotInstanceIdGenerator;
         private static object mSyncRoot;
         
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
             mBotDefinitions = new Dictionary<uint, Bot>();
-            mBotInstances = new Dictionary<uint, Bot>();
             mDefinedResponses = new Dictionary<uint, List<BotResponse>>();
-            mDefinedSpeech = new Dictionary<uint, List<string>>();
+            mDefinedSpeech = new Dictionary<uint, List<BotRandomSpeech>>();
             mPetHandlerIndex = new Dictionary<int, Bot>();
-            mBotInstanceIdGenerator = 0;
             mSyncRoot = new object();
 
             LoadBotDefinitions(MySqlClient);
@@ -42,12 +40,32 @@ namespace Snowlight.Game.Bots
             mDefinedSpeech.Clear();
             mPetHandlerIndex.Clear();
 
-            DataTable ResponseTable = MySqlClient.ExecuteQueryTable("SELECT bot_id,triggers,responses,response_serve_id FROM bot_responses");
+            DataTable ResponseTable = MySqlClient.ExecuteQueryTable("SELECT bot_id,triggers,responses,response_mode,response_serve_id FROM bot_responses");
                 
             foreach (DataRow Row in ResponseTable.Rows)
             {
+                ChatType Type;
+                switch ((string)Row["response_mode"])
+                {
+                    default:
+                    case "say":
+
+                        Type = ChatType.Say;
+                        break;
+
+                    case "shout":
+
+                        Type = ChatType.Shout;
+                        break;
+
+                    case "whisper":
+
+                        Type = ChatType.Whisper;
+                        break;
+                }
+
                 BotResponse Response = new BotResponse(Row["triggers"].ToString().Split('|').ToList(),
-                    Row["responses"].ToString().Split('|').ToList(), (int)Row["response_serve_id"]);
+                    Row["responses"].ToString().Split('|').ToList(), Type, (int)Row["response_serve_id"]);
                          
                 if (!mDefinedResponses.ContainsKey((uint)Row["bot_id"]))
                 {
@@ -57,16 +75,34 @@ namespace Snowlight.Game.Bots
                 mDefinedResponses[(uint)Row["bot_id"]].Add(Response);
             }
 
-            DataTable SpeechTable = MySqlClient.ExecuteQueryTable("SELECT bot_id,message FROM bots_speech");
+            DataTable SpeechTable = MySqlClient.ExecuteQueryTable("SELECT bot_id,message,speech_mode FROM bots_speech");
 
             foreach (DataRow Row in SpeechTable.Rows)
             {
-                if (!mDefinedSpeech.ContainsKey((uint)Row["bot_id"]))
+                ChatType Type;
+                switch ((string)Row["speech_mode"])
                 {
-                    mDefinedSpeech.Add((uint)Row["bot_id"], new List<string>());
+                    default:
+                    case "say":
+
+                        Type = ChatType.Say;
+                        break;
+
+                    case "shout":
+
+                        Type = ChatType.Shout;
+                        break;
+                
                 }
 
-                mDefinedSpeech[(uint)Row["bot_id"]].Add((string)Row["message"]);
+                if (!mDefinedSpeech.ContainsKey((uint)Row["bot_id"]))
+                {
+                    mDefinedSpeech.Add((uint)Row["bot_id"], new List<BotRandomSpeech>());
+                }
+
+                BotRandomSpeech RandomSpeech = new BotRandomSpeech((string)Row["message"], Type);
+
+                mDefinedSpeech[(uint)Row["bot_id"]].Add(RandomSpeech);
             }
 
             MySqlClient.SetParameter("enabled", "1");
@@ -117,24 +153,11 @@ namespace Snowlight.Game.Bots
 
         public static Bot CreateNewInstance(Bot Definition, uint RoomId, Vector3 Position, Pet PetData = null)
         {
-            uint ResultId = 0;
-
-            lock (mSyncRoot)
-            {
-                ResultId = mBotInstanceIdGenerator++;
-            }
-
-            Bot BotInstance = new Bot(ResultId, Definition.Id, Definition.BehaviorType, Definition.Name, Definition.Look,
-                Definition.Motto, RoomId, Position, Definition.ServePosition, Definition.PredefinedPositions.ToList(),
-                Definition.WalkMode, Definition.Kickable, Definition.Rotation, Definition.Responses, Definition.Effect,
-                Definition.ResponseDistance, PetData);
-
-            lock (mSyncRoot)
-            {
-                mBotInstances.Add(ResultId, BotInstance);
-            }
-
-            return BotInstance;
+            return new Bot(Definition.Id, Definition.Id, Definition.BehaviorType, Definition.Name,
+                Definition.Look, Definition.Motto, RoomId, Position, Definition.ServePosition,
+                Definition.PredefinedPositions.ToList(), Definition.WalkMode, Definition.Kickable,
+                Definition.Rotation, Definition.Responses, Definition.Effect, Definition.ResponseDistance,
+                PetData);
         }
 
         public static ReadOnlyCollection<Bot> GenerateBotInstancesForRoom(uint RoomId)
@@ -154,6 +177,7 @@ namespace Snowlight.Game.Bots
 
             return NewInstances.AsReadOnly();           
         }
+
         public static Bot GetBotByBehavior(string BehaviorType)
         {
             lock (mSyncRoot)
@@ -179,11 +203,11 @@ namespace Snowlight.Game.Bots
             return null;
         }
 
-        public static string GetRandomSpeechForBotDefinition(uint DefinitionId)
+        public static BotRandomSpeech GetRandomSpeechForBotDefinition(uint DefinitionId)
         {
             if (!mDefinedSpeech.ContainsKey(DefinitionId))
             {
-                return string.Empty;
+                return null;
             }
 
             return mDefinedSpeech[DefinitionId][RandomGenerator.GetNext(0, mDefinedSpeech[DefinitionId].Count - 1)];

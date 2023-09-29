@@ -10,11 +10,26 @@ using Snowlight.Specialized;
 using Snowlight.Game.Sessions;
 using Snowlight.Config;
 using Snowlight.Util;
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace Snowlight.Game.Moderation
 {
     public static class ModerationLogs
     {
+        public static void LogConsoleChatMessage(SqlDatabaseClient MySqlClient, uint FromUserId, uint ToUserId, string Message)
+        {
+            if (!ServerSettings.ModerationConsoleChatLogs)
+            {
+                return;
+            }
+
+            MySqlClient.SetParameter("fromuserid", FromUserId);
+            MySqlClient.SetParameter("touserid", ToUserId);
+            MySqlClient.SetParameter("message", Message);
+            MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
+            MySqlClient.ExecuteNonQuery("INSERT INTO moderation_chatlogs_console (from_user_id,to_user_id,message,timestamp) VALUES (@fromuserid,@touserid,@message,@timestamp)");
+        }
+
         public static void LogChatMessage(SqlDatabaseClient MySqlClient, uint UserId, uint RoomId, string Message)
         {
             if (!ServerSettings.ModerationChatLogs)

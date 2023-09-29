@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Characters;
 using Snowlight.Game.Bots;
+using Snowlight.Game.Groups;
 
 namespace Snowlight.Communication.Outgoing
 {
@@ -42,16 +43,18 @@ namespace Snowlight.Communication.Outgoing
 
                 if (!IsBot)
                 {
+                    Group FavoriteGroup = GroupManager.GetGroup(((CharacterInfo)Actor.ReferenceObject).FavoriteGroupId);
+
                     Message.AppendStringWithBreak(((CharacterInfo)Actor.ReferenceObject).Gender == CharacterGender.Male ? "m" : "f");
                     Message.AppendInt32(-1); // Unknown
-                    Message.AppendInt32(-1); // Group ID
-                    Message.AppendInt32(-1); // Unknown (sometimes -1, sometimes 1)
+                    Message.AppendInt32(FavoriteGroup != null ? FavoriteGroup.Id : -1); // Group ID
+                    Message.AppendInt32(FavoriteGroup != null ? (int)FavoriteGroup.State : -1); // Unknown (sometimes -1, sometimes 1)
                     Message.AppendStringWithBreak(string.Empty);
                     Message.AppendInt32(((CharacterInfo)Actor.ReferenceObject).Score);
                 }
                 else if (IsPet)
                 {
-                    Message.AppendInt32(500);
+                    Message.AppendUInt32(BotData.PetData.Id);
                 }
             }
 

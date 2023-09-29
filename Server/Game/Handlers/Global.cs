@@ -76,10 +76,12 @@ namespace Snowlight.Game.Handlers
         {
             SessionManager.StopSession(Session.Id);
         }
+
         private static void OnGetSoundSettings(Session Session, ClientMessage Message)
         {
-            Session.SendData(SoundSettingsComposer.Compose(Session.CharacterInfo.ConfigVolume, false));
+            Session.SendData(SoundSettingsComposer.Compose(Session.CharacterInfo.ConfigVolume));
         }
+
         private static void OnGetMotdMessage(Session Session, ClientMessage Message)
         {
             string MotdText = ServerSettings.MotdText[0];
@@ -90,14 +92,7 @@ namespace Snowlight.Game.Handlers
                 switch(ServerSettings.MotdType)
                 {
                     case MotdType.NotificationMessageComposer:
-                        if(MotdLink != string.Empty)
-                        {
-                            Session.SendData(NotificationMessageComposer.Compose(MotdText, MotdLink));
-                        }
-                        else
-                        {
-                            Session.SendData(NotificationMessageComposer.Compose(MotdText));
-                        }
+                        Session.SendData(NotificationMessageComposer.Compose(MotdText, MotdLink));
                         break;
 
                     case MotdType.MessageOfTheDayComposer:

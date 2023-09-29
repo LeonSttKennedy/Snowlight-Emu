@@ -59,6 +59,7 @@ namespace Snowlight.Game.Misc
 
             return ToReturn;
         }
+
         public static string CheckWords(string Message, Session Session)
         {
             for (int i = 0; i < BlockedWords.Count; i++)

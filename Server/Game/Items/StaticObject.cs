@@ -73,6 +73,14 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public bool FirstIlustration
+        {
+            get
+            {
+                return mRotation == 0;
+            }
+        }
+
         public StaticObject(string Name, Vector3 Position, int SizeX, int SizeY, int Rotation, float Height, bool Walkable, bool IsSeat)
         {
             mName = Name;

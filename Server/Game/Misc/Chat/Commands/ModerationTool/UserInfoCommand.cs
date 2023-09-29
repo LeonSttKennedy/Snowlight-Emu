@@ -49,10 +49,57 @@ namespace Snowlight.Game.Misc
                     return;
                 }
 
+                List<string> ActivityPoints = new List<string>();
+
+                if (Info.ActivityPoints != null)
+                {
+                    string Currency = string.Empty;
+                    foreach(KeyValuePair<int, int> APs in Info.ActivityPoints)
+                    {
+                        switch(APs.Key)
+                        {
+                            case 0:
+
+                                Currency = Info.ActivityPoints[0] > 0 ? "Pixels: " + Info.ActivityPoints[0] : string.Empty;
+                                break;
+
+                            case 1:
+
+                                Currency = Info.ActivityPoints[1] > 0 ? "Snowflakes: " + Info.ActivityPoints[1] : string.Empty;
+                                break;
+
+                            case 2:
+
+                                Currency = Info.ActivityPoints[2] > 0 ? "Hearts: " + Info.ActivityPoints[2] : string.Empty;
+                                break;
+
+                            case 3:
+
+                                Currency = Info.ActivityPoints[3] > 0 ? "Gift Points: " + Info.ActivityPoints[3] : string.Empty;
+                                break;
+
+                            case 4:
+
+                                Currency = Info.ActivityPoints[4] > 0 ? "Shells: " + Info.ActivityPoints[4] : string.Empty;
+                                break;
+
+                            case 5:
+
+                                Currency = Info.ActivityPoints[5] > 0 ? "Diamonds: " + Info.ActivityPoints[5] : string.Empty;
+                                break;
+                        }
+
+                        if (Currency != string.Empty)
+                        {
+                            ActivityPoints.Add(Currency);
+                        }
+                    }
+                }
+
                 string UserText = ExternalTexts.GetValue("command_userinfo_information",
                     new string[] { Username, Info.Id.ToString(), Info.HasLinkedSession.ToString(),
                     Info.Motto, Info.Gender.ToString(), Info.CreditsBalance.ToString(),
-                    Info.ActivityPointsBalance.ToString(), Info.IsMuted.ToString(),
+                    string.Join("\n", ActivityPoints), Info.IsMuted.ToString(),
                     Info.GetRoomCount().ToString()});
                 
                 string RoomText = string.Empty;

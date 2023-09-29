@@ -45,6 +45,12 @@ namespace Snowlight.Game.Items
             FireworksHandler.Register();
             JukeboxHandler.Register();
             RollerHandler.Register();
+
+            PetItemsHandler.Register();
+            GameCounterHandler.Register();
+            PuzzleboxHandler.Register();
+            WelcomeGiftHandler.Register();
+            WiredHandler.Register();
         }
 
         public static void InvokeItemEventHandler(Session Session, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData = 0)

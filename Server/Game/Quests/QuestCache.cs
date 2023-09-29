@@ -4,7 +4,7 @@ using System.Data;
 
 using Snowlight.Storage;
 
-namespace Snowlight.Game.Achievements
+namespace Snowlight.Game.Quests
 {
     public class QuestCache
     {

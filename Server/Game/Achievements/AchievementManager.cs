@@ -10,6 +10,9 @@ using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Rights;
 using Snowlight.Game.Rooms;
 using Snowlight.Communication.Incoming;
+using Snowlight.Util;
+using Snowlight.Game.Messenger;
+using Snowlight.Game.FriendStream;
 
 namespace Snowlight.Game.Achievements
 {
@@ -63,7 +66,8 @@ namespace Snowlight.Game.Achievements
                         mAchievements.Add(Group, new Achievement((uint)Row["id"], Group, (string)Row["category"]));
                     }
 
-                    mAchievements[Group].AddLevel(new AchievementLevel((int)Row["level"], (int)Row["reward_pixels"],
+                    mAchievements[Group].AddLevel(new AchievementLevel((int)Row["level"], (int)Row["reward_activity_points"],
+                        SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()),
                         (int)Row["reward_points"], (int)Row["progress_needed"]));
 
                 }
@@ -138,12 +142,19 @@ namespace Snowlight.Game.Achievements
                 Session.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeData.Id);
                 Session.SendData(InventoryNewItemsComposer.Compose(4, BadgeData.Id));
 
-                Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, TargetLevelData.PixelReward);
-                Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance,
-                    TargetLevelData.PixelReward));
+                Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, TargetLevelData.SeasonalCurrency,
+                    TargetLevelData.ActivityPointsReward);
+
+                if (TargetLevelData.SeasonalCurrency == SeasonalCurrencyList.Pixels)
+                {
+                    Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0],
+                        TargetLevelData.ActivityPointsReward));
+                }
+
+                Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
 
                 Session.SendData(AchievementUnlockedComposer.Compose(AchievementData, TargetLevel, TargetLevelData.PointsReward,
-                    TargetLevelData.PixelReward));
+                    TargetLevelData.ActivityPointsReward));
 
                 Session.AchievementCache.AddOrUpdateData(MySqlClient, AchievementGroup, NewLevel, NewProgress);
 
@@ -158,6 +169,11 @@ namespace Snowlight.Game.Achievements
 
                 Session.MessengerFriendCache.BroadcastToFriends(MessengerFriendEventComposer.Compose(Session.CharacterId,
                     MessengerFriendEventType.AchievementUnlocked, BadgeData.Code));
+
+                if (Session.CharacterInfo.AllowFriendStream)
+                {
+                    FriendStreamHandler.InsertNewEvent(Session.CharacterId, EventStreamType.AchievementEarned, BadgeData.Code);
+                }
 
                 RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
 
@@ -186,25 +202,40 @@ namespace Snowlight.Game.Achievements
             DataRow Row = null;
             if (!mAchievements.ContainsKey(AchievementGroup)) return;
 
-            Row = MySqlClient.ExecuteQueryRow("SELECT * FROM achievements_to_unlock WHERE user_id = " + UserId + " AND group_id = '" + AchievementGroup + "' LIMIT 1;");
+            MySqlClient.SetParameter("uid", UserId);
+            MySqlClient.SetParameter("gid", AchievementGroup);
+            Row = MySqlClient.ExecuteQueryRow("SELECT * FROM achievements_to_unlock WHERE user_id = @uid AND group_id = @gid LIMIT 1");
 
             if (Row != null)
             {
-                MySqlClient.ExecuteQueryTable("UPDATE achievements_to_unlock SET progress = progress + " + ProgressAmount + " WHERE user_id = " + UserId + " AND group_id = '" + AchievementGroup + "'");
+                MySqlClient.SetParameter("uid", UserId);
+                MySqlClient.SetParameter("gid", AchievementGroup);
+                MySqlClient.SetParameter("progressa", ProgressAmount);
+                MySqlClient.ExecuteQueryTable("UPDATE achievements_to_unlock SET progress = progress + @progressa WHERE user_id = @uid AND group_id = @gid");
             }
             else
             {
-                MySqlClient.ExecuteQueryTable("INSERT INTO achievements_to_unlock (user_id,group_id,progress) VALUES (" + UserId + ",'" + AchievementGroup + "'," + ProgressAmount + ")");
+                MySqlClient.SetParameter("uid", UserId);
+                MySqlClient.SetParameter("gid", AchievementGroup);
+                MySqlClient.SetParameter("progress", ProgressAmount);
+                MySqlClient.ExecuteQueryTable("INSERT INTO achievements_to_unlock (user_id,group_id,progress) VALUES (@uid, @gid, @progress)");
             }
         }
         public static void VerifyProgressUserAchievement(SqlDatabaseClient MySqlClient, Session Session) 
         {
-            DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM achievements_to_unlock WHERE user_id = " + Session.CharacterInfo.Id + ";");
+            MySqlClient.SetParameter("uid", Session.CharacterInfo.Id);
+            DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM achievements_to_unlock WHERE user_id = @uid");
 
             foreach (DataRow Row in Table.Rows)
             {
-                ProgressUserAchievement(MySqlClient, Session, (string)Row["group_id"], (int)Row["progress"]);
-                MySqlClient.ExecuteNonQuery("DELETE FROM achievements_to_unlock WHERE user_id = " + (uint)Row["user_id"] + " AND group_id = '" + (string)Row["group_id"] + "' LIMIT 1");
+                uint UserId = Session.CharacterInfo.Id;
+                string GroupId = (string)Row["group_id"];
+                int Progress = (int)Row["progress"];
+                ProgressUserAchievement(MySqlClient, Session, GroupId, Progress);
+
+                MySqlClient.SetParameter("uid", UserId);
+                MySqlClient.SetParameter("gid", GroupId);
+                MySqlClient.ExecuteNonQuery("DELETE FROM achievements_to_unlock WHERE user_id = @uid AND group_id = @gid LIMIT 1");
             }
         }
 

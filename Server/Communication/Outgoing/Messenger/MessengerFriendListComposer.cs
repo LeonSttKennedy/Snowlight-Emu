@@ -12,10 +12,10 @@ namespace Snowlight.Communication.Outgoing
 {
     public class MessengerCategories
     {
-        private uint mCatId;
+        private int mCatId;
         private string mCatName;
 
-        public uint CatId
+        public int CatId
         {
             get
             {
@@ -29,7 +29,7 @@ namespace Snowlight.Communication.Outgoing
                 return mCatName;
             }
         }
-        public MessengerCategories(uint Id, string Label)
+        public MessengerCategories(int Id, string Label)
         {
             mCatId = Id;
             mCatName = Label;
@@ -37,19 +37,19 @@ namespace Snowlight.Communication.Outgoing
     }
     public static class MessengerFriendListComposer
     {
-        public static ServerMessage Compose(uint CharacterId, ReadOnlyCollection<uint> Friends, ReadOnlyCollection<MessengerCategories> Categories)
+        public static ServerMessage Compose(Session Session, ReadOnlyCollection<uint> Friends, ReadOnlyCollection<MessengerCategories> Categories)
         { 
             // @LXKAXKAXVBXaCHIkXuzd0zoNeXxIHHH01-01-2011 13:18:32Alex BrookerPYQA
             ServerMessage Message = new ServerMessage(OpcodesOut.MESSENGER_FRIENDS_LIST);
-            Message.AppendInt32(300);
-            Message.AppendInt32(300);
-            Message.AppendInt32(800);
-            Message.AppendInt32(1100);
+            Message.AppendInt32(Session.FriendListSizeLimit);               // Session Friend Limit
+            Message.AppendInt32(ServerSettings.NormalUserFriendListSize);   // Normal User Friend Limit
+            Message.AppendInt32(ServerSettings.HcUserFriendListSize);       // Hc User Friend Limit
+            Message.AppendInt32(ServerSettings.VipUserFriendListSize);      // Vip User Friend Limit
             
             Message.AppendInt32(Categories.Count);
             foreach(MessengerCategories Category in Categories)
             {
-                Message.AppendUInt32(Category.CatId);
+                Message.AppendInt32(Category.CatId);
                 Message.AppendStringWithBreak(Category.CatName);
             }
 
@@ -66,15 +66,15 @@ namespace Snowlight.Communication.Outgoing
                         continue;
                     }
 
-                    Session Session = SessionManager.GetSessionByCharacterId(Info.Id);
+                    Session TargetSession = SessionManager.GetSessionByCharacterId(Info.Id);
 
-                    int CategoryId = (int)MessengerHandler.GetFriendshipCategoryId(MySqlClient, CharacterId, Info.Id);
+                    int CategoryId = (int)MessengerHandler.GetFriendshipCategoryId(Session.CharacterId, Info.Id);
 
                     Message.AppendUInt32(Info.Id);
                     Message.AppendStringWithBreak(Info.Username);
                     Message.AppendBoolean(true);
                     Message.AppendBoolean(Info.HasLinkedSession);
-                    Message.AppendBoolean(Session != null && Session.InRoom);
+                    Message.AppendBoolean(TargetSession != null && TargetSession.InRoom);
                     Message.AppendStringWithBreak(Info.HasLinkedSession ? Info.Figure : string.Empty);
                     Message.AppendInt32(CategoryId);
                     Message.AppendStringWithBreak(Info.HasLinkedSession ? Info.Motto : string.Empty);

@@ -25,7 +25,7 @@ implemented in the official build. See RetroDev for more information on
 how to contribute to the project.
 
 We would like to extend our thanks to all contributers and supporters
-of this project and other existent projects. (Skylight, PlusEMU, Uber, Phoenix, Mango, IDK Project, ThrustRP & Reality7and Another Projects contributers)
+of this project and other existent projects. (Skylight, PlusEMU, Uber, Phoenix, Mango, IDK Project, ThrustRP & Reality and Another Projects contributers)
 
 # FEATURES
 
@@ -115,7 +115,7 @@ Roller Skating, Ice Tag, Puzzle box
 - Seasonal currency reward support added
 - Added offline unlock support
 - Achivement list that are working (correctly):<br>
-ACH_MOTTO, ACH_AVATARTAGS, ACH_AVATARLOOKS, ACH_STUDENT, ACH_BASICCLUB, ACH_VIPCLUB, ACH_RESPECTEARNED, ACH_GIFTGIVER, ACH_GIFTRECEIVER, ACH_SPR, ACH_PETLOVER, ACH_PETRESPECTRECEIVER, ACH_PETRESPECTGIVER, ACH_ROOMENTRY, ACH_HAPPYHOUR, ACH_LOGIN, ACH_REGISTRATIONDURATION, ACH_ALLTIMEHOTELPRESENCE, ACH_NAME, ACH_PETLEVELUP
+ACH_MOTTO, ACH_AVATARTAGS, ACH_AVATARLOOKS, ACH_STUDENT, ACH_BASICCLUB, ACH_VIPCLUB, ACH_RESPECTEARNED, ACH_GIFTGIVER, ACH_GIFTRECEIVER, ACH_SPR, ACH_PETLOVER, ACH_PETRESPECTRECEIVER, ACH_PETRESPECTGIVER, ACH_ROOMENTRY, ACH_HAPPYHOUR, ACH_LOGIN, ACH_REGISTRATIONDURATION, ACH_ALLTIMEHOTELPRESENCE, ACH_NAME, ACH_PETLEVELUP, ACH_PETFEEDING, ACH_NOTESLEFT, ACH_NOTESRECEIVED, ACH_FIREWORKSCHARGER, ACH_ROOMDECOHOLEFURNICOUNT
 
 **Quests**
 
@@ -124,15 +124,16 @@ ACH_MOTTO, ACH_AVATARTAGS, ACH_AVATARLOOKS, ACH_STUDENT, ACH_BASICCLUB, ACH_VIPC
 
 **Pets** 
 
+- Can eat
 - Can drink
 - If pet levels up pet command tool will update
 - Pets play with exclusive toys per pet type
 - Personalisable pet command tool in database
 - Pets in rooms that you aren't the owner will return for your inventory
 - Guests can do commands (Sit, Down, Jump, Speak) 
-- Available commands Count: 40
+- Available commands Count: 41
 - Available command list:<br>
-Free, Sit, Down, Here, Come Here, Beg, Play Dead, Stand, Jump, Speak, Silent, Nest, Drink, Play, Stay, Wag tail, Move Forward, Turn Left, Turn Right, Triple jump, Chicken dance, High jump, Bounce, Spin, Dance, Flat, Relax, Croak, Wave, Dip, Mambo, Roll, Hang, Breathe fire, Ring of fire, Spread wings, Swing, Follow, Follow Left, Follow Right
+Free, Sit, Down, Here, Come Here, Beg, Play Dead, Stand, Jump, Speak, Silent, Nest, Drink, Eat , Play, Stay, Wag tail, Move Forward, Turn Left, Turn Right, Triple jump, Chicken dance, High jump, Bounce, Spin, Dance, Flat, Relax, Croak, Wave, Dip, Mambo, Roll, Hang, Breathe fire, Ring of fire, Spread wings, Swing, Follow, Follow Left, Follow Right
 
 # Screenshots
 

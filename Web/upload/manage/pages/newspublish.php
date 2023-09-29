@@ -114,7 +114,7 @@ while ($option = mysql_fetch_assoc($getOptions))
 
 <strong>SEO-friendly URL:</strong><br />
 <div style="border: 1px dotted; width: 300px; padding: 5px;">
-http://<?php echo SITE_DOMAIN; ?>/[id]-<input type="text" id="url" name="url" value="<?php if (isset($_POST['url'])) { echo $_POST['url']; } ?>" maxlength="120">/<br />
+http://<?php echo SITE_DOMAIN; ?>/news.php?id=[id]-<input type="text" id="url" name="url" value="<?php if (isset($_POST['url'])) { echo $_POST['url']; } ?>" maxlength="120">/<br />
 </div>
 <small>This will be automatically suggested for you when you type a title. Required for us to be friendly to search engines.</small><br />
 <br />

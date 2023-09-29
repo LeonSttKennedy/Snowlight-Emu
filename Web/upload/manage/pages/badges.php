@@ -101,7 +101,7 @@ else
 	while ($b = mysql_fetch_assoc($getBadges))
 	{
 		echo '<tr>';
-		echo '<td><img src="http://192.168.15.72/cdn.classichabbo.com/r38/gordon/RELEASE63-34888-34886-201107192308_9e5b377e2ee4333b61eb9d20d356936d/c_images/album1584/' . returnBadgeCode($b['badge_id']) . '.gif"></td>';
+		echo '<td><center><img src="' . CLIENT_BASE . '/c_images/album1584/' . returnBadgeCode($b['badge_id']) . '.gif"></center></td>';
 		echo '<td><center>' . returnBadgeCode($b['badge_id']) . '</center></td>';
 		echo '<td><center>';
 		

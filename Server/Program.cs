@@ -29,11 +29,14 @@ using Snowlight.Game.Rights;
 using Snowlight.Game.Bots;
 using Snowlight.Game.Infobus;
 using Snowlight.Game.Achievements;
+using Snowlight.Game.Quests;
 using Snowlight.Game.Recycler;
 using Snowlight.Game.Pets;
 using Snowlight.Game.Music;
 using Snowlight.Game.Rooms.Trading;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Groups;
+using Snowlight.Game.FriendStream;
 
 namespace Snowlight
 {
@@ -176,6 +179,7 @@ namespace Snowlight
                     // Catalog, pets and items
                     ItemDefinitionManager.Initialize(MySqlClient);
                     CatalogManager.Initialize(MySqlClient);
+                    CatalogSubGifts.Initialize(MySqlClient);
                     CatalogPurchaseHandler.Initialize();
                     Inventory.Initialize();
                     ItemEventDispatcher.Initialize();
@@ -184,14 +188,18 @@ namespace Snowlight
                     // Messenger
                     MessengerHandler.Initialize();
 
+                    // Friend Stream
+                    FriendStreamHandler.Initialize();
+
                     // Achievements and quests
                     AchievementManager.Initialize(MySqlClient);
                     QuestManager.Initialize(MySqlClient);
 
                     // Misc/extras
                     CrossdomainPolicy.Initialize("Data\\crossdomain.xml");
+                    GroupManager.Initialize(MySqlClient);
                     InfobusManager.Initialize();
-                    ActivityPointsWorker.Initialize();
+                    RoomPollManager.Initialize(MySqlClient);
                     UserStuffWorker.Initialize();
                     BotManager.Initialize(MySqlClient);
                     InterstitialManager.Initialize(MySqlClient);
@@ -199,13 +207,15 @@ namespace Snowlight
                     ChatWordFilter.Initialize(MySqlClient);
                     CommandManager.Initialize();
                     EffectsCacheWorker.Initialize();
-                    CatalogClubGifts.Initialize(MySqlClient);
                     RecyclerManager.Initialize(MySqlClient);
                     DrinkSetManager.Initialize(MySqlClient);
                     SongManager.Initialize();
                     TradeHandler.Initialize();
                     RandomGenerator.Initialize();
+                    CatalogStuffWorker.Initialize();
                     StatisticsSyncUtil.Initialize();
+                    ShutdownCommandWorker.Initialize();
+                    SubscriptionOfferManager.Initialize(MySqlClient);
 
                     // Polish
                     WarningSurpressors.Initialize();

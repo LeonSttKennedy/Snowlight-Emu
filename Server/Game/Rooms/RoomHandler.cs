@@ -18,8 +18,11 @@ using Snowlight.Game.Misc;
 using Snowlight.Game.Items;
 using Snowlight.Game.Moderation;
 using Snowlight.Game.Achievements;
+using Snowlight.Game.Quests;
 using Snowlight.Communication.Incoming;
 using Snowlight.Game.Rights;
+using Snowlight.Game.Groups;
+using Snowlight.Game.FriendStream;
 
 namespace Snowlight.Game.Rooms
 {
@@ -35,8 +38,8 @@ namespace Snowlight.Game.Rooms
             DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_CAMPAIGNS, new ProcessRequestCallback(GetFurniCampaigns));
             DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_PUB_DATA, new ProcessRequestCallback(GetPublicRoomData));
             DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_OBJECTS, new ProcessRequestCallback(GetRoomObjects));
-            DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_GROUP_BADGES, new ProcessRequestCallback(GetGroupBadges));
             DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_INTERSTITIAL_ADVERTISEMENT, new ProcessRequestCallback(GetInterstitial));
+            DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_ROOM_ADVERTISEMENT, new ProcessRequestCallback(GetAdvertisement));
             DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_INFO, new ProcessRequestCallback(GetRoomInfo));
             DataRouter.RegisterHandler(OpcodesIn.ROOM_ANSWER_DOORBELL, new ProcessRequestCallback(AnswerDoorbell));
             DataRouter.RegisterHandler(OpcodesIn.ROOM_CONTINUE_LOAD, new ProcessRequestCallback(ContinueLoadingAfterDoorbell));
@@ -92,6 +95,109 @@ namespace Snowlight.Game.Rooms
             DataRouter.RegisterHandler(OpcodesIn.ITEM_ACTIVATE_LOVE_SHUFFLER, new ProcessRequestCallback(ActivateGeneric));
             DataRouter.RegisterHandler(OpcodesIn.ITEM_ACTIVATE_ONE_WAY_GATE, new ProcessRequestCallback(ActivateGeneric));
             DataRouter.RegisterHandler(OpcodesIn.SYNC_MUSIC, new ProcessRequestCallback(SyncSoundManager));
+
+            // Groups
+            DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_GROUP_BADGES, new ProcessRequestCallback(GetGroupBadges));
+            DataRouter.RegisterHandler(OpcodesIn.ROOM_GROUP_INFO, new ProcessRequestCallback(GetGroupInfo));
+            DataRouter.RegisterHandler(OpcodesIn.JOIN_GROUP, new ProcessRequestCallback(JoinGroup));
+            DataRouter.RegisterHandler(OpcodesIn.SET_GROUP_FAVORITE, new ProcessRequestCallback(AddFavoriteGroup));
+            DataRouter.RegisterHandler(OpcodesIn.REMOVE_GROUP_FAVORITE, new ProcessRequestCallback(RemoveFavoriteGroup));
+            DataRouter.RegisterHandler(OpcodesIn.LOAD_USER_GROUPS, new ProcessRequestCallback(LoadUserGroups));
+
+            // Change Username
+            DataRouter.RegisterHandler(OpcodesIn.SAVE_SELECTED_USERNAME, new ProcessRequestCallback(SaveSelectedName));
+            DataRouter.RegisterHandler(OpcodesIn.CHECK_ENTERED_USERNAME, new ProcessRequestCallback(CheckIfNameIsValid));
+
+        }
+        private static void SaveSelectedName(Session Session, ClientMessage Message)
+        {
+            string NewName = UserInputFilter.FilterString(Message.PopString());
+
+            ChangeNameErrorCode ErrorCode = ChangeNameErrorCode.Allowed;
+
+            if (!Session.CharacterInfo.AllowChangeName)
+            {
+                ErrorCode = ChangeNameErrorCode.Change_Not_Allowed;
+            }
+
+            if (NewName.Length < 3)
+            {
+                ErrorCode = ChangeNameErrorCode.Username_Short;
+            }
+
+            if (NewName.Length > 15)
+            {
+                ErrorCode = ChangeNameErrorCode.Username_Long;
+            }
+
+            if (NewName.Contains(" ") || ChatWordFilter.BlockedWords.Contains(NewName.ToLower()))
+            {
+                ErrorCode = ChangeNameErrorCode.Invalid;
+            }
+
+            if (CharacterResolverCache.GetUidFromName(NewName) > 0)
+            {
+                ErrorCode = ChangeNameErrorCode.Taken;
+            }
+
+            Session.SendData(CheckUsernameResultComposer.Compose(ErrorCode, NewName));
+
+            RoomActor Actor = null;
+
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+            if (Instance != null)
+            {
+                Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+                Instance.BroadcastMessage(RoomUserObjectListComposer.Compose(new List<RoomActor>() { Actor }));
+                Instance.BroadcastMessage(ChangeUsernameResultComposer.Compose(ErrorCode));
+                Instance.BroadcastMessage(SendNewUsernameComposer.Compose(Session.CharacterId, Actor.Id, NewName));
+            }
+
+            Session.SendData(ChangeUsernameResultComposer.Compose(ErrorCode));
+            Session.SendData(SendNewUsernameComposer.Compose(Session.CharacterId, Actor.Id, NewName));
+
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                Session.CharacterInfo.UpdateUsername(MySqlClient, NewName);
+                Session.CharacterInfo.UpdateLastNameChange(MySqlClient);
+                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_Name", 1);
+            }
+
+            CharacterResolverCache.AddToCache(Session.CharacterId, NewName, true);
+        }
+
+        private static void CheckIfNameIsValid(Session Session, ClientMessage Message)
+        {
+            string NewName = UserInputFilter.FilterString(Message.PopString());
+
+            ChangeNameErrorCode ErrorCode = ChangeNameErrorCode.Allowed;
+
+            if (!Session.CharacterInfo.AllowChangeName)
+            {
+                ErrorCode = ChangeNameErrorCode.Change_Not_Allowed;
+            }
+
+            if (NewName.Length < 3)
+            {
+                ErrorCode = ChangeNameErrorCode.Username_Short;
+            }
+
+            if (NewName.Length > 15)
+            {
+                ErrorCode = ChangeNameErrorCode.Username_Long;
+            }
+
+            if(NewName.Contains(" ") || ChatWordFilter.BlockedWords.Contains(NewName.ToLower()))
+            {
+                ErrorCode = ChangeNameErrorCode.Invalid;
+            }
+
+            if(CharacterResolverCache.GetUidFromName(NewName) > 0)
+            {
+                ErrorCode = ChangeNameErrorCode.Taken;
+            }
+
+            Session.SendData(CheckUsernameResultComposer.Compose(ErrorCode, NewName));
         }
 
         private static void CheckCanCreateRoom(Session Session, ClientMessage Message)
@@ -131,7 +237,7 @@ namespace Snowlight.Game.Rooms
 
             if (Info == null) return;
 
-            Session.SendData(PublicRoomData.Compose(Info.Id, Info.SWFs));
+            Session.SendData(PublicRoomDataComposer.Compose(Info.Id, Info.SWFs));
         }
 
         private static void OpenPublicConnection(Session Session, ClientMessage Message)
@@ -195,15 +301,22 @@ namespace Snowlight.Game.Rooms
             // Check if the room capacity has been reached
             if (Info.CurrentUsers >= Info.MaxUsers && !Session.HasRight("enter_full_rooms"))
             {
-                Session.SendData(RoomJoinErrorComposer.Compose(1));
+                Session.SendData(RoomJoinErrorComposer.Compose(RoomJoinErrorCode.RoomFull));
                 Session.SendData(RoomKickedComposer.Compose());
                 return;
             }
 
+            /*if (Info.ClubRoom && !Session.HasRight("club_regular"))
+            {
+                Session.SendData(RoomJoinErrorComposer.Compose(RoomJoinErrorCode.RoomJoinFailedQueueString, "c"));
+                Session.SendData(RoomKickedComposer.Compose());
+                return;
+            }*/
+
             // Check if the user has been banned from this room
             if (Instance.IsUserBanned(Session.CharacterId))
             {
-                Session.SendData(RoomJoinErrorComposer.Compose(4));
+                Session.SendData(RoomJoinErrorComposer.Compose(RoomJoinErrorCode.RoomBanned));
                 Session.SendData(RoomKickedComposer.Compose());
                 return;
             }
@@ -263,7 +376,7 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            Session.SendData(RoomUrlComposer.Compose("/client/public/" + Instance.Info.ModelName + "/0"));
+            //Session.SendData(RoomUrlComposer.Compose("/client/public/" + Instance.Info.ModelName + "/0"));
             Session.SendData(RoomEntryModelComposer.Compose(Instance.Model.Name, Instance.Info.Id));
 
             if (Instance.Info.Type == RoomType.Flat)
@@ -278,38 +391,9 @@ namespace Snowlight.Game.Rooms
                 Session.SendData(RoomRatingInfoComposer.Compose((Session.RatedRoomsCache.HasRatedRoom(Instance.RoomId) || Instance.CheckUserRights(Session, true)) ? Instance.Info.Score : -1));
                 Session.SendData(RoomEventInfoComposer.Compose(Instance.Event));
             }
-
-            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-            {
-                if (Instance.Info.BadgeId > 0)
-                {
-                    RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
-                    if (Actor == null) return;
-
-                    Badge BadgeToGive = RightsManager.GetBadgeById(Instance.Info.BadgeId);
-                    if (BadgeToGive == null) return;
-
-                    if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
-                    {
-                        Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
-                        Session.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
-                        Session.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
-
-                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_success"), 1, ChatType.Whisper));
-                    }
-                    else if (Session.BadgeCache.Badges.Contains(BadgeToGive))
-                    {
-                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_error"), 4, ChatType.Whisper));
-                    }
-                }
-
-                if (Instance.Info.OwnerId != Session.CharacterId && Instance.Info.Type != RoomType.Public)
-                {
-                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_RoomEntry", 1);
-                }
-            }
         }
 
+        #region Groups
         private static void GetGroupBadges(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.AbsoluteRoomId);
@@ -319,13 +403,91 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            ServerMessage xMessage = new ServerMessage(OpcodesOut.ROOM_GROUP_BADGES);
-            // count
-            // foreach => group id
-            //         => string/wb badge code
-            xMessage.AppendStringWithBreak("Ib[ZCs58116s04078s04072s52074889902cf4440630470f222ad5c6489d7");
-            Session.SendData(xMessage);
+            Group UserGroup = GroupManager.GetGroup(Session.CharacterInfo.FavoriteGroupId);
+
+            Session.SendData(RoomGroupBadgeComposer.Compose(Session.CharacterId, UserGroup));
         }
+        private static void JoinGroup(Session Session, ClientMessage Message)
+        {
+            Group GroupData = GroupManager.GetGroup(Message.PopWiredInt32());
+            if(GroupData != null && !GroupData.HasPendingRequestByUserId(Session.CharacterId) 
+                && !GroupData.MembershipList.Contains(Session.CharacterId))
+            {
+                GroupData.AddMemberInDatabase(Session.CharacterId);
+                bool IsFavorite = Session.CharacterInfo.FavoriteGroupId == GroupData.Id;
+
+                Session.SendData(GroupInfoComposer.Compose(GroupData, Session.CharacterId, IsFavorite));
+            }
+        }
+        private static void GetGroupInfo(Session Session, ClientMessage Message)
+        {
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.AbsoluteRoomId);
+
+            if (Instance == null)
+            {
+                return;
+            }
+
+            Group UserGroup = GroupManager.GetGroup(Message.PopWiredInt32());
+            bool IsFavorite = Session.CharacterInfo.FavoriteGroupId == UserGroup.Id;
+
+            Session.SendData(GroupInfoComposer.Compose(UserGroup, Session.CharacterId, IsFavorite));
+        }
+        private static void LoadUserGroups(Session Session, ClientMessage Message)
+        {
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.AbsoluteRoomId);
+
+            if (Instance == null)
+            {
+                return;
+            }
+
+            Session.SendData(UserGroupsComposer.Compose(Session.CharacterInfo));
+        }
+        public static void AddFavoriteGroup(Session Session, ClientMessage Message)
+        {
+            int GroupId = Message.PopWiredInt32();
+            if (GroupId > 0)
+            {
+                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                {
+                    Session.CharacterInfo.UpdateFavoriteGroup(MySqlClient, GroupId);
+
+                    RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+                    if (Instance != null)
+                    {
+                        RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+                        Instance.BroadcastMessage(RoomUserObjectListComposer.Compose(new List<RoomActor>() { Actor }));
+                    }
+
+                    Group UserGroup = GroupManager.GetGroup(Session.CharacterInfo.FavoriteGroupId);
+
+                    Session.SendData(RoomGroupBadgeComposer.Compose(Session.CharacterId, UserGroup));
+                    Session.SendData(UserGroupsComposer.Compose(Session.CharacterInfo));
+                }
+            }
+        }
+        public static void RemoveFavoriteGroup(Session Session, ClientMessage Message)
+        {
+            int GroupId = Message.PopWiredInt32();
+            if (GroupId > 0)
+            {
+                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                {
+                    Session.CharacterInfo.UpdateFavoriteGroup(MySqlClient, 0);
+                    
+                    RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+                    if (Instance != null)
+                    {
+                        RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+                        Instance.BroadcastMessage(RoomUserObjectListComposer.Compose(new List<RoomActor>() { Actor }));
+                    }
+
+                    Session.SendData(UserGroupsComposer.Compose(Session.CharacterInfo));
+                }
+            }
+        }
+        #endregion
 
         private static void GetFurniCampaigns(Session Session, ClientMessage Message)
         {
@@ -385,11 +547,63 @@ namespace Snowlight.Game.Rooms
                     Session.SendData(QuestStartedComposer.Compose(Session, Quest));
                 }
             }
+
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                if (Instance.Info.BadgeCode != string.Empty)
+                {
+                    RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+                    if (Actor == null) return;
+
+                    Badge BadgeToGive = RightsManager.GetBadgeByCode(Instance.Info.BadgeCode);
+                    if (BadgeToGive == null) return;
+
+                    if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
+                    {
+                        Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
+                        Session.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
+                        Session.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_success"), 1, ChatType.Whisper));
+                    }
+                    else if (Session.BadgeCache.Badges.Contains(BadgeToGive))
+                    {
+                        Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_error"), 4, ChatType.Whisper));
+                    }
+                }
+
+                if (Instance.Info.OwnerId != Session.CharacterId && Instance.Info.Type != RoomType.Public)
+                {
+                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_RoomEntry", 1);
+                }
+
+                RoomPoll Poll = RoomPollManager.GetRoomPoll(Instance.Info.Id);
+                if (Poll != null && !Session.CharacterInfo.FilledPolls.Contains(Poll.Id))
+                {
+                    Session.SendData(RoomPollRequestComposer.Compose(Poll));
+                }
+            }
         }
 
         private static void GetInterstitial(Session Session, ClientMessage Message)
         {
             Session.SendData(RoomInterstitialComposer.Compose(InterstitialManager.GetRandomInterstitial(true)));
+        }
+
+        private static void GetAdvertisement(Session Session, ClientMessage Message)
+        {
+            RoomInfo Info = RoomInfoLoader.GetRoomInfo(Session.CurrentRoomId);
+
+            if (Info == null) 
+            {
+                return; 
+            }
+
+            Interstitial RoomAds = InterstitialManager.GetRoomAdsForRoomId(Info.Id);
+            if (RoomAds != null && Info.Type == RoomType.Public)
+            {
+                Session.SendData(PublicRoomAdvertisement.Compose(RoomAds));
+            }
         }
 
         private static void GetRoomInfo(Session Session, ClientMessage Message)
@@ -425,7 +639,6 @@ namespace Snowlight.Game.Rooms
 
             Actor.LeaveRoom();
         }
-
         private static void UserMoveTo(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
@@ -550,6 +763,8 @@ namespace Snowlight.Game.Rooms
             bool Shout = (Message.Id == OpcodesIn.ROOM_CHAT_SHOUT);
             string MessageText = ChatWordFilter.CheckWords(UserInputFilter.FilterString(Message.PopString()), Session);
 
+            bool done = Instance.WiredManager.HandleChat(MessageText, Actor);
+
             if (MessageText.Length == 0)
             {
                 return;
@@ -568,7 +783,14 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            Actor.Chat(MessageText, Shout, Session.HasRight("mute"));
+            if (!done)
+            {
+                Actor.Chat(MessageText, Shout, Session.HasRight("mute"));
+            }
+            else
+            {
+                Session.SendData(RoomChatComposer.Compose(Actor.Id, MessageText, 0, ChatType.Whisper));
+            }
 
             if (Instance.HumanActorCount > 1)
             {
@@ -1045,7 +1267,13 @@ namespace Snowlight.Game.Rooms
             }
 
             Instance.Info.IncreaseScore();
+            Session.RatedRoomsCache.MarkRoomRated(Instance.Info.Id);
             Session.SendData(RoomRatingInfoComposer.Compose(Instance.Info.Score));
+
+            if(Session.CharacterInfo.AllowFriendStream)
+            {
+                FriendStreamHandler.InsertNewEvent(Session.CharacterId, EventStreamType.RoomLiked, Instance.Info.Id.ToString());
+            }
         }
 
         private static void GetUserTags(Session Session, ClientMessage Message)
@@ -1065,6 +1293,11 @@ namespace Snowlight.Game.Rooms
             }
 
             CharacterInfo Info = (CharacterInfo)Actor.ReferenceObject;
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                Info.UpdateTags(MySqlClient);
+            }
+
             Session.SendData(RoomUserTagsComposer.Compose(Info.Id, Info.Tags));
         }
 
@@ -1072,7 +1305,10 @@ namespace Snowlight.Game.Rooms
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
 
-            if (Instance == null || !Instance.CheckUserRights(Session, true)) return;
+            if (Instance == null || !Instance.CheckUserRights(Session, true))
+            {
+                return;
+            }
 
             Instance.DeleteRoom(Session);
             Navigator.GetUserRooms(Session, null);
@@ -1243,12 +1479,16 @@ namespace Snowlight.Game.Rooms
             int RequestData = Message.PopWiredInt32();
 
             ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Interact, RequestData);
-            QuestManager.ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, Item.DefinitionId);
+            
+            QuestManager.ProgressUserQuest(Session, QuestType.EXPLORE_FIND_SPECIFIC_ITEM, Item.DefinitionId);
 
-            if (Item.Definition.Behavior == ItemBehavior.Switchable)
-            {
-                QuestManager.ProgressUserQuest(Session, QuestType.FURNI_SWITCH);
-            }
+            QuestType Type = Item.Definition.Behavior == ItemBehavior.Switchable ?
+                QuestType.FURNI_SWITCH : QuestType.EXPLORE_FIND_ITEM_BEHAVIOR;
+
+            uint Data = Item.Definition.Behavior == ItemBehavior.Switchable ?
+                0 : (uint)Item.Definition.Behavior;
+
+            QuestManager.ProgressUserQuest(Session, Type, Data);
         }
 
         private static void AddToStaffPicked(Session Session, ClientMessage Message)
@@ -1267,10 +1507,11 @@ namespace Snowlight.Game.Rooms
 
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
-                    Session TargetSession = SessionManager.GetSessionByCharacterId(Instance.Info.OwnerId);
+                    CharacterInfo RoomOwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, Instance.Info.OwnerId);
 
-                    if (TargetSession != null)
+                    if (RoomOwnerInfo.HasLinkedSession)
                     {
+                        Session TargetSession = SessionManager.GetSessionByCharacterId(RoomOwnerInfo.Id);
                         AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, "ACH_Spr", 1);
                     }
                     else

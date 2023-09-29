@@ -9998,24 +9998,6 @@ CREATE TABLE IF NOT EXISTS `new_items` (
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `notes`
---
-
-CREATE TABLE IF NOT EXISTS `notes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `content` varchar(500) NOT NULL,
-  `date` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Extraindo dados da tabela `notes`
---
-
-
--- --------------------------------------------------------
-
---
 -- Estrutura da tabela `pet_commands`
 --
 

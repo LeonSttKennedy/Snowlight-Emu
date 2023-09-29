@@ -45,25 +45,24 @@ namespace Snowlight.Game.Misc
                     {
                         case "inv":
                             {
-                                Session.InventoryCache.ClearAndDeleteAll();
+                                Session.InventoryCache.ClearAndDeleteAllItems();
                                 Session.SendData(InventoryRefreshComposer.Compose());
                                 Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_emptyinv_success")));
                                 return;
                             }
+
                         case "pets":
                             {
-                                foreach (Pet Pet in Session.PetInventoryCache.Pets.Values)
+                                foreach (Pet Pet in Session.InventoryCache.Pets.Values)
                                 {
                                     Session.SendData(InventoryPetRemovedComposer.Compose(Pet.Id));
-                                    using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                                    {
-                                        Session.PetInventoryCache.ReloadCache(MySqlClient);
-                                    }
                                 }
-                                Session.PetInventoryCache.ClearAndDeleteAll();
+
+                                Session.InventoryCache.ClearAndDeleteAllPets();
                                 Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_emptypets_success")));
                                 return;
                             }
+
                         default:
                             {
                                 Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_empty_tab_error", InventoryTab), 0, ChatType.Whisper));

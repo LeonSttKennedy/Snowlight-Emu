@@ -91,7 +91,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     if (Item.DisplayFlags == "0" && Item.TemporaryInteractionReferenceIds.Count == 0)
                     {
                         Item.TemporaryInteractionReferenceIds.Add(1, Actor.Id);
-                        Actor.BlockWalking();
+                        //Actor.BlockWalking();
 
                         using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                         {
@@ -105,10 +105,13 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         else
                         {
                             Item.DisplayFlags = "1";
+
+                            Actor.OverrideClipping = !Actor.OverrideClipping;
                             Actor.MoveTo(Item.RoomPosition.GetVector2(), true, true, true);
 
                             Item.BroadcastStateUpdate(Instance);
                             Item.RequestUpdate(3);
+                            Actor.OverrideClipping = !Actor.OverrideClipping;
                         }
                     }
 
@@ -211,7 +214,9 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                             if (Instance.IsValidStep(OutgoingUser.Position.GetVector2(), Item.SquareInFront, true))
                             {
-                                OutgoingUser.MoveTo(Item.SquareInFront);
+                                OutgoingUser.OverrideClipping = !OutgoingUser.OverrideClipping;
+                                OutgoingUser.MoveTo(Item.SquareInFront, true, true, true);
+                                OutgoingUser.OverrideClipping = !OutgoingUser.OverrideClipping;
                             }
 
                             Item.TemporaryInteractionReferenceIds.Remove(1);
@@ -235,7 +240,9 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                             if (Instance.CanInitiateMoveToPosition(Item.SquareInFront))
                             {
+                                IncomingUser.OverrideClipping = !IncomingUser.OverrideClipping;
                                 IncomingUser.MoveTo(Item.SquareInFront);
+                                IncomingUser.OverrideClipping = !IncomingUser.OverrideClipping;
                             }
 
                             Item.RequestUpdate(3);

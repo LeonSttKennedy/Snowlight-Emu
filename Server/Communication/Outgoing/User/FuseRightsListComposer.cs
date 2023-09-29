@@ -10,19 +10,8 @@ namespace Snowlight.Communication.Outgoing
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.USER_RIGHTS);
 
-            if (Session.HasRight("club_vip"))
-            {
-                Message.AppendInt32(2);
-            }
-            else if (Session.HasRight("club_regular"))
-            {
-                Message.AppendInt32(1);
-            }
-            else
-            {
-                Message.AppendInt32(0);
-            }
-
+            Message.AppendInt32((int)Session.SubscriptionManager.SubscriptionLevel);
+            
             // TODO: Dig in to the mod tool and other staff stuff further to figure out how much this does
 
             Message.AppendInt32(Session.HasRight("hotel_admin") ? 1000 : 0);

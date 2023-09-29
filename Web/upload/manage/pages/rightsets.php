@@ -93,31 +93,26 @@ $next = $page +1;
 
 if ($page > 1) 
 {
-	$pagesstring .= "<a href='index.php?_cmd=rightsets&page=$prev'>&laquo; Previous</a> ";
+	$pagesstring .= "<li><a href='index.php?_cmd=rightsets&page=1'>First Page</a></li>";
+	$pagesstring .= "<li><a href='index.php?_cmd=rightsets&page=$prev'>&laquo;</a></li>";
 }
 $rightindex = 3;
 $leftindex = ($page > 2) ? 2 : $page - 1;
 for($i = $page - $leftindex; $i < $page + $rightindex; $i++)
 {
-	if($page == $i)
+	if($i >= 1 && $i <= $tp)
 	{
-		$pagesstring .= ' <b>' . $i . '</b>';
-	}
-	else
-	{
-		if($i >= 1 && $i <= $tp)
-		{
-			$pagesstring .= " <a href='index.php?_cmd=rightsets&page=$i'>" . $i . "</a>";
-		}
+		$pagesstring .= "<li><a" . ($page == $i? ' class="active" ' : '' ) . " href='index.php?_cmd=rightsets&page=$i'>$i</a></li>";
 	}
 }
 
 if ($page < $tp) 
 {
-	$pagesstring .= " <a href='index.php?_cmd=rightsets&page=$next'>Next &raquo;</a>";
+	$pagesstring .= "<li><a href='index.php?_cmd=rightsets&page=$next'>&raquo;</a></li>";
+	$pagesstring .= "<li><a href='index.php?_cmd=rightsets&page=$tp'>Last Page</a></li>";
 }
 
-echo '<center style="width: 100%; padding: 10px; font-size: 115%;">' . $pagesstring . '</center>';
-require_once "bottom.php";
+echo '<div class="center"><ul class="pagination">' . $pagesstring . '</ul></div>';
 
+require_once "bottom.php";
 ?>

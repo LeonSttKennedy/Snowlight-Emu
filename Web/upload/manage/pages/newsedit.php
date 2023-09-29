@@ -143,7 +143,7 @@ while ($option = mysql_fetch_assoc($getOptions))
 
 <strong>SEO-friendly URL:</strong><br />
 <div style="border: 1px dotted; width: 300px; padding: 5px;">
-http://<?php echo SITE_DOMAIN; ?>/<b><?php echo $data['id']; ?>-<?php echo $data['seo_link']; ?></b>/<br />
+http://<?php echo SITE_DOMAIN; ?>/news.php?id=<b><?php echo $data['id']; ?>-<?php echo $data['seo_link']; ?></b>/<br />
 </div><br />
 
 <strong>Frontpage teaser text:</strong><br />

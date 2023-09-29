@@ -59,11 +59,11 @@ while ($text = mysql_fetch_assoc($get))
 	$badgeTDescr = mysql_result(mysql_query("SELECT sval FROM external_texts WHERE skey = 'badge_desc_" . $badgeName . "' LIMIT 1"), 0);
 
 	echo '<tr><form method="post">';
-	echo '<td><img src="http://192.168.15.72/cdn.classichabbo.com/r38/gordon/RELEASE63-34888-34886-201107192308_9e5b377e2ee4333b61eb9d20d356936d/c_images/album1584/' . $badgeName . '.gif" style="vertical-align: middle;">&nbsp;&nbsp;' . $badgeName . '</td>';
+	echo '<td><img src="' . CLIENT_BASE . '/c_images/album1584/' . $badgeName . '.gif" style="vertical-align: middle;">&nbsp;&nbsp;' . $badgeName . '</td>';
 	echo '<input type="hidden" name="edit-no" value="' . $badgeName . '">';
 	echo '<td><input type="text" style="width: 100%; padding: 10px; font-size: 115%;" name="nm" value="' . $badgeTName . '"></td>';
 	echo '<td><textarea style="width: 100%; height: 100%;" name="dc">' . $badgeTDescr . '</textarea></td>';
-	echo '<td><center><input type="submit" value="Update">&nbsp;<input type="button" value="Delete" onclick="window.location = \'index.php?_cmd=badgedefs&doDel=' . $badgeName . '\';"></center></td>';
+	echo '<td><center><input type="submit" value="Update">&nbsp;<input type="button" value="Delete" onclick="window.location = \'index.php?_cmd=badgetexts&doDel=' . $badgeName . '\';"></center></td>';
 	echo '</form></tr>';
 }
 
@@ -71,7 +71,7 @@ echo '<tr><form method="post">';
 echo '<td><input type="text" style="width: 100%; padding: 10px; font-size: 115%;" name="newbadge"></td>';
 echo '<td><input type="text" style="width: 100%; padding: 10px; font-size: 115%;" name="newname"></td>';
 echo '<td><textarea name="newdescr" style="width: 100%; height: 100%;"></textarea>';
-echo '<td><center><input type="submit" value="Add">';
+echo '<td><center><input type="submit" value="Add"></center>';
 echo '</form></tr>';
 
 echo '</thead>';

@@ -117,14 +117,17 @@ namespace Snowlight.Game.Navigation
 
                 foreach (DataRow Row in Table.Rows)
                 {
+                    string[] RoomsString = Row["connected_rooms"].ToString().Split('|');
                     List<uint> ConnectedRooms = new List<uint>();
-                    foreach (string RoomIds in Row["connected_rooms"].ToString().Split('|'))
+                    
+                    foreach (string RoomIds in RoomsString)
                     {
-                        uint.TryParse(RoomIds, out uint Result);
-
-                        if (Result > 0 && !ConnectedRooms.Contains(Result))
+                        if (uint.TryParse(RoomIds, out uint Result))
                         {
-                            ConnectedRooms.Add(Result);
+                            if (Result > 0 && !ConnectedRooms.Contains(Result))
+                            {
+                                ConnectedRooms.Add(Result);
+                            }
                         }
                     }
 
@@ -473,7 +476,7 @@ namespace Snowlight.Game.Navigation
 
         public static void GetUserRooms(Session Session, ClientMessage Message)
         {
-            ServerMessage Response = Message == null ? null : TryGetResponseFromCache(Session.CharacterId, Message);
+            ServerMessage Response = Message != null ? TryGetResponseFromCache(Session.CharacterId, Message) : null;
 
             if (Response != null)
             {
@@ -498,10 +501,16 @@ namespace Snowlight.Game.Navigation
             IEnumerable<RoomInfo> RoomsToSend = Rooms.OrderByDescending(U => U.CurrentUsers);
 
             Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, RoomsToSend.ToList());
-            if (Message != null)
+            
+            if (Message == null)
+            {
+                ClearCacheGroup(Session.CharacterId);
+            }
+            else
             {
                 AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             }
+
             Session.SendData(Response);
         }
 

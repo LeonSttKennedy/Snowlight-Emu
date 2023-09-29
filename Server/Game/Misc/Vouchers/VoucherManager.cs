@@ -8,6 +8,7 @@ using Snowlight.Game.Sessions;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Items;
 using Snowlight.Specialized;
+using Snowlight.Util;
 
 namespace Snowlight.Game.Misc
 {
@@ -32,10 +33,15 @@ namespace Snowlight.Game.Misc
                     Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
                 }
 
-                if (ValueData.ValuePixels > 0)
+                if (ValueData.ValueActivityPoints > 0)
                 {
-                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, ValueData.ValuePixels);
-                    Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance, ValueData.ValuePixels));
+                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, ValueData.SeasonalCurrency, ValueData.ValueActivityPoints);
+                    if (ValueData.SeasonalCurrency == SeasonalCurrencyList.Pixels)
+                    {
+                        Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0], ValueData.ValueActivityPoints));
+                    }
+
+                    Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
                 }
 
                 if (ValueData.ValueFurni.Count > 0)
@@ -80,7 +86,7 @@ namespace Snowlight.Game.Misc
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 MySqlClient.SetParameter("code", Code);
-                DataRow Row = MySqlClient.ExecuteQueryRow("SELECT value_credits,value_pixels,value_furni FROM vouchers WHERE code = @code AND enabled = '1' AND uses > 0 LIMIT 1");
+                DataRow Row = MySqlClient.ExecuteQueryRow("SELECT value_credits,value_activity_points,seasonal_currency,value_furni FROM vouchers WHERE code = @code AND enabled = '1' AND uses > 0 LIMIT 1");
 
                 if (Row == null)
                 {
@@ -100,7 +106,7 @@ namespace Snowlight.Game.Misc
                     }
                 }
 
-                return new VoucherValueData((int)Row["value_credits"], (int)Row["value_pixels"], FurniValue);
+                return new VoucherValueData((int)Row["value_credits"], (int)Row["value_activity_points"],  SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()), FurniValue);
             }
         }
 

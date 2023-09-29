@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 using Snowlight.Storage;
 using Snowlight.Game.Rooms;
+using Snowlight.Game.Catalog;
 using Snowlight.Game.Sessions;
 
 namespace Snowlight.Util
@@ -64,10 +65,22 @@ namespace Snowlight.Util
                         // If the day changes, this will restart the daily players count with the current number of connected players.
                         MySqlClient.SetParameter("sval", TotalUsersOnline);
                         MySqlClient.ExecuteNonQuery("UPDATE server_statistics SET daily_player_peak = @sval LIMIT 1");
-                        Program.CurrentDay = DateTime.Today;
 
-                        // If the day changes, restart the count of daily_sold in table catalog_marketplace_data ;)
-                        MySqlClient.ExecuteNonQuery("UPDATE catalog_marketplace_data SET daily_sold = '0'");
+                        foreach(KeyValuePair<uint, List<MarketplaceAvarage>> Var in CatalogManager.MarketplaceAvarages)
+                        {
+                            foreach(MarketplaceAvarage Avarage in Var.Value.OrderByDescending(L => L.SoldTimeStamp).ToList())
+                            {
+                                TimeSpan TS = DateTime.Now - Avarage.SoldTimeStamp;
+
+                                if(TS.TotalDays >= 30)
+                                {
+                                    MySqlClient.SetParameter("id", Avarage.Id);
+                                    MySqlClient.ExecuteNonQuery("DELETE FROM catalog_marketplace_data WHERE id = @id LIMIT 1");
+                                }
+                            }
+                        }
+
+                        Program.CurrentDay = DateTime.Today;
                     }
                 }
 

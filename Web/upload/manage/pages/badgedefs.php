@@ -51,6 +51,7 @@ echo '<br />';
 echo '<table border="1" width="100%">';
 echo '<thead>';
 echo '<tr>';
+echo '<td>ID</td>';
 echo '<td>Badge</td>';
 echo '<td>Right Sets</td>';
 echo '<td>Controls</td>';
@@ -58,6 +59,7 @@ echo '</tr>';
 
 $get = mysql_query("SELECT * FROM badge_definitions LIMIT $start,$limit");
 $all = intval(mysql_num_rows(mysql_query("SELECT * FROM badge_definitions")));
+$total = intval(mysql_result(mysql_query("SELECT id FROM badge_definitions ORDER BY id DESC LIMIT 1"), 0)) + 1;
 
 while ($text = mysql_fetch_assoc($get))
 {
@@ -65,7 +67,8 @@ while ($text = mysql_fetch_assoc($get))
 	$badgeRights = $text['rights_sets'];
 
 	echo '<tr><form method="post">';
-	echo '<td><img src="http://192.168.15.72/cdn.classichabbo.com/r38/gordon/RELEASE63-34888-34886-201107192308_9e5b377e2ee4333b61eb9d20d356936d/c_images/album1584/' . $badgeName . '.gif" style="vertical-align: middle;">&nbsp;&nbsp;' . $badgeName . '</td>';
+	echo '<td><center>#' . $text['id']. '</center></td>';
+	echo '<td><img src="' . CLIENT_BASE . '/c_images/album1584/' . $badgeName . '.gif" style="vertical-align: middle;">&nbsp;&nbsp;' . $badgeName . '</td>';
 	echo '<input type="hidden" name="edit-name" value="' . $badgeName . '">';
 	echo '<td><input type="text" style="width: 100%; padding: 10px; font-size: 115%;" name="rightsets" value="' . $badgeRights . '"></td>';
 	echo '<td><center><input type="submit" value="Update">&nbsp;<input type="button" value="Delete" onclick="window.location = \'index.php?_cmd=badgedefs&doDel=' . $badgeName . '\';"></center></td>';
@@ -80,33 +83,29 @@ $next = $page +1;
 
 if ($page > 1) 
 {
-	$pagesstring .= "<a href='index.php?_cmd=badgedefs&page=1'>First Page</a> <a href='index.php?_cmd=badgedefs&page=$prev'>&laquo; Previous</a> ";
+	$pagesstring .= "<li><a href='index.php?_cmd=badgedefs&page=1'>First Page</a></li>";
+	$pagesstring .= "<li><a href='index.php?_cmd=badgedefs&page=$prev'>&laquo;</a></li>";
 }
 $rightindex = 3;
 $leftindex = ($page > 2) ? 2 : $page - 1;
 for($i = $page - $leftindex; $i < $page + $rightindex; $i++)
 {
-	if($page == $i)
+	if($i >= 1 && $i <= $tp)
 	{
-		$pagesstring .= ' <b>' . $i . '</b>';
-	}
-	else
-	{
-		if($i >= 1 && $i <= $tp)
-		{
-			$pagesstring .= " <a href='index.php?_cmd=badgedefs&page=$i'>" . $i . "</a>";
-		}
+		$pagesstring .= "<li><a" . ($page == $i? ' class="active" ' : '' ) . " href='index.php?_cmd=badgedefs&page=$i'>$i</a></li>";
 	}
 }
 
 if ($page < $tp) 
 {
-	$pagesstring .= " <a href='index.php?_cmd=badgedefs&page=$next'>Next &raquo;</a> <a href='index.php?_cmd=badgedefs&page=$tp'>Last Page</a>";
+	$pagesstring .= "<li><a href='index.php?_cmd=badgedefs&page=$next'>&raquo;</a></li>";
+	$pagesstring .= "<li><a href='index.php?_cmd=badgedefs&page=$tp'>Last Page</a></li>";
 }
 
 if($page == $tp)
 {
 	echo '<tr><form method="post">';
+	echo '<td>#' . $total . '</td>';
 	echo '<td><input type="text" style="width: 100%; padding: 10px; font-size: 115%;" name="newbadge"></td>';
 	echo '<td><input type="text" style="width: 100%; padding: 10px; font-size: 115%;" name="newbadgerightsets"></td>';
 	echo '<td><center><input type="submit" value="Add">';
@@ -116,7 +115,7 @@ if($page == $tp)
 echo '</thead>';
 echo '</table>';
 echo '<br />';
-echo '<center style="width: 100%; padding: 10px; font-size: 115%;">' . $pagesstring . '</center>';
+echo '<div class="center"><ul class="pagination">' . $pagesstring . '</ul></div>';
 echo '</div>';
 
 echo '<div style="float: right; width: 31%;">';

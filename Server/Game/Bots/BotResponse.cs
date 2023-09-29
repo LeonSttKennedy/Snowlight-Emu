@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Snowlight.Communication.Outgoing;
 using Snowlight.Util;
 
 
@@ -10,7 +11,16 @@ namespace Snowlight.Game.Bots
     {
         private List<string> mTriggers;
         private List<string> mResponse;
+        private ChatType mResponseMode;
         private int mResponseServeId;
+
+        public ChatType ResponseMode
+        {
+            get
+            {
+                return mResponseMode;
+            }
+        }
 
         public int ResponseServeId
         {
@@ -20,10 +30,11 @@ namespace Snowlight.Game.Bots
             }
         }
 
-        public BotResponse(List<string> Triggers, List<string> Responses, int ResponseServeId)
+        public BotResponse(List<string> Triggers, List<string> Responses, ChatType ResponseMode, int ResponseServeId)
         {
             mTriggers = Triggers;
             mResponse = Responses;
+            mResponseMode = ResponseMode;
             mResponseServeId = ResponseServeId;
         }
 

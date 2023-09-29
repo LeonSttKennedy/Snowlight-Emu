@@ -55,8 +55,8 @@ namespace Snowlight.Game.Rooms.Trading
                 return;
             }
 
-            ServerMessage TradeInitiatedMessage = TradeInitiatedComposer.Compose(Session.CharacterId, Session.HasRight("trade"),
-                TargetSession.CharacterId, TargetSession.HasRight("trade"));
+            ServerMessage TradeInitiatedMessage = TradeInitiatedComposer.Compose(Session.CharacterId, Session.CanTrade(),
+                TargetSession.CharacterId, TargetSession.CanTrade());
 
             Session.SendData(TradeInitiatedMessage);
             TargetSession.SendData(TradeInitiatedMessage);

@@ -16,6 +16,8 @@ namespace Snowlight.Game.Messenger
     {
         private uint mCharacterId;
         private List<uint> mInner;
+        private List<uint> mInnerFriendRequestSent;
+        private List<uint> mInnerFriendRequestReceived;
         private Dictionary<uint, int> mInnerUpdates;
 
         private List<MessengerCategories> mInnerCategories;
@@ -32,7 +34,30 @@ namespace Snowlight.Game.Messenger
                 }
             }
         }
-
+        public ReadOnlyCollection<uint> RequestsReceived
+        {
+            get
+            {
+                lock (mInnerFriendRequestReceived)
+                {
+                    List<uint> Copy = new List<uint>();
+                    Copy.AddRange(mInnerFriendRequestReceived);
+                    return Copy.AsReadOnly();
+                }
+            }
+        }
+        public ReadOnlyCollection<uint> RequestsSent
+        {
+            get
+            {
+                lock (mInnerFriendRequestSent)
+                {
+                    List<uint> Copy = new List<uint>();
+                    Copy.AddRange(mInnerFriendRequestSent);
+                    return Copy.AsReadOnly();
+                }
+            }
+        }
         public ReadOnlyCollection<MessengerCategories> Categories
         {
             get
@@ -50,6 +75,8 @@ namespace Snowlight.Game.Messenger
         {
             mCharacterId = UserId;
             mInner = new List<uint>();
+            mInnerFriendRequestReceived = new List<uint>();
+            mInnerFriendRequestSent = new List<uint>();
             mInnerUpdates = new Dictionary<uint, int>();
             mInnerCategories = new List<MessengerCategories>();
 
@@ -61,10 +88,14 @@ namespace Snowlight.Game.Messenger
             lock (mInner)
             {
                 mInner.Clear();
+                mInnerFriendRequestReceived.Clear();
+                mInnerFriendRequestSent.Clear();
                 mInnerUpdates.Clear();
                 mInnerCategories.Clear();
 
                 mInner.AddRange(MessengerHandler.GetFriendsForUser(MySqlClient, mCharacterId, 1));
+                mInnerFriendRequestReceived.AddRange(MessengerHandler.GetFriendsForUser(MySqlClient, mCharacterId, 0));
+                mInnerFriendRequestSent.AddRange(MessengerHandler.GetFriendRequestsByUser(MySqlClient, mCharacterId));
                 mInnerCategories.AddRange(MessengerHandler.GetCategoriesForUser(MySqlClient, mCharacterId));
             }
         }
@@ -87,6 +118,11 @@ namespace Snowlight.Game.Messenger
                     return;
                 }
 
+                if(mInnerFriendRequestSent.Contains(FriendId))
+                {
+                    RemoveFromSentRequestCache(FriendId);
+                }
+
                 mInner.Add(FriendId);
                 MarkUpdateNeeded(FriendId, 1);
             }
@@ -104,6 +140,30 @@ namespace Snowlight.Game.Messenger
                 if (mInnerUpdates.ContainsKey(FriendId))
                 {
                     mInnerUpdates.Remove(FriendId);
+                }
+            }
+        }
+
+        public void AddToSentRequestCache(uint FriendId)
+        {
+            lock (mInnerFriendRequestSent)
+            {
+                if (mInnerFriendRequestSent.Contains(FriendId))
+                {
+                    return;
+                }
+
+                mInnerFriendRequestSent.Add(FriendId);
+            }
+        }
+
+        public void RemoveFromSentRequestCache(uint FriendId)
+        {
+            lock (mInnerFriendRequestSent)
+            {
+                if (mInnerFriendRequestSent.Contains(FriendId))
+                {
+                    mInnerFriendRequestSent.Remove(FriendId);
                 }
             }
         }
@@ -149,7 +209,7 @@ namespace Snowlight.Game.Messenger
                     mInnerUpdates.Clear();
                 }
 
-                return MessengerUpdateListComposer.Compose(UpdateInfo);
+                return MessengerUpdateListComposer.Compose(mInnerCategories, UpdateInfo);
             }
         }
 

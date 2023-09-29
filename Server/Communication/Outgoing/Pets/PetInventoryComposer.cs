@@ -9,12 +9,12 @@ namespace Snowlight.Communication.Outgoing
 {
     public static class PetInventoryComposer
     {
-        public static ServerMessage Compose(Dictionary<uint, Pet> Pets)
+        public static ServerMessage Compose(List<Pet> Pets)
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.INVENTORY_PETS);
             Message.AppendInt32(Pets.Count);
 
-            foreach (Pet Pet in Pets.Values)
+            foreach (Pet Pet in Pets)
             {
                 Message.AppendUInt32(Pet.Id);
                 Message.AppendStringWithBreak(Pet.Name);

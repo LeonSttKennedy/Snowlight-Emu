@@ -8,6 +8,9 @@ using System.Collections.ObjectModel;
 using Snowlight.Game.Pathfinding;
 using Snowlight.Game.Misc;
 using Snowlight.Util;
+using Snowlight.Game.Sessions;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Communication;
 
 namespace Snowlight.Game.Bots.Behavior
 {
@@ -33,9 +36,9 @@ namespace Snowlight.Game.Bots.Behavior
             }
         }
 
-        public override void Initialize(Bot BotReference)
+        public override void Initialize(Bot Bot)
         {
-            mSelfBot = BotReference;
+            mSelfBot = Bot;
         }
 
         public override void OnSelfEnterRoom(RoomInstance Instance)
@@ -52,16 +55,11 @@ namespace Snowlight.Game.Bots.Behavior
             mMovingToServePos = false;
             mActorServePos = null;
 
-            if (mSelfBot.Rotation >= 0)
-            {
-                mSelfActor.BodyRotation = mSelfBot.Rotation;
-                mSelfActor.HeadRotation = mSelfBot.Rotation;
-            }
+            mSelfActor.BodyRotation = Instance.Model.DoorRotation;
+            mSelfActor.HeadRotation = Instance.Model.DoorRotation;
+            mSelfActor.UpdateNeeded = true;
 
             mSelfActor.Chat("Hi and welcome to uberHotel! I am a bot Guide and I'm here to help you.", false, true);
-            mSelfActor.Chat("This is your own room, you can always come back to room by clicking the nest icon on room information.", false, true);
-            mSelfActor.Chat("If you want to explore the Habbo by yourself, click on the 'Rooms' icon on the left (we call it navigator).", false, true);
-            mSelfActor.Chat("You will find cool rooms and fun events with other people in them, feel free to visit them.", false, true);
             mSelfActor.Chat("I can give you tips and hints on what to do here, just ask me a question :)", false, true);
         }
 
@@ -87,7 +85,22 @@ namespace Snowlight.Game.Bots.Behavior
 
             if (Response != null)
             {
-                mSelfActor.Chat(Response.GetResponse(), false);
+                switch (Response.ResponseMode)
+                {
+                    default:
+                    case ChatType.Say:
+                    case ChatType.Shout:
+
+                        bool mActorBotShout = Response.ResponseMode == ChatType.Shout;
+                        mSelfActor.Chat(Response.GetResponse(), mActorBotShout);
+                        break;
+
+                    case ChatType.Whisper:
+
+                        mSelfActor.Whisper(Response.GetResponse(), Actor.ReferenceId);
+                        break;
+
+                }
 
                 if (Response.ResponseServeId > 0)
                 {
@@ -136,11 +149,12 @@ namespace Snowlight.Game.Bots.Behavior
         {
             if (mNextSpeechAttempt <= 0)
             {
-                string Message = BotManager.GetRandomSpeechForBotDefinition(mSelfBot.DefinitionId);
+                BotRandomSpeech RandomSpeech = BotManager.GetRandomSpeechForBotDefinition(mSelfBot.DefinitionId);
 
-                if (Message != null && Message.Length > 0)
+                if (RandomSpeech != null && RandomSpeech.Message.Length > 0)
                 {
-                    mSelfActor.Chat(Message);
+                    bool Shout = RandomSpeech.MessageMode == ChatType.Shout;
+                    mSelfActor.Chat(RandomSpeech.Message, Shout);
                 }
 
                 mNextSpeechAttempt = RandomGenerator.GetNext(0, 255);
@@ -179,7 +193,6 @@ namespace Snowlight.Game.Bots.Behavior
                 }
 
                 mNextMovementAttempt = RandomGenerator.GetNext(0, /*180*/90);
-                mNeedsRotation = true;
             }
             else
             {

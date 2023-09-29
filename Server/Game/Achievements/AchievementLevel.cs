@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Snowlight.Util;
+using System;
 
 namespace Snowlight.Game.Achievements
 {
     public class AchievementLevel
     {
         private int mLevel;
-        private int mRewardPixels;
+        private int mRewardActivityPoints;
+        private SeasonalCurrencyList mSeasonalCurrency;
         private int mRewardPoints;
         private int mRequirement;
 
@@ -17,11 +19,19 @@ namespace Snowlight.Game.Achievements
             }
         }
 
-        public int PixelReward
+        public SeasonalCurrencyList SeasonalCurrency
         {
             get
             {
-                return mRewardPixels;
+                return mSeasonalCurrency;
+            }
+        }
+
+        public int ActivityPointsReward
+        {
+            get
+            {
+                return mRewardActivityPoints;
             }
         }
 
@@ -41,10 +51,11 @@ namespace Snowlight.Game.Achievements
             }
         }
 
-        public AchievementLevel(int Level, int PixelReward, int PointReward, int Requirement)
+        public AchievementLevel(int Level, int ActivityPointsReward, SeasonalCurrencyList SeasonalPointsType, int PointReward, int Requirement)
         {
             mLevel = Level;
-            mRewardPixels = PixelReward;
+            mRewardActivityPoints = ActivityPointsReward;
+            mSeasonalCurrency = SeasonalPointsType;
             mRewardPoints = PointReward;
             mRequirement = Requirement;
         }

@@ -17,6 +17,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Switchable, new ItemEventHandler(HandleGenericSwitch));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Bed, new ItemEventHandler(HandleGenericSwitch));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Seat, new ItemEventHandler(HandleGenericSwitch));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Platform, new ItemEventHandler(HandleGenericSwitch));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.BlackHole, new ItemEventHandler(HandleGenericSwitch));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.StepSwitch, new ItemEventHandler(HandleStepSwitch));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Scoreboard, new ItemEventHandler(HandleScoreboard));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Rental, new ItemEventHandler(HandleRental));
@@ -51,6 +53,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         RoomManager.MarkWriteback(Item, true);
 
                         Item.BroadcastStateUpdate(Instance);
+                        Instance.RegenerateRelativeHeightmap(true);
                     }
 
                     break;

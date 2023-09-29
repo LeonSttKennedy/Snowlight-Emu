@@ -34,6 +34,7 @@ namespace Snowlight.Communication.Outgoing
                 }
             }
 
+            Message.AppendBoolean(false); // New additions in catalog available
             return Message;
         }
 
@@ -66,7 +67,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(Page.Color);
             Message.AppendInt32(Page.Icon);
             Message.AppendInt32(Page.Id);
-            Message.AppendStringWithBreak(Page.Caption + (Page.RequiredRight.Length > 0 ? "*" : string.Empty) + (Page.ComingSoon? " (" + ExternalTexts.GetValue("catalog_page_coming_soon") + ")" : string.Empty));
+            Message.AppendStringWithBreak(Page.Caption /*+ (Page.RequiredRight.Length > 0 ? "*" : string.Empty)*/ + (Page.ComingSoon ? " (" + ExternalTexts.GetValue("catalog_page_coming_soon") + ")" : string.Empty));
             Message.AppendInt32(TreeSize);
         }
 

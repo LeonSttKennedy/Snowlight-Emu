@@ -6,6 +6,7 @@ using Snowlight.Specialized;
 using Snowlight.Game.Rooms;
 using Snowlight.Communication.Outgoing;
 using System.Collections.Generic;
+using Snowlight.Game.Items.Wired;
 
 namespace Snowlight.Game.Items
 {
@@ -29,6 +30,8 @@ namespace Snowlight.Game.Items
         private uint mSoundManagerId;
         private int mSoundManagerOrder;
         private double mExpireTimestamp;
+        private bool mTimmerRunning;
+        private WiredData mWiredData;
 
         public uint Id
         {
@@ -279,9 +282,52 @@ namespace Snowlight.Game.Items
                 return mExpireTimestamp - UnixTimestamp.GetCurrent();
             }
         }
+        public double ActiveHeight
+        {
+            get
+            {
+                float Height;
+
+                if (mCachedDefinition.AdjustableHeight.Count > 1)
+                {
+                    int.TryParse(mFlags, out int index);
+                    Height = mCachedDefinition.AdjustableHeight[index];
+                }
+                else
+                {
+                    Height = mCachedDefinition.Height;
+                }
+
+                return Height;
+            }
+        }
+        public bool TimmerRunning
+        {
+            get
+            {
+                return mTimmerRunning;
+            }
+
+            set
+            {
+                mTimmerRunning = value;
+            }
+        }
+        public WiredData WiredData
+        {
+            get
+            {
+                return mWiredData;
+            }
+            set
+            {
+                mWiredData = value;
+            }
+        }
 
         public Item(uint Id, uint DefinitionId, uint UserId, uint RoomId, Vector3 RoomPos, string RoomWallPos, int Rotation,
-            string Flags, string DisplayFlags, bool Untradable, uint SoundManagerId, int SoundManagerOrder, double ExpireTimestamp)
+            string Flags, string DisplayFlags, bool Untradable, uint SoundManagerId, int SoundManagerOrder, double ExpireTimestamp,
+            WiredManager WiredManager)
         {
             mId = Id;
             mDefinitionId = DefinitionId;
@@ -299,9 +345,30 @@ namespace Snowlight.Game.Items
             mSoundManagerId = SoundManagerId;
             mSoundManagerOrder = SoundManagerOrder;
             mExpireTimestamp = ExpireTimestamp;
+            mTimmerRunning = false;
+
+            if (WiredManager != null && (mCachedDefinition.Behavior == ItemBehavior.WiredCondition || mCachedDefinition.Behavior == ItemBehavior.WiredTrigger || mCachedDefinition.Behavior == ItemBehavior.WiredEffect))
+            {
+                mWiredData = WiredManager.LoadWired(Id, mCachedDefinition.BehaviorData);
+                if (mCachedDefinition.Behavior == ItemBehavior.WiredTrigger)
+                {
+                    switch (WiredTypesUtil.TriggerFromInt(mCachedDefinition.BehaviorData))
+                    {
+                        case WiredTriggerTypes.periodically:
+                            RequestUpdate(mWiredData.Data2);
+                            break;
+                        case WiredTriggerTypes.walks_on_furni:
+                        case WiredTriggerTypes.walks_off_furni:
+                            WiredManager.RegisterWalkItems(mId);
+                            break;
+                    }
+
+                }
+
+            }
         }
 
-        public void Update(RoomInstance Instance)
+        public void Update(RoomInstance Instance, RoomActor Actor = null, int ActorRotation = 0)
         {
             if (mUpdateTicks > 0)
             {

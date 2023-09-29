@@ -17,10 +17,10 @@ namespace Snowlight.Communication.Outgoing
 
             foreach (PetRaceData Race in RaceData)
             {
-                Message.AppendInt32(PetType); // Pet type
-                Message.AppendInt32(Race.Data1); // Color??
-                Message.AppendInt32(Race.Data2);
-                Message.AppendInt32(Race.Data3);
+                Message.AppendInt32(PetType);       // Pet type
+                Message.AppendInt32(Race.Data1);    // Pet color / breed
+                Message.AppendInt32(Race.Data2);    // Sellable (BOOL)
+                Message.AppendInt32(Race.Data3);    // Is Rare  (BOOL)
             }
 
             return Message;

@@ -19,6 +19,8 @@ using Snowlight.Game.Items;
 using Snowlight.Game.Pets;
 using Snowlight.Game.Music;
 using Snowlight.Game.Rooms.Trading;
+using Snowlight.Game.Items.Wired;
+using Snowlight.Game.Advertisements;
 
 namespace Snowlight.Game.Rooms
 {
@@ -138,6 +140,7 @@ namespace Snowlight.Game.Rooms
             mTradeManager = new TradeManager();
             mRollerItems = new List<Item>[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
             mRoomTriggers = new List<RoomTriggers>();
+            mWiredManager = new WiredManager(this);
 
             mDiagonalEnabled = true;
 
@@ -154,7 +157,7 @@ namespace Snowlight.Game.Rooms
 
                 foreach (DataRow Row in ItemTable.Rows)
                 {
-                    Item Item = ItemFactory.CreateFromDatabaseRow(Row);
+                    Item Item = ItemFactory.CreateFromDatabaseRow(Row, mWiredManager);
 
                     if (Item.PendingExpiration && Item.ExpireTimeLeft <= 0)
                     {
@@ -175,7 +178,8 @@ namespace Snowlight.Game.Rooms
 
                 // Static objects
                 MySqlClient.SetParameter("id", RoomId);
-                DataTable StaticObjectTable = MySqlClient.ExecuteQueryTable("SELECT name,position,size_x,size_y,rotation,height,walkable,is_seat FROM static_objects WHERE room_id = @id");
+                MySqlClient.SetParameter("enabled", "1");
+                DataTable StaticObjectTable = MySqlClient.ExecuteQueryTable("SELECT * FROM static_objects WHERE room_id = @id AND enabled = @enabled");
 
                 foreach (DataRow Row in StaticObjectTable.Rows)
                 {
@@ -183,7 +187,7 @@ namespace Snowlight.Game.Rooms
                         (int)Row["size_x"], (int)Row["size_y"], (int)Row["rotation"], (float)Row["height"],
                          (Row["walkable"].ToString() == "1"), (Row["is_seat"].ToString() == "1")));
                 }
-            
+
                 // Rights
                 MySqlClient.SetParameter("id", RoomId);
                 DataTable RightsTable = MySqlClient.ExecuteQueryTable("SELECT user_id FROM room_rights WHERE room_id = @id");
@@ -197,7 +201,7 @@ namespace Snowlight.Game.Rooms
                 MySqlClient.SetParameter("id", RoomId);
                 DataTable TriggersTable = MySqlClient.ExecuteQueryTable("SELECT * FROM room_triggers WHERE room_id = @id");
 
-                foreach(DataRow Row in TriggersTable.Rows)
+                foreach (DataRow Row in TriggersTable.Rows)
                 {
                     RoomTriggerList Trigger = RoomTriggerList.ROLLER;
                     switch ((string)Row["action"])
@@ -222,15 +226,42 @@ namespace Snowlight.Game.Rooms
 
                 // Pets
                 MySqlClient.SetParameter("id", RoomId);
-                DataTable PetsTable = MySqlClient.ExecuteQueryTable("SELECT * FROM pets WHERE room_id = @id");
+                DataTable PetsTable = MySqlClient.ExecuteQueryTable("SELECT * FROM user_pets WHERE room_id = @id");
 
                 foreach (DataRow Row in PetsTable.Rows)
                 {
                     Pet PetData = PetFactory.GetPetFromDatabaseRow(Row);
 
                     AddBotToRoom(BotManager.CreateNewInstance(BotManager.GetHandlerDefinitionForPetType(PetData.Type),
-                        RoomId, Vector3.FromString(Row["room_pos"].ToString()), PetData));
+                        RoomId, PetData.RoomPosition, PetData));
+
                 }
+
+                // Room bans
+                MySqlClient.SetParameter("id", RoomId);
+                DataTable BansTable = MySqlClient.ExecuteQueryTable("SELECT * FROM room_bans WHERE room_id = @id");
+                foreach (DataRow Row in BansTable.Rows)
+                {
+                    uint UserId = (uint)Row["user_id"];
+                    double ExpireTimestamp = (double)Row["expire"];
+
+                    if (ExpireTimestamp == 0 || UnixTimestamp.GetCurrent() < ExpireTimestamp)
+                    {
+                        if (mBannedUsers.ContainsKey(UserId))
+                        {
+                            mBannedUsers[UserId] = ExpireTimestamp;
+                            continue;
+                        }
+
+                        mBannedUsers.Add(UserId, ExpireTimestamp);
+                    }
+                    else
+                    {
+                        mBannedUsers.Remove(UserId);
+                    }
+                }
+
+                CleanDatabaseBans();
             }
 
             RegenerateRelativeHeightmap();
@@ -254,7 +285,6 @@ namespace Snowlight.Game.Rooms
 
             return new RoomInstance(InstanceId, Info, Model);
         }
-
         public void Unload()
         {
             if (mUnloaded)

@@ -6,6 +6,7 @@ using System.Text;
 
 using Snowlight.Storage;
 using Snowlight.Specialized;
+using Snowlight.Game.Pets;
 
 namespace Snowlight.Game.Items
 {
@@ -13,6 +14,7 @@ namespace Snowlight.Game.Items
     {
         private uint mCharacterId;
         private Dictionary<uint, Item> mInner;
+        private Dictionary<uint, Pet> mInnerPets;
 
         public Dictionary<uint, Item> Items
         {
@@ -32,10 +34,29 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public Dictionary<uint, Pet> Pets
+        {
+            get
+            {
+                lock (mInnerPets)
+                {
+                    Dictionary<uint, Pet> Copy = new Dictionary<uint, Pet>();
+
+                    foreach (KeyValuePair<uint, Pet> Item in mInnerPets)
+                    {
+                        Copy.Add(Item.Key, Item.Value);
+                    }
+
+                    return new Dictionary<uint, Pet>(Copy);
+                }
+            }
+        }
+
         public InventoryCache(SqlDatabaseClient MySqlClient, uint CharacterId)
         {
             mCharacterId = CharacterId;
             mInner = new Dictionary<uint, Item>();
+            mInnerPets = new Dictionary<uint, Pet>();
 
             ReloadCache(MySqlClient);
         }
@@ -67,6 +88,20 @@ namespace Snowlight.Game.Items
                     mInner.Add(Item.Id, Item);
                 }            
             }
+
+            lock (mInnerPets)
+            {
+                mInnerPets.Clear();
+
+                MySqlClient.SetParameter("userid", mCharacterId);
+                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM user_pets WHERE user_id = @userid AND room_id = 0");
+
+                foreach (DataRow Row in Table.Rows)
+                {
+                    Pet Pet = PetFactory.GetPetFromDatabaseRow(Row);
+                    mInnerPets.Add(Pet.Id, Pet);
+                }
+            }
         }
 
         public void Add(Item Item)
@@ -91,6 +126,42 @@ namespace Snowlight.Game.Items
 
                 return mInner.Remove(ItemId);
             }
+        }
+        public void Add(Pet Pet)
+        {
+            lock (mInnerPets)
+            {
+                if (!mInnerPets.ContainsKey(Pet.Id))
+                {
+                    mInnerPets.Add(Pet.Id, Pet);
+                }
+            }
+        }
+
+        public bool RemovePet(uint PetId)
+        {
+            lock (mInnerPets)
+            {
+                if (!mInnerPets.ContainsKey(PetId))
+                {
+                    return false;
+                }
+
+                return mInnerPets.Remove(PetId);
+            }
+        }
+
+        public Pet GetPet(uint Id)
+        {
+            lock (mInnerPets)
+            {
+                if (mInnerPets.ContainsKey(Id))
+                {
+                    return mInnerPets[Id];
+                }
+            }
+
+            return null;
         }
 
         public Dictionary<uint, Item> GetFloorItems()
@@ -165,21 +236,18 @@ namespace Snowlight.Game.Items
             }
         }
 
-        public Dictionary<uint, Item> GetPets()
+        public Dictionary<uint, Pet> GetPets()
         {
-            lock (mInner)
+            lock (mInnerPets)
             {
-                Dictionary<uint, Item> Copy = new Dictionary<uint, Item>();
+                Dictionary<uint, Pet> Copy = new Dictionary<uint, Pet>();
 
-                foreach (KeyValuePair<uint, Item> Item in mInner)
+                foreach (KeyValuePair<uint, Pet> Item in mInnerPets)
                 {
-                    if (Item.Value.Definition.Type == ItemType.Pet)
-                    {
-                        Copy.Add(Item.Key, Item.Value);
-                    }
+                    Copy.Add(Item.Key, Item.Value);
                 }
 
-                return new Dictionary<uint, Item>(Copy);
+                return new Dictionary<uint, Pet>(Copy);
             }
         }
 
@@ -196,7 +264,7 @@ namespace Snowlight.Game.Items
             return null;
         }
 
-        public void ClearAndDeleteAll()
+        public void ClearAndDeleteAllItems()
         {
             lock (mInner)
             {
@@ -205,7 +273,27 @@ namespace Snowlight.Game.Items
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
                     MySqlClient.SetParameter("userid", mCharacterId);
+                    MySqlClient.ExecuteNonQuery("DELETE FROM wired_items WHERE item_id IN (SELECT id FROM items WHERE user_id = @userid)");
+
+                    MySqlClient.SetParameter("userid", mCharacterId);
+                    MySqlClient.ExecuteNonQuery("DELETE FROM user_gifts WHERE item_id IN (SELECT id FROM items WHERE user_id = @userid)");
+
+                    MySqlClient.SetParameter("userid", mCharacterId);
                     MySqlClient.ExecuteNonQuery("DELETE FROM items WHERE user_id = @userid");
+                }
+            }
+        }
+
+        public void ClearAndDeleteAllPets()
+        {
+            lock (mInnerPets)
+            {
+                mInnerPets.Clear();
+
+                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                {
+                    MySqlClient.SetParameter("userid", mCharacterId);
+                    MySqlClient.ExecuteNonQuery("DELETE FROM user_pets WHERE user_id = @userid AND room_id = 0");
                 }
             }
         }

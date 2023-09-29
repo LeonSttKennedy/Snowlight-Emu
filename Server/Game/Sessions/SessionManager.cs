@@ -56,6 +56,11 @@ namespace Snowlight.Game.Sessions
                             continue;
                         }
 
+                        if (ConnectedUsers.ContainsKey(Session.CharacterId))
+                        {
+                            ConnectedUsers.Remove(Session.CharacterId);
+                        }
+
                         ConnectedUsers.Add(Session.CharacterId, Session.CharacterInfo.Username);
                     }
                 }

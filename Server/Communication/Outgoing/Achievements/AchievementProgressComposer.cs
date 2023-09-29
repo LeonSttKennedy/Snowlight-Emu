@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Snowlight.Game.Achievements;
+using Snowlight.Util;
 
 namespace Snowlight.Communication.Outgoing
 {
@@ -14,8 +15,8 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(TargetLevel);                                                   // Target level
             Message.AppendStringWithBreak(Achievement.GroupName + TargetLevel);                 // Target name/desc/badge
             Message.AppendInt32(TargetLevelData.Requirement);                                   // Progress req/target        
-            Message.AppendInt32(TargetLevelData.PixelReward);                                   // Pixel reward       
-            Message.AppendInt32(TargetLevelData.PointsReward);                                  // Unknown(??)
+            Message.AppendInt32(TargetLevelData.ActivityPointsReward);                          // Activity Points reward       
+            Message.AppendInt32((int)TargetLevelData.SeasonalCurrency);                         // Seasonal Currency Type
             Message.AppendInt32(UserData != null ? UserData.Progress : 0);                      // Current progress
             Message.AppendBoolean(UserData != null ? (UserData.Level >= TotalLevels) : false);  // Set 100% completed(??)
             Message.AppendStringWithBreak(Achievement.Category);                                // Category

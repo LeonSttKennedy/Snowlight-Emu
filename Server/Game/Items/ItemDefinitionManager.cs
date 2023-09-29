@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-
+using System.Linq;
 using Snowlight.Storage;
-
+using Snowlight.Util;
 
 namespace Snowlight.Game.Items
 {
     public static class ItemDefinitionManager
     {
         private static Dictionary<uint, ItemDefinition> mDefinitions;
+        private static List<ItemDefinition> mOldGiftDefinitionList;
 
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
             mDefinitions = new Dictionary<uint, ItemDefinition>();
+            mOldGiftDefinitionList = new List<ItemDefinition>();
 
             int Count = 0;
             int Failed = 0;
@@ -63,14 +65,22 @@ namespace Snowlight.Game.Items
                 }
 
                 mDefinitions.Add((uint)Row["id"], new ItemDefinition((uint)Row["id"], (uint)Row["sprite_id"],
-                    (string)Row["name"], GetTypeFromString(Row["type"].ToString()),
+                    (string)Row["name"], (string)Row["public_name"], GetTypeFromString(Row["type"].ToString()),
                     ItemBehaviorUtil.FromString((Row["behavior"].ToString())), (int)Row["behavior_data"], Behavior, 
                     WMode, (int)Row["room_limit"], (int)Row["size_x"], (int)Row["size_y"], (float)Row["height"],
-                    (Row["allow_recycling"].ToString() == "1"), (Row["allow_trading"].ToString() == "1"),
-                    (Row["allow_selling"].ToString() == "1"), (Row["allow_gifting"].ToString() == "1"),
-                    (Row["allow_inventory_stacking"].ToString() == "1")));
+                    (string)Row["height_adjustable"],(Row["allow_recycling"].ToString() == "1"),
+                    (Row["allow_trading"].ToString() == "1"), (Row["allow_selling"].ToString() == "1"),
+                    (Row["allow_gifting"].ToString() == "1"), (Row["allow_inventory_stacking"].ToString() == "1")));
 
                 Count++;             
+            }
+
+            foreach (ItemDefinition Definition in mDefinitions.Values)
+            {
+                if (Definition.Behavior == ItemBehavior.Gift && Definition.BehaviorData == 1)
+                {
+                    mOldGiftDefinitionList.Add(Definition);
+                }
             }
 
             Output.WriteLine("Loaded " + Count + " item definition(s)" + (Failed > 0 ? " (" + Failed + " skipped due to errors)" : "") + ".", OutputLevel.DebugInformation);
@@ -103,6 +113,12 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public static ItemDefinition OldGiftDefinitions()
+        {
+            int Random = RandomGenerator.GetNext(0, 6);
+            return mOldGiftDefinitionList[Random];
+        }
+
         public static ItemDefinition GetDefinition(uint Id)
         {
             lock (mDefinitions)
@@ -114,6 +130,27 @@ namespace Snowlight.Game.Items
             }
 
             return null;
+        }
+
+        public static ItemDefinition GetDefinitionBySpriteId(uint SpriteId)
+        {
+            lock (mDefinitions)
+            {
+                foreach (ItemDefinition ItemDefs in mDefinitions.Values)
+                {
+                    if (ItemDefs.SpriteId == SpriteId)
+                    {
+                        return ItemDefs;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static ItemDefinition GetDefinitionByName(string Name)
+        {
+            return mDefinitions.Values.Where(Def => Def.Name.Equals(Name)).ToList().FirstOrDefault(); ;
         }
     }
 }

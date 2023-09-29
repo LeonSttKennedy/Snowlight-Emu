@@ -8,8 +8,11 @@ using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
+using Snowlight.Util;
+using Snowlight.Game.Items;
+using Snowlight.Game.Catalog;
 
-namespace Snowlight.Game.Achievements
+namespace Snowlight.Game.Quests
 {
     public static class QuestManager
     {
@@ -35,13 +38,16 @@ namespace Snowlight.Game.Achievements
             {
                 mQuests.Clear();
 
-                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM quests");
+                MySqlClient.SetParameter("enabled", "1");
+                DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM quests WHERE enabled = @enabled");
 
                 foreach (DataRow Row in Table.Rows)
                 {
                     mQuests.Add((uint)Row["id"], new Quest((uint)Row["id"], (string)Row["category"], (int)Row["series_number"],
-                        (QuestType)((int)Row["goal_type"]), (uint)Row["goal_data"], (string)Row["name"], (int)Row["reward"],
-                        (string)Row["data_bit"]));
+                        (QuestType)((int)Row["goal_type"]), (uint)Row["goal_data"], (ItemBehavior)(uint)Row["goal_data_behavior"],
+                        (string)Row["name"], SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()),
+                        (int)Row["reward"], (string)Row["data_bit"]));
+
                 }
             }
         }
@@ -103,7 +109,19 @@ namespace Snowlight.Game.Achievements
 
                     break;
 
-                case QuestType.EXPLORE_FIND_ITEM:
+                case QuestType.EXPLORE_FIND_ITEM_BEHAVIOR:
+
+                    if (EventData != (int)UserQuest.GoalDataBehavior)
+                    {
+                        return;
+                    }
+
+                    NewProgress = (int)UserQuest.GoalDataBehavior;
+                    PassQuest = true;
+                    break;
+
+                case QuestType.EXPLORE_FIND_SPECIFIC_ITEM:
+                case QuestType.FIND_A_PET_TYPE:
 
                     if (EventData != UserQuest.GoalData)
                     {
@@ -121,7 +139,12 @@ namespace Snowlight.Game.Achievements
                 
                 if (PassQuest)
                 {
-                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, UserQuest.Reward);
+                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, UserQuest.SeasonalCurrency, UserQuest.Reward);
+                    if(UserQuest.SeasonalCurrency == SeasonalCurrencyList.Pixels)
+                    {
+                        Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0], UserQuest.Reward));
+                    }
+                    Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
 
                     Quest NextQuest = GetNextQuestInSeries(UserQuest.Category, UserQuest.Number + 1);
 
@@ -137,8 +160,13 @@ namespace Snowlight.Game.Achievements
             if (PassQuest)
             {
                 Session.SendData(QuestCompletedComposer.Compose(Session, UserQuest));
-                Session.SendData(ActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPointsBalance,
+
+                if (UserQuest.SeasonalCurrency == SeasonalCurrencyList.Pixels)
+                {
+                    Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0],
                     UserQuest.Reward));
+                }
+
                 GetList(Session, null);
 
                 Session.MessengerFriendCache.BroadcastToFriends(MessengerFriendEventComposer.Compose(Session.CharacterId,

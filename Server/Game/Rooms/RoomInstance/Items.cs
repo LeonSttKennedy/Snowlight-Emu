@@ -8,6 +8,7 @@ using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Sessions;
 using Snowlight.Config;
 using Snowlight.Util;
+using Snowlight.Game.Advertisements;
 
 namespace Snowlight.Game.Rooms
 {
@@ -226,7 +227,7 @@ namespace Snowlight.Game.Rooms
                                     return -1;
                                 }
 
-                                double ItemTotalHeight = StackItem.RoomPosition.Z + StackItem.Definition.Height;
+                                double ItemTotalHeight = StackItem.RoomPosition.Z + StackItem.ActiveHeight;
 
                                 if (ItemTotalHeight >= TempStackHeights[MatchedTile.X, MatchedTile.Y])
                                 {
@@ -248,7 +249,7 @@ namespace Snowlight.Game.Rooms
                     }
                 }
 
-                if ((HighestStack + Item.Definition.Height) >= ServerSettings.MaxFurniStacking)
+                if ((HighestStack + Item.ActiveHeight) >= ServerSettings.MaxFurniStacking)
                 {
                     return -1;
                 }
@@ -356,7 +357,7 @@ namespace Snowlight.Game.Rooms
 
             return Tiles;
         }
-        public List<Vector2> PositiveStaticObjectCalculateAffectedTiles(StaticObject Object, Vector2 Position, int Rotation)
+        public List<Vector2> CalculateAffectedTiles(StaticObject Object, Vector2 Position, int Rotation)
         {
             List<Vector2> Tiles = new List<Vector2>();
             Tiles.Add(Position);
@@ -427,89 +428,6 @@ namespace Snowlight.Game.Rooms
                         for (int x = 1; x < Object.SizeY; x++)
                         {
                             Vector2 _Vector = new Vector2(Position.X + x, Position.Y + y);
-
-                            if (!Tiles.Contains(Vector))
-                            {
-                                Tiles.Add(Vector);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return Tiles;
-        }
-        public List<Vector2> NegativeStaticObjectCalculateAffectedTiles(StaticObject Object, Vector2 Position, int Rotation)
-        {
-            List<Vector2> Tiles = new List<Vector2>();
-            Tiles.Add(Position);
-
-            if (Object.SizeY > 0)
-            {
-                if (Rotation == 0 || Rotation == 4)
-                {
-                    for (int y = 1; y < Object.SizeY; y++)
-                    {
-                        Tiles.Add(new Vector2(Position.X, Position.Y - y));
-
-                        for (int x = 1; x < Object.SizeX; x++)
-                        {
-                            Tiles.Add(new Vector2(Position.X - x, Position.Y - y));
-                        }
-                    }
-                }
-                else if (Rotation == 2 || Rotation == 6)
-                {
-                    for (int x = 1; x < Object.SizeY; x++)
-                    {
-                        Tiles.Add(new Vector2(Position.X - x, Position.Y));
-
-                        for (int y = 1; y < Object.SizeX; y++)
-                        {
-                            Tiles.Add(new Vector2(Position.X - x, Position.Y - y));
-                        }
-                    }
-                }
-            }
-
-            if (Object.SizeX > 0)
-            {
-                if (Rotation == 0 || Rotation == 4)
-                {
-                    for (int x = 1; x < Object.SizeX; x++)
-                    {
-                        Vector2 Vector = new Vector2(Position.X - x, Position.Y);
-
-                        if (!Tiles.Contains(Vector))
-                        {
-                            Tiles.Add(Vector);
-                        }
-
-                        for (int y = 1; y < Object.SizeY; y++)
-                        {
-                            Vector2 _Vector = new Vector2(Position.X - x, Position.Y - y);
-
-                            if (!Tiles.Contains(Vector))
-                            {
-                                Tiles.Add(_Vector);
-                            }
-                        }
-                    }
-                }
-                else if (Rotation == 2 || Rotation == 6)
-                {
-                    for (int y = 1; y < Object.SizeX; y++)
-                    {
-                        Vector2 Vector = new Vector2(Position.X, Position.Y - y);
-
-                        if (!Tiles.Contains(Vector))
-                        {
-                            Tiles.Add(Vector);
-                        }
-
-                        for (int x = 1; x < Object.SizeY; x++)
-                        {
-                            Vector2 _Vector = new Vector2(Position.X - x, Position.Y - y);
 
                             if (!Tiles.Contains(Vector))
                             {
@@ -611,7 +529,8 @@ namespace Snowlight.Game.Rooms
             bool IsRotationOnly = (Item.RoomId == RoomId && Item.RoomPosition.X == Position.X &&
                 Item.RoomPosition.Y == Position.Y && Rotation != Item.RoomRotation);
 
-            if (!IsValidItemRotation(Rotation))
+            if (!Item.Definition.Behavior.Equals(ItemBehavior.RoomBackground) &&
+                !IsValidItemRotation(Rotation))
             {
                 return null;
             }

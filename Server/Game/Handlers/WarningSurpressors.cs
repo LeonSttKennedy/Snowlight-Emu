@@ -3,6 +3,9 @@
 using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Communication.Incoming;
+using Snowlight.Game.Advertisements;
+using Snowlight.Game.Rooms;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Handlers
 {
@@ -10,10 +13,6 @@ namespace Snowlight.Game.Handlers
     {
         public static void Initialize()
         {
-            // com.sulake.habbo.communication.messages.outgoing.advertisement.GetRoomAdMessageComposer;
-            // used for returning the room ads...
-            DataRouter.RegisterHandler(126, new ProcessRequestCallback(SurpressingHandler));
-
             // com.sulake.habbo.communication.messages.outgoing.tracking.LatencyPingReportMessageComposer;
             // something to do with latency..
             DataRouter.RegisterHandler(316, new ProcessRequestCallback(SurpressingHandler));

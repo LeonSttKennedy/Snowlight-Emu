@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-
+using System.Web.ModelBinding;
 
 namespace Snowlight.Util
 {
@@ -23,18 +23,34 @@ namespace Snowlight.Util
     public static class ServerSettings
     {
         private static bool mActivityPointsEnabled;
+        private static SeasonalCurrencyList mActivityPointsType;
         private static bool mMoreActivityPointsForVipUsers;
         private static int mActivityPointsInterval;
         private static int mActivityPointsCreditsAmount;
         private static int mMoreActivityPointsCreditsAmount;
         private static int mActivityPointsPixelsAmount;
         private static int mMoreActivityPointsPixelsAmount;
+
+        private static bool mDailyRewardEnabled;
+        private static SeasonalCurrencyList mDailyActivityPointsType;
+        private static int mDailyRewardActivityPointAmount;
+        private static int mDailyRewardCreditsAmount;
+
         private static bool mGiftingSystemEnabled;
+        private static bool mNewGiftingSystem;
+        private static int mGiftingSystemPrice;
+        private static List<uint> mGiftingSystemSpriteIds;
+        private static int mGiftingSystemBoxCount;
+        private static int mGiftingSystemRibbonCount;
+
         private static InfobusStatus mInfobusStatus;
+
         private static bool mLoginBadgeEnabled;
-        private static uint mLoginBadgeId;
+        private static string mLoginBadgeCode;
+
         private static bool mMarketplaceEnabled;
         private static int mMarketplaceTax;
+        private static bool mMarketplaceTokensBuyEnabled;
         private static int mMarketplaceTokensPrice;
         private static int mMarketplacePremiumTokens;
         private static int mMarketplaceDefaultTokens;
@@ -42,17 +58,32 @@ namespace Snowlight.Util
         private static int mMarketplaceMaxPrice;
         private static int mMarketplaceOfferTime;
         private static int mMarketplaceAverageOfferDays;
+
         private static int mMaxFavoritesPerUser;
         private static int mMaxFurniPerRoom;
         private static int mMaxFurniStacking;
         private static int mMaxPetsPerRoom;
         private static int mMaxRoomsPerUser;
+
         private static bool mModerationActionLogs;
+        private static bool mModerationConsoleChatLogs;
         private static bool mModerationChatLogs;
         private static bool mModerationRoomLogs;
+
         private static bool mMotdEnabled;
         private static MotdType mMotdType;
         private static List<string> mMotdText;
+
+        private static int mNameChangeWaitDays;
+        
+        private static bool mEnablePets;
+        private static bool mPetScratchingAccountDaysOldEnabled;
+        private static int mPetScratchingAccountDaysOld;
+        
+        private static int mNormalUserFriendListSize;
+        private static int mHcUserFriendListSize;
+        private static int mVipUserFriendListSize;
+
         private static int mWordFilterMaximumCount;
         private static int mWordFilterTimeToMute;
 
@@ -66,6 +97,18 @@ namespace Snowlight.Util
             set
             {
                 mActivityPointsEnabled = value;
+            }
+        }
+        public static SeasonalCurrencyList ActivityPointsType
+        {
+            get
+            {
+                return mActivityPointsType;
+            }
+
+            set
+            {
+                mActivityPointsType = value;
             }
         }
         public static bool MoreActivityPointsForVipUsers
@@ -140,6 +183,54 @@ namespace Snowlight.Util
                 mMoreActivityPointsPixelsAmount = value;
             }
         }
+        public static bool DailyRewardEnabled
+        {
+            get
+            {
+                return mDailyRewardEnabled;
+            }
+
+            set
+            {
+                mDailyRewardEnabled = value;
+            }
+        }
+        public static SeasonalCurrencyList DailyActivityPointsType
+        {
+            get
+            {
+                return mDailyActivityPointsType;
+            }
+
+            set
+            {
+                mDailyActivityPointsType = value;
+            }
+        }
+        public static int DailyRewardActivityPointAmount
+        {
+            get 
+            {
+                return mDailyRewardActivityPointAmount; 
+            }
+            
+            set 
+            {
+                mDailyRewardActivityPointAmount =  value; 
+            }
+        }
+        public static int DailyRewardCreditsAmount
+        {
+            get
+            {
+                return mDailyRewardCreditsAmount;
+            }
+
+            set
+            {
+                mDailyRewardCreditsAmount = value;
+            }
+        }
         public static bool GiftingSystemEnabled
         {
             get 
@@ -150,6 +241,66 @@ namespace Snowlight.Util
             set 
             { 
                 mGiftingSystemEnabled = value; 
+            }
+        }
+        public static bool NewGiftingSystem
+        {
+            get
+            {
+                return mNewGiftingSystem;
+            }
+
+            set
+            {
+                mNewGiftingSystem = value;
+            }
+        }
+        public static int GiftingSystemPrice
+        {
+            get
+            {
+                return mGiftingSystemPrice;
+            }
+
+            set
+            {
+                mGiftingSystemPrice = value;
+            }
+        }
+        public static List<uint> GiftingSystemSpriteIds
+        {
+            get
+            {
+                return mGiftingSystemSpriteIds;
+            }
+
+            set
+            {
+                mGiftingSystemSpriteIds = value;
+            }
+        }
+        public static int GiftingSystemBoxCount
+        {
+            get
+            {
+                return mGiftingSystemBoxCount;
+            }
+
+            set
+            {
+                mGiftingSystemBoxCount = value;
+            }
+        }
+        public static int GiftingSystemRibbonCount
+        {
+            get
+            {
+                return mGiftingSystemRibbonCount;
+            }
+
+            set
+            {
+                mGiftingSystemRibbonCount = value;
             }
         }
         public static InfobusStatus InfobusStatus
@@ -175,16 +326,16 @@ namespace Snowlight.Util
                 mLoginBadgeEnabled = value;
             }
         }
-        public static uint LoginBadgeId
+        public static string LoginBadgeCode
         {
             get
             {
-                return mLoginBadgeId;
+                return mLoginBadgeCode;
             }
 
             set
             {
-                mLoginBadgeId = value;
+                mLoginBadgeCode = value;
             }
         }
         public static bool MarketplaceEnabled
@@ -209,6 +360,18 @@ namespace Snowlight.Util
             set
             {
                 mMarketplaceTax = value;
+            }
+        }
+        public static bool MarketplaceTokensBuyEnabled
+        {
+            get
+            {
+                return mMarketplaceTokensBuyEnabled;
+            }
+
+            set
+            {
+                mMarketplaceTokensBuyEnabled = value;
             }
         }
         public static int MarketplaceTokensPrice
@@ -367,6 +530,18 @@ namespace Snowlight.Util
                 mModerationActionLogs = value;
             }
         }
+        public static bool ModerationConsoleChatLogs
+        {
+            get
+            {
+                return mModerationConsoleChatLogs;
+            }
+
+            set
+            {
+                mModerationConsoleChatLogs = value;
+            }
+        }
         public static bool ModerationChatLogs
         {
             get
@@ -425,6 +600,94 @@ namespace Snowlight.Util
             {
                 mMotdText = value;
             }
+        }
+        public static int NameChangeWaitDays
+        {
+            get
+            {
+                return mNameChangeWaitDays; 
+            }
+
+            set
+            {
+                mNameChangeWaitDays = value;
+            }
+        }
+
+        public static bool PetsEnabled
+        {
+            get
+            {
+                return mEnablePets;
+            }
+
+            set
+            {
+                mEnablePets = value;
+            }
+        }
+        public static bool PetScratchingAccountDaysOldEnabled
+        {
+            get
+            {
+                return mPetScratchingAccountDaysOldEnabled;
+            }
+
+            set
+            {
+                mPetScratchingAccountDaysOldEnabled = value;
+            }
+        }
+        public static int PetScratchingAccountDaysOld
+        {
+            get
+            {
+                return mPetScratchingAccountDaysOld;
+            }
+
+            set
+            {
+                mPetScratchingAccountDaysOld = value;
+            }
+        }
+        public static int NormalUserFriendListSize
+        {
+            get
+            {
+                return mNormalUserFriendListSize;
+            }
+
+            set
+            {
+                mNormalUserFriendListSize = value;
+            }
+
+        }
+        public static int HcUserFriendListSize
+        {
+            get
+            {
+                return mHcUserFriendListSize;
+            }
+
+            set
+            {
+                mHcUserFriendListSize = value;
+            }
+
+        }
+        public static int VipUserFriendListSize
+        {
+            get
+            {
+                return mVipUserFriendListSize;
+            }
+
+            set
+            {
+                mVipUserFriendListSize = value;
+            }
+
         }
         public static int WordFilterMaximumCount
         {
@@ -485,19 +748,48 @@ namespace Snowlight.Util
 
             foreach (string MotdString in Row["motd_text"].ToString().Replace("\\n", "\n").Split('|')) Motd.Add(MotdString);
 
+            List<uint> GiftSpriteIds = new List<uint>();
+
+            foreach (string SpriteId in Row["gifting_system_spriteids"].ToString().Split('|'))
+            {
+                if (uint.TryParse(SpriteId, out uint GiftSpriteId))
+                {
+                    if (!GiftSpriteIds.Contains(GiftSpriteId))
+                    {
+                        GiftSpriteIds.Add(GiftSpriteId);
+                    }
+                }
+            }
+
             ActivityPointsEnabled = (Row["activitypoints_enabled"].ToString() == "1");
+            ActivityPointsType = SeasonalCurrency.FromStringToEnum(Row["activitypoints_type"].ToString());
             MoreActivityPointsForVipUsers = (Row["more_activitypoints_for_vip_users"].ToString() == "1");
             ActivityPointsInterval = (int)Row["activitypoints_interval"];
             ActivityPointsCreditsAmount = (int)Row["activitypoints_credits_amount"];
             MoreActivityPointsCreditsAmount = (int)Row["more_activitypoints_credits_amount"];
             ActivityPointsPixelsAmount = (int)Row["activitypoints_pixels_amount"];
             MoreActivityPointsPixelsAmount = (int)Row["more_activitypoints_pixels_amount"];
+            
+            DailyRewardEnabled = (Row["daily_reward_enabled"].ToString() == "1");
+            DailyActivityPointsType = SeasonalCurrency.FromStringToEnum(Row["daily_activitypoints_type"].ToString());
+            DailyRewardActivityPointAmount = (int)Row["daily_activitypoints_amount"];
+            DailyRewardCreditsAmount = (int)Row["daily_credits_amount"]; 
+            
             GiftingSystemEnabled = (Row["gifting_system_enabled"].ToString() == "1");
+            NewGiftingSystem = (Row["new_gifting_system"].ToString() == "1");
+            GiftingSystemPrice = (int)Row["gifting_system_price"];
+            GiftingSystemSpriteIds = GiftSpriteIds;
+            GiftingSystemBoxCount = (int)Row["gifting_system_box_count"];
+            GiftingSystemRibbonCount = (int)Row["gifting_system_ribbon_count"];
+            
             InfobusStatus = Infobus_Status;
+            
             LoginBadgeEnabled = (Row["login_badge_enabled"].ToString() == "1");
-            LoginBadgeId = (uint)Row["login_badge_id"];
+            LoginBadgeCode = (string)Row["login_badge_code"];
+            
             MarketplaceEnabled = (Row["marketplace_enabled"].ToString() == "1");
             MarketplaceTax = (int)Row["marketplace_tax"];
+            MarketplaceTokensBuyEnabled = (Row["marketplace_tokens_buy_enabled"].ToString() == "1");
             MarketplaceTokensPrice = (int)Row["marketplace_tokens_price"];
             MarketplacePremiumTokens = (int)Row["marketplace_premium_tokens"];
             MarketplaceNormalTokens = (int)Row["marketplace_default_tokens"];
@@ -505,25 +797,40 @@ namespace Snowlight.Util
             MarketplaceMaxPrice = (int)Row["marketplace_max_price"];
             MarketplaceOfferTotalHours = (int)Row["marketplace_offer_hours"];
             MarketplaceAvarageDays = (int)Row["marketplace_avarage_days"];
+            
             MaxFavoritesPerUser = (int)Row["max_favorites_per_user"];
             MaxFurniPerRoom = (int)Row["max_furni_per_room"];
             MaxFurniStacking = (int)Row["max_furni_stacking"];
             MaxPetsPerRoom = (int)Row["max_pets_per_room"];
             MaxRoomsPerUser = (int)Row["max_rooms_per_user"];
+            
             ModerationActionLogs = (Row["moderation_actionlogs_enabled"].ToString() == "1");
             ModerationChatLogs = (Row["moderation_chatlogs_enabled"].ToString() == "1");
+            ModerationConsoleChatLogs = (Row["moderation_console_chatlogs_enabled"].ToString() == "1");
             ModerationRoomLogs = (Row["moderation_roomlogs_enabled"].ToString() == "1");
+            
             MotdEnabled = (Row["motd_enabled"].ToString() == "1");
             MotdType = Motd_Type;
             MotdText = Motd;
+            
+            NameChangeWaitDays = (int)Row["name_change_wait_days"];
+            
+            PetsEnabled = (Row["enable_pets"].ToString() == "1");
+            PetScratchingAccountDaysOldEnabled = (Row["pet_scratching_account_days_old_enabled"].ToString() == "1");
+            PetScratchingAccountDaysOld = (int)Row["pet_scratching_account_days_old"];
+            
+            NormalUserFriendListSize = (int)Row["normal_user_friend_list_size"];
+            HcUserFriendListSize = (int)Row["hc_user_friend_list_size"];
+            VipUserFriendListSize = (int)Row["vip_user_friend_list_size"];
+            
             WordFilterMaximumCount = (int)Row["wordfilter_maximum_count"];
             WordFilterTimeToMute = (int)Row["wordfilter_time_muted"];
         }
 
-        public static void UpdateInfobusStatus(SqlDatabaseClient MySql)
+        public static void UpdateInfobusStatus(SqlDatabaseClient MySqlClient)
         {
-            MySql.SetParameter("infobus_status", InfobusStatus.ToString().ToLower());
-            MySql.ExecuteNonQuery("UPDATE server_settings SET infobus_status = @infobus_status");
+            MySqlClient.SetParameter("infobus_status", InfobusStatus.ToString().ToLower());
+            MySqlClient.ExecuteNonQuery("UPDATE server_settings SET infobus_status = @infobus_status");
         }
     }
 }

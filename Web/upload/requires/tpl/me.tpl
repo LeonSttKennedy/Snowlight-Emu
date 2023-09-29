@@ -25,7 +25,7 @@ padding: 4px 10px 6px 10px;
 </div>
 <div class="right" style="margin-top: 20px; width: 35%; font-size: 110%;">
 <a style="font-size: 150%;" href="client.php" onclick="window.open('client.php', 'client', 'width=1100,height=700,location=false,status=false,menubar=false,directories=false,toolbar=false,resizable=true,scrollbars=false'); return false;">Enter &raquo;</a>
-<p><img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_credits.png" style="margin-right: 5px;" /><?php GetUserInfo($_SESSION['id'], "credits_balance"); ?>&nbsp;&nbsp;<img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_ap.png" style="margin-left: 5px; margin-right: 5px;" /><?php GetUserInfo($_SESSION['id'], "activity_points_balance"); ?></p>
+<p><img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_credits.png" style="margin-right: 5px;" /><?php GetUserInfo($_SESSION['id'], "credits_balance"); ?>&nbsp;&nbsp;<img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_ap.png" style="margin-left: 5px; margin-right: 5px;" /><?php Users::GetActivityPointsValue($_SESSION['id'], 0); ?></p>
 </div>
 <div class="clear">
 </div>

@@ -6,6 +6,7 @@ using Snowlight.Game.Rooms;
 using Snowlight.Specialized;
 using Snowlight.Storage;
 using Snowlight.Game.Misc;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 {
@@ -65,7 +66,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     if (Item.DisplayFlags != "0")
                     {
                         Item.DisplayFlags = "0";
-                        Item.BroadcastStateUpdate(Instance);
+                        Instance.BroadcastMessage(OneWayGateStatusComposer.Compose(Item.Id, Item.DisplayFlags.Equals("1")));
                     }
 
                     foreach (uint ActorId in Item.TemporaryInteractionReferenceIds.Values)
@@ -99,7 +100,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     if (Item.TemporaryInteractionReferenceIds.Count == 0 && Instance.IsValidStep(Item.RoomPosition.GetVector2(),
                         Item.SquareBehind, true) && Item.DisplayFlags == "0")
                     {
-                        Actor.BlockWalking();
+                        //Actor.BlockWalking();
                         Actor.MoveTo(Item.RoomPosition.GetVector2(), true, true, true);
                         Item.TemporaryInteractionReferenceIds.Add(1, Actor.Id);
                         Item.RequestUpdate(1);
@@ -108,7 +109,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     break;
 
                 case ItemEventType.UpdateTick:
-
+                    
                     RoomActor UpdateActor = null;
 
                     if (Item.TemporaryInteractionReferenceIds.ContainsKey(1))
@@ -124,7 +125,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         if (Item.DisplayFlags != "0")
                         {
                             Item.DisplayFlags = "0";
-                            Item.BroadcastStateUpdate(Instance);
+                            Instance.BroadcastMessage(OneWayGateStatusComposer.Compose(Item.Id, Item.DisplayFlags.Equals("1")));
                         }
 
                         if (Item.TemporaryInteractionReferenceIds.Count > 0)
@@ -141,11 +142,13 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     }
 
                     Item.DisplayFlags = "1";
-                    Item.BroadcastStateUpdate(Instance);
+                    Instance.BroadcastMessage(OneWayGateStatusComposer.Compose(Item.Id, Item.DisplayFlags.Equals("1")));
 
+                    UpdateActor.OverrideClipping = !UpdateActor.OverrideClipping;
                     UpdateActor.MoveTo(Item.SquareBehind, true, true, true);
-
+                    
                     Item.RequestUpdate(2);
+                    UpdateActor.OverrideClipping = !UpdateActor.OverrideClipping;
                     break;
             }
 

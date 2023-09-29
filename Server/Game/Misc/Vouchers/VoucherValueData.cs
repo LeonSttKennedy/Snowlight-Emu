@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Snowlight.Util;
+using System;
 using System.Collections.Generic;
 
 namespace Snowlight.Game.Misc
@@ -6,7 +7,8 @@ namespace Snowlight.Game.Misc
     public class VoucherValueData
     {
         private int mValueCredits;
-        private int mValuePixels;
+        private int mValueActivityPoints;
+        private SeasonalCurrencyList mSeasonalCurrency;
         private List<uint> mValueFurni;
 
         public int ValueCredits
@@ -17,14 +19,20 @@ namespace Snowlight.Game.Misc
             }
         }
 
-        public int ValuePixels
+        public int ValueActivityPoints
         {
             get
             {
-                return mValuePixels;
+                return mValueActivityPoints;
             }
         }
-
+        public SeasonalCurrencyList SeasonalCurrency
+        {
+            get
+            {
+                return mSeasonalCurrency;
+            }
+        }
         public List<uint> ValueFurni
         {
             get
@@ -33,10 +41,11 @@ namespace Snowlight.Game.Misc
             }
         }
 
-        public VoucherValueData(int ValueCredits, int ValuePixels, List<uint> ValueFurni)
+        public VoucherValueData(int ValueCredits, int ValueActivityPoints, SeasonalCurrencyList SeasonalCurrency, List<uint> ValueFurni)
         {
             mValueCredits = ValueCredits;
-            mValuePixels = ValuePixels;
+            mValueActivityPoints = ValueActivityPoints;
+            mSeasonalCurrency = SeasonalCurrency;
             mValueFurni = ValueFurni;
         }
     }

@@ -131,7 +131,7 @@ namespace Snowlight.Game.Pathfinding
                     Tmp = Current.Position + (diag ? MovePoints[i] : NoDiagMovePoints[i]);
                     bool IsFinalMove = (Tmp.X == end.X && Tmp.Y == end.Y); // are we at the final position?
 
-                    if (mCurrentInstance.IsValidStep(new Vector2(Current.Position.X, Current.Position.Y), Tmp, IsFinalMove, Actor.OverrideClipping, new List<RoomActor>[map.Heightmap.SizeX, map.Heightmap.SizeY])) // need to set the from positions
+                    if (mCurrentInstance.IsValidStep(new Vector2(Current.Position.X, Current.Position.Y), Tmp, IsFinalMove, Actor.OverrideClipping)) // need to set the from positions
                     {
                         if (Map[Tmp.X, Tmp.Y] == null)
                         {

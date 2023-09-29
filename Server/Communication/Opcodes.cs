@@ -302,6 +302,7 @@ namespace Snowlight.Communication
         public const uint INIT_CRYPTO = 206;
         public const uint ROOM_GET_CAMPAIGNS = 215;
         public const uint GET_MUSIC_DATA = 221;
+        public const uint MESSENGER_PENDING_REQUESTS = 233;
         public const uint SYNC_MUSIC = 249;
         public const uint JUKEBOX_PLAYLIST_ADD = 255;
         public const uint JUKEBOX_PLAYLIST_REMOVE = 256;

@@ -9,6 +9,7 @@ if (!HK_LOGGED_IN || !$GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hotel_
 {
 	exit;
 }
+$currenciesarray = array('pixels','snowflakes','hearts','giftpoints','shells');
 
 if(isset($_GET["update"]))
 {
@@ -48,6 +49,9 @@ $motdtext = explode("|", GetServerSettings(motd_text));
 				<h2 style="margin: 0;">Activity Points</h2><br />
 				<p style="margin: 5px 0 0 5px;">
 					<input type="checkbox" name="activitypointsenabled" <?php echo (GetServerSettings(activitypoints_enabled) == "1" ? 'checked="on"' : ''); ?> />&nbsp;&nbsp;Users <?php echo (GetServerSettings(activitypoints_enabled) == "1" ? '' : 'do not'); ?> will win bonuses while logged in.
+				</p>
+				<p style="margin: 5px 0 5px 5px;">
+					Type:<br /><select name="activitypointstype"><?php foreach($currenciesarray as $string) { echo '<option value="' . $string . '" ' . ((GetServerSettings(activitypoints_type) == $string) ? 'selected' : '') . '>' . ucfirst($string) . '</option>'; }?></select>
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
 					Interval (in Min):<br /><input type="number" name="activitypointsinterval" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_interval) / 60; ?>" />

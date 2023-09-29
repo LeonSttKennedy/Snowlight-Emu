@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using Snowlight.Game.Pathfinding;
 using Snowlight.Game.Misc;
 using Snowlight.Util;
+using Snowlight.Game.Sessions;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Bots.Behavior
 {
@@ -33,9 +35,9 @@ namespace Snowlight.Game.Bots.Behavior
             }
         }
 
-        public override void Initialize(Bot BotReference)
+        public override void Initialize(Bot Bot)
         {
-            mSelfBot = BotReference;
+            mSelfBot = Bot;
         }
 
         public override void OnSelfEnterRoom(RoomInstance Instance)
@@ -84,7 +86,22 @@ namespace Snowlight.Game.Bots.Behavior
 
             if (Response != null)
             {
-                mSelfActor.Chat(Response.GetResponse(), false);
+                switch (Response.ResponseMode)
+                {
+                    default:
+                    case ChatType.Say:
+                    case ChatType.Shout:
+
+                        bool mActorBotShout = Response.ResponseMode == ChatType.Shout;
+                        mSelfActor.Chat(Response.GetResponse(), mActorBotShout);
+                        break;
+
+                    case ChatType.Whisper:
+
+                        mSelfActor.Whisper(Response.GetResponse(), Actor.ReferenceId);
+                        break;
+
+                }
 
                 if (Response.ResponseServeId > 0)
                 {
@@ -133,11 +150,12 @@ namespace Snowlight.Game.Bots.Behavior
         {
             if (mNextSpeechAttempt <= 0)
             {
-                string Message = BotManager.GetRandomSpeechForBotDefinition(mSelfBot.DefinitionId);
+                BotRandomSpeech RandomSpeech = BotManager.GetRandomSpeechForBotDefinition(mSelfBot.DefinitionId);
 
-                if (Message != null && Message.Length > 0)
+                if (RandomSpeech != null && RandomSpeech.Message.Length > 0)
                 {
-                    mSelfActor.Chat(Message);
+                    bool Shout = RandomSpeech.MessageMode == ChatType.Shout;
+                    mSelfActor.Chat(RandomSpeech.Message, Shout);
                 }
 
                 mNextSpeechAttempt = RandomGenerator.GetNext(0, 255);

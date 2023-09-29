@@ -5,7 +5,7 @@ if (!defined('IN_HK') || !IN_HK)
 	exit;
 }
 
-if (!HK_LOGGED_IN || !$users->hasFuse(HK_USER_ID, 'fuse_housekeeping_catalog'))
+if (!HK_LOGGED_IN || !$GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hk_catalog'))
 {
 	exit;
 }
@@ -14,17 +14,17 @@ require_once "top.php";
 
 echo '<h1>New furni finder</h1>';
 echo '<p>This tool will scan Habbo UK\'s furni data file for furniture that is missing from our defs.</p><br />';
-echo '<p><a href="http://hotel-uk.habbo.com/gamedata/furnidata?hash=x">http://hotel-uk.habbo.com/gamedata/furnidata?hash=x</a></p><br />';
+echo '<p><a href="' . CLIENT_BASE . '/furnidata.txt">' . CLIENT_BASE . '/furnidata.txt</a></p><br />';
 
 $whatWeKnow = Array();
-$getWhatWeKnow = dbquery("SELECT item_name FROM furniture");
+$getWhatWeKnow = mysql_query("SELECT name FROM item_definitions");
 
 while ($g = mysql_fetch_assoc($getWhatWeKnow))
 {
-	$whatWeKnow[] = $g['item_name'];
+	$whatWeKnow[] = $g['name'];
 }
 
-$data = file_get_contents("http://hotel-uk.habbo.com/gamedata/furnidata?hash=x");
+$data = file_get_contents(CLIENT_BASE . "/furnidata.txt");
 $data = str_replace("\n", "", $data);
 $data = str_replace("[[", "[", $data);
 $data = str_replace("]]", "]", $data);

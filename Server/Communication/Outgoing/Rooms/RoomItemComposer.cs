@@ -20,7 +20,7 @@ namespace Snowlight.Communication.Outgoing
             {
                 string[] CurrentFlags = Item.DisplayFlags.Split('|');
 
-                if (CurrentFlags.Length > 0)
+                if (CurrentFlags.Length > 1)
                 {
                     ItemFlags = CurrentFlags[0];
                     if (Item.Definition.BehaviorData == 2)

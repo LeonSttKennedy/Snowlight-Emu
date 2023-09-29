@@ -12,6 +12,7 @@ using Snowlight.Game.Rooms.Events;
 using System.Collections.ObjectModel;
 using Snowlight.Game.Music;
 using Snowlight.Game.Rooms.Trading;
+using Snowlight.Game.Items.Wired;
 
 namespace Snowlight.Game.Rooms
 {
@@ -30,6 +31,7 @@ namespace Snowlight.Game.Rooms
         private RoomMusicController mMusicController;
         private Dictionary<uint, uint> mTemporaryStickieRights;
         private TradeManager mTradeManager;
+        private WiredManager mWiredManager;
 
         public RoomMusicController MusicController
         {
@@ -76,6 +78,13 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public WiredManager WiredManager
+        {
+            get
+            {
+                return mWiredManager;
+            }
+        }
         public void PickAllToUserInventory(Session Session)
         {
             List<Item> Copy = new List<Item>();

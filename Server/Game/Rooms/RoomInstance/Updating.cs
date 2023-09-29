@@ -9,7 +9,9 @@ using Snowlight.Game.Items;
 using Snowlight.Game.Pathfinding;
 using Snowlight.Game.Bots;
 using Snowlight.Game.Achievements;
+using Snowlight.Game.Quests;
 using Snowlight.Util;
+using Snowlight.Game.Items.Wired;
 
 namespace Snowlight.Game.Rooms
 {
@@ -153,6 +155,32 @@ namespace Snowlight.Game.Rooms
                         Actor.BodyRotation = Rotation.Calculate(Actor.Position.GetVector2(), NextStep, Actor.MoonWalkEnabled);
                         Actor.HeadRotation = Actor.BodyRotation;
 
+                        uint WiredId = mWiredManager.GetRegisteredWalkItem(mFurniMap[NextStep.X, NextStep.Y]);
+
+                        Item Wired = GetItem(WiredId);
+                        
+                        if (Wired != null && Wired.Definition.Behavior == ItemBehavior.WiredTrigger)
+                        {
+                            if (WiredTypesUtil.TriggerFromInt(Wired.Definition.BehaviorData) == WiredTriggerTypes.walks_on_furni && Actor.FurniOnId != mFurniMap[NextStep.X, NextStep.Y])
+                            {
+                                mWiredManager.ExecuteActions(Wired, Actor);
+                            }
+                        }
+
+                        WiredId = mWiredManager.GetRegisteredWalkItem(mFurniMap[Actor.Position.X, Actor.Position.Y]);
+
+                        Wired = GetItem(WiredId);
+
+                        if (Wired != null && Wired.Definition.Behavior == ItemBehavior.WiredTrigger)
+                        {
+                            if (WiredTypesUtil.TriggerFromInt(Wired.Definition.BehaviorData) == WiredTriggerTypes.walks_off_furni && Actor.FurniOnId != mFurniMap[NextStep.X, NextStep.Y])
+                            {
+                                mWiredManager.ExecuteActions(Wired, Actor);
+                            }
+                        }
+
+                        Actor.FurniOnId = mFurniMap[NextStep.X, NextStep.Y];
+
                         // Request update for next @B cycle
                         Actor.UpdateNeeded = true;
                     }
@@ -177,6 +205,14 @@ namespace Snowlight.Game.Rooms
                     }
 
                     NewUserGrid[Actor.Position.X, Actor.Position.Y].Add(Actor);
+                }
+
+                // Platform user updating
+                double FloorHeight = GetUserStepHeight(Actor.Position.GetVector2());
+                if(!Actor.IsMoving && Actor.Position.Z != FloorHeight)
+                {
+                    Actor.Position.Z = FloorHeight;
+                    Actor.UpdateNeeded = true;
                 }
 
                 // If the actor is leaving and has stopped walking, help them out by removing them.
@@ -236,7 +272,7 @@ namespace Snowlight.Game.Rooms
 
             lock (mItemSyncRoot)
             {
-               ItemCopy = mItems.Values.ToList();
+                ItemCopy = mItems.Values.ToList();
             }
 
             foreach (Item Item in ItemCopy)
@@ -283,6 +319,12 @@ namespace Snowlight.Game.Rooms
                 {
                     case RoomTriggerList.ROLLER:
 
+                        if (Actor.IsMoving)
+                        {
+                            Actor.RemoveStatus("mv");
+                            Actor.Pathfinder.Clear();
+                        }
+
                         Actor.MoveTo(Action.ToRoomPosition.GetVector2());
 
                         Vector2 NextStep = Actor.GetNextStep();
@@ -300,7 +342,7 @@ namespace Snowlight.Game.Rooms
                         break;
 
                     case RoomTriggerList.TELEPORT:
-                        
+
                         if (Actor.Type != RoomActorType.UserCharacter) break;
 
                         if (Action.ToRoomId == Session.CurrentRoomId || Action.ToRoomId == 0)
@@ -311,21 +353,24 @@ namespace Snowlight.Game.Rooms
                         }
                         else if (Action.ToRoomId != Session.CurrentRoomId)
                         {
-                            if (Instance == null) break;
+                            if (!Actor.IsMoving && Actor.Pathfinder.IsCompleted)
+                            {
+                                if (Instance == null) break;
 
-                            Actor.BlockWalking();
+                                Actor.BlockWalking();
 
-                            RoomInfo Info = RoomInfoLoader.GetRoomInfo(Action.ToRoomId);
+                                RoomInfo Info = RoomInfoLoader.GetRoomInfo(Action.ToRoomId);
 
-                            Session.IsTeleporting = true;
-                            Session.TriggerTeleporterId = Action.Id;
+                                Session.IsTeleporting = true;
+                                Session.TriggerTeleporterId = Action.Id;
 
-                            Session.SendData(MessengerFollowResultComposer.Compose(Info));
+                                Session.SendData(MessengerFollowResultComposer.Compose(Info));
+                            }
                         }
                         break;
 
                     case RoomTriggerList.INFOBUSDOOR:
-                        
+
                         if (ServerSettings.InfobusStatus == InfobusStatus.Open)
                         {
                             goto case RoomTriggerList.TELEPORT;
@@ -356,7 +401,9 @@ namespace Snowlight.Game.Rooms
             if (Effect.Type == RoomTileEffectType.Sit && !CurrentStatusses.ContainsKey("mv"))
             {
                 string OldStatus = (CurrentStatusses.ContainsKey("sit") ? CurrentStatusses["sit"] : string.Empty);
-                string NewStatus = Math.Round(Effect.InteractionHeight, 1).ToString().Replace(',', '.');
+                string NewStatus = Actor.Type == RoomActorType.AiBot && ((Bot)Actor.ReferenceObject).PetData != null ? 
+                    Math.Round(Effect.InteractionHeight / 2, 1).ToString().Replace(',', '.') : 
+                    Math.Round(Effect.InteractionHeight, 1).ToString().Replace(',', '.');
 
                 if (Actor.BodyRotation != Effect.Rotation)
                 {
@@ -371,12 +418,12 @@ namespace Snowlight.Game.Rooms
                     Actor.UpdateNeeded = true;
                 }
             }
-            else if (CurrentStatusses.ContainsKey("sit") && !Actor.IsSitting)
+            else if (CurrentStatusses.ContainsKey("sit") && (Actor.Type == RoomActorType.UserCharacter && !Actor.IsSitting))
             {
                 Actor.RemoveStatus("sit");
                 Actor.UpdateNeeded = true;
             }
-
+        
             if (Effect.Type == RoomTileEffectType.Lay && !CurrentStatusses.ContainsKey("mv"))
             {
                 string OldStatus = (CurrentStatusses.ContainsKey("lay") ? CurrentStatusses["lay"] : string.Empty);
@@ -395,7 +442,7 @@ namespace Snowlight.Game.Rooms
                     Actor.UpdateNeeded = true;
                 }
             }
-            else if (CurrentStatusses.ContainsKey("lay"))
+            else if (CurrentStatusses.ContainsKey("lay") && (Actor.Type == RoomActorType.UserCharacter))
             {
                 Actor.RemoveStatus("lay");
                 Actor.UpdateNeeded = true;
@@ -434,13 +481,19 @@ namespace Snowlight.Game.Rooms
                 Actor.ApplyEffect(ClearEffect, true, true);
             }
 
-            if (Actor.Type == RoomActorType.UserCharacter && Effect.QuestData > 0)
+            if (Actor.Type == RoomActorType.UserCharacter && (Effect.QuestData > 0 || Effect.QuestBehavior > ItemBehavior.None))
             {
                 Session SessionObject = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                 if (SessionObject != null)
                 {
-                    QuestManager.ProgressUserQuest(SessionObject, QuestType.EXPLORE_FIND_ITEM, Effect.QuestData);
+                    QuestType Type = Effect.QuestBehavior > ItemBehavior.None ?
+                        QuestType.EXPLORE_FIND_ITEM_BEHAVIOR : QuestType.EXPLORE_FIND_SPECIFIC_ITEM;
+
+                    uint Data = Effect.QuestBehavior > ItemBehavior.None ?
+                        (uint)Effect.QuestBehavior : Effect.QuestData;
+
+                    QuestManager.ProgressUserQuest(SessionObject, Type, Data);
                 }
             } 
         }

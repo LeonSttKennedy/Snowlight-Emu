@@ -7,7 +7,7 @@ namespace Snowlight.Communication.Outgoing
     {
         public static ServerMessage Compose(uint DisplayId, Pet Pet)
         {
-            ServerMessage Message = new ServerMessage(OpcodesOut.ROOM_PET_UPDATE);
+            ServerMessage Message = new ServerMessage(OpcodesOut.ROOM_PET_ADD_EXPERIENCE);
             Message.AppendInt32(9);
             Message.AppendUInt32(DisplayId);
             Message.AppendUInt32(DisplayId);

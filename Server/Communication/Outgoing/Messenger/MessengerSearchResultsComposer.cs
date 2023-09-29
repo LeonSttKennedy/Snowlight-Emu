@@ -24,7 +24,8 @@ namespace Snowlight.Communication.Outgoing
                 Message.AppendBoolean(Info.HasLinkedSession);
                 Message.AppendBoolean(FriendSession != null ? FriendSession.InRoom : false);
                 Message.AppendStringWithBreak(string.Empty);
-                Message.AppendBoolean(true);
+                Message.AppendInt32((int)Info.Gender);
+                //Message.AppendBoolean(true);
                 Message.AppendStringWithBreak(Info.HasLinkedSession ? Info.Figure : string.Empty);
 
                 if (Info.HasLinkedSession)
@@ -44,13 +45,17 @@ namespace Snowlight.Communication.Outgoing
 
             foreach (CharacterInfo Info in NonFriends)
             {
+                Session NonFriendSession = SessionManager.GetSessionByCharacterId(Info.Id);
+
                 Message.AppendUInt32(Info.Id);
                 Message.AppendStringWithBreak(Info.Username);
                 Message.AppendStringWithBreak(Info.Motto);
                 Message.AppendBoolean(Info.HasLinkedSession);
-                Message.AppendBoolean(false); // TODO: InRoom (really needed here??)
+                Message.AppendBoolean(NonFriendSession != null ? NonFriendSession.InRoom : false);
+                //Message.AppendBoolean(false); // TODO: InRoom (really needed here??)
                 Message.AppendStringWithBreak(string.Empty);
-                Message.AppendBoolean(false);
+                Message.AppendInt32((int)Info.Gender);
+                //Message.AppendBoolean(true);
                 Message.AppendStringWithBreak(Info.HasLinkedSession ? Info.Figure : string.Empty);
 
                 if (Info.HasLinkedSession)

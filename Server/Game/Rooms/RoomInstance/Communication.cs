@@ -5,6 +5,12 @@ using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Bots;
+using Snowlight.Util;
+using Snowlight.Game.Achievements;
+using Snowlight.Game.Rights;
+using Snowlight.Storage;
+using Snowlight.Game.Advertisements;
+using System.Linq;
 
 namespace Snowlight.Game.Rooms
 {
@@ -135,10 +141,15 @@ namespace Snowlight.Game.Rooms
             }
 
             Session.SendData(RoomUserObjectListComposer.Compose(ActorObjects));
-            Session.SendData(RoomStaticObjectsComposer.Compose(mStaticObjects));
+            Session.SendData(RoomStaticObjectsComposer.Compose(this, mStaticObjects));
             Session.SendData(RoomFloorObjectsComposer.Compose(GetFloorItems()));
             Session.SendData(RoomWallObjectsComposer.Compose(GetWallItems()));
             Session.SendData(RoomUserStatusListComposer.Compose(ActorObjects));
+
+            if(Info.ModelName.Equals("park_a") && ServerSettings.InfobusStatus == InfobusStatus.Open)
+            {
+                Session.SendData(ParkInfobusDoorComposer.Compose((int)ServerSettings.InfobusStatus));
+            }
 
             foreach (KeyValuePair<uint, int> DancingActor in DancingActors)
             {
