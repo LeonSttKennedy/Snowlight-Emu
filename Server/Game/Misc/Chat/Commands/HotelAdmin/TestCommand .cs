@@ -14,6 +14,7 @@ using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Game.Advertisements;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Items;
 
 namespace Snowlight.Game.Misc
 {

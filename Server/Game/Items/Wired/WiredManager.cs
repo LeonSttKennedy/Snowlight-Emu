@@ -53,7 +53,7 @@ namespace Snowlight.Game.Items.Wired
         has_furni_on = 7
     }
 
-    public enum WiredExtraTypes
+    public enum WiredAddonTypes
     {
         random = 0, // ??
         unseen = 0  // ??
@@ -174,6 +174,21 @@ namespace Snowlight.Game.Items.Wired
 
                     return WiredConditionTypes.has_furni_on;
 
+            }
+        }
+
+        public static WiredAddonTypes AddonFromInt(int Type) 
+        {
+            switch(Type) 
+            {
+                default:
+                case 0:
+
+                    return WiredAddonTypes.unseen;
+
+                case 1:
+
+                    return WiredAddonTypes.random;
             }
         }
     }
@@ -595,6 +610,7 @@ namespace Snowlight.Game.Items.Wired
             try
             {
                 Random rnd = new Random();
+                
                 foreach (Item ActionItem in mInstance.GetItemsOnPosition(Item.RoomPosition.GetVector2()))
                 {
                     if (ActionItem.Definition.Behavior == ItemBehavior.WiredEffect)
@@ -1041,5 +1057,9 @@ namespace Snowlight.Game.Items.Wired
             }
         }
 
+        private List<Item> ItemsOnPosition(Vector3 Position)
+        {
+            return mInstance.GetItemsOnPosition(Position.GetVector2()).ToList();
+        }
     }
 }

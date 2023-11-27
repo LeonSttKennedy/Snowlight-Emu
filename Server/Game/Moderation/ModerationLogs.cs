@@ -14,9 +14,15 @@ using Microsoft.VisualBasic.ApplicationServices;
 
 namespace Snowlight.Game.Moderation
 {
+    public enum MessageType
+    {
+        Invite = 0,
+        Message = 1
+    }
+
     public static class ModerationLogs
     {
-        public static void LogConsoleChatMessage(SqlDatabaseClient MySqlClient, uint FromUserId, uint ToUserId, string Message)
+        public static void LogConsoleChatMessage(SqlDatabaseClient MySqlClient, uint FromUserId, uint ToUserId, MessageType MessageType, string Message)
         {
             if (!ServerSettings.ModerationConsoleChatLogs)
             {
@@ -25,9 +31,10 @@ namespace Snowlight.Game.Moderation
 
             MySqlClient.SetParameter("fromuserid", FromUserId);
             MySqlClient.SetParameter("touserid", ToUserId);
+            MySqlClient.SetParameter("messagetype", MessageType.ToString().ToLower());
             MySqlClient.SetParameter("message", Message);
             MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
-            MySqlClient.ExecuteNonQuery("INSERT INTO moderation_chatlogs_console (from_user_id,to_user_id,message,timestamp) VALUES (@fromuserid,@touserid,@message,@timestamp)");
+            MySqlClient.ExecuteNonQuery("INSERT INTO moderation_chatlogs_console (from_user_id,to_user_id,type,message,timestamp) VALUES (@fromuserid,@touserid,@messagetype,@message,@timestamp)");
         }
 
         public static void LogChatMessage(SqlDatabaseClient MySqlClient, uint UserId, uint RoomId, string Message)

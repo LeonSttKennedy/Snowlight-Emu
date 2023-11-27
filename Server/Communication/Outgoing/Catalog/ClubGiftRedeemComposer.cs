@@ -14,7 +14,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendUInt32(Gift.Definition.SpriteId);
             Message.AppendStringWithBreak("");
             Message.AppendBoolean(Gift.IsVip);
-            Message.AppendBoolean(false); // canselect :D
+            Message.AppendBoolean(false);
             return Message;
         }
     }

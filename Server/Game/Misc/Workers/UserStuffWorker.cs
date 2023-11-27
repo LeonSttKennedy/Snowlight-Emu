@@ -86,14 +86,11 @@ namespace Snowlight.Game.Misc
                                     Session.SendData(UserObjectComposer.Compose(Session));
                                 }
 
-                                Session.SubscriptionManager.UpdateGiftPoints(true);
+                                Session.SubscriptionManager.AddGiftPoints(true);
                                 #endregion
 
                                 #region Delivery Activity Points and Credits
-                                if (ServerSettings.ActivityPointsEnabled)
-                                {
-                                    DeliveryStuff(Session, MySqlClient);
-                                }
+                                DeliveryStuff(Session, MySqlClient);
                                 #endregion
 
                                 #region Delivery Some ACH FROM HERE
@@ -120,36 +117,98 @@ namespace Snowlight.Game.Misc
         #region Activity Points and Credits
         private static void DeliveryStuff(Session Session, SqlDatabaseClient MySqlClient)
         {
-            TimeSpan TS = UnixTimestamp.ElapsedTime(Session.CharacterInfo.TimeSinceLastActivityPointsUpdate);
+            TimeSpan TS = UnixTimestamp.ElapsedTime(Session.CharacterInfo.LastActivityPointsUpdate);
+            TimeSpan TSLastLogin = UnixTimestamp.ElapsedTime(Session.CharacterInfo.TimestampLastOnline);
 
-            int CreditsAmount = ServerSettings.ActivityPointsCreditsAmount;
-            int ActivityPointsAmount = ServerSettings.ActivityPointsPixelsAmount;
+            int CreditsAmount = 0;
+            Dictionary<SeasonalCurrencyList, int> ActivityPointsToDelivery = new Dictionary<SeasonalCurrencyList, int>();
 
-            if (ServerSettings.MoreActivityPointsForVipUsers && Session.HasRight("club_vip"))
+            #region Daily login reward
+            if (ServerSettings.DailyRewardEnabled && !Session.CharacterInfo.ReceivedDailyReward)
             {
-                CreditsAmount += ServerSettings.MoreActivityPointsCreditsAmount;
-                ActivityPointsAmount += ServerSettings.MoreActivityPointsPixelsAmount;
-            }
-
-            if (Session.InRoom && TS.TotalMinutes >= ServerSettings.ActivityPointsInterval)
-            {
-                if (CreditsAmount > 0)
+                if (Session.InRoom && TSLastLogin.TotalMinutes >= ServerSettings.DailyRewardWaitTime)
                 {
-                    Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, CreditsAmount);
-                    Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                }
-
-                if (ActivityPointsAmount > 0)
-                {
-                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, ServerSettings.ActivityPointsType, ActivityPointsAmount);
-                    if (ServerSettings.ActivityPointsType == SeasonalCurrencyList.Pixels)
+                    if (ServerSettings.DailyRewardCreditsAmount > 0)
                     {
-                        Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0], ActivityPointsAmount));
+                        CreditsAmount += ServerSettings.DailyRewardCreditsAmount;
                     }
-                    Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
+
+                    if (ServerSettings.DailyRewardActivityPointAmount > 0)
+                    {
+                        if (ActivityPointsToDelivery.ContainsKey(ServerSettings.ActivityPointsType))
+                        {
+                            ActivityPointsToDelivery[ServerSettings.DailyActivityPointsType] += ServerSettings.DailyRewardActivityPointAmount;
+                        }
+                        else
+                        {
+                            ActivityPointsToDelivery.Add(ServerSettings.DailyActivityPointsType, ServerSettings.DailyRewardActivityPointAmount);
+                        }
+                    }
+
+                    Session.CharacterInfo.ReceivedDailyReward = true;
+                    Session.CharacterInfo.UpdateReceivedDailyReward(MySqlClient);
+                }
+            }
+            #endregion
+
+            #region Activity points reward
+            if (ServerSettings.ActivityPointsEnabled)
+            {
+                if (Session.InRoom && TS.TotalMinutes >= ServerSettings.ActivityPointsInterval)
+                {
+                    if (ServerSettings.ActivityPointsCreditsAmount > 0)
+                    {
+                        CreditsAmount += ServerSettings.ActivityPointsCreditsAmount;
+                    }
+
+                    if (ServerSettings.ActivityPointsAmount > 0)
+                    {
+                        if (ActivityPointsToDelivery.ContainsKey(ServerSettings.ActivityPointsType))
+                        {
+                            ActivityPointsToDelivery[ServerSettings.ActivityPointsType] += ServerSettings.ActivityPointsAmount;
+                        }
+                        else
+                        {
+                            ActivityPointsToDelivery.Add(ServerSettings.ActivityPointsType, ServerSettings.ActivityPointsAmount);
+                        }
+                    }
+
+                    if (ServerSettings.MoreActivityPointsForVipUsers && Session.HasRight("club_vip"))
+                    {
+                        CreditsAmount += ServerSettings.MoreActivityPointsCreditsAmount;
+
+                        if (ActivityPointsToDelivery.ContainsKey(ServerSettings.ActivityPointsType))
+                        {
+                            ActivityPointsToDelivery[ServerSettings.ActivityPointsType] += ServerSettings.MoreActivityPointsAmount;
+                        }
+                        else
+                        {
+                            ActivityPointsToDelivery.Add(ServerSettings.ActivityPointsType, ServerSettings.MoreActivityPointsAmount);
+                        }
+                    }
                 }
 
                 Session.CharacterInfo.SetLastActivityPointsUpdate(MySqlClient);
+            }
+            #endregion
+
+            if (CreditsAmount > 0)
+            {
+                Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, CreditsAmount);
+                Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
+            }
+
+            if (ActivityPointsToDelivery.Count > 0)
+            {
+                foreach (KeyValuePair<SeasonalCurrencyList, int> Ap in ActivityPointsToDelivery)
+                {
+                    Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, Ap.Key, Ap.Value);
+                    if (Ap.Key == SeasonalCurrencyList.Pixels)
+                    {
+                        Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0], Ap.Value));
+                    }
+                    Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
+                }
             }
         }
         #endregion

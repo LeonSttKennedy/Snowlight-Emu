@@ -7,10 +7,11 @@ using System.Collections.Generic;
 
 using Snowlight.Storage;
 using Snowlight.Game.Achievements;
+using Snowlight.Game.Quests;
 
 namespace Snowlight.Game.Catalog
 {
-    public static class CatalogStuffWorker
+    public static class DailyStuffWorker
     {
         private static Thread mWorkerThread;
         private static DateTime mCurrentDay;
@@ -59,7 +60,8 @@ namespace Snowlight.Game.Catalog
                     {
                         if (CurrentDay != DateTime.Today)
                         {
-                            CatalogManager.RefreshCatalogData(MySqlClient, false);
+                            CatalogManager.RefreshCatalogData(MySqlClient, true);
+                            QuestManager.ReloadQuests(MySqlClient);
                             CurrentDay = DateTime.Today;
                         }
                     }

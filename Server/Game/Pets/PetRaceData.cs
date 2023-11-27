@@ -4,44 +4,39 @@ namespace Snowlight.Game.Pets
 {
     public class PetRaceData
     {
-        private int mData1;
-        private int mData2;
-        private int mData3;
+        private int mBreed;
+        private bool mSellable;
+        private bool mIsRare;
 
-        public int Data1
+        public int Breed
         {
             get
             {
-                return mData1;
+                return mBreed;
             }
         }
 
-        public int Data2
+        public bool Sellable
         {
             get
             {
-                return mData2;
+                return mSellable;
             }
         }
 
-        public int Data3
+        public bool IsRare
         {
             get
             {
-                return mData3;
+                return mIsRare;
             }
         }
 
-        public PetRaceData(int Data1, int Data2, int Data3)
+        public PetRaceData(int Breed, bool Sellable, bool IsRare)
         {
-            mData1 = Data1;
-            mData2 = Data2;
-            mData3 = Data3;
-        }
-
-        public override string ToString()
-        {
-            return mData1 + " " + mData2 + " " + mData3;
+            mBreed = Breed;
+            mSellable = Sellable;
+            mIsRare = IsRare;
         }
     }
 }

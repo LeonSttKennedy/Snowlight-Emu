@@ -466,7 +466,8 @@ namespace Snowlight.Game.Navigation
 
             IEnumerable<RoomInstance> Rooms =
                 (from RoomInstance in RoomManager.RoomInstances
-                 where RoomUids.Contains(RoomInstance.Value.RoomId)
+                 where RoomUids.Contains(RoomInstance.Value.RoomId) &&
+                 RoomInstance.Value.Info.Type != RoomType.Public
                  select RoomInstance.Value).Take(50);
 
             Response = NavigatorRoomListComposer.Compose(0, 4, string.Empty, Rooms.ToList());

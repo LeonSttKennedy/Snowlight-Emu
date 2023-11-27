@@ -10,6 +10,8 @@ using Snowlight.Storage;
 using Snowlight.Game.Items;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Misc;
+using System.Web.Caching;
 
 namespace Snowlight.Game.Catalog
 {
@@ -89,10 +91,30 @@ namespace Snowlight.Game.Catalog
         public static void Purchase(Session Session, SqlDatabaseClient MySqlClient, uint OfferId)
         {
             MarketplaceOffers Offer = TryGetOffer(OfferId);
+            MarketplaceFiltersCache UserCache = Session.MarketplaceFiltersCache;
 
-            if (Offer == null || Offer.State != 1 || Offer.Timestamp <= FormatTimestamp())
+            if (Offer == null)
             {
-                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_marketplace_error")));
+                SerializeOffers(Session, UserCache.MinPrice, UserCache.MaxPrice, UserCache.SearchQuery, UserCache.FilterMode);
+
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_marketplace_offer_not_found")));
+                return;
+            }
+
+            if(Offer.State != 1 || Offer.Timestamp <= FormatTimestamp())
+            {
+                if (CatalogManager.MarketplaceOffers.Values.Where(O => O.State == 1 && O.DefinitionId == Offer.DefinitionId).Count() > 0)
+                {
+                    Offer = CatalogManager.MarketplaceOffers.Values.Where(O => O.State == 1 && O.DefinitionId == Offer.DefinitionId).OrderBy(O => O.TotalPrice).FirstOrDefault();
+                    Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(MarketplaceError.UpdateItem, Offer.Id, Offer.TotalPrice, OfferId));
+                }
+                else
+                {
+                    SerializeOffers(Session, UserCache.MinPrice, UserCache.MaxPrice, UserCache.SearchQuery, UserCache.FilterMode);
+
+                    Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(MarketplaceError.AllSoldOut));
+                }
+
                 return;
             }
 
@@ -104,6 +126,7 @@ namespace Snowlight.Game.Catalog
 
             if (Session.CharacterInfo.CreditsBalance < Offer.TotalPrice)
             {
+                Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(MarketplaceError.NoCredits));
                 return;
             }
 
@@ -162,7 +185,7 @@ namespace Snowlight.Game.Catalog
             }
 
             Session.SendData(InventoryRefreshComposer.Compose());
-            Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(1, 0, 0, 0));
+            Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(MarketplaceError.Sucess));
         }
 
         public static void SellItem(Session Session, uint ItemID, int ItemType, int SellingPrice)
@@ -201,7 +224,9 @@ namespace Snowlight.Game.Catalog
                         Session.InventoryCache.RemoveItem(ItemID);
                         Session.SendData(InventoryRefreshComposer.Compose());
 
-                        SerializeOffers(Session, -1, -1, "", 0);
+                        MarketplaceFiltersCache UserCache = Session.MarketplaceFiltersCache;
+                        SerializeOffers(Session, UserCache.MinPrice, UserCache.MaxPrice, UserCache.SearchQuery, UserCache.FilterMode);
+
                         Session.SendData(CatalogMarketplaceSerializeOwnOffersComposer.Compose(Session.CharacterId));
                     }
                 }
@@ -263,6 +288,9 @@ namespace Snowlight.Game.Catalog
             MySqlClient.SetParameter("offerid", OfferId);
             MySqlClient.ExecuteQueryTable("DELETE FROM catalog_marketplace_offers WHERE offer_id = @offerid LIMIT 1");
             Session.SendData(CatalogMarketplaceTakeBackComposer.Compose(OfferId, true));
+
+            MarketplaceFiltersCache UserCache = Session.MarketplaceFiltersCache;
+            SerializeOffers(Session, UserCache.MinPrice, UserCache.MaxPrice, UserCache.SearchQuery, UserCache.FilterMode);
         }
 
         public static void RedeemCredits(Session Session)

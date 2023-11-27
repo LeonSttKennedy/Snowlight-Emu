@@ -25,7 +25,7 @@ implemented in the official build. See RetroDev for more information on
 how to contribute to the project.
 
 We would like to extend our thanks to all contributers and supporters
-of this project and other existent projects. (Skylight, PlusEMU, Uber, Phoenix, Mango, IDK Project, ThrustRP & Reality and Another Projects contributers)
+of this project and other existent projects. (Like: Skylight, PlusEMU, Uber, Phoenix, Mango, IDK Project, ThrustRP & Reality and Another Projects contributers)
 
 # FEATURES
 
@@ -46,7 +46,7 @@ Pixels / Snowflakes / Hearts / Gift points / Shells ( Added Apart: Diamonds )
 - User change name
 - Subscription offers (can be configurated in database)
 - Groups
-- Club gift notification when login, buy a duck or subscription in catalog
+- Club gift notification when login, buy a duck or  buy subscription in catalog
 - User can personalize gifts
 - Only users with Trade achievement and enable trade status can trading
 
@@ -92,10 +92,10 @@ Roller Skating, Ice Tag, Puzzle box
 - Remove friend request
 - Accept friend request
 - Instant message friend with inserting on database for moderation
-- Categories (isn't 100% working, sometimes when messenger updates the categories go away)
+- Categories
 - Update friend status when logging in/out/entering rooms
 - Follow friend
-- Fully functional Event stream (enable / disable / like / events: achievement/friend made/room like/motto changed) (habbo head figure doesn't load)
+- Fully functional Event stream (enable or disable, like, events: achievement/friend made/room like/motto changed) (known issue: habbo head figure doesn't load)
 
 **Catalog** 
 
@@ -119,6 +119,7 @@ ACH_MOTTO, ACH_AVATARTAGS, ACH_AVATARLOOKS, ACH_STUDENT, ACH_BASICCLUB, ACH_VIPC
 
 **Quests**
 
+- Daily quests support
 - Seasonal currency reward support added
 - Corrected some user quests that couldn't possible to be completed
 

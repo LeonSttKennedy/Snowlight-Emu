@@ -12,7 +12,7 @@ namespace Snowlight.Communication.Outgoing
         public static ServerMessage Compose(CatalogItem Item)
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.CATALOG_PURCHASE_RESULT);
-            Message.AppendUInt32(Item.Id);
+            Message.AppendUInt32(Item.Definition.Id);
             Message.AppendStringWithBreak(Item.DisplayName);
             Message.AppendInt32(Item.CostCredits);
             Message.AppendInt32(Item.CostActivityPoints);

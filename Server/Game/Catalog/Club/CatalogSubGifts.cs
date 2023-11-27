@@ -15,6 +15,7 @@ using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
+using System.Web.UI;
 
 namespace Snowlight.Game.Catalog
 {
@@ -47,12 +48,25 @@ namespace Snowlight.Game.Catalog
                 foreach (DataRow Row in GiftsTable.Rows)
                 {
                     uint GiftId = (uint)Row["id"];
+                    int ParentId = (int)Row["parent_id"];
 
-                    if (!mClubGifts.ContainsKey(GiftId))
+                    SubscriptionGifts Gift = new SubscriptionGifts(GiftId, (int)Row["definition_id"],
+                                Row["item_name"].ToString(), Row["preset_flags"].ToString(), (int)Row["amount"],
+                                (int)Row["days_need"], (Row["isvip"].ToString() == "1"));
+
+
+                    if (ParentId == -1)
                     {
-                        mClubGifts.Add(GiftId, new SubscriptionGifts(GiftId, (uint)Row["definition_id"],
-                                Row["item_name"].ToString(), Row["preset_flags"].ToString(),
-                                (int)Row["days_need"], (Row["isvip"].ToString() == "1")));
+                        if (!mClubGifts.ContainsKey(GiftId))
+                        {
+                            mClubGifts.Add(GiftId, Gift);
+                        }
+                    }
+                    else
+                    {
+                        uint _ParentId = uint.Parse(ParentId.ToString());
+                        SubscriptionGifts ParentItem = GetSubscriptionGiftByAbsoluteId(_ParentId);
+                        ParentItem.AddItem(Gift);
                     }
 
                     CountLoaded++;
@@ -100,67 +114,87 @@ namespace Snowlight.Game.Catalog
             string ItemName = Message.PopString();
 
             SubscriptionGifts SelectedItem = GetGiftByName(ItemName);
-            if (SelectedItem == null || SelectedItem.Definition == null)
+            if (SelectedItem == null || SelectedItem.DefinitionId > 0 && SelectedItem.Definition == null)
             {
                 return;
             }
 
-            Session.SubscriptionManager.UpdateGiftPoints();
+            Session.SubscriptionManager.AddGiftPoints();
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                ItemDefinition Def = ItemDefinitionManager.GetDefinition(SelectedItem.DefinitionId);
+                #region Arrange To Delivery
+                List<SubscriptionGifts> ItemsToDelivery = new List<SubscriptionGifts>();
 
-                Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
-                List<Item> GeneratedGenericItems = new List<Item>();
-
-                GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, Def.Id,
-                        Session.CharacterInfo.Id, SelectedItem.PresetFlags, SelectedItem.PresetFlags, 0));
-
-                switch (Def.Behavior)
+                if (SelectedItem.IsDeal)
                 {
-                    case ItemBehavior.Teleporter:
-
-                        Item LinkedItem = ItemFactory.CreateItem(MySqlClient, Def.Id,
-                            Session.CharacterId, GeneratedGenericItems[0].Id.ToString(), string.Empty,
-                            0);
-
-                        GeneratedGenericItems[0].Flags = LinkedItem.Id.ToString();
-                        GeneratedGenericItems[0].SynchronizeDatabase(MySqlClient, true);
-
-                        GeneratedGenericItems.Add(LinkedItem);
-                        break;
+                    ItemsToDelivery.AddRange(SelectedItem.DealItems);
                 }
-
-                foreach (Item GeneratedItem in GeneratedGenericItems)
+                else
                 {
-                    Session.InventoryCache.Add(GeneratedItem);
+                    ItemsToDelivery.Add(SelectedItem);
+                }
+                #endregion
 
-                    int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
+                foreach (SubscriptionGifts GiftToDelivery in ItemsToDelivery)
+                {
+                    ItemDefinition Def = ItemDefinitionManager.GetDefinition(GiftToDelivery.Definition.Id);
 
-                    if (!NewItems.ContainsKey(TabId))
+                    Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
+                    List<Item> GeneratedGenericItems = new List<Item>();
+
+                    for (int i = 0; i < GiftToDelivery.Amount; i++)
                     {
-                        NewItems.Add(TabId, new List<uint>());
+                        GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, Def.Id,
+                                Session.CharacterInfo.Id, GiftToDelivery.PresetFlags, GiftToDelivery.PresetFlags, 0));
+
+                        switch (Def.Behavior)
+                        {
+                            case ItemBehavior.Teleporter:
+
+                                Item LinkedItem = ItemFactory.CreateItem(MySqlClient, Def.Id,
+                                    Session.CharacterId, GeneratedGenericItems[0].Id.ToString(), string.Empty,
+                                    0);
+
+                                GeneratedGenericItems[0].Flags = LinkedItem.Id.ToString();
+                                GeneratedGenericItems[0].SynchronizeDatabase(MySqlClient, true);
+
+                                GeneratedGenericItems.Add(LinkedItem);
+                                break;
+                        }
+
+                        foreach (Item GeneratedItem in GeneratedGenericItems)
+                        {
+                            Session.InventoryCache.Add(GeneratedItem);
+
+                            int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
+
+                            if (!NewItems.ContainsKey(TabId))
+                            {
+                                NewItems.Add(TabId, new List<uint>());
+                            }
+
+                            NewItems[TabId].Add(GeneratedItem.Id);
+                        }
+
+                        foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
+                        {
+                            foreach (uint NewItem in NewItemData.Value)
+                            {
+                                Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
+                            }
+                        }
+
+                        if (NewItems.Count > 0)
+                        {
+                            Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
+                        }
+
+                        Session.SendData(InventoryRefreshComposer.Compose());
                     }
 
-                    NewItems[TabId].Add(GeneratedItem.Id);
+                    Session.SendData(ClubGiftRedeemComposer.Compose(GiftToDelivery));
                 }
-
-                foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                {
-                    foreach (uint NewItem in NewItemData.Value)
-                    {
-                        Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                    }
-                }
-
-                if (NewItems.Count > 0)
-                {
-                    Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-                }
-
-                Session.SendData(InventoryRefreshComposer.Compose());
-                Session.SendData(ClubGiftRedeemComposer.Compose(SelectedItem));
             }
         }
 
@@ -197,6 +231,19 @@ namespace Snowlight.Game.Catalog
             }
 
             return CanSelect;
+        }
+
+        public static SubscriptionGifts GetSubscriptionGiftByAbsoluteId(uint ItemId)
+        {
+            lock (mClubGifts)
+            {
+                if (mClubGifts.ContainsKey(ItemId))
+                {
+                    return mClubGifts[ItemId];
+                }
+            }
+
+            return null;
         }
     }
 }

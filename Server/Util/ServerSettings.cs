@@ -22,70 +22,15 @@ namespace Snowlight.Util
 
     public static class ServerSettings
     {
+        #region Activity Points Settings
         private static bool mActivityPointsEnabled;
         private static SeasonalCurrencyList mActivityPointsType;
         private static bool mMoreActivityPointsForVipUsers;
         private static int mActivityPointsInterval;
         private static int mActivityPointsCreditsAmount;
         private static int mMoreActivityPointsCreditsAmount;
-        private static int mActivityPointsPixelsAmount;
-        private static int mMoreActivityPointsPixelsAmount;
-
-        private static bool mDailyRewardEnabled;
-        private static SeasonalCurrencyList mDailyActivityPointsType;
-        private static int mDailyRewardActivityPointAmount;
-        private static int mDailyRewardCreditsAmount;
-
-        private static bool mGiftingSystemEnabled;
-        private static bool mNewGiftingSystem;
-        private static int mGiftingSystemPrice;
-        private static List<uint> mGiftingSystemSpriteIds;
-        private static int mGiftingSystemBoxCount;
-        private static int mGiftingSystemRibbonCount;
-
-        private static InfobusStatus mInfobusStatus;
-
-        private static bool mLoginBadgeEnabled;
-        private static string mLoginBadgeCode;
-
-        private static bool mMarketplaceEnabled;
-        private static int mMarketplaceTax;
-        private static bool mMarketplaceTokensBuyEnabled;
-        private static int mMarketplaceTokensPrice;
-        private static int mMarketplacePremiumTokens;
-        private static int mMarketplaceDefaultTokens;
-        private static int mMarketplaceMinPrice;
-        private static int mMarketplaceMaxPrice;
-        private static int mMarketplaceOfferTime;
-        private static int mMarketplaceAverageOfferDays;
-
-        private static int mMaxFavoritesPerUser;
-        private static int mMaxFurniPerRoom;
-        private static int mMaxFurniStacking;
-        private static int mMaxPetsPerRoom;
-        private static int mMaxRoomsPerUser;
-
-        private static bool mModerationActionLogs;
-        private static bool mModerationConsoleChatLogs;
-        private static bool mModerationChatLogs;
-        private static bool mModerationRoomLogs;
-
-        private static bool mMotdEnabled;
-        private static MotdType mMotdType;
-        private static List<string> mMotdText;
-
-        private static int mNameChangeWaitDays;
-        
-        private static bool mEnablePets;
-        private static bool mPetScratchingAccountDaysOldEnabled;
-        private static int mPetScratchingAccountDaysOld;
-        
-        private static int mNormalUserFriendListSize;
-        private static int mHcUserFriendListSize;
-        private static int mVipUserFriendListSize;
-
-        private static int mWordFilterMaximumCount;
-        private static int mWordFilterTimeToMute;
+        private static int mActivityPointsAmount;
+        private static int mMoreActivityPointsAmount;
 
         public static bool ActivityPointsEnabled
         {
@@ -159,30 +104,39 @@ namespace Snowlight.Util
                 mMoreActivityPointsCreditsAmount = value;
             }
         }
-        public static int ActivityPointsPixelsAmount
+        public static int ActivityPointsAmount
         {
             get
             {
-                return mActivityPointsPixelsAmount;
+                return mActivityPointsAmount;
             }
 
             set
             {
-                mActivityPointsPixelsAmount = value;
+                mActivityPointsAmount = value;
             }
         }
-        public static int MoreActivityPointsPixelsAmount
+        public static int MoreActivityPointsAmount
         {
             get
             {
-                return mMoreActivityPointsPixelsAmount;
+                return mMoreActivityPointsAmount;
             }
 
             set
             {
-                mMoreActivityPointsPixelsAmount = value;
+                mMoreActivityPointsAmount = value;
             }
         }
+        #endregion
+
+        #region Daily Reward Settings
+        private static bool mDailyRewardEnabled;
+        private static int mDailyRewardWaitTime;
+        private static SeasonalCurrencyList mDailyActivityPointsType;
+        private static int mDailyRewardActivityPointAmount;
+        private static int mDailyRewardCreditsAmount;
+
         public static bool DailyRewardEnabled
         {
             get
@@ -193,6 +147,17 @@ namespace Snowlight.Util
             set
             {
                 mDailyRewardEnabled = value;
+            }
+        }
+        public static int DailyRewardWaitTime
+        {
+            get
+            {
+                return mDailyRewardWaitTime;
+            }
+            set
+            {
+                mDailyRewardWaitTime = value;
             }
         }
         public static SeasonalCurrencyList DailyActivityPointsType
@@ -231,6 +196,16 @@ namespace Snowlight.Util
                 mDailyRewardCreditsAmount = value;
             }
         }
+        #endregion
+
+        #region Gifting Items Settings
+        private static bool mGiftingSystemEnabled;
+        private static bool mNewGiftingSystem;
+        private static int mGiftingSystemPrice;
+        private static List<uint> mGiftingSystemSpriteIds;
+        private static int mGiftingSystemBoxCount;
+        private static int mGiftingSystemRibbonCount;
+
         public static bool GiftingSystemEnabled
         {
             get 
@@ -303,6 +278,11 @@ namespace Snowlight.Util
                 mGiftingSystemRibbonCount = value;
             }
         }
+        #endregion
+
+        #region Infobus Settings
+        private static InfobusStatus mInfobusStatus;
+
         public static InfobusStatus InfobusStatus
         {
             get
@@ -314,6 +294,12 @@ namespace Snowlight.Util
                 mInfobusStatus = value;
             }
         }
+        #endregion
+
+        #region Badge When Login Reward Settings
+        private static bool mLoginBadgeEnabled;
+        private static string mLoginBadgeCode;
+
         public static bool LoginBadgeEnabled
         {
             get
@@ -338,6 +324,20 @@ namespace Snowlight.Util
                 mLoginBadgeCode = value;
             }
         }
+        #endregion
+
+        #region Marketplace Settings
+        private static bool mMarketplaceEnabled;
+        private static int mMarketplaceTax;
+        private static bool mMarketplaceTokensBuyEnabled;
+        private static int mMarketplaceTokensPrice;
+        private static int mMarketplacePremiumTokens;
+        private static int mMarketplaceDefaultTokens;
+        private static int mMarketplaceMinPrice;
+        private static int mMarketplaceMaxPrice;
+        private static int mMarketplaceOfferTime;
+        private static int mMarketplaceAverageOfferDays;
+
         public static bool MarketplaceEnabled
         {
             get
@@ -458,6 +458,21 @@ namespace Snowlight.Util
                 mMarketplaceAverageOfferDays = value;
             }
         }
+        #endregion
+
+        #region User Limits Settings
+        private static int mMaxFavoritesPerUser;
+        private static int mMaxFurniPerRoom;
+        private static int mMaxFurniStacking;
+        private static int mMaxPetsPerRoom;
+        private static int mMaxRoomsPerUser;
+
+        private static int mNormalUserFriendListSize;
+        private static int mHcUserFriendListSize;
+        private static int mVipUserFriendListSize;
+
+        private static int mNameChangeWaitDays;
+
         public static int MaxFavoritesPerUser
         {
             get
@@ -518,6 +533,66 @@ namespace Snowlight.Util
                 mMaxRoomsPerUser = value;
             }
         }
+        public static int NormalUserFriendListSize
+        {
+            get
+            {
+                return mNormalUserFriendListSize;
+            }
+
+            set
+            {
+                mNormalUserFriendListSize = value;
+            }
+
+        }
+        public static int HcUserFriendListSize
+        {
+            get
+            {
+                return mHcUserFriendListSize;
+            }
+
+            set
+            {
+                mHcUserFriendListSize = value;
+            }
+
+        }
+        public static int VipUserFriendListSize
+        {
+            get
+            {
+                return mVipUserFriendListSize;
+            }
+
+            set
+            {
+                mVipUserFriendListSize = value;
+            }
+
+        }
+
+        public static int NameChangeWaitDays
+        {
+            get
+            {
+                return mNameChangeWaitDays;
+            }
+
+            set
+            {
+                mNameChangeWaitDays = value;
+            }
+        }
+        #endregion
+
+        #region Moderation Settings
+        private static bool mModerationActionLogs;
+        private static bool mModerationConsoleChatLogs;
+        private static bool mModerationChatLogs;
+        private static bool mModerationRoomLogs;
+
         public static bool ModerationActionLogs
         {
             get
@@ -566,7 +641,14 @@ namespace Snowlight.Util
                 mModerationRoomLogs = value;
             }
         }
-         public static bool MotdEnabled
+        #endregion
+
+        #region Message Of The Day Settings
+        private static bool mMotdEnabled;
+        private static MotdType mMotdType;
+        private static List<string> mMotdText;
+
+        public static bool MotdEnabled
         {
             get
             {
@@ -601,18 +683,12 @@ namespace Snowlight.Util
                 mMotdText = value;
             }
         }
-        public static int NameChangeWaitDays
-        {
-            get
-            {
-                return mNameChangeWaitDays; 
-            }
+        #endregion
 
-            set
-            {
-                mNameChangeWaitDays = value;
-            }
-        }
+        #region Pet Settings
+        private static bool mEnablePets;
+        private static bool mPetScratchingAccountDaysOldEnabled;
+        private static int mPetScratchingAccountDaysOld;
 
         public static bool PetsEnabled
         {
@@ -650,45 +726,12 @@ namespace Snowlight.Util
                 mPetScratchingAccountDaysOld = value;
             }
         }
-        public static int NormalUserFriendListSize
-        {
-            get
-            {
-                return mNormalUserFriendListSize;
-            }
+        #endregion
 
-            set
-            {
-                mNormalUserFriendListSize = value;
-            }
+        #region Word Filter Settings
+        private static int mWordFilterMaximumCount;
+        private static int mWordFilterTimeToMute;
 
-        }
-        public static int HcUserFriendListSize
-        {
-            get
-            {
-                return mHcUserFriendListSize;
-            }
-
-            set
-            {
-                mHcUserFriendListSize = value;
-            }
-
-        }
-        public static int VipUserFriendListSize
-        {
-            get
-            {
-                return mVipUserFriendListSize;
-            }
-
-            set
-            {
-                mVipUserFriendListSize = value;
-            }
-
-        }
         public static int WordFilterMaximumCount
         {
             get
@@ -715,6 +758,8 @@ namespace Snowlight.Util
             }
 
         }
+        #endregion
+
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
             Output.WriteLine("Loading server settings in database...", OutputLevel.Informational);
@@ -767,10 +812,11 @@ namespace Snowlight.Util
             ActivityPointsInterval = (int)Row["activitypoints_interval"];
             ActivityPointsCreditsAmount = (int)Row["activitypoints_credits_amount"];
             MoreActivityPointsCreditsAmount = (int)Row["more_activitypoints_credits_amount"];
-            ActivityPointsPixelsAmount = (int)Row["activitypoints_pixels_amount"];
-            MoreActivityPointsPixelsAmount = (int)Row["more_activitypoints_pixels_amount"];
+            ActivityPointsAmount = (int)Row["activitypoints_amount"];
+            MoreActivityPointsAmount = (int)Row["more_activitypoints_amount"];
             
             DailyRewardEnabled = (Row["daily_reward_enabled"].ToString() == "1");
+            DailyRewardWaitTime = (int)Row["daily_reward_wait_time"];
             DailyActivityPointsType = SeasonalCurrency.FromStringToEnum(Row["daily_activitypoints_type"].ToString());
             DailyRewardActivityPointAmount = (int)Row["daily_activitypoints_amount"];
             DailyRewardCreditsAmount = (int)Row["daily_credits_amount"]; 

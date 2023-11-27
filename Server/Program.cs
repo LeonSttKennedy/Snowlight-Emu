@@ -212,7 +212,7 @@ namespace Snowlight
                     SongManager.Initialize();
                     TradeHandler.Initialize();
                     RandomGenerator.Initialize();
-                    CatalogStuffWorker.Initialize();
+                    DailyStuffWorker.Initialize();
                     StatisticsSyncUtil.Initialize();
                     ShutdownCommandWorker.Initialize();
                     SubscriptionOfferManager.Initialize(MySqlClient);

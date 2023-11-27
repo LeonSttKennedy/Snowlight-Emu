@@ -95,7 +95,7 @@ namespace Snowlight.Game.Catalog
 
                                 foreach (PetRaceData RaceData in Races)
                                 {
-                                    if (RaceData.Data1 == Race)
+                                    if (RaceData.Breed == Race)
                                     {
                                         RaceOk = true;
                                         break;
@@ -368,6 +368,11 @@ namespace Snowlight.Game.Catalog
                 }
                 #endregion
 
+                if (Item.Definition != null && !Item.Definition.Type.Equals(ItemType.Pet))
+                {
+                    Session.SendData(CatalogPurchaseResultComposer.Compose(Item));
+                }
+
                 Session.SendData(InventoryRefreshComposer.Compose());
 
                 foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
@@ -381,11 +386,6 @@ namespace Snowlight.Game.Catalog
                 if (NewItems.Count > 0)
                 {
                     Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-                }
-
-                if (Item.Definition != null && !Item.Definition.Type.Equals(ItemType.Pet))
-                {
-                    Session.SendData(CatalogPurchaseResultComposer.Compose(Item));
                 }
             }
         }

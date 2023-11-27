@@ -305,6 +305,8 @@
     <Compile Include="Game\Achievements\AchievementCache.cs" />
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
     <Compile Include="Game\Achievements\AchievementManager.cs" />
+    <Compile Include="Game\Misc\Caches\MarketplaceFiltersCache.cs" />
+    <Compile Include="Game\Quests\DailyQuest.cs" />
     <Compile Include="Game\Quests\Quest.cs" />
     <Compile Include="Game\Quests\QuestCache.cs" />
     <Compile Include="Game\Quests\QuestManager.cs" />
@@ -438,7 +440,7 @@
     <Compile Include="Game\Misc\Items\MoodlightData.cs" />
     <Compile Include="Game\Misc\Items\TeleporterLinkFinder.cs" />
     <Compile Include="Game\Misc\Workers\ShutdownCommandWorker.cs" />
-    <Compile Include="Game\Catalog\ItemRotation\CatalogStuffWorker.cs" />
+    <Compile Include="Game\Misc\Workers\DailyStuffWorker.cs" />
     <Compile Include="Game\Misc\Workers\UserStuffWorker.cs" />
     <Compile Include="Game\Pathfinding\MinHeap.cs" />
     <Compile Include="Game\Pathfinding\ComplexPathfinder.cs" />

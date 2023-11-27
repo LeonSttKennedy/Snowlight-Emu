@@ -167,6 +167,21 @@ namespace Snowlight.Game.Misc
                             }
                         }
 
+                    case "clubgiftpoints":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                TargetSession.SubscriptionManager.GiveGiftPoints(Amount);
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                goto End;
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
                     default:
                         {
                             Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_currency_error", Type), 0, ChatType.Whisper));

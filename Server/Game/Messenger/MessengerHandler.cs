@@ -251,7 +251,7 @@ namespace Snowlight.Game.Messenger
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                ModerationLogs.LogConsoleChatMessage(MySqlClient, Session.CharacterId, TargetSession.CharacterId, Text);
+                ModerationLogs.LogConsoleChatMessage(MySqlClient, Session.CharacterId, TargetSession.CharacterId, MessageType.Message, Text);
             }
 
             TargetSession.SendData(MessengerImMessageComposer.Compose(Session.CharacterId, Text));
@@ -497,7 +497,7 @@ namespace Snowlight.Game.Messenger
 
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
-                    ModerationLogs.LogConsoleChatMessage(MySqlClient, Session.CharacterId, TargetSession.CharacterId, MessageText);
+                    ModerationLogs.LogConsoleChatMessage(MySqlClient, Session.CharacterId, TargetSession.CharacterId, MessageType.Invite, MessageText);
                 }
 
                 TargetSession.SendData(MessengerImInviteComposer.Compose(Session.CharacterId, MessageText));

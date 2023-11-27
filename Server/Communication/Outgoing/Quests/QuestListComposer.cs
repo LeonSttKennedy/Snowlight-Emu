@@ -33,6 +33,11 @@ namespace Snowlight.Communication.Outgoing
                 }
             }
 
+            if (QuestManager.CurrentDailyQuest >= UserQuestGoals["daily"])
+            {
+                UserQuestGoals["daily"] = QuestManager.CurrentDailyQuest + 1;
+            }
+
             foreach (Quest Quest in Quests)
             {
                 foreach (KeyValuePair<string, int> Goal in UserQuestGoals)
@@ -85,6 +90,9 @@ namespace Snowlight.Communication.Outgoing
                 Number++;
             }
 
+            int DailyQuestTime = Quest == null ? 0 : (Category.Equals("daily") && !Number.Equals(QuestManager.CurrentDailyQuest + 1) && AmountInCat.Equals(Number) ?
+                (int)QuestManager.NextDailyQuest.TotalSeconds : 0);
+
             Message.AppendStringWithBreak(Category);
             Message.AppendInt32(Number); // Quest progress in this cat
             Message.AppendInt32(AmountInCat); // Total quests in this cat
@@ -97,7 +105,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendStringWithBreak(Quest == null ? string.Empty : Quest.QuestName);
             Message.AppendInt32(UserProgress); // Current progress
             Message.AppendUInt32(Quest == null ? 0 : Quest.GoalData); // Target progress
-            Message.AppendInt32(0); // "Next quest available countdown" in seconds
+            Message.AppendInt32(DailyQuestTime); // "Next quest available countdown" in seconds
         }
     }
 }

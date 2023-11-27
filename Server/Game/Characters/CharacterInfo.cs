@@ -76,6 +76,7 @@ namespace Snowlight.Game.Characters
         private int mFavoriteGroupId;
 
         private bool mIsOnline;
+        private bool mReceivedDailyReward;
 
         private bool mAllowFriendStream;
         private bool mAllowMimic;
@@ -163,11 +164,11 @@ namespace Snowlight.Game.Characters
             }
         }
 
-        public double TimeSinceLastActivityPointsUpdate
+        public double LastActivityPointsUpdate
         {
             get
             {
-                return (UnixTimestamp.GetCurrent() - mTimestampLastActivityPointsUpdate);
+                return mTimestampLastActivityPointsUpdate;
             }
         }
 
@@ -575,6 +576,18 @@ namespace Snowlight.Game.Characters
                 mIsOnline = value;
             }
         }
+        public bool ReceivedDailyReward
+        {
+            get
+            {
+                return mReceivedDailyReward;
+            }
+
+            set
+            {
+                mReceivedDailyReward = value;
+            }
+        }
         public bool AllowMimic
         {
             get
@@ -643,7 +656,7 @@ namespace Snowlight.Game.Characters
             int ModerationTicketsAbusive, double ModerationTicketCooldown, int ModerationBans, int ModerationCautions,
             double TimestampLastOnline, double TimestampRegistered, int RespectPoints, int RespectCreditHuman,
             int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, double TimestampLastNameChange, int MarketplaceTokens,
-            int RegularVisitor, int TimeOnline, int FavoriteGroupId, bool Online, bool AllowFriendStream, bool AllowMimic, bool AllowGifts, bool AllowTrade)
+            int RegularVisitor, int TimeOnline, int FavoriteGroupId, bool Online, bool ReceivedDailyReward, bool AllowFriendStream, bool AllowMimic, bool AllowGifts, bool AllowTrade)
         {
             mSessionId = SessionId;
             mId = Id;
@@ -696,6 +709,7 @@ namespace Snowlight.Game.Characters
             mFavoriteGroupId = FavoriteGroupId;
 
             mIsOnline = Online;
+            mReceivedDailyReward = ReceivedDailyReward;
 
             mAllowFriendStream = AllowFriendStream;
             mAllowMimic = AllowMimic;
@@ -766,7 +780,7 @@ namespace Snowlight.Game.Characters
         public void UpdateLastOnline(SqlDatabaseClient MySqlClient)
         {
             MySqlClient.SetParameter("userid", mId);
-            MySqlClient.SetParameter("lastonline", UnixTimestamp.GetCurrent());
+            MySqlClient.SetParameter("lastonline", mTimestampLastOnline);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET timestamp_lastvisit = @lastonline WHERE id = @userid LIMIT 1");
         }
         public void UpdateCreditsBalance(SqlDatabaseClient MySqlClient, int Amount)
@@ -991,6 +1005,13 @@ namespace Snowlight.Game.Characters
             MySqlClient.SetParameter("userid", mId);
             MySqlClient.SetParameter("lnc", mTimestampLastNameChange);
             MySqlClient.ExecuteNonQuery("UPDATE characters SET timestamp_last_name_change = @lnc WHERE id = @userid LIMIT 1");
+        }
+
+        public void UpdateReceivedDailyReward(SqlDatabaseClient MySqlClient)
+        {
+            MySqlClient.SetParameter("userid", mId);
+            MySqlClient.SetParameter("data", mReceivedDailyReward ? "1" :  "0");
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET received_daily_reward = @data WHERE id = @userid LIMIT 1");
         }
     }
 }

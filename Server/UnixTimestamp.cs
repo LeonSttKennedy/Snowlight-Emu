@@ -25,8 +25,7 @@ namespace Snowlight
 
         public static TimeSpan ElapsedTime(double Timestamp)
         {
-            double DoubleTS = GetCurrent() - Timestamp;
-            TimeSpan TS = DateTime.Now - GetDateTimeFromUnixTimestamp(DoubleTS);
+            TimeSpan TS = DateTime.Now - GetDateTimeFromUnixTimestamp(Timestamp);
             return TS;
         }
     }

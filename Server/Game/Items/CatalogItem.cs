@@ -1,4 +1,5 @@
-﻿using Snowlight.Util;
+﻿using Snowlight.Game.Pets;
+using Snowlight.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Snowlight.Game.Items
         private int mClubRestriction;
         private string mBadgeCode;
 
+        private List<PetRaceData> mPetRaceData;
         private List<CatalogItem> mDealItems;
 
         public uint Id
@@ -113,6 +115,14 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public List<PetRaceData> DealRaces
+        {
+            get
+            {
+                return mPetRaceData;
+            }
+        }
+
         public List<CatalogItem> DealItems
         {
             get
@@ -136,12 +146,20 @@ namespace Snowlight.Game.Items
             mClubRestriction = ClubRestriction;
             mBadgeCode = BadgeCode;
 
+            mPetRaceData = new List<PetRaceData>();
             mDealItems = new List<CatalogItem>();
         }
+        
+        public void AddPetRaceData(PetRaceData PetData)
+        {
+            mPetRaceData.Add(PetData);
+        }
+        
         public void AddItem(CatalogItem Item)
         {
             mDealItems.Add(Item);
         }
+
         public bool ShowPresetFlags()
         {
             bool ShowPresetFlags = true;

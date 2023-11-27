@@ -16,11 +16,29 @@ namespace Snowlight.Game.Quests
 {
     public static class QuestManager
     {
+        private static DailyQuest mDailyQuestsSettings;
         private static Dictionary<uint, Quest> mQuests;
         private static object mSyncRoot;
 
+        public static int CurrentDailyQuest
+        {
+            get
+            {
+                return mDailyQuestsSettings.LastIndex;
+            }
+        }
+
+        public static TimeSpan NextDailyQuest
+        {
+            get
+            {
+                return mDailyQuestsSettings.NextQuestAvailable;
+            }
+        }
+
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
+            mDailyQuestsSettings = new DailyQuest(0, 0 , 0);
             mQuests = new Dictionary<uint, Quest>();
             mSyncRoot = new object();
 
@@ -47,7 +65,32 @@ namespace Snowlight.Game.Quests
                         (QuestType)((int)Row["goal_type"]), (uint)Row["goal_data"], (ItemBehavior)(uint)Row["goal_data_behavior"],
                         (string)Row["name"], SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()),
                         (int)Row["reward"], (string)Row["data_bit"]));
+                }
 
+                MySqlClient.SetParameter("enabled", "1");
+                DataTable Daily = MySqlClient.ExecuteQueryTable("SELECT * FROM quests_daily_rotation WHERE enabled = @enabled LIMIT 1");
+
+                foreach(DataRow Row in Daily.Rows)
+                {
+                    mDailyQuestsSettings = new DailyQuest((uint)Row["id"], (double)Row["timestamp_last_rotation"], (int)Row["last_index"]);
+                }
+
+                if (mDailyQuestsSettings.Id == 0)
+                {
+                    mDailyQuestsSettings.DisableInDatabase();
+                }
+                else
+                {
+                    if (mDailyQuestsSettings.ExecuteRotation)
+                    {
+                        mDailyQuestsSettings.LastIndex++;
+                        if (mDailyQuestsSettings.LastIndex >= mQuests.Values.Where(Q => Q.Category.Equals("daily")).Count())
+                        {
+                            mDailyQuestsSettings.DisableInDatabase();
+                        }
+
+                        mDailyQuestsSettings.UpdateInDatabase();
+                    }
                 }
             }
         }

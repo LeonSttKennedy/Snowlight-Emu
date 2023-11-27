@@ -53,6 +53,7 @@ namespace Snowlight.Game.Sessions
         private ClubSubscription mSubscriptionManager;
         private QuestCache mQuestCache;
         private FriendStreamEventsCache mFriendStreamCache;
+        private MarketplaceFiltersCache mMarketplaceFilterCache;
 
         private uint mRoomId;
         private bool mRoomAuthed;
@@ -240,6 +241,13 @@ namespace Snowlight.Game.Sessions
             }
         }
 
+        public MarketplaceFiltersCache MarketplaceFiltersCache
+        {
+            get
+            {
+                return mMarketplaceFilterCache;
+            }
+        }
         public bool InRoom
         {
             get
@@ -423,6 +431,7 @@ namespace Snowlight.Game.Sessions
                 mAvatarEffectCache = new AvatarEffectCache(MySqlClient, CharacterId);
                 mQuestCache = new QuestCache(MySqlClient, CharacterId);
                 mFriendStreamCache = new FriendStreamEventsCache(MySqlClient, this);
+                mMarketplaceFilterCache = new MarketplaceFiltersCache();
 
                 // Initial check for a respect update
                 if (mCharacterInfo.NeedsRespectUpdate)
@@ -443,9 +452,15 @@ namespace Snowlight.Game.Sessions
                     (double)Row["past_time_hc"], (double)Row["past_time_vip"], (int)Row["gift_points"]) :
                     new ClubSubscription(CharacterId, ClubSubscriptionLevel.None, 0, 0, 0, 0, 0, 0));
 
-                mSubscriptionManager.UpdateGiftPoints(true);
+                mSubscriptionManager.AddGiftPoints(true);
 
                 mAvatarEffectCache.CheckEffectExpiry(this);
+
+                if (mCharacterInfo.DateTimeLastLogin.ToString("dd-MM-yyyy") != DateTime.Now.ToString("dd-MM-yyyy"))
+                {
+                    mCharacterInfo.ReceivedDailyReward = false;
+                    mCharacterInfo.UpdateReceivedDailyReward(MySqlClient);
+                }
 
                 mCharacterInfo.Online = true;
                 mCharacterInfo.UpdateOnline(MySqlClient);
@@ -461,7 +476,7 @@ namespace Snowlight.Game.Sessions
                 SendData(AchievementDataListComposer.Compose(AchievementManager.Achievements.Values.ToList()));
 
                 SendData(AvailabilityStatusMessageComposer.Compose());
-                SendData(InfoFeedEnableMessageComposer.Compose(mCharacterInfo.AllowFriendStream));
+                SendData(InfoFeedEnableMessageComposer.Compose(true));
 
                 SendData(TutorialStatusComposer.Compose(this));
 
@@ -600,9 +615,7 @@ namespace Snowlight.Game.Sessions
 
                 #endregion
 
-                #region Login Bonus Rewards
-
-                #region Badge
+                #region Login Badge Reward
                 if (ServerSettings.LoginBadgeEnabled)
                 {
                     Badge BadgeToGive = RightsManager.GetBadgeByCode(ServerSettings.LoginBadgeCode);
@@ -615,29 +628,6 @@ namespace Snowlight.Game.Sessions
                         SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
                     }
                 }
-                #endregion
-
-                #region Daily Credits/Pixels
-                if (ServerSettings.DailyRewardEnabled && Info.DateTimeLastLogin.ToString("dd-MM-yyyy") != DateTime.Now.ToString("dd-MM-yyyy"))
-                {
-                    if (ServerSettings.DailyRewardCreditsAmount > 0)
-                    {
-                        Info.UpdateCreditsBalance(MySqlClient, ServerSettings.DailyRewardCreditsAmount);
-                        SendData(CreditsBalanceComposer.Compose(Info.CreditsBalance));
-                    }
-
-                    if (ServerSettings.DailyRewardActivityPointAmount > 0)
-                    {
-                        Info.UpdateActivityPointsBalance(MySqlClient, ServerSettings.DailyActivityPointsType, ServerSettings.DailyRewardActivityPointAmount);
-                        if (ServerSettings.DailyActivityPointsType == SeasonalCurrencyList.Pixels)
-                        {
-                            SendData(UpdatePixelsBalanceComposer.Compose(Info.ActivityPoints[0], ServerSettings.DailyRewardActivityPointAmount));
-                        }
-                        SendData(UserActivityPointsBalanceComposer.Compose(Info.ActivityPoints));
-                    }
-                }
-                #endregion
-
                 #endregion
 
                 mCharacterInfo.TimestampLastOnline = UnixTimestamp.GetCurrent();
@@ -785,7 +775,7 @@ namespace Snowlight.Game.Sessions
             }
             else
             {
-                //SessionManager.StopSession(mId);
+                SessionManager.StopSession(mId);
                 return;
             }
         }

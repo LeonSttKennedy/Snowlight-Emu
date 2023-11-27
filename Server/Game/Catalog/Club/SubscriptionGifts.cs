@@ -12,11 +12,14 @@ namespace Snowlight.Game.Catalog
     public class SubscriptionGifts
     {
         private uint mId;
-        private uint mDefinitionId;
+        private int mDefinitionId;
         private string mItemName;
         private string mPresetFlags;
+        private int mAmount;
         private int mDaysNeed;
         private bool mIsVip;
+
+        private List<SubscriptionGifts> mDealGifts;
 
         public uint Id
         {
@@ -30,7 +33,7 @@ namespace Snowlight.Game.Catalog
                 mId = value;
             }
         }
-        public uint DefinitionId
+        public int DefinitionId
         {
             get
             {
@@ -49,6 +52,7 @@ namespace Snowlight.Game.Catalog
             {
                 return mItemName;
             }
+
             set 
             {
                 mItemName = value;
@@ -69,9 +73,23 @@ namespace Snowlight.Game.Catalog
             {
                 return mPresetFlags;
             }
+
             set
             {
                 mPresetFlags = value;
+            }
+        }
+
+        public int Amount
+        {
+            get
+            {
+                return mAmount;
+            }
+
+            set
+            {
+                mAmount = value;
             }
         }
 
@@ -79,7 +97,8 @@ namespace Snowlight.Game.Catalog
         {
             get
             {
-                return ItemDefinitionManager.GetDefinition(mDefinitionId);
+                uint DefId = uint.Parse(mDefinitionId == -1 ? "0" : mDefinitionId.ToString());
+                return ItemDefinitionManager.GetDefinition(DefId);
             }
         }
 
@@ -109,14 +128,38 @@ namespace Snowlight.Game.Catalog
             }
         }
 
-        public SubscriptionGifts(uint Id, uint DefinitionId, string ItemName, string PresetFlags, int DaysNeed, bool IsVip)
+        public List<SubscriptionGifts> DealItems
+        {
+            get
+            {
+                return mDealGifts;
+            }
+        }
+
+        public bool IsDeal
+        {
+            get
+            {
+                return mDefinitionId == -1 && mDealGifts.Count > 1;
+            }
+        }
+
+        public SubscriptionGifts(uint Id, int DefinitionId, string ItemName, string PresetFlags, int Amount, int DaysNeed, bool IsVip)
         {
             mId = Id;
             mDefinitionId = DefinitionId;
             mItemName = ItemName;
             mPresetFlags = PresetFlags;
+            mAmount = Amount;
             mDaysNeed = DaysNeed;
             mIsVip = IsVip;
+
+            mDealGifts = new List<SubscriptionGifts>();
+        }
+
+        public void AddItem(SubscriptionGifts Gift)
+        {
+            mDealGifts.Add(Gift);
         }
     }
 }

@@ -36,7 +36,8 @@ namespace Snowlight.Game.Pets
             Dictionary<int, List<PetTricks>> NewTrickData = new Dictionary<int, List<PetTricks>>();
             Dictionary<int, List<PetCommands>> NewCommandsData = new Dictionary<int, List<PetCommands>>();
 
-            DataTable RaceTable = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_pet_races");
+            MySqlClient.SetParameter("enabled", "1");
+            DataTable RaceTable = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_pet_races WHERE enabled = @enabled");
 
             foreach (DataRow Row in RaceTable.Rows)
             {
@@ -47,7 +48,7 @@ namespace Snowlight.Game.Pets
                     NewRaceData.Add(PetType, new List<PetRaceData>());
                 }
 
-                NewRaceData[PetType].Add(new PetRaceData((int)Row["data1"], (int)Row["data2"], (int)Row["data3"]));
+                NewRaceData[PetType].Add(new PetRaceData((int)Row["pet_breed"], (Row["sellable"].ToString() == "1"), (Row["breed_is_rare"].ToString() == "1")));
             }
 
             DataTable TrickTable = MySqlClient.ExecuteQueryTable("SELECT * FROM pet_tricks");

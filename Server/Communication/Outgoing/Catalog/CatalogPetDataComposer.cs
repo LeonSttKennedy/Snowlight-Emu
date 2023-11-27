@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 using Snowlight.Game.Items;
 using Snowlight.Game.Pets;
 
@@ -8,19 +8,19 @@ namespace Snowlight.Communication.Outgoing
 {
     public static class CatalogPetDataComposer
     {
-        public static ServerMessage Compose(CatalogItem Item, List<PetRaceData> RaceData, int PetType)
+        public static ServerMessage Compose(CatalogItem Item, int PetType)
         {
             // L{a0 pet12RAPCHIHPCIIHPCJIHPCKIHPCPAIHPCQAIH
             ServerMessage Message = new ServerMessage(OpcodesOut.CATALOG_PET_DATA);
             Message.AppendStringWithBreak(Item.DisplayName);
-            Message.AppendInt32(RaceData.Count);
+            Message.AppendInt32(Item.DealRaces.Count);
 
-            foreach (PetRaceData Race in RaceData)
+            foreach (PetRaceData Race in Item.DealRaces)
             {
-                Message.AppendInt32(PetType);       // Pet type
-                Message.AppendInt32(Race.Data1);    // Pet color / breed
-                Message.AppendInt32(Race.Data2);    // Sellable (BOOL)
-                Message.AppendInt32(Race.Data3);    // Is Rare  (BOOL)
+                Message.AppendInt32(PetType);                           // Pet type
+                Message.AppendInt32(Race.Breed);                        // Pet color / breed
+                Message.AppendBoolean(Race.Sellable);                   // Sellable
+                Message.AppendBoolean(Race.IsRare);                     // Is Rare
             }
 
             return Message;

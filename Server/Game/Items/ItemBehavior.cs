@@ -25,39 +25,41 @@ namespace Snowlight.Game.Items
         WiredTrigger = 18,
         WiredCondition = 19,
         WiredEffect = 20,
-        TimedAlert = 21,
-        StepSwitch = 22,
-        Football = 23,
-        Dice = 24,
-        HoloDice = 25,
-        SpinningBottle = 26,
-        HabboWheel = 27,
-        LoveShuffler = 28,
-        StickyNote = 29,
-        StickyPole = 30,
-        Scoreboard = 31,
-        Pet = 32,
-        Dispenser = 33,
-        Fireworks = 34,
-        MusicDisk = 35,
-        Rental = 36,
-        Gift = 37,
-        PuzzleBox = 38,
-        PetNest = 39,
-        PetBall = 40,
-        PetFood = 41,
-        PetWaterBowl = 42,
-        GameCounter = 43,
-        DuckHC = 44,
-        DuckVIP = 45,
-        Platform = 46,
-        WelcomeGift = 47,
-        RoomBackground = 48,
-        DragonTree = 49,
-        ChickenTrampoline = 50,
-        FrogPond = 51,
-        MonkeyPond = 52,
-        BlackHole = 53
+        WiredAddon = 21,
+        TimedAlert = 22,
+        StepSwitch = 23,
+        Football = 24,
+        FootballGate = 25,
+        Dice = 26,
+        HoloDice = 27,
+        SpinningBottle = 28,
+        HabboWheel = 29,
+        LoveShuffler = 30,
+        StickyNote = 31,
+        StickyPole = 32,
+        Scoreboard = 33,
+        Pet = 34,
+        Dispenser = 35,
+        Fireworks = 36,
+        MusicDisk = 37,
+        Rental = 38,
+        Gift = 39,
+        PuzzleBox = 40,
+        PetNest = 41,
+        PetBall = 42,
+        PetFood = 43,
+        PetWaterBowl = 44,
+        GameCounter = 45,
+        DuckHC = 46,
+        DuckVIP = 47,
+        Platform = 48,
+        WelcomeGift = 49,
+        RoomBackground = 50,
+        DragonTree = 51,
+        ChickenTrampoline = 52,
+        FrogPond = 53,
+        MonkeyPond = 54,
+        BlackHole = 55
     }
 
     public static class ItemBehaviorUtil
@@ -126,6 +128,10 @@ namespace Snowlight.Game.Items
 
                     return ItemBehavior.Football;
 
+                case "football_gate":
+
+                    return ItemBehavior.FootballGate;
+
                 case "autoswitch":
 
                     return ItemBehavior.StepSwitch;
@@ -145,6 +151,10 @@ namespace Snowlight.Game.Items
                 case "wiredtrigger":
 
                     return ItemBehavior.WiredTrigger;
+
+                case "wiredaddon":
+
+                    return ItemBehavior.WiredAddon;
 
                 case "effectgenerator":
 

@@ -117,14 +117,14 @@ namespace Snowlight.Game.Characters
                 (double)Row["timestamp_created"], (int)Row["respect_points"], (int)Row["respect_credit_humans"],
                 (int)Row["respect_credit_pets"], (double)Row["last_respect_update"], (double)Row["moderation_muted_until_timestamp"], (double)Row["last_name_change"],
                 (int)Row["marketplace_tickets"], (int)Row["regular_visitor"], (int)Row["time_online"], (int)Row["favorite_group_id"],
-                (Row["online"].ToString() == "1"), (Row["allow_eventstream"].ToString() == "1"), (Row["allow_mimic"].ToString() == "1"), (Row["allow_gifts"].ToString() == "1"),
+                (Row["online"].ToString() == "1"), (Row["received_daily_reward"].ToString() == "1"), (Row["allow_eventstream"].ToString() == "1"), (Row["allow_mimic"].ToString() == "1"), (Row["allow_gifts"].ToString() == "1"),
                 (Row["allow_trade"].ToString() == "1"));
         }
 
         public static CharacterInfo GenerateNullCharacter(uint Id)
         {
             return new CharacterInfo(null, 0, Id, "Unknown", string.Empty, string.Empty, CharacterGender.Male, string.Empty,
-                0, string.Empty, 0, false, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, true, false, true, true, false);
+                0, string.Empty, 0, false, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, true, false, false, true, true, false);
         }
     }
 }

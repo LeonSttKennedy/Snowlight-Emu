@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tempo de Geração: Fev 21, 2023 as 10:15 AM
+-- Tempo de Geração: Nov 27, 2023 as 12:53 AM
 -- Versão do Servidor: 5.5.10
 -- Versão do PHP: 5.3.6
 
@@ -284,6 +284,60 @@ CREATE TABLE IF NOT EXISTS `achievements_to_unlock` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `articles`
+--
+
+CREATE TABLE IF NOT EXISTS `articles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `seo_link` varchar(120) NOT NULL DEFAULT 'news-article',
+  `title` varchar(255) DEFAULT NULL,
+  `category_id` int(10) unsigned NOT NULL DEFAULT '1',
+  `shortstory` text,
+  `longstory` text,
+  `published` int(10) NOT NULL DEFAULT '0',
+  `author` int(6) NOT NULL DEFAULT '1',
+  `image` varchar(255) DEFAULT '/Public/Images/news/TS_Web60.png',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Extraindo dados da tabela `articles`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `articles_categories`
+--
+
+CREATE TABLE IF NOT EXISTS `articles_categories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `caption` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+
+--
+-- Extraindo dados da tabela `articles_categories`
+--
+
+INSERT INTO `articles_categories` (`id`, `caption`) VALUES
+(0, 'Uncategorized'),
+(1, 'Uber'),
+(2, 'Technical'),
+(3, 'Updates'),
+(4, 'Competitions'),
+(5, 'Polls'),
+(6, 'Sponsored'),
+(7, 'Credits'),
+(8, 'Uber Club'),
+(9, 'VIP'),
+(10, 'Furni'),
+(11, 'Support');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `avatar_effects`
 --
 
@@ -339,7 +393,7 @@ CREATE TABLE IF NOT EXISTS `badge_definitions` (
   `code` varchar(64) NOT NULL,
   `rights_sets` varchar(128) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`,`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=233 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=538 ;
 
 --
 -- Extraindo dados da tabela `badge_definitions`
@@ -577,7 +631,312 @@ INSERT INTO `badge_definitions` (`id`, `code`, `rights_sets`) VALUES
 (229, 'ACH_RoomDecoHoleFurniCount7', ''),
 (230, 'ACH_RoomDecoHoleFurniCount8', ''),
 (231, 'ACH_RoomDecoHoleFurniCount9', ''),
-(232, 'ACH_RoomDecoHoleFurniCount10', '');
+(232, 'ACH_RoomDecoHoleFurniCount10', ''),
+(233, 'BBBH1', ''),
+(234, 'BBBH2', ''),
+(235, 'BOT', ''),
+(236, 'BE1', ''),
+(237, 'BE2', ''),
+(238, 'BR003', ''),
+(239, 'BRO', ''),
+(240, 'BRP', ''),
+(241, 'E12', ''),
+(242, 'EXM', ''),
+(243, 'FAN', ''),
+(244, 'FRH', ''),
+(245, 'HQ007', ''),
+(246, 'HQ008', ''),
+(247, 'HQ009', ''),
+(248, 'MRG00', ''),
+(249, 'MRG01', ''),
+(250, 'MRG02', ''),
+(251, 'MRG03', ''),
+(252, 'MRG04', ''),
+(253, 'MRG05', ''),
+(254, 'PRE', ''),
+(255, 'Z31', ''),
+(256, 'ARB', ''),
+(257, '50S', ''),
+(258, '70S', ''),
+(259, 'BR011', ''),
+(260, 'BR012', ''),
+(261, 'BR013', ''),
+(262, 'BR014', ''),
+(263, 'BR015', ''),
+(264, 'CO4', ''),
+(265, 'CO5', ''),
+(266, 'CO6', ''),
+(267, 'CY1', ''),
+(268, 'CY2', ''),
+(269, 'CY3', ''),
+(270, 'DE007', ''),
+(271, 'DE008', ''),
+(272, 'DI001', ''),
+(273, 'DJ3', ''),
+(274, 'DK1', ''),
+(275, 'EAS01', ''),
+(276, 'EAS02', ''),
+(277, 'EAS03', ''),
+(278, 'EC2', ''),
+(279, 'EC3', ''),
+(280, 'EC4', ''),
+(281, 'EC5', ''),
+(282, 'EHR', ''),
+(283, 'ES005', ''),
+(284, 'ES006', ''),
+(285, 'ES007', ''),
+(286, 'ES008', ''),
+(287, 'ES009', ''),
+(288, 'ES010', ''),
+(289, 'ES011', ''),
+(290, 'ES012', ''),
+(291, 'ES013', ''),
+(292, 'ES014', ''),
+(293, 'ES015', ''),
+(294, 'ES016', ''),
+(295, 'ES017', ''),
+(296, 'ES018', ''),
+(297, 'ES019', ''),
+(298, 'ES020', ''),
+(299, 'EXH', ''),
+(300, 'FR030', ''),
+(301, 'FRM', ''),
+(302, 'FRN', ''),
+(303, 'FRR', ''),
+(304, 'FRS', ''),
+(305, 'GWA', ''),
+(306, 'HC1', ''),
+(307, 'HC2', ''),
+(308, 'HC3', ''),
+(309, 'HC4', ''),
+(310, 'HC5', ''),
+(311, 'HC1_CN', ''),
+(312, 'HC2_CN', ''),
+(313, 'HC1mm', ''),
+(314, 'HC2mm', ''),
+(315, 'HUB', ''),
+(316, 'HWB', ''),
+(317, 'HWN00', ''),
+(318, 'HWN01', ''),
+(319, 'HWN02', ''),
+(320, 'HWN03', ''),
+(321, 'HWN04', ''),
+(322, 'HWN05', ''),
+(323, 'HWN06', ''),
+(324, 'HWN07', ''),
+(325, 'HWN08', ''),
+(326, 'HWN09', ''),
+(327, 'HX1', ''),
+(328, 'HX2', ''),
+(329, 'HX3', ''),
+(330, 'HX4', ''),
+(331, 'HX5', ''),
+(332, 'HX6', ''),
+(333, 'HX7', ''),
+(334, 'HX8', ''),
+(335, 'HX9', ''),
+(336, 'IT006', ''),
+(337, 'IT013', ''),
+(338, 'IT014', ''),
+(339, 'IT015', ''),
+(340, 'IT016', ''),
+(341, 'IT017', ''),
+(342, 'KH0', ''),
+(343, 'LEG', ''),
+(344, 'LLL', ''),
+(345, 'MB1', ''),
+(346, 'MB2', ''),
+(347, 'MS1', ''),
+(348, 'MS2', ''),
+(349, 'MS3', ''),
+(350, 'MS4', ''),
+(351, 'MS5', ''),
+(352, 'MS6', ''),
+(353, 'MYF', ''),
+(354, 'NEA', ''),
+(355, 'NEB', ''),
+(356, 'NEC', ''),
+(357, 'NED', ''),
+(358, 'NEE', ''),
+(359, 'NEF', ''),
+(360, 'NEG', ''),
+(361, 'NEH', ''),
+(362, 'NEI', ''),
+(363, 'NEJ', ''),
+(364, 'NO5', ''),
+(365, 'NOA', ''),
+(366, 'NOB', ''),
+(367, 'NOC', ''),
+(368, 'NOD', ''),
+(369, 'NOE', ''),
+(370, 'NOF', ''),
+(371, 'NOG', ''),
+(372, 'NOH', ''),
+(373, 'NRJ', ''),
+(374, 'NZB', ''),
+(375, 'OL1', ''),
+(376, 'OL2', ''),
+(377, 'OL3', ''),
+(378, 'PHF', ''),
+(379, 'RA1', ''),
+(380, 'RA2', ''),
+(381, 'RA3', ''),
+(382, 'RA4', ''),
+(383, 'RA5', ''),
+(384, 'RA6', ''),
+(385, 'RA7', ''),
+(386, 'RA8', ''),
+(387, 'RA9', ''),
+(388, 'RA10', ''),
+(389, 'RA11', ''),
+(390, 'RE2', ''),
+(391, 'REX', ''),
+(392, 'RU3', ''),
+(393, 'RUG', ''),
+(394, 'SB5', ''),
+(395, 'SB6', ''),
+(396, 'SB7', ''),
+(397, 'SE1', ''),
+(398, 'SGA', ''),
+(399, 'SGF', ''),
+(400, 'SU1', ''),
+(401, 'SU2', ''),
+(402, 'SU3', ''),
+(403, 'TWIC1', ''),
+(404, 'TWIC2', ''),
+(405, 'TWIC3', ''),
+(406, 'TWIQ1', ''),
+(407, 'TWIQ2', ''),
+(408, 'TWIQ3', ''),
+(409, 'TWIV1', ''),
+(410, 'TWIV2', ''),
+(411, 'TWIV3', ''),
+(412, 'UK1', ''),
+(413, 'VA6', ''),
+(414, 'VA7', ''),
+(415, 'VA8', ''),
+(416, 'WAR', ''),
+(417, 'WH1', ''),
+(418, 'WH2', ''),
+(419, 'WH3', ''),
+(420, 'WH4', ''),
+(421, 'WH5', ''),
+(422, 'WH6', ''),
+(423, 'WH7', ''),
+(424, 'WH8', ''),
+(425, 'YAK', ''),
+(426, 'AUB', ''),
+(427, 'DE4', ''),
+(428, 'DE5', ''),
+(429, 'DESP1', ''),
+(430, 'DESP2', ''),
+(431, 'DEV', ''),
+(432, 'DEW', ''),
+(433, 'DEX', ''),
+(434, 'DK007', ''),
+(435, 'ES090', ''),
+(436, 'IT055', ''),
+(437, 'IT056', ''),
+(438, 'NO8', ''),
+(439, 'PR1', ''),
+(440, 'PR2', ''),
+(441, 'PR3', ''),
+(442, 'PIR', ''),
+(443, 'PT1', ''),
+(444, 'PT2', ''),
+(445, 'PT3', ''),
+(446, 'PT4', ''),
+(447, 'RM0', ''),
+(448, 'RM1', ''),
+(449, 'RM2', ''),
+(450, 'RM3', ''),
+(451, 'UST', ''),
+(452, 'RNS', ''),
+(453, 'UKK', ''),
+(454, 'UKL', ''),
+(455, 'UKM', ''),
+(456, 'USJ', ''),
+(457, 'UKO', ''),
+(458, 'UKU', ''),
+(459, 'UKV', ''),
+(460, 'UKW', ''),
+(461, 'Z02', ''),
+(462, 'Z57', ''),
+(463, 'WD0', ''),
+(464, 'WD1', ''),
+(465, 'WD2', ''),
+(466, 'WD3', ''),
+(467, 'WD4', ''),
+(468, 'WD5', ''),
+(469, 'AR1', ''),
+(470, 'ATW', ''),
+(471, 'BGWV0', ''),
+(472, 'BGWV1', ''),
+(473, 'BGWV2', ''),
+(474, 'BGWV3', ''),
+(475, 'BGWV4', ''),
+(476, 'BGWV5', ''),
+(477, 'BGWV6', ''),
+(478, 'BGWV7', ''),
+(479, 'BR028', ''),
+(480, 'BR029', ''),
+(481, 'BR030', ''),
+(482, 'BR031', ''),
+(483, 'BR035', ''),
+(484, 'BR036', ''),
+(485, 'BR037', ''),
+(486, 'BR038', ''),
+(487, 'BR039', ''),
+(488, 'BR40', ''),
+(489, 'BR042', ''),
+(490, 'BR043', ''),
+(491, 'BR045', ''),
+(492, 'BR051', ''),
+(493, 'BR052', ''),
+(494, 'BR053', ''),
+(495, 'BR055', ''),
+(496, 'BR080', ''),
+(497, 'BR084', ''),
+(498, 'BR085', ''),
+(499, 'BR086', ''),
+(500, 'BR087', ''),
+(501, 'BR088', ''),
+(502, 'BR089', ''),
+(503, 'BR090', ''),
+(504, 'BR091', ''),
+(505, 'BR092', ''),
+(506, 'BR093', ''),
+(507, 'BR094', ''),
+(508, 'BR095', ''),
+(509, 'BR099', ''),
+(510, 'BR100', ''),
+(511, 'BR101', ''),
+(512, 'BR102', ''),
+(513, 'BR115', ''),
+(514, 'GLA', ''),
+(515, 'GLB', ''),
+(516, 'GLC', ''),
+(517, 'GLD', ''),
+(518, 'GLE', ''),
+(519, 'GLF', ''),
+(520, 'GLG', ''),
+(521, 'GLH', ''),
+(522, 'GLI', ''),
+(523, 'GLJ', ''),
+(524, 'GLK', ''),
+(525, 'DJ1', ''),
+(526, 'DJ2', ''),
+(527, 'UK011', ''),
+(528, 'UK111', ''),
+(529, 'UK112', ''),
+(530, 'UK113', ''),
+(531, 'UK114', ''),
+(532, 'UK115', ''),
+(533, 'MTV01', ''),
+(534, 'MTV02', ''),
+(535, 'MTV10', ''),
+(536, 'UKC', ''),
+(537, '1goal', '');
 
 -- --------------------------------------------------------
 
@@ -968,7 +1327,7 @@ CREATE TABLE IF NOT EXISTS `catalog` (
   `page_strings_1` text COMMENT 'Delimiter: |',
   `page_strings_2` text COMMENT 'Delimiter: |',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=179 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=180 ;
 
 --
 -- Extraindo dados da tabela `catalog`
@@ -980,8 +1339,8 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (3, -1, 10, '1', 'Uber Exchange', 6, 11, '', '1', '0', '0', 'default_3x3', 'catalog_bank_headline1_uber|catalog_bank_teaser|catalog_special_txtbg1', 'Exchange is where you can convert your Credits into a tradable currency. You can then use this currency to trade for Furni or just show off your riches in your room.|Click on an item for more details.|Refundable & Goods'),
 (4, 6, 1, '1', 'Custom Rooms', 125, 0, 'club_regular', '1', '0', '0', 'default_3x3', 'catalog_header_blackhole|catalog_blackhole_teaser', 'This ingenious furni line has been created for you to create your very own custom room layouts!|Click on an item for details.'),
 (5, -1, 15, '1', 'Staff Furniture', 31, 5, 'moderation_tool', '1', '1', '0', 'default_3x3', '', ''),
-(6, -1, 11, '1', 'Uber Club', 75, 4, '', '1', '0', '0', 'club_buy', 'hc2_clubtitle_uber', ''),
-(7, 6, 3, '1', 'Club Shop', 75, 0, '', '1', '0', '0', 'default_3x3', 'hc2_clubtitle_uber|catalog_hc_teaser|catalog_special_txtbg1', 'As a member of Uber Club, you can shop from this selection of exclusive items. Every now and then we will also be adding items that are currently unavailable in the regular Furni Shop as well!|Click on an item for details.|For Uber Club members only!'),
+(6, -1, 11, '1', 'Uber Club', 75, 4, '', '1', '0', '0', 'club_buy', 'hc2_clubtitle', ''),
+(7, 6, 4, '1', 'Club Shop', 75, 0, '', '1', '0', '0', 'default_3x3', 'hc2_clubtitle|catalog_hc_teaser|catalog_special_txtbg1', 'As a member of Uber Club, you can shop from this selection of exclusive items. Every now and then we will also be adding items that are currently unavailable in the regular Furni Shop as well!|Click on an item for details.|For Uber Club members only!'),
 (8, 2, 92, '1', 'Windows', 63, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_windows_headline1_en|ctlg_windows_teaser1_en', 'Let the sunshine in with one of our many window designs and give your room a unique, new feel. Don''t forget to watch out for the window cleaner every Tuesday! I heard he''s cheating on your Mum.|Click on an item for more details.'),
 (9, 2, 79, '1', 'Teleporters', 58, 0, '', '1', '0', '0', 'default_3x3', 'catalog_doors_headline1|catalog_door_a', 'A different dimension? Another world? A new universe? ...or maybe just to the other side of the room! You can do it all with our range of teleporters. When trading, make sure you get a linking pair!|Click on an item for more details.'),
 (10, 2, 78, '1', 'Summer', 57, 0, '', '1', '0', '0', 'default_3x3', 'summer|catalog_sum_teaser1', 'Are you a paddler, a swimmer or do you just like lazing on the side? It doesn''t matter with this summer range because you can do it all from your very own room! Don''t forget your sunscreen...|Click on an item for more details.'),
@@ -1047,7 +1406,7 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (70, 2, 27, '1', 'Diner', 204, 0, '', '1', '0', '0', 'default_3x3', 'catalog_diner_header_en|catalog_diner_teaser_en', 'Design your own 50''s Diner with this restaurant range in every single colour you could think of! This collection also features many timeless (and tasteless...) dishes for that real greasy spooon atmosphere.|Click on an item for more details.'),
 (71, 2, 39, '1', 'Grunge', 32, 0, '', '1', '0', '0', 'default_3x3', 'catalog_grunge_headline1|catalog_grunge_teaser', 'Homeless, a tramp or maybe just a teenager? If you like laying on AIDS-riden mattresses you found behind your mate''s council flat, why not do it online too? Just remember the 50 credit fine for graffiting the Welcome Lounge please!|Click on an item for more details.'),
 (72, 2, 36, '1', 'Glass', 29, 0, '', '1', '0', '0', 'default_3x3', 'catalog_glass_headline1|catalog_glass_teaser1', 'Recycled glass with rubber non-slip surfaces makes for a strange but professional look. Perfect for high rise buildings and offices to optimise lighting and the feel of openess and space. Don''t worry, its shatterproof safety glass!|Click on an item for more details.'),
-(73, 2, 37, '1', 'Gothic', 30, 0, '', '1', '0', '0', 'default_3x3', 'catalog_gothic_headline1|catalog_gothic_teaser1', 'With this range you can recreate Doomsday, a medieval courtyard or just a really depressing church. This range suits those who lurk in the shadows and crawl out to start their day just as the sun sets. Dim candle light is perfect for those eyes that have never seen the bright light of day.|Click on an item for more details.\r\n|Click on an item for more details.'),
+(73, 2, 37, '1', 'Gothic', 30, 0, '', '1', '0', '0', 'default_3x3', 'catalog_gothic_headline1|catalog_gothic_teaser1', 'With this range you can recreate Doomsday, a medieval courtyard or just a really depressing church. This range suits those who lurk in the shadows and crawl out to start their day just as the sun sets. Dim candle light is perfect for those eyes that have never seen the bright light of day.|Click on an item for more details.|'),
 (74, 2, 69, '1', 'Romantique', 50, 0, '', '1', '0', '0', 'default_3x3', 'catalog_romantique_headline1|catalog_romantique_teaser1', 'Found in the back of an old French warehouse this furniture was stored long ago and forgotten about until found and restored to its former glory. This collection looks great in any budoir or boutique and comes in several different colours!|Click on an item for more details.'),
 (75, 2, 61, '1', 'Neon', 41, 0, '', '1', '0', '0', 'default_3x3', 'catalog_neon_header1_en|catalog_neon_teaser1_en', 'Start up the music and invite some friends over! Install some of our fabulous lights, dance floors and disco balls to get the party going. This is the right range for you party animals out there, so come and get some!|Click on an item for more details.'),
 (76, 2, 73, '1', 'Sci-Fi', 53, 0, '', '1', '0', '0', 'default_3x3', 'sf_header_en|sf_teaser_en', 'Beep bip beeboo bop. Bipbipbip beep bopbop beeeeep bib bob bib. Beeeeb, bopbipbipbob beep, beep, beep.  Bipbipbip beep bopbop beeeeep bib. beep beep beep, boooohhhooooop. Transmission terminated.|Click on an item for more details.'),
@@ -1108,7 +1467,7 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (131, 58, 14, '1', 'Monkey', 128, 0, '', '1', '0', '0', 'pets', 'catalog_pet_headline1|', 'This mischievous monkey has made his way into the hotel and into our hearts. From the tilted beret to his love of bunches of bananas- this Monkey is sure to liven up your Habbo life!||Name your Monkey:|Select your colour/breed:|'),
 (132, -1, 9, '1', 'Trax', 4, 4, '', '1', '1', '0', 'default_3x3', NULL, NULL),
 (133, 132, 1, '1', 'Trax Machines', 4, 0, '', '1', '0', '0', 'default_3x3', 'catalog_djshop_headline1|catalog_djshop_teaser1', 'Buy your Trax machines here, ready to load with all your wonderful, musical creations! Check the Sound Sets page for all the discs you could use!|Click on an item for more information.'),
-(134, 6, 4, '1', 'Club Gifts', 75, 0, '', '1', '0', '0', 'club_gifts', 'hc2_clubtitle_uber|', ''),
+(134, 6, 5, '1', 'Club Gifts', 75, 0, '', '1', '0', '0', 'club_gifts', 'hc2_clubtitle|', ''),
 (135, 5, 5, '1', 'Penguins', 263, 0, '', '1', '0', '0', 'default_3x3', 'catalog_frontpage_headline2_en', NULL),
 (136, 2, 65, '1', 'Prison', 240, 0, '', '1', '0', '0', 'default_3x3', 'prisonheader|prisonteaser', 'Hey, he''s scaping! Just Kidding, no one''s getting out of these high security cells!|Click on an item for more details.'),
 (137, 2, 58, '1', 'Memorial', 263, 0, '', '1', '0', '0', 'default_3x3', 'ctlg_limited_headline1_en|catalog_limited_teaser|catalog_special_txtbg2', 'Available this week only and NEVER to be sold again, special Memorial Furni. As we have a fond farewell to Old Habbo and welcome New Habbo, bag yourself a highly collectible momento.|Click on an item for more details.|Habbo Memorial'),
@@ -1153,7 +1512,8 @@ INSERT INTO `catalog` (`id`, `parent_id`, `order_num`, `enabled`, `title`, `icon
 (175, 2, 42, '1', 'Habbo Way', 160, 0, '', '1', '0', '0', 'default_3x3', 'catalog_header_habboway|catalog_teaser_habboway', 'To celebrate the launch of Habbo Way, we have a fantastic new floor furni. With it, you''ll be able to walk through the air, at least metaphorically.|Click on an item for more details.'),
 (176, 2, 57, '1', 'Mayan', 171, 0, '', '1', '0', '0', 'default_3x3', 'mayan_header|mayanteaser', 'Just what you need to prove you survived the apocolypse!|Click on an item for more details.'),
 (177, 39, 5, '1', 'WIRED: Sets', 84, 0, '', '1', '0', '0', 'default_3x3', 'catalog_wired_header6_en|ctlg_pic_wired_deals', 'The easiest way to get to WIRED is through the sets. These deals contain all the furniture you need to build a working WIRED combination (e.g. a password controlled door)|Click on an item for more details.'),
-(178, 39, 6, '1', 'Information', 42, 0, '', '1', '0', '0', 'pets2', 'catalog_wired_header1|ctlg_pic_teaser_wired', 'WIREDs are programmable components that can perform and (optionally with conditions) trigger functions.|For Wired you need 3 types of furniture:|\r\n1. Trigger: Things that need to happen for effects to happen\r\n2. Effects: Things that happen when a trigger is activated\r\n3. Conditions (optional): What must be in order for a trigger to work\r\nSo: Trigger + Effect + (Condition) = Wired!|Each component can be programmed separately. Just stack your trigger, effect and - if you want - your condition on top of each other and they will work!');
+(178, 39, 6, '1', 'Information', 42, 0, '', '1', '0', '0', 'pets2', 'catalog_wired_header1|ctlg_pic_teaser_wired', 'WIREDs are programmable components that can perform and (optionally with conditions) trigger functions.|For Wired you need 3 types of furniture:|\r\n1. Trigger: Things that need to happen for effects to happen\r\n2. Effects: Things that happen when a trigger is activated\r\n3. Conditions (optional): What must be in order for a trigger to work\r\nSo: Trigger + Effect + (Condition) = Wired!|Each component can be programmed separately. Just stack your trigger, effect and - if you want - your condition on top of each other and they will work!'),
+(179, 6, 3, '1', 'Pet Special Breeds', 173, 0, 'club_regular', '1', '0', '0', 'pets', 'catalog_pet_headline1|', 'Dragon pet with special breed, for special people, are going land on uberHotel! Don''t miss out on the chance to find a new friend! Who knows when they''ll back.||Name your Dragon:|Pick a color/breed:');
 
 -- --------------------------------------------------------
 
@@ -1177,7 +1537,7 @@ CREATE TABLE IF NOT EXISTS `catalog_items` (
   `order_id` int(11) NOT NULL DEFAULT '1',
   `badge_code` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4251 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4259 ;
 
 --
 -- Extraindo dados da tabela `catalog_items`
@@ -4204,8 +4564,8 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (3014, 127, 2906, '', 'a0 pet8', 20, 0, 'pixels', '1', 1, 0, -1, 0, ''),
 (3015, 128, 2907, '', 'a0 pet9', 20, 0, 'pixels', '1', 1, 0, -1, 0, ''),
 (3016, 129, 2908, '', 'a0 pet10', 20, 0, 'pixels', '1', 1, 0, -1, 0, ''),
-(3017, 130, 2909, '', 'a0 pet11', 20, 0, 'pixels', '1', 1, 0, -1, 0, ''),
-(3018, 115, 2883, '', 'a0 pet12', 20, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(3017, 130, 2909, '', 'a0 pet11', 30, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(3018, 115, 2883, '', 'a0 pet12', 25, 0, 'pixels', '1', 1, 0, -1, 0, ''),
 (3019, 131, 2910, '', 'a0 pet14', 20, 0, 'pixels', '1', 1, 0, -1, 0, ''),
 (3020, 3, 760, '1', 'a0 CF_1_coin_bronze', 2, 0, 'pixels', '1', 1, 0, -1, 1, ''),
 (3021, 3, 763, '5', 'a0 CF_5_coin_silver', 6, 0, 'pixels', '1', 1, 0, -1, 2, ''),
@@ -5439,9 +5799,21 @@ INSERT INTO `catalog_items` (`id`, `page_id`, `base_id`, `preset_flags`, `name`,
 (4247, 116, 2640, '', 'kuurna_table1', 0, 0, 'pixels', '1', 2, 0, 4243, 3, ''),
 (4248, 116, 2643, '', 'kuurna_chair1', 0, 0, 'pixels', '1', 4, 0, 4243, 4, ''),
 (4249, 116, 2638, '', 'kuurna_chair', 0, 0, 'pixels', '1', 4, 0, 4243, 5, ''),
-(4250, 116, 2639, '', 'kuurna_mat', 0, 0, 'pixels', '1', 4, 0, 4243, 6, '');
+(4250, 116, 2639, '', 'kuurna_mat', 0, 0, 'pixels', '1', 4, 0, 4243, 6, ''),
+(4251, 117, 1018, '17', 'SONG LostMyTapesAtGoa', 1, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(4252, 117, 1018, '18', 'SONG EpicFlail', 1, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(4253, 117, 1018, '19', 'SONG ElectricPixels', 1, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(4254, 117, 1018, '20', 'SONG AlleyCatInTrouble', 1, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(4255, 117, 1018, '21', 'SONG GalacticDisco', 1, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(4256, 117, 1018, '22', 'SONG Trax_2', 1, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(4257, 117, 1018, '23', 'SONG RnB_Swat_Teem', 1, 0, 'pixels', '1', 1, 0, -1, 0, ''),
+(4258, 179, 2883, '', 'rare pet12', 50, 50, 'diamonds', '1', 1, 0, -1, 0, '');
 
 -- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `catalog_items_rotation_settings`
+--
 
 CREATE TABLE IF NOT EXISTS `catalog_items_rotation_settings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -5460,9 +5832,9 @@ CREATE TABLE IF NOT EXISTS `catalog_items_rotation_settings` (
 --
 
 INSERT INTO `catalog_items_rotation_settings` (`id`, `page_id`, `page_to_copy`, `rotation_time`, `rotation_type`, `timestamp_last_rotation`, `last_index`, `enabled`) VALUES
-(1, 152, 82, 7, 'day', 1695757944, 1, '1'),
-(2, 153, 91, 15, 'day', 1695757944, 7, '1'),
-(3, 154, 96, 1, 'day', 1696010943, 172, '1');
+(1, 152, 82, 7, 'day', 0, 0, '1'),
+(2, 153, 91, 15, 'day', 0, 0, '1'),
+(3, 154, 96, 1, 'day', 0, 0, '1');
 
 -- --------------------------------------------------------
 
@@ -5478,7 +5850,7 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_data` (
   `sold_price` int(9) NOT NULL DEFAULT '0',
   `sold_timestamp` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `catalog_marketplace_data`
@@ -5522,166 +5894,183 @@ CREATE TABLE IF NOT EXISTS `catalog_marketplace_offers` (
 CREATE TABLE IF NOT EXISTS `catalog_pet_races` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pet_type` int(11) NOT NULL DEFAULT '0',
-  `data1` int(11) NOT NULL DEFAULT '0',
-  `data2` int(11) NOT NULL DEFAULT '0',
-  `data3` int(11) NOT NULL DEFAULT '0',
+  `pet_breed` int(11) NOT NULL DEFAULT '0',
+  `catalog_item_id` int(11) NOT NULL DEFAULT '0',
+  `sellable` enum('0','1') NOT NULL DEFAULT '1',
+  `breed_is_rare` enum('0','1') NOT NULL DEFAULT '0',
+  `enabled` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `pet_type` (`pet_type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=149 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=164 ;
 
 --
 -- Extraindo dados da tabela `catalog_pet_races`
 --
 
-INSERT INTO `catalog_pet_races` (`id`, `pet_type`, `data1`, `data2`, `data3`) VALUES
-(1, 0, 0, 1, 0),
-(2, 0, 1, 1, 0),
-(3, 0, 2, 1, 0),
-(4, 0, 3, 1, 0),
-(5, 0, 4, 1, 0),
-(6, 0, 5, 1, 0),
-(7, 0, 6, 1, 0),
-(8, 0, 7, 1, 0),
-(9, 0, 8, 1, 0),
-(10, 0, 9, 1, 0),
-(11, 0, 10, 1, 0),
-(12, 0, 11, 1, 0),
-(13, 0, 12, 1, 0),
-(14, 0, 13, 1, 0),
-(15, 0, 14, 1, 0),
-(16, 0, 15, 1, 0),
-(17, 0, 16, 1, 0),
-(18, 0, 17, 1, 0),
-(19, 0, 18, 1, 0),
-(20, 0, 19, 1, 0),
-(21, 0, 20, 1, 0),
-(22, 0, 21, 1, 0),
-(23, 0, 22, 1, 0),
-(24, 0, 23, 1, 0),
-(25, 0, 24, 1, 0),
-(26, 1, 0, 1, 0),
-(27, 1, 1, 1, 0),
-(28, 1, 2, 1, 0),
-(29, 1, 3, 1, 0),
-(30, 1, 4, 1, 0),
-(31, 1, 5, 1, 0),
-(32, 1, 6, 1, 0),
-(33, 1, 7, 1, 0),
-(34, 1, 8, 1, 0),
-(35, 1, 9, 1, 0),
-(36, 1, 10, 1, 0),
-(37, 1, 11, 1, 0),
-(38, 1, 12, 1, 0),
-(39, 1, 13, 1, 0),
-(40, 1, 14, 1, 0),
-(41, 1, 15, 1, 0),
-(42, 1, 16, 1, 0),
-(43, 1, 17, 1, 0),
-(44, 1, 18, 1, 0),
-(45, 1, 19, 1, 0),
-(46, 1, 20, 1, 0),
-(47, 1, 21, 1, 0),
-(48, 1, 22, 1, 0),
-(49, 1, 23, 1, 0),
-(50, 1, 24, 1, 0),
-(51, 2, 0, 1, 0),
-(52, 2, 1, 1, 0),
-(53, 2, 2, 1, 0),
-(54, 2, 3, 1, 0),
-(55, 2, 4, 1, 0),
-(56, 2, 5, 1, 0),
-(57, 2, 6, 1, 0),
-(58, 2, 7, 1, 0),
-(59, 2, 8, 1, 0),
-(60, 2, 9, 1, 0),
-(61, 2, 10, 1, 0),
-(62, 2, 11, 1, 0),
-(63, 3, 0, 1, 0),
-(64, 3, 1, 1, 0),
-(65, 3, 2, 1, 0),
-(66, 3, 3, 1, 0),
-(67, 3, 4, 1, 0),
-(68, 3, 5, 1, 0),
-(69, 3, 6, 1, 0),
-(70, 4, 0, 1, 0),
-(71, 4, 1, 1, 0),
-(72, 4, 2, 1, 0),
-(73, 4, 3, 1, 0),
-(74, 5, 0, 1, 0),
-(75, 5, 1, 1, 0),
-(76, 5, 2, 1, 0),
-(77, 5, 3, 1, 0),
-(78, 5, 5, 1, 0),
-(79, 5, 7, 1, 0),
-(80, 5, 8, 1, 0),
-(81, 6, 0, 1, 0),
-(82, 6, 1, 1, 0),
-(83, 6, 2, 1, 0),
-(84, 6, 3, 1, 0),
-(85, 6, 4, 1, 0),
-(86, 6, 5, 1, 0),
-(87, 6, 6, 1, 0),
-(88, 7, 0, 1, 0),
-(89, 7, 1, 1, 0),
-(90, 7, 2, 1, 0),
-(91, 7, 3, 1, 0),
-(92, 7, 4, 1, 0),
-(93, 7, 5, 1, 0),
-(94, 7, 6, 1, 0),
-(95, 8, 0, 1, 0),
-(96, 8, 1, 1, 0),
-(97, 8, 2, 1, 0),
-(98, 8, 3, 1, 0),
-(99, 8, 4, 1, 0),
-(100, 8, 5, 1, 0),
-(101, 8, 6, 1, 0),
-(102, 8, 7, 1, 0),
-(103, 8, 8, 1, 0),
-(104, 8, 9, 1, 0),
-(105, 8, 10, 1, 0),
-(106, 8, 11, 1, 0),
-(107, 8, 12, 1, 0),
-(108, 9, 0, 1, 0),
-(109, 9, 1, 1, 0),
-(110, 9, 2, 1, 0),
-(111, 9, 3, 1, 0),
-(112, 9, 4, 1, 0),
-(113, 9, 5, 1, 0),
-(114, 9, 6, 1, 0),
-(115, 9, 7, 1, 0),
-(116, 9, 8, 1, 0),
-(117, 10, 0, 1, 0),
-(118, 11, 1, 1, 0),
-(119, 11, 2, 1, 0),
-(120, 11, 3, 1, 0),
-(121, 11, 4, 1, 0),
-(122, 11, 5, 1, 0),
-(123, 11, 6, 1, 0),
-(124, 11, 7, 1, 0),
-(125, 11, 8, 1, 0),
-(126, 11, 9, 1, 0),
-(127, 11, 10, 1, 0),
-(128, 11, 11, 1, 0),
-(129, 11, 12, 1, 0),
-(130, 12, 0, 1, 0),
-(131, 12, 1, 1, 0),
-(132, 12, 2, 1, 0),
-(133, 12, 3, 1, 0),
-(134, 12, 4, 1, 0),
-(135, 12, 5, 1, 0),
-(136, 12, 6, 1, 0),
-(137, 12, 7, 1, 0),
-(138, 12, 8, 1, 0),
-(139, 12, 9, 1, 0),
-(140, 14, 0, 1, 0),
-(141, 14, 1, 1, 0),
-(142, 14, 2, 1, 0),
-(143, 14, 3, 1, 0),
-(144, 14, 4, 1, 0),
-(145, 14, 5, 1, 0),
-(146, 14, 6, 1, 0),
-(147, 14, 7, 1, 0),
-(148, 14, 8, 1, 0);
+INSERT INTO `catalog_pet_races` (`id`, `pet_type`, `pet_breed`, `catalog_item_id`, `sellable`, `breed_is_rare`, `enabled`) VALUES
+(1, 0, 0, 3006, '1', '0', '1'),
+(2, 0, 1, 3006, '1', '0', '1'),
+(3, 0, 2, 3006, '1', '0', '1'),
+(4, 0, 3, 3006, '1', '0', '1'),
+(5, 0, 4, 3006, '1', '0', '1'),
+(6, 0, 5, 3006, '1', '0', '1'),
+(7, 0, 6, 3006, '1', '0', '1'),
+(8, 0, 7, 3006, '1', '0', '1'),
+(9, 0, 8, 3006, '1', '0', '1'),
+(10, 0, 9, 3006, '1', '0', '1'),
+(11, 0, 10, 3006, '1', '0', '1'),
+(12, 0, 11, 3006, '1', '0', '1'),
+(13, 0, 12, 3006, '1', '0', '1'),
+(14, 0, 13, 3006, '1', '0', '1'),
+(15, 0, 14, 3006, '1', '0', '1'),
+(16, 0, 15, 3006, '1', '0', '1'),
+(17, 0, 16, 3006, '1', '0', '1'),
+(18, 0, 17, 3006, '1', '0', '1'),
+(19, 0, 18, 3006, '1', '0', '1'),
+(20, 0, 19, 3006, '1', '0', '1'),
+(21, 0, 20, 3006, '1', '0', '1'),
+(22, 0, 21, 3006, '1', '0', '1'),
+(23, 0, 22, 3006, '1', '0', '1'),
+(24, 0, 23, 3006, '1', '0', '1'),
+(25, 0, 24, 3006, '1', '0', '1'),
+(26, 1, 0, 3007, '1', '0', '1'),
+(27, 1, 1, 3007, '1', '0', '1'),
+(28, 1, 2, 3007, '1', '0', '1'),
+(29, 1, 3, 3007, '1', '0', '1'),
+(30, 1, 4, 3007, '1', '0', '1'),
+(31, 1, 5, 3007, '1', '0', '1'),
+(32, 1, 6, 3007, '1', '0', '1'),
+(33, 1, 7, 3007, '1', '0', '1'),
+(34, 1, 8, 3007, '1', '0', '1'),
+(35, 1, 9, 3007, '1', '0', '1'),
+(36, 1, 10, 3007, '1', '0', '1'),
+(37, 1, 11, 3007, '1', '0', '1'),
+(38, 1, 12, 3007, '1', '0', '1'),
+(39, 1, 13, 3007, '1', '0', '1'),
+(40, 1, 14, 3007, '1', '0', '1'),
+(41, 1, 15, 3007, '1', '0', '1'),
+(42, 1, 16, 3007, '1', '0', '1'),
+(43, 1, 17, 3007, '1', '0', '1'),
+(44, 1, 18, 3007, '1', '0', '1'),
+(45, 1, 19, 3007, '1', '0', '1'),
+(46, 1, 20, 3007, '1', '0', '1'),
+(47, 1, 21, 3007, '1', '0', '1'),
+(48, 1, 22, 3007, '1', '0', '1'),
+(49, 1, 23, 3007, '1', '0', '1'),
+(50, 1, 24, 3007, '1', '0', '1'),
+(51, 2, 0, 3008, '1', '0', '1'),
+(52, 2, 1, 3008, '1', '0', '1'),
+(53, 2, 2, 3008, '1', '0', '1'),
+(54, 2, 3, 3008, '1', '0', '1'),
+(55, 2, 4, 3008, '1', '0', '1'),
+(56, 2, 5, 3008, '1', '0', '1'),
+(57, 2, 6, 3008, '1', '0', '1'),
+(58, 2, 7, 3008, '1', '0', '1'),
+(59, 2, 8, 3008, '1', '0', '1'),
+(60, 2, 9, 3008, '1', '0', '1'),
+(61, 2, 10, 3008, '1', '0', '1'),
+(62, 2, 11, 3008, '1', '0', '1'),
+(63, 3, 0, 3009, '1', '0', '1'),
+(64, 3, 1, 3009, '1', '0', '1'),
+(65, 3, 2, 3009, '1', '0', '1'),
+(66, 3, 3, 3009, '1', '0', '1'),
+(67, 3, 4, 3009, '1', '0', '1'),
+(68, 3, 5, 3009, '1', '0', '1'),
+(69, 3, 6, 3009, '1', '0', '1'),
+(70, 4, 0, 3010, '1', '0', '1'),
+(71, 4, 1, 3010, '1', '0', '1'),
+(72, 4, 2, 3010, '1', '0', '1'),
+(73, 4, 3, 3010, '1', '0', '1'),
+(74, 5, 0, 3011, '1', '0', '1'),
+(75, 5, 1, 3011, '1', '0', '1'),
+(76, 5, 2, 3011, '1', '0', '1'),
+(77, 5, 3, 3011, '1', '0', '1'),
+(78, 5, 5, 3011, '1', '0', '1'),
+(79, 5, 7, 3011, '1', '0', '1'),
+(80, 5, 8, 3011, '1', '0', '1'),
+(81, 6, 0, 3012, '1', '0', '1'),
+(82, 6, 1, 3012, '1', '0', '1'),
+(83, 6, 2, 3012, '1', '0', '1'),
+(84, 6, 3, 3012, '1', '0', '1'),
+(85, 6, 4, 3012, '1', '0', '1'),
+(86, 6, 5, 3012, '1', '0', '1'),
+(87, 6, 6, 3012, '1', '0', '1'),
+(88, 7, 0, 3013, '1', '0', '1'),
+(89, 7, 1, 3013, '1', '0', '1'),
+(90, 7, 2, 3013, '1', '0', '1'),
+(91, 7, 3, 3013, '1', '0', '1'),
+(92, 7, 4, 3013, '1', '0', '1'),
+(93, 7, 5, 3013, '1', '0', '1'),
+(94, 7, 6, 3013, '1', '0', '1'),
+(95, 8, 0, 3014, '1', '0', '1'),
+(96, 8, 1, 3014, '1', '0', '1'),
+(97, 8, 2, 3014, '1', '0', '1'),
+(98, 8, 3, 3014, '1', '0', '1'),
+(99, 8, 4, 3014, '1', '0', '1'),
+(100, 8, 5, 3014, '1', '0', '1'),
+(101, 8, 6, 3014, '1', '0', '1'),
+(102, 8, 7, 3014, '1', '0', '1'),
+(103, 8, 8, 3014, '1', '0', '1'),
+(104, 8, 9, 3014, '1', '0', '1'),
+(105, 8, 10, 3014, '1', '0', '1'),
+(106, 8, 11, 3014, '1', '0', '1'),
+(107, 8, 12, 3014, '1', '0', '1'),
+(108, 8, 13, 3014, '1', '1', '0'),
+(109, 8, 14, 3014, '1', '1', '0'),
+(110, 8, 15, 3014, '1', '1', '0'),
+(111, 8, 16, 3014, '1', '1', '0'),
+(112, 8, 17, 3014, '1', '1', '0'),
+(113, 9, 0, 3015, '1', '0', '1'),
+(114, 9, 1, 3015, '1', '0', '1'),
+(115, 9, 2, 3015, '1', '0', '1'),
+(116, 9, 3, 3015, '1', '0', '1'),
+(117, 9, 4, 3015, '1', '0', '1'),
+(118, 9, 5, 3015, '1', '0', '1'),
+(119, 9, 6, 3015, '1', '0', '1'),
+(120, 9, 7, 3015, '1', '0', '1'),
+(121, 9, 8, 3015, '1', '0', '1'),
+(122, 9, 9, 3015, '1', '1', '0'),
+(123, 9, 10, 3015, '1', '1', '0'),
+(124, 9, 11, 3015, '1', '1', '0'),
+(125, 10, 0, 3016, '1', '0', '1'),
+(126, 11, 1, 3017, '1', '0', '1'),
+(127, 11, 2, 3017, '1', '0', '1'),
+(128, 11, 3, 3017, '1', '0', '1'),
+(129, 11, 4, 3017, '1', '0', '1'),
+(130, 11, 5, 3017, '1', '0', '1'),
+(131, 11, 6, 3017, '1', '0', '1'),
+(132, 11, 7, 3017, '1', '0', '1'),
+(133, 11, 8, 3017, '1', '0', '1'),
+(134, 11, 9, 3017, '1', '0', '1'),
+(135, 11, 10, 3017, '1', '0', '1'),
+(136, 11, 11, 3017, '1', '0', '1'),
+(137, 11, 12, 3017, '1', '0', '1'),
+(138, 11, 13, 3017, '1', '1', '0'),
+(139, 11, 14, 3017, '1', '1', '0'),
+(140, 11, 15, 3017, '1', '1', '0'),
+(141, 11, 16, 3017, '1', '1', '0'),
+(142, 11, 17, 3017, '1', '1', '0'),
+(143, 11, 18, 3017, '1', '1', '0'),
+(144, 12, 0, 3018, '1', '0', '1'),
+(145, 12, 1, 3018, '1', '0', '1'),
+(146, 12, 2, 3018, '1', '0', '1'),
+(147, 12, 3, 3018, '1', '0', '1'),
+(148, 12, 4, 3018, '1', '0', '1'),
+(149, 12, 5, 3018, '1', '0', '1'),
+(150, 12, 6, 4258, '1', '1', '1'),
+(151, 12, 7, 3018, '1', '0', '0'),
+(152, 12, 8, 3018, '1', '0', '0'),
+(153, 12, 9, 3018, '1', '0', '0'),
+(154, 12, 10, 3018, '1', '0', '0'),
+(155, 14, 0, 3019, '1', '0', '1'),
+(156, 14, 1, 3019, '1', '0', '1'),
+(157, 14, 2, 3019, '1', '0', '1'),
+(158, 14, 3, 3019, '1', '0', '1'),
+(159, 14, 4, 3019, '1', '0', '1'),
+(160, 14, 5, 3019, '1', '0', '1'),
+(161, 14, 6, 3019, '1', '0', '1'),
+(162, 14, 7, 3019, '1', '0', '1'),
+(163, 14, 8, 3019, '1', '0', '1');
 
 -- --------------------------------------------------------
 
@@ -5765,11 +6154,13 @@ INSERT INTO `catalog_subscriptions` (`id`, `name`, `type`, `cost_credits`, `leng
 
 CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `definition_id` int(10) unsigned NOT NULL,
+  `definition_id` int(10) NOT NULL,
   `item_name` varchar(128) NOT NULL DEFAULT 'new_item',
   `preset_flags` varchar(32) NOT NULL DEFAULT '',
+  `amount` int(11) NOT NULL DEFAULT '1',
   `days_need` int(10) NOT NULL DEFAULT '1',
   `isvip` enum('0','1') NOT NULL DEFAULT '0',
+  `parent_id` int(11) NOT NULL DEFAULT '-1',
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
@@ -5778,54 +6169,54 @@ CREATE TABLE IF NOT EXISTS `catalog_subscriptions_gifts` (
 -- Extraindo dados da tabela `catalog_subscriptions_gifts`
 --
 
-INSERT INTO `catalog_subscriptions_gifts` (`id`, `definition_id`, `item_name`, `preset_flags`, `days_need`, `isvip`, `enabled`) VALUES
-(1, 235, 'a0 clubsofa', '', 0, '0', '0'),
-(2, 765, 'a0 clubtv', '', 31, '0', '0'),
-(3, 253, 'a0 hcamme', '', 62, '0', '0'),
-(4, 772, 'a0 hc_crtn', '', 93, '0', '0'),
-(5, 244, 'a0 mocchamaster', '', 124, '0', '0'),
-(6, 764, 'a0 clubrug', '', 155, '0', '0'),
-(7, 249, 'a0 edicehc', '', 186, '0', '0'),
-(8, 2274, 'a0 hc_wall_lamp', '', 217, '0', '0'),
-(9, 294, 'a0 hcporttele', '', 248, '0', '0'),
-(10, 777, 'a0 hc_rllr', '', 279, '0', '0'),
-(11, 252, 'a0 hcsohva', '', 310, '0', '0'),
-(12, 770, 'a0 hc_bkshlf', '', 341, '0', '0'),
-(13, 317, 'a0 hc_lmp', '', 372, '0', '0'),
-(14, 779, 'a0 hc_trll', '', 403, '0', '0'),
-(15, 316, 'a0 hc_tbl', '', 434, '0', '0'),
-(16, 776, 'a0 hc_machine', '', 465, '0', '0'),
-(17, 315, 'a0 hc_chr', '', 496, '0', '0'),
-(18, 778, 'a0 hc_rntgn', '', 527, '0', '0'),
-(19, 318, 'a0 hc_dsk', '', 558, '0', '0'),
-(20, 773, 'a0 hc_djset', '', 589, '0', '0'),
-(21, 775, 'a0 hc_lmpst', '', 620, '0', '0'),
-(22, 774, 'a0 hc_frplc', '', 651, '0', '0'),
-(23, 771, 'a0 hc_btlr', '', 682, '0', '0'),
-(24, 1859, 'hc2_sofa', '', 0, '0', '1'),
-(25, 1848, 'hc3_sofa', '', 0, '1', '1'),
-(26, 1841, 'hc2_sofatbl', '', 31, '0', '1'),
-(27, 1873, 'hc3_table', '', 31, '1', '1'),
-(28, 1853, 'hc2_biglamp', '', 62, '0', '1'),
-(29, 1852, 'hc3_bard', '', 62, '1', '1'),
-(30, 1837, 'hc2_cart', '', 93, '0', '1'),
-(31, 1872, 'hc3_light', '', 93, '1', '1'),
-(32, 1835, 'hc2_vase', '', 124, '0', '1'),
-(33, 1868, 'hc3_dc', '', 124, '1', '1'),
-(34, 1856, 'hc2_divider', '', 155, '0', '1'),
-(35, 1845, 'hc3_shelf', '', 155, '1', '1'),
-(36, 1847, 'hc2_carpet', '', 186, '0', '1'),
-(37, 1855, 'hc3_stool', '', 186, '1', '1'),
-(38, 1866, 'hc2_dvn', '', 217, '0', '1'),
-(39, 1838, 'hc3_divider', '', 217, '1', '1'),
-(40, 1857, 'hc2_coffee', '', 248, '0', '1'),
-(41, 1854, 'hc3_hugelamp', '', 248, '1', '1'),
-(42, 1865, 'hc2_frplc', '', 279, '0', '1'),
-(43, 2503, 'hc3_walldeco', '', 279, '1', '1'),
-(44, 1846, 'hc2_barchair', '', 310, '0', '1'),
-(45, 1877, 'hc3_stereo', '', 310, '1', '1'),
-(46, 1843, 'hc2_armchair', '', 341, '0', '1'),
-(47, 1886, 'hc3_vase', '', 341, '1', '1');
+INSERT INTO `catalog_subscriptions_gifts` (`id`, `definition_id`, `item_name`, `preset_flags`, `amount`, `days_need`, `isvip`, `parent_id`, `enabled`) VALUES
+(1, 235, 'a0 clubsofa', '', 1, 0, '0', -1, '0'),
+(2, 765, 'a0 clubtv', '', 1, 31, '0', -1, '0'),
+(3, 253, 'a0 hcamme', '', 1, 62, '0', -1, '0'),
+(4, 772, 'a0 hc_crtn', '', 1, 93, '0', -1, '0'),
+(5, 244, 'a0 mocchamaster', '', 1, 124, '0', -1, '0'),
+(6, 764, 'a0 clubrug', '', 1, 155, '0', -1, '0'),
+(7, 249, 'a0 edicehc', '', 1, 186, '0', -1, '0'),
+(8, 2274, 'a0 hc_wall_lamp', '', 1, 217, '0', -1, '0'),
+(9, 294, 'a0 hcporttele', '', 1, 248, '0', -1, '0'),
+(10, 777, 'a0 hc_rllr', '', 1, 279, '0', -1, '0'),
+(11, 252, 'a0 hcsohva', '', 1, 310, '0', -1, '0'),
+(12, 770, 'a0 hc_bkshlf', '', 1, 341, '0', -1, '0'),
+(13, 317, 'a0 hc_lmp', '', 1, 372, '0', -1, '0'),
+(14, 779, 'a0 hc_trll', '', 1, 403, '0', -1, '0'),
+(15, 316, 'a0 hc_tbl', '', 1, 434, '0', -1, '0'),
+(16, 776, 'a0 hc_machine', '', 1, 465, '0', -1, '0'),
+(17, 315, 'a0 hc_chr', '', 1, 496, '0', -1, '0'),
+(18, 778, 'a0 hc_rntgn', '', 1, 527, '0', -1, '0'),
+(19, 318, 'a0 hc_dsk', '', 1, 558, '0', -1, '0'),
+(20, 773, 'a0 hc_djset', '', 1, 589, '0', -1, '0'),
+(21, 775, 'a0 hc_lmpst', '', 1, 620, '0', -1, '0'),
+(22, 774, 'a0 hc_frplc', '', 1, 651, '0', -1, '0'),
+(23, 771, 'a0 hc_btlr', '', 1, 682, '0', -1, '0'),
+(24, 1859, 'hc2_sofa', '', 1, 0, '0', -1, '1'),
+(25, 1848, 'hc3_sofa', '', 1, 0, '1', -1, '1'),
+(26, 1841, 'hc2_sofatbl', '', 1, 31, '0', -1, '1'),
+(27, 1873, 'hc3_table', '', 1, 31, '1', -1, '1'),
+(28, 1853, 'hc2_biglamp', '', 1, 62, '0', -1, '1'),
+(29, 1852, 'hc3_bard', '', 1, 62, '1', -1, '1'),
+(30, 1837, 'hc2_cart', '', 1, 93, '0', -1, '1'),
+(31, 1872, 'hc3_light', '', 1, 93, '1', -1, '1'),
+(32, 1835, 'hc2_vase', '', 1, 124, '0', -1, '1'),
+(33, 1868, 'hc3_dc', '', 1, 124, '1', -1, '1'),
+(34, 1856, 'hc2_divider', '', 1, 155, '0', -1, '1'),
+(35, 1845, 'hc3_shelf', '', 1, 155, '1', -1, '1'),
+(36, 1847, 'hc2_carpet', '', 1, 186, '0', -1, '1'),
+(37, 1855, 'hc3_stool', '', 1, 186, '1', -1, '1'),
+(38, 1866, 'hc2_dvn', '', 1, 217, '0', -1, '1'),
+(39, 1838, 'hc3_divider', '', 1, 217, '1', -1, '1'),
+(40, 1857, 'hc2_coffee', '', 1, 248, '0', -1, '1'),
+(41, 1854, 'hc3_hugelamp', '', 1, 248, '1', -1, '1'),
+(42, 1865, 'hc2_frplc', '', 1, 279, '0', -1, '1'),
+(43, 2503, 'hc3_walldeco', '', 1, 279, '1', -1, '1'),
+(44, 1846, 'hc2_barchair', '', 1, 310, '0', -1, '1'),
+(45, 1877, 'hc3_stereo', '', 1, 310, '1', -1, '1'),
+(46, 1843, 'hc2_armchair', '', 1, 341, '0', -1, '1'),
+(47, 1886, 'hc3_vase', '', 1, 341, '1', -1, '1');
 
 -- --------------------------------------------------------
 
@@ -5844,13 +6235,14 @@ CREATE TABLE IF NOT EXISTS `characters` (
   `credits_balance` int(10) NOT NULL DEFAULT '100',
   `activity_points_balance` text NOT NULL,
   `activity_points_last_update` double NOT NULL DEFAULT '0',
+  `received_daily_reward` enum('0','1') NOT NULL DEFAULT '0',
   `score` int(11) NOT NULL DEFAULT '0',
   `privacy_accept_friends` enum('0','1') NOT NULL DEFAULT '1',
   `home_room` int(10) unsigned NOT NULL DEFAULT '0',
   `auth_ticket` varchar(64) NOT NULL DEFAULT '',
   `last_ip` varchar(64) NOT NULL DEFAULT '',
   `config_volume` int(11) NOT NULL DEFAULT '100',
-  `timestamp_lastvisit` double(11,0) NOT NULL DEFAULT '0',
+  `timestamp_lastvisit` double NOT NULL DEFAULT '0',
   `online` enum('0','1') NOT NULL DEFAULT '0',
   `timestamp_created` double NOT NULL DEFAULT '0',
   `moderation_tickets` int(11) NOT NULL DEFAULT '0',
@@ -5925,6 +6317,179 @@ INSERT INTO `drink_sets` (`id`, `drinks`, `internal_comment`) VALUES
 (25, '26', 'Calippo Ice Cream Machine'),
 (26, '45,46,47', 'The Moodi Machine'),
 (27, '34', 'Fish Hole & Kitchen Inspector');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `external_texts`
+--
+
+CREATE TABLE IF NOT EXISTS `external_texts` (
+  `skey` text NOT NULL,
+  `sval` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `external_texts`
+--
+
+INSERT INTO `external_texts` (`skey`, `sval`) VALUES
+('badge_desc_MDMWW', 'I won the Uber Home Exhibition competition!'),
+('badge_name_ADM', 'Uber Staff'),
+('badge_name_MDMWW', 'Home Exhibition'),
+('badge_desc_ADM', 'I''m a staff member here, at Uber.'),
+('badge_name_WHY', '...'),
+('badge_desc_WHY', 'What?'),
+('badge_name_Z63', 'BETA Lab Rat'),
+('badge_desc_Z63', 'I helped test the new Uber.'),
+('badge_name_BOT', 'Uber Bot'),
+('badge_desc_BOT', 'I''m an automated worker at uberHotel.'),
+('navigator.roomsettings.deleteroom.confirm.message', 'Are you sure you want to delete %room_name%? All the furniture (excluding wallpaper, floor, landscapes and stickie notes) will moved to "My Stuff".'),
+('badge_name_HUG', 'Hug me'),
+('badge_desc_HUG', '<3'),
+('badge_name_US09', 'Uber Staff'),
+('badge_desc_US09', 'I''m a staff member here, at Uber.'),
+('handitem45', 'Excited Moodi'),
+('handitem46', 'Happy Moodi'),
+('infostand.button.savebranding', 'Save'),
+('badge_name_ACH_BasicClub1', 'Uber Club member I'),
+('badge_desc_ACH_BasicClub1', 'For joining the Uber Club.'),
+('badge_name_ACH_BasicClub2', 'Uber Club member II'),
+('badge_desc_ACH_BasicClub2', 'For %limit% months of Uber Club membership.'),
+('badge_name_ACH_BasicClub3', 'Uber Club member III'),
+('badge_desc_ACH_BasicClub3', 'For %limit% months of Uber Club membership.'),
+('badge_name_ACH_BasicClub4', 'Uber Club member IV'),
+('badge_desc_ACH_BasicClub4', 'For %limit% months of Uber Club membership.'),
+('badge_name_ACH_BasicClub5', 'Uber Club member V'),
+('badge_desc_ACH_BasicClub5', 'For %limit% months of Uber Club membership.'),
+('catalog.page.club', 'Uber Club'),
+('catalog.page.song_disk_shop', 'Music Discs'),
+('catalog.purchase.price.credits_and_activitypoints.5', '%credits% Credit(s) + %activitypoints% Diamond(s)'),
+('catalog.purchase.price.activitypoints.5', '%activitypoints% Diamonds'),
+('catalog.alert.notenough.activitypoints.title.5', 'Not Enough Diamonds!'),
+('catalog.purchase.youractivitypoints.5', 'Diamonds: %activitypoints%'),
+('catalog.alert.notenough.activitypoints.description.5', 'Oops. It seems you don''t have enough Diamonds.'),
+('catalog.purchase.confirmation.dialog.price.credits_and_activitypoints.5', '%credits% Credit(s) + %activitypoints% Diamond(s)'),
+('catalog.purchase.confirmation.dialog.price.activitypoints.5', '%activitypoints% Diamond(s)'),
+('catalog.purse.clubdays', 'HC: %months%m %days%d >>'),
+('pet.command.0', 'Free'),
+('pet.command.1', 'Sit'),
+('pet.command.2', 'Down'),
+('pet.command.3', 'Here'),
+('pet.command.4', 'Beg'),
+('pet.command.5', 'Play dead'),
+('pet.command.6', 'Stay'),
+('pet.command.7', 'Follow'),
+('pet.command.8', 'Stand'),
+('pet.command.9', 'Jump'),
+('pet.command.10', 'Speak'),
+('pet.command.11', 'Play'),
+('pet.command.12', 'Silent'),
+('pet.command.13', 'Nest'),
+('pet.command.14', 'Drink'),
+('pet.command.15', 'Follow left'),
+('pet.command.16', 'Follow right'),
+('pet.command.17', 'Play football'),
+('pet.command.18', 'Come here'),
+('pet.command.19', 'Bounce'),
+('pet.command.20', 'Flat'),
+('pet.command.21', 'Dance'),
+('pet.command.22', 'Spin'),
+('pet.command.23', 'Switch TV'),
+('pet.command.24', 'Move forward'),
+(' pet.command.25', 'Turn left'),
+(' pet.command.26', 'Turn right'),
+(' pet.command.27', 'Relax'),
+(' pet.command.28', 'Croak'),
+(' pet.command.29', 'Dip'),
+('pet.command.30', 'Wave'),
+('pet.command.31', 'Mambo'),
+(' pet.command.32', 'High jump'),
+('pet.command.33', 'Chicken dance'),
+('pet.command.34', 'Triple jump'),
+(' pet.command.35', 'Spread wings'),
+(' pet.command.36', 'Breathe fire'),
+('pet.command.37', 'Hang'),
+('pet.command.38', 'Torch'),
+('pet.command.40', 'Swing'),
+('pet.command.41', 'Roll'),
+('pet.command.42', 'Ring of fire'),
+('pet.command.43', 'Eat'),
+('pet.command.44', 'Wag Tail'),
+('catalog.page.quest.new_user', 'Hello'),
+('avatareditor.try.club.clothes', 'Try Uber Club clothes'),
+('avatareditor.try.club.clothes.description', 'Try on Uber Club clothing.'),
+('avatareditor.try.club.clothes.more', 'You can now try on Uber Club clothes. Join Uber Club and wear these clothes everyday.'),
+('avatareditor.invalidclubitems.title', 'Thanks for trying out the UC clothing'),
+('avatareditor.invalidclubitems.description', 'These clothing items and colors are for Uber Club members only. Join the Uber Club and enjoy these benefits today. Press ok if you want to remove the Club clothes. '),
+('friendbar.stream.welcome', 'With Friend Stream you and your friends can share what you''ve been up to in Uber! Turn on the Friend Stream now to get connected and share with your friends.'),
+('badge_name_ACH_Name1', 'Uber Name'),
+('badge_desc_ACH_Name1', 'Thanks for selecting your Uber name after registering.'),
+('quests.explore.name', 'Explore Uber'),
+('catalog.club.extend.basic.confirm.title', 'Extend your UC subscription'),
+('catalog.club.extend.basic.confirm.caption', 'Extend your UC subscription'),
+('catalog.club.extend.basic.expiration_days_left', 'This offer will extend your UC subscription for 31 days. The offer is only available for %day% days.'),
+('catalog.club.extend.basic.expires_today', 'This offer will extend your UC subscription for 31 days. This offer ends today!'),
+('group.owngroups.title', 'Your Uber Groups'),
+('group.badgepopup.body', 'This is a Uber Group badge. Click to see Group information and to join.'),
+('group.title', 'Uber Group'),
+('group.window.title', 'Uber Groups'),
+('catalog.club.buy.confirm.desc.none.vip', 'You are about to subscribe to Uber VIP Club. Cool!'),
+('catalog.club.buy.confirm.desc.none.hc', 'You are about to subscribe to Uber Club. Cool!'),
+('catalog.club.buy.confirm.desc.hc.vip', 'You are about to subscribe to Uber Club. Cool!'),
+('catalog.club.buy.confirm.desc.hc.hc', 'You are about to extend your subscription to Uber Club. Glad to see you continue your subscription!'),
+('catalog.club.buy.confirm.desc.vip.vip', 'You are about to extend your subscription to Uber VIP Club. Glad to see you continue your subscription!'),
+('catalog.club.item.header.upgradehctovip', 'Upgrade UC to VIP'),
+('catalog.club.hc', 'Uber Club'),
+('catalog.club.buy.confirm.desc.hc.vip.period', 'You''re about to upgrade your existing Uber Club subscription to the VIP Club. The upgrade will convert your remaining Club Subscription to VIP based on the price difference between the subscriptions, and then give you 10 Credits worth of VIP.'),
+('catalog.club.buy.confirm.before', 'You now have: %days% days of Uber Club'),
+('catalog.club.info.header', 'Uber Club'),
+('catalog.club.info.content', 'Get the Uber Club membership you want- UC for less or VIP for more.'),
+('catalog.club.buy.remaining.hc', 'UC remaining: %days% days'),
+('catalog.club_gift.past_club.long', 'Your past UC length: %months% months, %days% days'),
+('catalog.club.buy.info.hc', 'Still UC? Upgrade your subscription now to VIP or continue your existing UC membership!'),
+('catalog.club.buy.header.none', 'UC or VIP?'),
+('catalog.club.buy.info.none', 'Get your membership now, get the best deal on UC or go for the ultimate VIP subscription!'),
+('catalog.club_gift.past_club', 'Your past UC length: %days% days'),
+('catalog.buy.widget.get.club.to.unlock.this.product', 'This item is UC only'),
+('catalog.buy.widget.get.club.button', 'Get Uber Club!');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `external_variables`
+--
+
+CREATE TABLE IF NOT EXISTS `external_variables` (
+  `skey` text NOT NULL,
+  `sval` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `external_variables`
+--
+
+INSERT INTO `external_variables` (`skey`, `sval`) VALUES
+('client.fatal.error.url', '%www%/account/disconnected?source=client_error'),
+('habboinfotool.url', '%www%/manage/index.php?_cmd=userinfo&searchParam='),
+('wordfilter.url', '%www%/manage/index.php?_cmd=wordfilter'),
+('roomadmin.url', '%www%/manage/index.php?_cmd=roomadmin&searchParam='),
+('link.format.habboclub', '%www%/credits/uberclub'),
+('logout.disconnect.url', '%www%/account/disconnected?reason=disconnected&origin=%origin%'),
+('logout.url', '%www%/me.php?pa=1'),
+('moderatoractionlog.url', '%www%/manage/index.php?_cmd=actionlog&searchParam='),
+('moderator.cmds', '[":alert x",":ban x",":kick x",":superban x",":shutup x",":unmute x",":transfer x",":softkick x"]'),
+('interstitial.max.displays', '9999999'),
+('interstitial.interval', '30'),
+('interstitial.show.time', '3000'),
+('client.hotel_view.image', 'hotel_view_images_hq/grass_view.png'),
+('catalog.show.purse', 'false'),
+('subscription.reminder.when.days.left', '5'),
+('club.membership.extend.promotion.enabled', '0'),
+('new.identity', '1'),
+('avatar.widget.enabled', '1'),
+('client.allow.facebook.like', '1'),
+('purse.widget.currency.shells.enabled', '1');
 
 -- --------------------------------------------------------
 
@@ -6068,8 +6633,8 @@ INSERT INTO `help_topics` (`id`, `category`, `title`, `body`, `priority`) VALUES
 (2, 5, 'snowlight.uservoice.com', 'If you have found any bugs, missing features, or have other ideas or feedback, please submit them on our uservoice forum:\r\n\r\nhttp://snowlight.uservoice.com\r\n\r\nThank you!', '2'),
 (3, 4, 'Reporting a user', 'If another user is misbehaving, breaking rules, or behaving inappropiately, it is possible to report the user to the moderators. There are two possible ways to do so:\r\n\r\n1. Select the user, and press ''Report''. The report window will appear.\r\n2. Click the yellow question mark (while in a room), and click ''Report user to the moderators''. Select the offending user. The report window will appear.', '1'),
 (4, 1, 'The Habbo Way (Rules)', 'What is the Habbo Way?\r\nThe Habbo Way is like a code of conduct, a guide to how Habbos should act in the Hotel. Habbos who break the Habbo Way are not welcome in the Hotel and may be banned. The Habbo Way is a simple set of rules for all players to follow in the Habbo.\r\n\r\nThe Habbo Way\r\n1. Do not bully, harass or abuse other players; avoid violent or aggressive behaviour.\r\n2. Do not steal or scam passwords, credits or furniture from other players. \r\n3. Keep your password and personal details secret and never try to gain this information from other players.\r\n4. You may not give away, sell or trade your Habbo account or seek to sell virtual items from Habbo for cash.\r\n5. Do not take part in sexual activities, make sexual proposals or respond to them.\r\n6. Do not use any scripts or third party software to enter, disrupt or modify Habbo.\r\n7. Treat other players as you would wish to be treated! And remember that a crime in a virtual world is as serious as in the real world.\r\n\r\nYou may also wish to review our Terms of Use.\r\n\r\nWhy is there a Habbo Way?\r\nHabbo Hotel is a place where people come to relax, hang out and make new friends in a safe, non-threatening environment. The Habbo Way helps to maintain this safe, non-threatening environment.\r\n\r\nWhat should I do if I see someone break the Habbo Way?\r\nIf you see someone break the Habbo Way and you are uncomfortable with it, you should use the Ignore feature. This prevents their chat from showing up on your screen. Use Ignore for name-calling, mild swearing, or anything else that just doesn''t suit your taste. If the chat is truly offensive, hateful or racist, or if you feel threatened by it, send a ''call for help'' and report them to an on duty Moderator, then leave the room or place the Habbo on Ignore.\r\n\r\nWhat will happen if I break the Habbo Way?\r\nIf you break the Habbo Way you may be alerted, kicked from the room or banned from Habbo Hotel.\r\n\r\nWhy do my words come up as ''*****''?\r\nAll areas of Habbo Hotel have a word filter which takes out offensive words. This covers swearing and racist or sexist language, plus email addresses and phone numbers.  Offensive words are replaced with ''*****''. The filters also work on Habbo names, missions, Stickies and all types of messages sent through the Console.\r\n\r\nWhat happens if I avoid the word filter?\r\nIf you avoid the word filter you may be banned from Habbo Hotel.', '2'),
-(5, 2, 'How do I aquire credits?', 'Every player will win 120 credits only by login. Be aware this bonus is delivered every day upon in for the first time login.\r\nIf you''re a regular user you will receive 15 credits, just remember to be in a room that will be delivered within 30 minutes. VIP Club members receive a bonuses of 35 credits. \r\nAnother way is considering to participate in staff competitions on the hotel.', '1'),
-(6, 2, 'How do I aquire pixels?', 'Every player will win 120 pixels only by login. Be aware this bonus is delivered every day upon in for the first time login.\r\nYou will receive 15 pixels automatically every 30 minutes, just remember to be in a room. If you''re a VIP Club member you receive a bonuses of 35 pixels.\r\nYou can earn pixels by unlocking achievements or completing quests, see what achievements and quests you has, clicking on ''Achievement'' or ''Quests'' tab in your toolbar on the left of your screen.', '1'),
+(5, 2, 'How do I aquire credits?', 'Every player will win 120 credits, just remember need to be in a room and you need to wait 5 minutes to win. Be aware this bonus is delivered every day upon in for the first time login.\r\nIf you''re a regular user you will receive 15 credits, just remember to be in a room that will be delivered within 30 minutes. VIP Club members receive a bonuses of 35 credits. \r\nAnother way is considering to participate in staff competitions on the hotel.', '1'),
+(6, 2, 'How do I aquire pixels?', 'Every player will win 120 pixels, just remember need to be in a room and you need to wait 5 minutes to win. Be aware this bonus is delivered every day upon in for the first time login.\r\nYou will receive 15 pixels automatically every 30 minutes, just remember to be in a room. If you''re a VIP Club member you receive a bonuses of 35 pixels.\r\nYou can earn pixels by unlocking achievements or completing quests, see what achievements and quests you has, clicking on ''Achievement'' or ''Quests'' tab in your toolbar on the left of your screen.', '1'),
 (7, 6, 'Are all achievements available on uberHotel?', 'We have not yet added all achievements. The ones that are available can be seen under the ''Achievement'' tab in your toolbar on left of your screen.', '0'),
 (8, 4, 'Infobus', 'Here in uberHotel our devs had care to maked the Infobus is fully functional!\r\nStay tuned for the news to find when the next Infobus Event is.', '0'),
 (9, 1, 'Staff on uberHotel', 'uberHotel is being maintained and moderated by a relatively small staff team. They are here to make sure everything works correctly and to help our players and keep them safe.\r\n\r\nIn general we do not have any staff openings; if we are looking for staff it will be announced on the homepage, or we will approach players we deem capable.', '2'),
@@ -8088,7 +8653,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `public_name`, `type`
 (1920, 3513, 'fball_ptch3', 'Football Patch 4', 's', 'switch', 2, 'terminator', 3, 3, 1, '0', '1', '1', '1', '1', '1', '0', 0),
 (1921, 3514, 'fball_goal_r', 'Football Goal Red', 's', 'switch', 2, 'terminator', 3, 1, 1, '0', '1', '1', '1', '1', '1', '0', 0),
 (1922, 3515, 'fball_goal_b', 'Football Goal Blue', 's', 'switch', 2, 'terminator', 3, 1, 1, '0', '1', '1', '1', '1', '1', '0', 0),
-(1923, 3516, 'fball_gate', 'Football Gate', 's', 'switch', 2, 'terminator', 1, 1, 0.1, '0', '1', '1', '1', '1', '1', '2', 0),
+(1923, 3516, 'fball_gate', 'Football Gate', 's', 'football_gate', 2, 'terminator', 1, 1, 0.1, '0', '1', '1', '1', '1', '1', '2', 0),
 (1924, 3517, 'fball_ptch6', 'Football Patch 7', 's', 'switch', 2, 'terminator', 3, 3, 1, '0', '1', '1', '1', '1', '1', '0', 0),
 (1925, 3518, 'fball_ball5', 'Grand Final Ball', 's', 'switch', 2, 'terminator', 1, 1, 1, '0', '1', '1', '1', '1', '1', '0', 0),
 (1926, 3519, 'fball_goal_g', 'Football Goal Green', 's', 'switch', 2, 'terminator', 3, 1, 1, '0', '1', '1', '1', '1', '1', '0', 0),
@@ -8242,7 +8807,7 @@ INSERT INTO `item_definitions` (`id`, `sprite_id`, `name`, `public_name`, `type`
 (2073, 3666, 'wf_colortile', 'Color Tile', 's', 'switch', 2, 'terminator', 1, 1, 0, '0', '1', '1', '0', '1', '1', '1', 0),
 (2074, 3667, 'wf_floor_switch2', 'Floor Switch 2', 's', 'switch', 2, 'terminator', 1, 1, 1, '0', '1', '1', '0', '1', '1', '0', 0),
 (2075, 3668, 'wf_trg_state_changed', 'WIRED Trigger: Furni State Is Changed', 's', 'wiredtrigger', 4, 'normal', 1, 1, 0.6, '0', '1', '1', '0', '1', '1', '0', 0),
-(2076, 3669, 'wf_xtra_random', 'WIRED Add-on: Random Effect', 's', 'switch', 2, 'normal', 1, 1, 0.5, '0', '1', '1', '0', '1', '1', '0', 0),
+(2076, 3669, 'wf_xtra_random', 'WIRED Add-on: Random Effect', 's', 'wiredaddon', 1, 'normal', 1, 1, 0.5, '0', '1', '1', '0', '1', '1', '0', 0),
 (2077, 3670, 'wf_xtra_unseen', 'WIRED Add-on: Unseen Effect', 's', 'switch', 2, 'normal', 1, 1, 0.5, '0', '1', '1', '0', '1', '1', '0', 0),
 (2078, 3671, 'wf_trg_periodically', 'WIRED Trigger: Repeat Effect', 's', 'wiredtrigger', 6, 'normal', 1, 1, 0.6, '0', '1', '1', '0', '1', '1', '0', 0),
 (2079, 3672, 'wf_pyramid', 'Hidden Pyramid', 's', 'switch', 2, 'terminator', 1, 1, 1, '0', '1', '1', '0', '1', '1', '0', 0),
@@ -9809,14 +10374,12 @@ CREATE TABLE IF NOT EXISTS `messenger_category` (
   `user_id` int(11) NOT NULL,
   `label` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `messenger_category`
 --
 
-INSERT INTO `messenger_category` (`id`, `user_id`, `label`) VALUES
-(1, 1, 'Snowlight Emulator');
 
 -- --------------------------------------------------------
 
@@ -9853,7 +10416,7 @@ CREATE TABLE IF NOT EXISTS `moderation_action_log` (
   `action_detail` text NOT NULL,
   `timestamp` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `moderation_action_log`
@@ -9873,7 +10436,7 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs` (
   `room_id` int(10) unsigned NOT NULL DEFAULT '0',
   `message` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `moderation_chatlogs`
@@ -9890,6 +10453,7 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs_console` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `from_user_id` int(11) unsigned NOT NULL,
   `to_user_id` int(11) unsigned NOT NULL,
+  `type` enum('invite','message') NOT NULL DEFAULT 'message',
   `message` text NOT NULL,
   `timestamp` double NOT NULL,
   PRIMARY KEY (`id`),
@@ -9900,6 +10464,48 @@ CREATE TABLE IF NOT EXISTS `moderation_chatlogs_console` (
 
 --
 -- Extraindo dados da tabela `moderation_chatlogs_console`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `moderation_forum_replies`
+--
+
+CREATE TABLE IF NOT EXISTS `moderation_forum_replies` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `thread_id` int(10) unsigned NOT NULL,
+  `poster` varchar(120) NOT NULL,
+  `date` varchar(50) NOT NULL,
+  `message` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Extraindo dados da tabela `moderation_forum_replies`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `moderation_forum_threads`
+--
+
+CREATE TABLE IF NOT EXISTS `moderation_forum_threads` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `poster` varchar(100) NOT NULL,
+  `subject` varchar(120) NOT NULL,
+  `date` varchar(50) NOT NULL,
+  `timestamp` double NOT NULL,
+  `message` text NOT NULL,
+  `locked` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Extraindo dados da tabela `moderation_forum_threads`
 --
 
 
@@ -10135,6 +10741,24 @@ CREATE TABLE IF NOT EXISTS `new_items` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `notes`
+--
+
+CREATE TABLE IF NOT EXISTS `notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(500) NOT NULL,
+  `date` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Extraindo dados da tabela `notes`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `pet_commands`
 --
 
@@ -10342,7 +10966,7 @@ INSERT INTO `pet_commands` (`type`, `command_id`, `min_level`, `order_id`) VALUE
 (8, 25, 12, 12),
 (8, 26, 13, 13),
 (8, 13, 14, 14),
-(8, 14, 14, 15);
+(8, 14, 14, 15),
 (8, 19, 15, 16),
 (8, 20, 16, 17),
 (8, 22, 17, 18),
@@ -10590,7 +11214,7 @@ CREATE TABLE IF NOT EXISTS `quests` (
   `data_bit` varchar(2) NOT NULL DEFAULT '',
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=43 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=66 ;
 
 --
 -- Extraindo dados da tabela `quests`
@@ -10638,7 +11262,51 @@ INSERT INTO `quests` (`id`, `category`, `series_number`, `goal_type`, `goal_data
 (39, 'pets', 6, 24, 1, 0, 'SCRATCHAPET', 'pixels', 10, '', '1'),
 (40, 'pets', 7, 25, 3, 0, 'FINDTERRIER', 'pixels', 10, '', '1'),
 (41, 'pets', 8, 25, 6, 0, 'FINDLION', 'pixels', 10, '', '1'),
-(42, 'pets', 9, 25, 8, 0, 'FINDSPIDER', 'pixels', 10, '', '1');
+(42, 'pets', 9, 25, 8, 0, 'FINDSPIDER', 'pixels', 10, '', '1'),
+(43, 'daily', 1, 17, 1954, 0, 'FINDBEACHBALL', 'snowflakes', 5, '', '1'),
+(44, 'daily', 2, 14, 3, 0, 'CHANGELOOK1', 'snowflakes', 5, '', '1'),
+(45, 'daily', 3, 17, 2890, 0, 'FINDSHELL', 'snowflakes', 5, '', '1'),
+(46, 'daily', 4, 25, 4, 0, 'FINDBEAR', 'snowflakes', 5, '', '1'),
+(47, 'daily', 5, 14, 3, 0, 'CHANGELOOK2', 'snowflakes', 5, '', '1'),
+(48, 'daily', 6, 25, 5, 0, 'FINDPIG', 'snowflakes', 5, '', '1'),
+(49, 'daily', 7, 9, 5, 0, 'SAYPICKUPLINES', 'snowflakes', 5, '', '1'),
+(50, 'daily', 8, 25, 2, 0, 'FINDCROC', 'snowflakes', 5, '', '1'),
+(51, 'daily', 9, 17, 1365, 0, 'FINDDJ', 'snowflakes', 5, '', '1'),
+(52, 'daily', 10, 8, 10, 0, 'EXPLORE', 'snowflakes', 5, '', '1'),
+(53, 'daily', 11, 17, 2247, 0, 'FINDMOVIESCREEN', 'snowflakes', 5, '', '1'),
+(54, 'daily', 12, 11, 3, 0, 'DANCE', 'snowflakes', 5, '', '1'),
+(55, 'daily', 13, 25, 12, 0, 'FINDDRAGON', 'snowflakes', 5, '', '1'),
+(56, 'daily', 14, 24, 1, 0, 'SCRATCH1', 'snowflakes', 5, '', '1'),
+(57, 'daily', 15, 25, 3, 0, 'FINDTERRIER', 'snowflakes', 5, '', '1'),
+(58, 'daily', 16, 11, 1, 0, 'RESPECT1', 'snowflakes', 5, '', '1'),
+(59, 'daily', 17, 25, 1, 0, 'FINDCAT', 'snowflakes', 5, '', '1'),
+(60, 'daily', 18, 10, 3, 0, 'FRIEND1', 'snowflakes', 5, '', '1'),
+(61, 'daily', 19, 25, 7, 0, 'FINDRHINO', 'snowflakes', 5, '', '1'),
+(62, 'daily', 20, 16, 1, 0, 'BADGE1', 'snowflakes', 5, '', '1'),
+(63, 'daily', 21, 25, 6, 0, 'FINDLION', 'snowflakes', 5, '', '1'),
+(64, 'daily', 22, 17, 1366, 0, 'FINDTRAY', 'snowflakes', 5, '', '1'),
+(65, 'daily', 23, 25, 10, 0, 'FINDCHICK', 'snowflakes', 5, '', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `quests_daily_rotation`
+--
+
+CREATE TABLE IF NOT EXISTS `quests_daily_rotation` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `timestamp_last_rotation` double(11,0) NOT NULL DEFAULT '0',
+  `last_index` int(11) NOT NULL DEFAULT '0',
+  `enabled` enum('0','1') NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Extraindo dados da tabela `quests_daily_rotation`
+--
+
+INSERT INTO `quests_daily_rotation` (`id`, `timestamp_last_rotation`, `last_index`, `enabled`) VALUES
+(1, 0, -1, '1');
 
 -- --------------------------------------------------------
 
@@ -10651,7 +11319,7 @@ CREATE TABLE IF NOT EXISTS `rights` (
   `set_id` int(10) unsigned NOT NULL,
   `right_id` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
 
 --
 -- Extraindo dados da tabela `rights`
@@ -10670,7 +11338,13 @@ INSERT INTO `rights` (`id`, `set_id`, `right_id`) VALUES
 (10, 100, 'moderation_tickets'),
 (11, 100, 'cannot_ignore'),
 (12, 100, 'mute'),
-(13, 5, 'trade');
+(13, 5, 'trade'),
+(14, 100, 'fuse_ignore_maintenance'),
+(15, 100, 'hk_login'),
+(16, 100, 'hk_moderation'),
+(17, 100, 'hk_sitemanagement'),
+(18, 100, 'hk_catalog'),
+(19, 200, 'hk_external_login');
 
 -- --------------------------------------------------------
 
@@ -10786,19 +11460,12 @@ CREATE TABLE IF NOT EXISTS `room_ads` (
   `image` varchar(255) NOT NULL,
   `enabled` enum('1','0') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `room_ads`
 --
 
-INSERT INTO `room_ads` (`id`, `room_id`, `url`, `image`, `enabled`) VALUES
-(1, 1, 'http://www.uberhotel.org', 'http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/album3370/billboard_twilight.gif', '1'),
-(2, 2, 'http://www.uberhotel.org', 'http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/billboards/ad_rooftoptgt_inside_R.gif', '1'),
-(3, 3, 'http://www.uberhotel.org', 'http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/album3298/billboard_big_right_orelsan.gif', '1'),
-(4, 4, 'http://www.uberhotel.org', 'http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/album3346/01_200x180_lego_star_wars_billboard.gif', '1'),
-(5, 12, 'http://www.uberhotel.org', 'http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/album3371/uk_bullyproof_billboard_02.gif', '1'),
-(6, 16, 'http://www.uberhotel.org', 'http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/album3371/uk_bullyproof_billboard_03.gif', '1');
 
 -- --------------------------------------------------------
 
@@ -10993,14 +11660,12 @@ CREATE TABLE IF NOT EXISTS `room_polls` (
   `extra_reward` varchar(64) DEFAULT '',
   `badge_reward` varchar(64) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `room_polls`
 --
 
-INSERT INTO `room_polls` (`id`, `room_id`, `title`, `request_message`, `thanks_message`, `expire_timestamp`, `credits_reward`, `activitypoints_reward`, `seasonal_currency`, `extra_reward`, `badge_reward`) VALUES
-(1, 1, 'About Uber Hotel!', 'Hi dear user,\r\nWe wanna know if Uber Hotel is an cool place for our users.\r\nIf you can response this poll we will be extremily happy to see what youre thinking about us.\r\nRegards from our staff team!', 'Thank you!\r\nEnjoy your reward!', 1696009207, 500, 500, 'pixels', '207|235', 'UKC');
 
 -- --------------------------------------------------------
 
@@ -11015,18 +11680,12 @@ CREATE TABLE IF NOT EXISTS `room_poll_questions` (
   `question_type` enum('textbox','checkbox','radio') NOT NULL,
   `minimum_selection` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `room_poll_questions`
 --
 
-INSERT INTO `room_poll_questions` (`id`, `poll_id`, `question`, `question_type`, `minimum_selection`) VALUES
-(1, 1, 'Any bug has occoured with you during your online time?', 'radio', 1),
-(2, 1, 'What do you think about our last promotions?', 'radio', 1),
-(3, 1, 'Who is your favorite staff member?\r\nU can select more than 1.', 'checkbox', 1),
-(4, 1, 'Do you liked Uber Hotel?', 'radio', 1),
-(5, 1, 'What you has to say to our staff team:', 'textbox', 1);
 
 -- --------------------------------------------------------
 
@@ -11039,23 +11698,12 @@ CREATE TABLE IF NOT EXISTS `room_poll_question_selections` (
   `question_id` int(11) unsigned NOT NULL,
   `selection_text` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `room_poll_question_selections`
 --
 
-INSERT INTO `room_poll_question_selections` (`id`, `question_id`, `selection_text`) VALUES
-(1, 1, 'Yep'),
-(2, 1, 'Nope'),
-(3, 2, 'I''ve liked!'),
-(4, 2, 'I didn''t liked!'),
-(5, 2, 'I didn''t parcipated, and can''t opinion.'),
-(6, 3, 'Meth0d'),
-(7, 3, 'wSaturnino'),
-(8, 3, 'Other'),
-(9, 4, 'Sure'),
-(10, 4, 'Nope');
 
 -- --------------------------------------------------------
 
@@ -11090,7 +11738,7 @@ CREATE TABLE IF NOT EXISTS `room_rights` (
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `room_id` (`room_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `room_rights`
@@ -11367,8 +12015,7 @@ INSERT INTO `server_ingame_texts` (`identifier`, `display_text`) VALUES
 ('catalog_gift_sent_need_wait_15sec', 'Please wait 15 seconds until can send another gift!'),
 ('catalog_marketplace_base_item_not_found', 'Unable to find item base item!'),
 ('catalog_marketplace_boosting_error', 'To prevent average boosting you cannot purchase your own marketplace offers.'),
-('catalog_marketplace_error', 'Sorry, this offer has expired.'),
-('catalog_marketplace_offer_not_found', 'Unable to find offer! Sorry!'),
+('catalog_marketplace_offer_not_found', 'Sorry, couldn''t retrieve this offer.'),
 ('catalog_page_coming_soon', 'Coming Soon'),
 ('catalog_recycler_disabled', 'The recycler is temporarily disabled. Please check back later.'),
 ('command_alert_error', 'Please enter a message to alert the users.'),
@@ -11527,9 +12174,10 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
   `activitypoints_interval` int(11) NOT NULL DEFAULT '15' COMMENT 'in Min',
   `activitypoints_credits_amount` int(11) NOT NULL DEFAULT '15',
   `more_activitypoints_credits_amount` int(11) NOT NULL DEFAULT '35',
-  `activitypoints_pixels_amount` int(11) NOT NULL DEFAULT '15',
-  `more_activitypoints_pixels_amount` int(11) NOT NULL DEFAULT '35',
+  `activitypoints_amount` int(11) NOT NULL DEFAULT '15',
+  `more_activitypoints_amount` int(11) NOT NULL DEFAULT '35',
   `daily_reward_enabled` enum('0','1') NOT NULL DEFAULT '1',
+  `daily_reward_wait_time` int(11) NOT NULL DEFAULT '5' COMMENT 'in Min',
   `daily_activitypoints_type` enum('pixels','snowflakes','hearts','giftpoints','shells') NOT NULL DEFAULT 'pixels',
   `daily_activitypoints_amount` int(11) NOT NULL DEFAULT '120',
   `daily_credits_amount` int(11) NOT NULL DEFAULT '120',
@@ -11579,8 +12227,8 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
 -- Extraindo dados da tabela `server_settings`
 --
 
-INSERT INTO `server_settings` (`activitypoints_enabled`, `activitypoints_type`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_pixels_amount`, `more_activitypoints_pixels_amount`, `daily_reward_enabled`, `daily_activitypoints_type`, `daily_activitypoints_amount`, `daily_credits_amount`, `motd_enabled`, `motd_type`, `motd_text`, `name_change_wait_days`, `gifting_system_enabled`, `new_gifting_system`, `gifting_system_price`, `gifting_system_spriteids`, `gifting_system_box_count`, `gifting_system_ribbon_count`, `infobus_status`, `login_badge_enabled`, `login_badge_code`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_console_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_enabled`, `marketplace_tax`, `marketplace_tokens_buy_enabled`, `marketplace_tokens_price`, `marketplace_premium_tokens`, `marketplace_default_tokens`, `marketplace_min_price`, `marketplace_max_price`, `marketplace_offer_hours`, `marketplace_avarage_days`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `enable_pets`, `pet_scratching_account_days_old_enabled`, `pet_scratching_account_days_old`, `normal_user_friend_list_size`, `hc_user_friend_list_size`, `vip_user_friend_list_size`, `wordfilter_maximum_count`, `wordfilter_time_muted`) VALUES
-('1', 'pixels', '1', 30, 15, 35, 15, 35, '1', 'pixels', 120, 120, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', 15, '1', '1', 1, '3372|3373|3374|3375|3376|3377|3378|3379|3380|3381', 7, 11, 'closed', '1', 'Z63', '1', '1', '1', '1', '1', 1, '1', 1, 10, 5, 1, 10000, 48, 7, 30, 500, 12, 10, 15, '1', '1', 14, 300, 600, 1100, 5, 300);
+INSERT INTO `server_settings` (`activitypoints_enabled`, `activitypoints_type`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_amount`, `more_activitypoints_amount`, `daily_reward_enabled`, `daily_reward_wait_time`, `daily_activitypoints_type`, `daily_activitypoints_amount`, `daily_credits_amount`, `motd_enabled`, `motd_type`, `motd_text`, `name_change_wait_days`, `gifting_system_enabled`, `new_gifting_system`, `gifting_system_price`, `gifting_system_spriteids`, `gifting_system_box_count`, `gifting_system_ribbon_count`, `infobus_status`, `login_badge_enabled`, `login_badge_code`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_console_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_enabled`, `marketplace_tax`, `marketplace_tokens_buy_enabled`, `marketplace_tokens_price`, `marketplace_premium_tokens`, `marketplace_default_tokens`, `marketplace_min_price`, `marketplace_max_price`, `marketplace_offer_hours`, `marketplace_avarage_days`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `enable_pets`, `pet_scratching_account_days_old_enabled`, `pet_scratching_account_days_old`, `normal_user_friend_list_size`, `hc_user_friend_list_size`, `vip_user_friend_list_size`, `wordfilter_maximum_count`, `wordfilter_time_muted`) VALUES
+('1', 'pixels', '1', 30, 15, 35, 15, 35, '1', 5, 'pixels', 120, 120, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', 15, '1', '1', 1, '3372|3373|3374|3375|3376|3377|3378|3379|3380|3381', 7, 11, 'open', '1', 'Z63', '1', '1', '1', '1', '1', 1, '1', 1, 10, 5, 1, 10000, 48, 7, 30, 500, 12, 10, 15, '1', '1', 14, 300, 600, 1100, 5, 300);
 
 -- --------------------------------------------------------
 
@@ -11607,6 +12255,25 @@ INSERT INTO `server_statistics` (`server_status`, `server_ver`, `active_connecti
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `site_config`
+--
+
+CREATE TABLE IF NOT EXISTS `site_config` (
+  `maintenance` enum('0','1') NOT NULL DEFAULT '0',
+  `maintenance_text` text NOT NULL,
+  `reg_status` enum('0','1') NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `site_config`
+--
+
+INSERT INTO `site_config` (`maintenance`, `maintenance_text`, `reg_status`) VALUES
+('0', 'We are patching some bugs founded in our hotel.', '0');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `songs`
 --
 
@@ -11617,7 +12284,7 @@ CREATE TABLE IF NOT EXISTS `songs` (
   `song_data` text NOT NULL,
   `length` double NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 --
 -- Extraindo dados da tabela `songs`
@@ -11639,7 +12306,14 @@ INSERT INTO `songs` (`id`, `name`, `artist`, `song_data`, `length`) VALUES
 (13, 'Furni Face', 'Lady BlaBla', '1:379,4;45,4;0,1;205,2;42,5;37,4;384,2;41,4;42,5;0,2:2:0,3;199,3;0,1;383,3;519,4;515,8;519,8;39,2;0,1:3:0,2;205,2;382,4;522,2;516,12;518,8;0,3:4:0,4;386,2;0,2;43,1;0,1;207,3;202,1;520,8;44,2;0,2;520,4;207,3:', 66),
 (14, 'Habbowood', 'Micheal Bauble', '1:280,4;265,4;264,4;263,8;0,16:2:262,4;263,8;266,4;267,4;264,12;262,4:3:0,4;268,8;269,4;270,4;268,8;282,4;285,4:4:0,20;74,4;75,3;81,3;0,6:', 72),
 (15, 'Party Trax', 'Aerokid', '1:12,16;3,4;19,8;0,2;29,8;0,16:2:13,4;14,4;10,8;0,4;2,8;0,1;33,1;32,18;16,2;32,2;16,2:3:0,2;15,1;17,1;5,4;7,2;24,1;8,1;4,4;0,2;24,1;6,1;0,4;22,4;0,2;28,4;30,4;31,2;16,2;31,2;16,2;20,1;21,1;20,1;21,1;20,1;21,1;20,1;21,1:4:18,2;0,2;10,4;5,22;35,2;0,20;24,1;17,1:', 100),
-(16, 'Who Dares Stacks', 'Rage Against the Fuse', '1:255,4;310,7;0,9;310,14;0,4:2:0,3;309,1;308,7;309,1;308,7;309,1;308,7;309,1;308,7;309,1;0,2:3:0,4;162,7;0,1;162,7;0,1;162,15;0,3:4:0,6;135,4;135,4;135,4;0,2;135,4;135,4;135,4;135,4;0,2:5:0,14;155,2;0,2;155,2;314,1;315,1;314,1;315,1;314,1;315,1;314,1;0,1;314,1;315,1;314,1;315,1;314,1;315,1;314,1;315,1;0,2:6:0,12;311,1;0,1;311,1;0,1;311,1;0,1;311,1;0,1;311,1;0,5;155,2;311,1;0,1;311,1;0,1;311,1;0,3;311,1;0,1:', 76);
+(16, 'Who Dares Stacks', 'Rage Against the Fuse', '1:255,4;310,7;0,9;310,14;0,4:2:0,3;309,1;308,7;309,1;308,7;309,1;308,7;309,1;308,7;309,1;0,2:3:0,4;162,7;0,1;162,7;0,1;162,15;0,3:4:0,6;135,4;135,4;135,4;0,2;135,4;135,4;135,4;135,4;0,2:5:0,14;155,2;0,2;155,2;314,1;315,1;314,1;315,1;314,1;315,1;314,1;0,1;314,1;315,1;314,1;315,1;314,1;315,1;314,1;315,1;0,2:6:0,12;311,1;0,1;311,1;0,1;311,1;0,1;311,1;0,1;311,1;0,5;155,2;311,1;0,1;311,1;0,1;311,1;0,3;311,1;0,1:', 76),
+(17, 'Tapes from Goa', 'Habnosis', '1:0,116;116,8;0,8;5,56;0,64:2:0,49;42,6;0,21;575,4;0,4;575,20;0,4;0,2;290,6;290,2;290,4;293,2;297,1;291,2;0,12;42,6;0,31;75,4;0,6;97,2;0,16;575,4;0,2;502,4;0,12;502,4;0,4;502,4:3:0,42;471,4;0,3;81,4;44,2;0,12;97,2;2,2;0,2;2,2;0,2;2,8;0,1;81,3;0,4;410,14;0,2;410,30;97,2;0,2;410,2;0,2;410,2;0,2;410,2;0,2;410,2;0,10;97,2;0,6;97,2;410,22;97,2;410,16:4:0,44;410,40;157,66;97,2;157,2;97,2;0,4;157,79:5:0,20;577,8;0,8;570,16;79,2;423,2;79,2;423,2;79,2;423,2;79,2;423,2;79,2;423,2;79,2;423,2;79,2;0,2;79,2;97,2;0,6;97,2;0,6;97,2;0,6;97,2;0,14;97,2;101,1;0,1;101,1;0,1;101,1;0,1;101,1;0,1;101,1;0,1;101,1;0,1;101,1;0,1;101,1;0,1;101,1;0,1;101,1;0,1;101,1;100,1;101,1;100,1;101,1;100,1;101,1;100,1;101,1;100,1;101,1;100,1;101,19;100,5;101,1;100,1;101,1;100,6;101,1;100,1;101,1;100,5;101,1;100,1;101,1;0,4;576,4;575,12:6:0,11;576,16;0,5;100,19;101,1;447,32;0,6;447,50;454,36;447,56:7:0,4;575,16;0,6;514,4;0,1;118,1;0,5;118,1;0,3;118,1;97,2;0,6;97,2;0,8;71,24;0,8;471,48;0,24;73,82:8:578,20;0,4;579,8;0,6;73,46;0,4;73,87;97,2;0,44;578,32;579,4:', 512),
+(18, 'Epic Flail', 'Habbocalyptica', '1:484,12;0,4;298,2;303,2;298,2;303,2;0,3;366,1;305,4;306,2;0,2;306,2;0,1;366,1;0,4;629,4;630,4;622,4;630,4;305,4;306,2;0,2;306,2;0,1;366,1;298,2;303,2;298,2;303,2;484,12;0,2:2:0,2;471,8;207,3;0,3;298,2;303,2;298,2;303,2;295,2;296,2;305,4;306,2;296,2;306,2;296,2;471,4;629,4;630,4;622,8;305,4;306,2;296,2;306,2;296,2;298,2;303,2;298,2;303,2;471,4;207,3;0,7:3:0,2;471,8;0,2;338,32;39,2;0,6;39,2;0,2;630,4;338,20;471,4;0,10:4:0,3;471,8;0,1;338,32;39,2;0,10;622,4;338,20;0,1;471,4;0,9:5:485,4;0,1;485,4;0,11;295,2;296,2;295,2;296,2;0,4;295,2;296,2;295,2;296,2;0,16;39,2;0,6;295,2;296,2;295,2;296,2;295,2;296,2;295,2;296,2;469,4;0,10:6:472,12;0,8;244,10;182,14;244,2;0,20;244,16;472,8;0,6:', 188),
+(19, 'Electric Pixels', 'Habbo de Gaia', '1:73,36;435,40;565,2;566,2;468,24;0,2:2:0,1;76,2;43,1;0,1;76,2;0,2;76,2;43,1;0,1;76,2;0,2;76,2;0,21;439,8;454,2;0,2;454,2;0,2;454,20;0,6;420,2;0,2;420,2;0,2;420,2;0,2;420,2;0,2;97,2;0,6:3:0,2;76,2;0,2;76,2;0,2;76,2;0,2;76,2;0,2;76,2;0,16;73,30;434,4;420,2;434,6;435,24;0,4:4:0,1;80,16;0,19;463,6;438,2;463,2;438,2;463,2;438,2;0,2;97,2;0,4;79,2;0,2;79,2;42,6;79,2;420,2;0,4;447,20;73,2;0,4:5:52,34;97,2;0,2;420,2;0,2;420,2;0,2;420,2;439,4;0,4;456,22;0,2;456,20;0,6:6:0,7;42,6;0,1;42,6;565,2;566,2;565,2;566,2;565,2;566,2;565,2;566,2;468,38;0,2;73,4;463,2;0,2;439,4;463,2;0,2;439,4;463,2;0,8:7:0,12;577,24;52,62;0,8:8:77,20;553,4;554,4;553,4;554,4;460,32;447,10;0,2;460,18;0,8:', 212),
+(20, 'Alley Cat in Trouble', 'Rage Against the Fuse', '1:349,20;355,8;349,8;307,8;307,1;307,1;307,1;0,1;349,8;457,2:2:0,2;346,17;0,5;346,11;0,1;361,12;346,7;0,3:3:0,4;240,16;0,8;240,8;307,8;307,1;307,1;307,1;0,1;240,8;0,2:4:0,8;243,12;0,8;243,8;363,8;0,4;243,8;0,2:5:0,12;242,8;0,4;236,4;242,8;457,2;0,2;457,2;0,2;457,2;457,2;242,8;0,2:6:0,2;71,18;0,4;71,32;0,2:', 116),
+(21, 'Galactic Disco', 'DJ Bobba feat. Habboway', '1:214,2;95,20;0,2;260,1;0,3;260,1;0,1;407,16;95,6;0,6:2:0,14;461,2;0,2;461,2;0,10;495,2;0,2;495,2;0,2;495,2;0,2;495,2;0,2;412,2;0,5;495,2;0,3:3:0,2;413,28;458,14;0,2;86,6;0,6:4:0,2;411,42;0,2;256,1;257,5;0,6:5:0,6;465,2;0,2;465,2;0,2;465,2;0,2;465,2;0,2;531,2;0,2;531,2;0,6;461,2;0,2;461,2;0,2;461,2;0,4;92,1;93,4;0,5:6:0,6;72,2;0,2;72,2;0,2;72,2;0,2;72,2;0,2;72,2;0,1;72,3;0,2;72,2;0,2;72,2;0,2;72,2;0,2;72,2;0,4;72,2;0,8:', 116),
+(22, 'Phuturistic Chilled Trax', 'Aerokid', '1:65,2;64,16;0,1;69,1;0,4;31,8;64,12;49,4;53,2:2:0,2;66,18;70,24;75,3;0,3:3:0,6;71,4;72,10;36,4;30,4;36,4;0,4;77,8;0,6:4:0,10;68,2;65,2;68,2;67,4;73,12;0,10;81,3;0,5:', 48),
+(23, 'Pet Romance', 'Lady BlaBla', '1:118,1;0,1;136,2;0,2;137,2;0,2;137,2;136,2;137,2;136,4;71,6;0,4:2:121,6;122,4;123,4;122,4;123,2;122,4;0,2;169,2;0,2:3:0,1;125,1;143,8;68,2;165,2;69,1;0,1;69,1;168,1;169,2;69,1;0,1;69,1;125,1;143,4;167,1;0,1:4:0,2;120,8;138,4;120,6;138,6;66,2;121,2:', 60);
 
 -- --------------------------------------------------------
 
@@ -14820,7 +15494,7 @@ INSERT INTO `static_objects` (`id`, `room_id`, `name`, `position`, `size_x`, `si
 CREATE TABLE IF NOT EXISTS `subscription_offers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `discount_percentage` int(11) NOT NULL DEFAULT '1',
-  `subscription_level` enum('2','1') NOT NULL DEFAULT '2',
+  `offerted_level` enum('2','1') NOT NULL DEFAULT '2',
   `user_ids_list` text NOT NULL,
   `expire_timestamp` double(11,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -14828,6 +15502,24 @@ CREATE TABLE IF NOT EXISTS `subscription_offers` (
 
 --
 -- Extraindo dados da tabela `subscription_offers`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `account_password` text NOT NULL,
+  `account_email` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Extraindo dados da tabela `users`
 --
 
 

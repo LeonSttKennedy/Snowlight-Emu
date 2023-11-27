@@ -358,8 +358,13 @@ namespace Snowlight.Game.Rooms
                                 if (Instance == null) break;
 
                                 Actor.BlockWalking();
-
+                                
                                 RoomInfo Info = RoomInfoLoader.GetRoomInfo(Action.ToRoomId);
+
+                                if (Info.CurrentUsers >= Info.MaxUsers && !Session.HasRight("enter_full_rooms"))
+                                {
+                                    break;
+                                }
 
                                 Session.IsTeleporting = true;
                                 Session.TriggerTeleporterId = Action.Id;

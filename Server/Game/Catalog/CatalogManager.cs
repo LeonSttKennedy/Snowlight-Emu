@@ -188,6 +188,15 @@ namespace Snowlight.Game.Catalog
                         (int)Row["amount"], (string)Row["preset_flags"], (int)Row["club_restriction"],
                         (string)Row["badge_code"]);
 
+                    MySqlClient.SetParameter("enabled", "1");
+                    MySqlClient.SetParameter("item_id", Item.Id);
+                    DataTable RaceTable = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_pet_races WHERE catalog_item_id = @item_id AND enabled = @enabled");
+
+                    foreach (DataRow PetRow in RaceTable.Rows)
+                    {
+                        Item.AddPetRaceData(new PetRaceData((int)PetRow["pet_breed"], (PetRow["sellable"].ToString() == "1"), (PetRow["breed_is_rare"].ToString() == "1")));
+                    }
+
                     if (Item.DefinitionId > 0 && Item.Definition == null)
                     {
                         Output.WriteLine("Warning: Catalog item " + (uint)Row["id"] + " has an invalid base_id reference.", OutputLevel.Warning);
@@ -408,8 +417,11 @@ namespace Snowlight.Game.Catalog
                 Settings.UpdateInDatabase();
             }
 
-            mCatalogItems[PageId].Add(mCatalogItems[Settings.PageToCopy][Settings.LastIndex]);
+            CatalogItem Item = mCatalogItems[Settings.PageToCopy][Settings.LastIndex];
+
+            mCatalogItems[PageId].Add(Item);
         }
+
         public static void MarketplaceBuyTickets(Session Session, ClientMessage Message)
         {
             bool CreditsError = false;
@@ -445,8 +457,15 @@ namespace Snowlight.Game.Catalog
 
         public static void MarketplaceItemStats(Session Session, ClientMessage Message)
         {
-            // Posters has same SpriteId, so how can i count her ExtraData??
-
+            /* 
+             * Posters has same SpriteId, and still impossible count his offers by extradata.
+             * 
+             * oLJYhO => Message received
+             * oL  = 3020 > Message Header Id
+             * J   = 2    > int ItemType
+             * YhO = 4001 > uint Sprite
+             */
+            
             int ItemType = Message.PopWiredInt32();
             uint Sprite = Message.PopWiredUInt32();
 
@@ -468,12 +487,14 @@ namespace Snowlight.Game.Catalog
             string SearchQuery = Message.PopString();
             int FilterMode = Message.PopWiredInt32();
 
+            Session.MarketplaceFiltersCache.FillCache(MinPrice, MaxPrice, SearchQuery, FilterMode);
             MarketplaceManager.SerializeOffers(Session, MinPrice, MaxPrice, SearchQuery, FilterMode);
         }
 
         private static void MarketplaceTakeBack(Session Session, ClientMessage Message)
         {
             uint ItemId = Message.PopWiredUInt32();
+
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 MarketplaceManager.CancelOffer(Session, MySqlClient, ItemId);
@@ -489,14 +510,17 @@ namespace Snowlight.Game.Catalog
 
             Session.SendData(CatalogMarketplaceCanSellComposer.Compose(Session));
         }
+
         private static void MarketplacePurchase(Session Session, ClientMessage Message)
         {
             uint ItemId = Message.PopWiredUInt32();
+
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 MarketplaceManager.Purchase(Session, MySqlClient, ItemId);
             }
         }
+
         private static void MarketplacePostItem(Session Session, ClientMessage Message)
         {
             if (Session.InventoryCache != null)
@@ -620,10 +644,12 @@ namespace Snowlight.Game.Catalog
                 CatalogPurchaseHandler.HandlePurchaseGift(MySqlClient, Session, Item, ExtraData, GiftUser, GiftMessage, SpriteId, GiftBoxId, Ribbon);
             }
         }
+
         private static void GetPresentsData(Session Session, ClientMessage Message)
         {
             Session.SendData(CatalogGiftsConfigComposer.Compose());
         }
+
         private static void GetClubOffers(Session Session, ClientMessage Message)
         {
             ServerMessage Response = TryGetResponseFromCache(Session.CharacterId, Message);
@@ -669,6 +695,7 @@ namespace Snowlight.Game.Catalog
         private static void GetPetData(Session Session, ClientMessage Message)
         {
             CatalogItem PetItem = null;
+
             string ItemName = Message.PopString();
 
             if (mCatalogItemsNameIndex.ContainsKey(ItemName))
@@ -690,7 +717,7 @@ namespace Snowlight.Game.Catalog
 
             int PetType = Def.BehaviorData;
 
-            Session.SendData(CatalogPetDataComposer.Compose(PetItem, PetDataManager.GetRaceDataForType(PetType), PetType));
+            Session.SendData(CatalogPetDataComposer.Compose(PetItem, PetType));
         }
 
         private static void CheckPetName(Session Session, ClientMessage Message)
