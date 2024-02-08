@@ -89,7 +89,7 @@ namespace Snowlight.Game.Handlers
 
             if (ServerSettings.MotdEnabled)
             {
-                switch(ServerSettings.MotdType)
+                switch (ServerSettings.MotdType)
                 {
                     case MotdType.NotificationMessageComposer:
                         Session.SendData(NotificationMessageComposer.Compose(MotdText, MotdLink));

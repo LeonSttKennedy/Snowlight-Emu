@@ -24,7 +24,7 @@ namespace Snowlight.Communication.Outgoing
 
                 string IMG = Events.EventType == EventStreamType.AchievementEarned ?
                     "http://192.168.15.3/cdn.classichabbo.com/r38/gordon/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/album1584/" + Events.ExtraData[0] + ".gif" :
-                    "?www.habbo.com/habbo-imaging/avatarimage?figure=" + Events.UserInfo.Figure + ".gif";
+                    "?http://www.habbo.com/habbo-imaging/avatarimage?figure=" + Events.UserInfo.Figure + ".gif";
 
                 TimeSpan ElapsedTime = DateTime.Now - UnixTimestamp.GetDateTimeFromUnixTimestamp(Events.Timestamp);
 
@@ -63,16 +63,8 @@ namespace Snowlight.Communication.Outgoing
                             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                             {
                                 CharacterInfo FriendMadeInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, FriendMadeId);
-                                if (FriendMadeInfo != null)
-                                {
-                                    Message.AppendStringWithBreak(FriendMadeInfo.Id.ToString());
-                                    Message.AppendStringWithBreak(FriendMadeInfo.Username);
-                                }
-                                else
-                                {
-                                    Message.AppendStringWithBreak(string.Empty);
-                                    Message.AppendStringWithBreak("User Not Found");
-                                }
+                                Message.AppendStringWithBreak(FriendMadeInfo != null ? FriendMadeInfo.Id.ToString() : string.Empty);
+                                Message.AppendStringWithBreak(FriendMadeInfo != null ? FriendMadeInfo.Username : "User not found");
                             }
 
                             break;
@@ -82,17 +74,10 @@ namespace Snowlight.Communication.Outgoing
                         {
                             uint.TryParse(Events.ExtraData, out uint RoomId);
                             RoomInfo RoomInfo = RoomInfoLoader.GetRoomInfo(RoomId);
-                            if (RoomInfo != null)
-                            {
-                                Message.AppendStringWithBreak(RoomInfo.Id.ToString());
-                                Message.AppendStringWithBreak(RoomInfo.Name);
-                            }
-                            else
-                            {
-                                Message.AppendStringWithBreak(string.Empty);
-                                Message.AppendStringWithBreak("Room Not Found");
-                            }
 
+                            Message.AppendStringWithBreak(RoomInfo != null ? RoomInfo.Id.ToString() : string.Empty);
+                            Message.AppendStringWithBreak(RoomInfo != null ? RoomInfo.Name : "Room not found");
+                            
                             break;
                         }
 

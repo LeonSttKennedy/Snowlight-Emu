@@ -33,7 +33,7 @@ namespace Snowlight.Communication.Outgoing
                 }
             }
 
-            if (QuestManager.CurrentDailyQuest >= UserQuestGoals["daily"])
+            if (UserQuestGoals.ContainsKey("daily") && QuestManager.CurrentDailyQuest >= UserQuestGoals["daily"])
             {
                 UserQuestGoals["daily"] = QuestManager.CurrentDailyQuest + 1;
             }

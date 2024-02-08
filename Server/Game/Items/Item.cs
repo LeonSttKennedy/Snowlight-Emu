@@ -282,6 +282,7 @@ namespace Snowlight.Game.Items
                 return mExpireTimestamp - UnixTimestamp.GetCurrent();
             }
         }
+
         public double ActiveHeight
         {
             get
@@ -301,6 +302,7 @@ namespace Snowlight.Game.Items
                 return Height;
             }
         }
+
         public bool TimmerRunning
         {
             get
@@ -313,6 +315,7 @@ namespace Snowlight.Game.Items
                 mTimmerRunning = value;
             }
         }
+
         public WiredData WiredData
         {
             get
