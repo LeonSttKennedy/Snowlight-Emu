@@ -521,7 +521,8 @@ namespace Snowlight.Game.Rooms
 
             Session.SendData(RoomWallsStatusComposer.Compose(Instance.Info.HideWalls, Instance.Info.WallThickness, Instance.Info.FloorThickness));
             Session.SendData(RoomInfoRightsComposer.Compose(Instance.Info.Type == RoomType.Flat, Instance.RoomId,
-                (Instance.Info.Type == RoomType.Flat && Instance.CheckUserRights(Session, true)), Instance.Info.PubInternalName));
+                (Instance.Info.Type == RoomType.Flat && Instance.CheckUserRights(Session, true)), Instance.Info.PubInternalName,
+                Instance.Info.PubInternalId));
 
             /*if (Instance.Info.Type == RoomType.Flat)
             {

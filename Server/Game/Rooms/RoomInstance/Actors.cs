@@ -219,13 +219,13 @@ namespace Snowlight.Game.Rooms
                 TargetTeleporter.BroadcastStateUpdate(this);
             }
 
-            if (CheckUserRights(Session, true))
+            if (mInfo.Type != RoomType.Public && CheckUserRights(Session, true))
             {
                 NewActor.SetStatus("flatctrl", "useradmin");
                 Session.SendData(RoomOwnerRightsComposer.Compose());
                 Session.SendData(RoomRightsComposer.Compose());
             }
-            else if (CheckUserRights(Session))
+            else if (mInfo.Type != RoomType.Public && CheckUserRights(Session))
             {
                 NewActor.SetStatus("flatctrl");
                 Session.SendData(RoomRightsComposer.Compose());

@@ -357,7 +357,7 @@ namespace Snowlight.Game.Rights
 
                         if (PastVipTimeInDays > 0)
                         {
-                            if (((PastVipTimeInDays / 31) - VIP_Progress) > 0)
+                            if ((Math.Floor((double)(PastVipTimeInDays / 31)) - VIP_Progress) > 0)
                             {
                                 ToReturn = true;
                             }
@@ -377,7 +377,7 @@ namespace Snowlight.Game.Rights
 
                         if (PastHcTimeInDays > 0)
                         {
-                            if (((PastHcTimeInDays / 31) - HC_Progress) > 0)
+                            if ((Math.Floor((double)(PastHcTimeInDays / 31)) - HC_Progress) > 0)
                             {
                                 ToReturn = true;
                             }

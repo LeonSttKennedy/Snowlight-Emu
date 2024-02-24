@@ -118,6 +118,27 @@ namespace Snowlight.Game.Catalog
             }
         }
 
+        private DateTime Future
+        {
+            get
+            {
+                double TimeLeft = mTimestamp + (ServerSettings.MarketplaceOfferTotalHours * 60 * 60);
+                DateTime Future = UnixTimestamp.GetDateTimeFromUnixTimestamp(TimeLeft);
+                
+                return Future;
+            }
+        }
+
+        public int MinutesLeft
+        {
+            get
+            {
+                TimeSpan MinLef = Future - DateTime.Now;
+
+                return Compare() ? 0 : (int)MinLef.TotalMinutes;
+            }
+        }
+
         public MarketplaceOffers(uint OfferID, uint UserID, uint ItemID, int State, uint Sprite, string ExtraData, int AskingPrice, int TotalPrice, int ItemType, double Timestamp, int LimitedNumber, int LimitedStack)
         {
             mId = OfferID;
@@ -211,13 +232,16 @@ namespace Snowlight.Game.Catalog
             }
         }
 
-        public void CheckForExpiracy(SqlDatabaseClient MySqlClient)
+        public bool Compare()
         {
-            double TimeLeft = mTimestamp + (ServerSettings.MarketplaceOfferTotalHours * 60 * 60);
-            DateTime Future = UnixTimestamp.GetDateTimeFromUnixTimestamp(TimeLeft);
             int Compare = DateTime.Compare(DateTime.Now, Future);
 
-            if (Compare > -1 && mOfferState != 2)
+            return Compare > -1;
+        }
+
+        public void CheckForExpiracy(SqlDatabaseClient MySqlClient)
+        {
+            if (Compare() && mOfferState != 2)
             {
                 mOfferState = 3;
                 MySqlClient.SetParameter("offerid", mId);

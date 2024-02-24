@@ -206,7 +206,7 @@ namespace Snowlight.Game.Catalog
             {
                 case true:
                     
-                    if(Subscription.SubscriptionLevel == ClubSubscriptionLevel.VipClub &&
+                    if (Subscription.SubscriptionLevel == ClubSubscriptionLevel.VipClub &&
                         Subscription.PastVipTimeInDays >= Gift.DaysNeed)
                     {
                         CanSelect = true;

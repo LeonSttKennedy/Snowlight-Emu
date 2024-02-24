@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Snowlight.Game.Items;
 using Snowlight.Game.Navigation;
 using Snowlight.Game.Rooms;
 
@@ -9,7 +10,7 @@ namespace Snowlight.Communication.Outgoing
 {
     public static class NavigatorOfficialRoomsComposer
     {
-        public static ServerMessage Message(List<NavigatorOfficialItem> Items)
+        public static ServerMessage Message(List<NavigatorOfficialItem> Items, NavigatorOfficialItem RoomAds)
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.NAVIGATOR_OFFICIAL_ROOMS);
             Message.AppendInt32(Items.Count);
@@ -37,14 +38,21 @@ namespace Snowlight.Communication.Outgoing
                 }
             }
 
+            Message.AppendBoolean(RoomAds != null);
+
+            if (RoomAds != null)
+            {
+                SerializeOfficialItem(RoomAds, Message);
+            }
+
             return Message;
         }
 
         private static void SerializeOfficialItem(NavigatorOfficialItem Item, ServerMessage Message)
         {
-            RoomInstance Instance = null; 
+            RoomInstance Instance = null;
             RoomInfo Info = null;
-            
+
             if (!Item.IsCategory)
             {
                 Instance = Item.TryGetRoomInstance();
@@ -61,6 +69,10 @@ namespace Snowlight.Communication.Outgoing
             {
                 Type = 2;
             }
+            else if (Item.SearchTag != string.Empty)
+            {
+                Type = 1;
+            }
 
             Message.AppendUInt32(Item.Id);
             Message.AppendStringWithBreak(Item.Name);
@@ -72,15 +84,19 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(Item.GetTotalUsersInPublicRoom());
             Message.AppendInt32(Type);
 
-            if (Item.IsCategory)
+            if (Item.SearchTag != string.Empty)
+            {
+                Message.AppendStringWithBreak(Item.SearchTag);
+            }
+            else if (Item.IsCategory)
             {
                 Message.AppendBoolean(Item.CategoryAutoExpand); // Category auto expand
             }
             else if (Info != null && Info.Type == RoomType.Public)
             {
                 Message.AppendStringWithBreak(Item.ImageType == NavigatorOfficialItemImageType.Internal ? Item.Image : string.Empty);
-                Message.AppendInt32(0); // Appears to be nothing but junk!
-                Message.AppendInt32(0); // Something to do with room parts (e.g. lido part 0 & 1) default 0
+                Message.AppendInt32(0);                 // Appears to be nothing but junk!
+                Message.AppendInt32(0);                 // Something to do with room parts (e.g. lido part 0 & 1) default 0 / Room description text ID
                 Message.AppendStringWithBreak(Info.SWFs);
                 Message.AppendInt32(Info.MaxUsers);
                 Message.AppendUInt32(Info.Id);
@@ -89,6 +105,6 @@ namespace Snowlight.Communication.Outgoing
             {
                 NavigatorRoomListComposer.SerializeRoom(Message, Info);
             }
-       }
+        }
     }
 }

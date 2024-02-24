@@ -26,7 +26,7 @@ namespace Snowlight.Communication.Outgoing
                     Message.AppendUInt32(offer.Sprite);
                     Message.AppendStringWithBreak(extradata);
                     Message.AppendInt32(offer.TotalPrice);
-                    Message.AppendUInt32(offer.Sprite);
+                    Message.AppendInt32(offer.MinutesLeft);
                     Message.AppendInt32(AvaragePrice);
                     Message.AppendInt32(offer.CountOffers());
                 }

@@ -10,7 +10,7 @@ namespace Snowlight.Game.Navigation
     public enum NavigatorOfficialItemDisplayType
     {
         Banner = 0,
-        Detailed = 1
+        Detailed = 1,
     }
 
     public enum NavigatorOfficialItemImageType
@@ -25,12 +25,14 @@ namespace Snowlight.Game.Navigation
         private uint mParentId;
         private uint mRoomId;
         private bool mIsCategory;
+        private bool mIsAdvertsement;
         private NavigatorOfficialItemDisplayType mDisplayType;
         private string mName;
         private string mDescr;
         private NavigatorOfficialItemImageType mImageType;
         private string mImage;
         private string mBannerLabel;
+        private string mSearchTag;
         private bool mCategoryAutoExpand;
 
         private List<uint> mConnectedRooms;
@@ -64,6 +66,14 @@ namespace Snowlight.Game.Navigation
             get
             {
                 return mIsCategory;
+            }
+        }
+
+        public bool IsAdvertsement
+        {
+            get
+            {
+                return mIsAdvertsement;
             }
         }
 
@@ -115,6 +125,14 @@ namespace Snowlight.Game.Navigation
             }
         }
 
+        public string SearchTag
+        {
+            get
+            {
+                return mSearchTag;
+            }
+        }
+
         public bool CategoryAutoExpand
         {
             get
@@ -131,20 +149,22 @@ namespace Snowlight.Game.Navigation
             }
         }
 
-        public NavigatorOfficialItem(uint Id, uint ParentId, uint RoomId, bool IsCategory,
+        public NavigatorOfficialItem(uint Id, uint ParentId, uint RoomId, bool IsCategory, bool IsAdvertsement,
             NavigatorOfficialItemDisplayType DisplayType, string Name, string Descr, NavigatorOfficialItemImageType ImageType,
-            string Image, string BannerLabel, bool CategoryAutoExpand, List<uint> ConnectedRoomsList)
+            string Image, string BannerLabel, string SearchTag, bool CategoryAutoExpand, List<uint> ConnectedRoomsList)
         {
             mId = Id;
             mParentId = ParentId;
             mRoomId = RoomId;
             mIsCategory = IsCategory;
+            mIsAdvertsement = IsAdvertsement;
             mDisplayType = DisplayType;
             mName = Name;
             mDescr = Descr;
             mImageType = ImageType;
             mImage = Image;
             mBannerLabel = BannerLabel;
+            mSearchTag = SearchTag;
             mCategoryAutoExpand = CategoryAutoExpand;
             mConnectedRooms = ConnectedRoomsList;
         }
@@ -163,12 +183,21 @@ namespace Snowlight.Game.Navigation
         {
             int TotalUsersInThisItem = 0;
 
-            if (GetRoomInfo() != null) TotalUsersInThisItem += GetRoomInfo().CurrentUsers;
-
-            foreach (uint RoomId in mConnectedRooms)
+            if (GetRoomInfo() != null)
             {
-                RoomInfo ConnectedRoom = RoomInfoLoader.GetRoomInfo(RoomId);
-                if (mConnectedRooms.Count > 0 && ConnectedRoom != null) TotalUsersInThisItem += ConnectedRoom.CurrentUsers;
+                TotalUsersInThisItem += GetRoomInfo().CurrentUsers;
+            }
+
+            if (mConnectedRooms.Count > 0)
+            {
+                foreach (uint RoomId in mConnectedRooms)
+                {
+                    RoomInfo ConnectedRoom = RoomInfoLoader.GetRoomInfo(RoomId);
+                    if (ConnectedRoom != null)
+                    {
+                        TotalUsersInThisItem += ConnectedRoom.CurrentUsers;
+                    }
+                }
             }
 
             return TotalUsersInThisItem;

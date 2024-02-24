@@ -89,7 +89,7 @@ namespace Snowlight.Game.Navigation
                 foreach (DataRow Row in Table.Rows)
                 {
                     mFlatCategories.Add(new FlatCategory((int)Row["id"], (Row["visible"].ToString() == "1"),
-                        (string)Row["title"], (Row["allow_trading"].ToString() == "1")));
+                        (string)Row["title"], (string)Row["required_right"], (Row["allow_trading"].ToString() == "1")));
                     NumberLoaded++;
                 }
 
@@ -132,12 +132,12 @@ namespace Snowlight.Game.Navigation
                     }
 
                     mOfficialItems.Add(new NavigatorOfficialItem((uint)Row["id"], (uint)Row["parent_id"], (uint)Row["room_id"],
-                        (Row["is_category"].ToString() == "1"), (Row["display_type"].ToString() == "details" ?
-                        NavigatorOfficialItemDisplayType.Detailed : NavigatorOfficialItemDisplayType.Banner),
-                        (string)Row["name"], (string)Row["descr"], (Row["image_type"].ToString() == "internal" ?
-                        NavigatorOfficialItemImageType.Internal : NavigatorOfficialItemImageType.External),
-                        (string)Row["image_src"], (string)Row["banner_label"], (Row["category_autoexpand"].ToString() == "1"),
-                        ConnectedRooms));
+                        (Row["is_category"].ToString() == "1"), (Row["is_advertsement"].ToString() == "1"),
+                        (Row["display_type"].ToString() == "details" ? NavigatorOfficialItemDisplayType.Detailed :
+                        NavigatorOfficialItemDisplayType.Banner), (string)Row["name"], (string)Row["descr"], 
+                        (Row["image_type"].ToString() == "internal" ? NavigatorOfficialItemImageType.Internal :
+                        NavigatorOfficialItemImageType.External), (string)Row["image_src"], (string)Row["banner_label"],
+                        (string)Row["search_tag"], (Row["category_autoexpand"].ToString() == "1"), ConnectedRooms));
                     NumberLoaded++;
                 }
             }
@@ -191,6 +191,15 @@ namespace Snowlight.Game.Navigation
             return false;
         }
 
+        private static NavigatorOfficialItem GetRoomAds()
+        {
+            List<NavigatorOfficialItem> RoomAds = mOfficialItems.Where(O => O.IsAdvertsement).ToList();
+
+            NavigatorOfficialItem RandomAds = RoomAds.Count > 0 ? RoomAds[RandomGenerator.GetNext(0, RoomAds.Count() - 1)] : null;
+
+            return RandomAds;
+        }
+
         private static void GetCategories(Session Session, ClientMessage Message)
         {
             ServerMessage Response = TryGetResponseFromCache(0, Message);
@@ -201,7 +210,7 @@ namespace Snowlight.Game.Navigation
                 return;
             }
 
-            Response = NavigatorFlatCategoriesComposer.Compose(mFlatCategories);
+            Response = NavigatorFlatCategoriesComposer.Compose(Session, mFlatCategories);
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -216,9 +225,9 @@ namespace Snowlight.Game.Navigation
                 return;
             }
 
-            IEnumerable<NavigatorOfficialItem> Official = mOfficialItems.OrderByDescending(O => O.GetTotalUsersInPublicRoom());
+            IEnumerable<NavigatorOfficialItem> Official = mOfficialItems.OrderByDescending(O => O.GetTotalUsersInPublicRoom()).Where(O => !O.IsAdvertsement);
 
-            Response = NavigatorOfficialRoomsComposer.Message(Official.ToList());
+            Response = NavigatorOfficialRoomsComposer.Message(Official.ToList(), GetRoomAds());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -243,7 +252,7 @@ namespace Snowlight.Game.Navigation
                  orderby RoomInstance.Value.Event.TimestampStarted descending
                  select RoomInstance.Value).Take(50);
 
-            Response = NavigatorRoomListComposer.Compose(Category, 12, string.Empty, Rooms.ToList(), true);
+            Response = NavigatorRoomListComposer.Compose(Category, 12, string.Empty, Rooms.ToList(), GetRoomAds(), true);
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -291,7 +300,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 6, string.Empty, Rooms);
+            Response = NavigatorRoomListComposer.Compose(0, 6, string.Empty, Rooms, GetRoomAds());
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             Session.SendData(Response);
         }
@@ -339,7 +348,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 3, string.Empty, Rooms);
+            Response = NavigatorRoomListComposer.Compose(0, 3, string.Empty, Rooms, GetRoomAds());
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             Session.SendData(Response);
         }
@@ -365,7 +374,7 @@ namespace Snowlight.Game.Navigation
                  orderby RoomInstance.Value.CachedNavigatorUserCount descending
                  select RoomInstance.Value).Take(50);
 
-            Response = NavigatorRoomListComposer.Compose(Category, 1, string.Empty, Rooms.ToList());
+            Response = NavigatorRoomListComposer.Compose(Category, 1, string.Empty, Rooms.ToList(), GetRoomAds());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -392,7 +401,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 2, string.Empty, Rooms);
+            Response = NavigatorRoomListComposer.Compose(0, 2, string.Empty, Rooms, GetRoomAds());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -436,7 +445,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 7, string.Empty, Rooms);
+            Response = NavigatorRoomListComposer.Compose(0, 7, string.Empty, Rooms, GetRoomAds());
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             Session.SendData(Response);
         }
@@ -470,7 +479,7 @@ namespace Snowlight.Game.Navigation
                  RoomInstance.Value.Info.Type != RoomType.Public
                  select RoomInstance.Value).Take(50);
 
-            Response = NavigatorRoomListComposer.Compose(0, 4, string.Empty, Rooms.ToList());
+            Response = NavigatorRoomListComposer.Compose(0, 4, string.Empty, Rooms.ToList(), GetRoomAds());
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             Session.SendData(Response);
         }
@@ -501,7 +510,7 @@ namespace Snowlight.Game.Navigation
 
             IEnumerable<RoomInfo> RoomsToSend = Rooms.OrderByDescending(U => U.CurrentUsers);
 
-            Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, RoomsToSend.ToList());
+            Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, RoomsToSend.ToList(), GetRoomAds());
             
             if (Message == null)
             {
@@ -613,7 +622,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(1, 9, Query, Rooms.Values.Take(50).ToList());
+            Response = NavigatorRoomListComposer.Compose(1, 9, Query, Rooms.Values.Take(50).ToList(), GetRoomAds());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -696,8 +705,8 @@ namespace Snowlight.Game.Navigation
                     MySqlClient.ExecuteNonQuery("INSERT INTO navigator_frontpage (parent_id,room_id) VALUES (@parentid,@id)");
                 }
 
-                mOfficialItems.Add(new NavigatorOfficialItem(0, CategoryId, RoomId, false, NavigatorOfficialItemDisplayType.Detailed,
-                    string.Empty, string.Empty, NavigatorOfficialItemImageType.Internal, string.Empty, string.Empty, false, new List<uint>()));
+                mOfficialItems.Add(new NavigatorOfficialItem(0, CategoryId, RoomId, false, false, NavigatorOfficialItemDisplayType.Detailed,
+                    string.Empty, string.Empty, NavigatorOfficialItemImageType.Internal, string.Empty, string.Empty, string.Empty, false, new List<uint>()));
             }
         }
 

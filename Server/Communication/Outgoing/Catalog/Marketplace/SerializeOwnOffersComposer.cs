@@ -28,18 +28,13 @@ namespace Snowlight.Communication.Outgoing
 
                 foreach (MarketplaceOffers UserOffers in UserOfferList)
                 {
-                    double TimeLeft = UserOffers.Timestamp + (ServerSettings.MarketplaceOfferTotalHours * 60 * 60);
-                    DateTime Future = UnixTimestamp.GetDateTimeFromUnixTimestamp(TimeLeft);
-                    TimeSpan TSOffer = Future - DateTime.Now;
-                    int Compare = DateTime.Compare(DateTime.Now, Future);
-
                     Message.AppendUInt32(UserOffers.Id);
                     Message.AppendInt32(UserOffers.State); // 1 = active, 2 = sold, 3 = expired
                     Message.AppendInt32(UserOffers.ItemType);
                     Message.AppendUInt32(UserOffers.Sprite);
                     Message.AppendStringWithBreak(UserOffers.ItemType == 2 ? UserOffers.ExtraData : string.Empty);
                     Message.AppendInt32(UserOffers.TotalPrice); // ??
-                    Message.AppendInt32(Compare > -1 ? 0 : (int)TSOffer.TotalMinutes);
+                    Message.AppendInt32(UserOffers.MinutesLeft);
                     Message.AppendUInt32(UserOffers.Sprite);
                 }
             }

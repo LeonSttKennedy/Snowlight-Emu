@@ -47,6 +47,7 @@ namespace Snowlight.Game.Rooms
         private int mWallThickness;
         private int mFloorThickness;
         private string mPubInternalName;
+        private int mPubInternalId;
         private Dictionary<string, string> mDecorations;
         private string mBadgeCode;
         private object mSyncRoot;
@@ -274,6 +275,14 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public int PubInternalId
+        {
+            get
+            {
+                return (mType == RoomType.Flat ? 0 : mPubInternalId);
+            }
+        }
+
         public int WallThickness
         {
             get
@@ -328,8 +337,8 @@ namespace Snowlight.Game.Rooms
         public RoomInfo(uint Id, RoomType Type, uint OwnerId, string Name, string Description, List<string> Tags,
             RoomAccessType AccessType, string Password, RoomIcon Icon, int CategoryId, int MaxUsers, string Swfs,
             int Score, string ModelName, bool AllowPets, bool AllowPetEating, bool DisableBlocking, bool HideWalls,
-            string PubInternalName, int WallThickness, int FloorThickness, Dictionary<string, string> Decorations,
-            string BadgeCode)
+            string PubInternalName, int PubInternalId, int WallThickness, int FloorThickness,
+            Dictionary<string, string> Decorations, string BadgeCode)
         {
             mId = Id;
             mType = Type;
@@ -351,6 +360,7 @@ namespace Snowlight.Game.Rooms
             mDisableRoomBlocking = DisableBlocking;
             mHideWalls = HideWalls;
             mPubInternalName = PubInternalName;
+            mPubInternalId = PubInternalId;
             mWallThickness = WallThickness;
             mFloorThickness = FloorThickness;
             mDecorations = Decorations;
