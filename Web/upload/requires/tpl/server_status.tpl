@@ -10,8 +10,7 @@ if($_SESSION['login'])
 	
 	echo Core::GetSystemStatus() == "1"? $enabled : $disabled; 
 	
-	$uid = Users::Name2Id($_SESSION['account_name']);
-	if(Users::HasRight($uid, "hk_login"))
+	if(Users::HasRight($_SESSION['id'], "hk_login"))
 	{
 ?>
 		<button class="red" onclick="window.location = 'http://<?php echo SITE_DOMAIN; ?>/manage/';">Housekeeping</button>

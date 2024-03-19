@@ -71,9 +71,9 @@ class Users extends Security
 		$initial_credits = "100"; // Credits
 		$initial_pixels = "0,1500"; // 0 = Pixels | , = Separator char | 1500 = Initial Value
 
-		mysql_query("INSERT INTO users (account_name, account_password, account_email) VALUES ('".$entered_username."', '".$sha1_password."', '".$entered_email."');");
+		mysql_query("INSERT INTO users (account_password, account_email) VALUES ('".$sha1_password."', '".$entered_email."');");
 		$last = mysql_insert_id();
-		mysql_query("INSERT INTO characters (id, account_uid,username, motto, figure, credits_balance, activity_points_balance, timestamp_created) VALUES ('".$last."', '".$last."', '".$entered_username."', '".$initial_motto."', '".$initial_figure."', '".$initial_credits."', '".$initial_pixels."', '".microtime(true)."');");
+		mysql_query("INSERT INTO characters (id, account_uid, username, motto, figure, credits_balance, activity_points_balance, timestamp_created) VALUES ('".$last."', '".$last."', '".$entered_username."', '".$initial_motto."', '".$initial_figure."', '".$initial_credits."', '".$initial_pixels."', '".microtime(true)."');");
 		
 		Users::TryLogin($entered_email, $entered_password);
 	}
@@ -97,7 +97,7 @@ class Users extends Security
 	
 	public function CheckName($entered_username)
 	{
-		$query = mysql_query("SELECT * FROM users WHERE account_name = '".$entered_username."' LIMIT 1;");
+		$query = mysql_query("SELECT * FROM characters WHERE username = '".$entered_username."' LIMIT 1;");
 		$ocuped = mysql_num_rows($query);
 		if($ocuped == 1)
 		{
@@ -160,7 +160,7 @@ class Users extends Security
 				{
 					$_SESSION['login'] = true;
 					$_SESSION['id'] = $user_data['id'];
-					$_SESSION['account_name'] = $user_data['account_name'];
+					$_SESSION['account_name'] = $this->GetUserData($user_data['id'], 'username');
 					
 					Security::Redirect("me.php");
 				}
@@ -212,6 +212,13 @@ class Users extends Security
 		$this->UpdateSSO($SSO_Data, $username, 1);
 		
 		return $SSO_Data;
+	}
+	
+	public function GetUserData($uid, $value)
+	{
+		$result = mysql_query("SELECT $value FROM characters WHERE account_uid = '$uid' LIMIT 1");
+		$user_data = mysql_fetch_array($result);
+		return $user_data[''.$value.''];
 	}
 	
 	public function UpdateSSO($SSO, $username, $mode)

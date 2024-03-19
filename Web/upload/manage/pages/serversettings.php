@@ -9,7 +9,7 @@ if (!HK_LOGGED_IN || !$GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hotel_
 {
 	exit;
 }
-$currenciesarray = array('pixels','snowflakes','hearts','giftpoints','shells');
+$currenciesarray = array('pixels','snowflakes','hearts','giftpoints','shells', 'diamonds');
 
 if(isset($_GET["update"]))
 {
@@ -54,13 +54,13 @@ $motdtext = explode("|", GetServerSettings(motd_text));
 					Type:<br /><select name="activitypointstype"><?php foreach($currenciesarray as $string) { echo '<option value="' . $string . '" ' . ((GetServerSettings(activitypoints_type) == $string) ? 'selected' : '') . '>' . ucfirst($string) . '</option>'; }?></select>
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
-					Interval (in Min):<br /><input type="number" name="activitypointsinterval" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_interval) / 60; ?>" />
+					Interval (in Min):<br /><input type="number" name="activitypointsinterval" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_interval); ?>" />
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
 					Credits:<br /><input type="number" name="activitypointscredits" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_credits_amount); ?>" />
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
-					Pixels:<br /><input type="number" name="activitypointspixels" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_pixels_amount); ?>" />
+					Activity Points:<br /><input type="number" name="activitypointspixels" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_pixels_amount); ?>" />
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
 					<input type="checkbox" name="activitypointstovipenabled" <?php echo (GetServerSettings(more_activitypoints_for_vip_users) == "1" ? 'checked="on"' : ''); ?> />&nbsp;&nbsp;Users with VIP Subscription <?php echo (GetServerSettings(more_activitypoints_for_vip_users) == "1" ? '' : 'do not'); ?> will win more bonuses while logged in.
@@ -69,7 +69,7 @@ $motdtext = explode("|", GetServerSettings(motd_text));
 					To VIP Credits:<br /><input type="number" name="activitypointstovipcredits" style="text-align:center;" value="<?php echo GetServerSettings(more_activitypoints_credits_amount); ?>" />
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
-					To VIP Pixels:<br /><input type="number" name="activitypointstovippixels" style="text-align:center;" value="<?php echo GetServerSettings(more_activitypoints_pixels_amount); ?>" />
+					To VIP Activity Points:<br /><input type="number" name="activitypointstovippixels" style="text-align:center;" value="<?php echo GetServerSettings(more_activitypoints_pixels_amount); ?>" />
 				</p>
 			</td>
 		</tr>
@@ -174,18 +174,18 @@ $motdtext = explode("|", GetServerSettings(motd_text));
 					</p>
 					<br />
 					<p style="margin: 0 0 5px 5px;">
-						Enter badge definition ID:<br /><input type="text" name="badgewhenloginid" style="text-align:center;" value="<?php echo GetServerSettings(login_badge_id); ?>" />
+						Enter badge Code:<br /><input type="text" name="badgewhenloginid" style="text-align:center;" value="<?php echo GetServerSettings(login_badge_code); ?>" />
 					</p>
 				</div>
 				<div style="float: right; width: 41%;">
 					<p>
 						Current Badge:
 					</p>
-					<img src="<?php echo CLIENT_BASE . '/c_images/album1584/' . returnBadgeCode(GetServerSettings(login_badge_id)) . '.gif'; ?>" alt="Current Badge" />
+					<img src="<?php echo CLIENT_BASE . '/c_images/album1584/' . GetServerSettings(login_badge_code) . '.gif'; ?>" alt="Current Badge" />
 				</div>
 				<div style="clear: both;"></div>
 				<p style="margin: 5px;">
-					To see all badge definition ids <a href="index.php?_cmd=badgedefs">click here</a>.
+					Warning: The entered code need to has a badge definition entry in database. To see all badge definition <a href="index.php?_cmd=badgedefs">click here</a>.
 				</p>
 			</td>
 		</tr>
@@ -193,7 +193,16 @@ $motdtext = explode("|", GetServerSettings(motd_text));
 			<td style="border-width: 2px; border-style:dashed; border-color:#93c1a7;">
 				<h2 style="margin: 0;">Other settings</h2><br />	
 				<p style="margin: 5px 0 0 5px;">
-					<input type="checkbox" name="badgewhenloginenabled" <?php echo (GetServerSettings(gifting_system_enabled) == "1" ? 'checked="on"' : ''); ?> />&nbsp;&nbsp;Users <?php echo (GetServerSettings(login_badge_enabled) == "1" ? '' : 'do not'); ?> can send gifts.
+					<input type="checkbox" name="giftsystemenabled" <?php echo (GetServerSettings(gifting_system_enabled) == "1" ? 'checked="on"' : ''); ?> />&nbsp;&nbsp;Users <?php echo (GetServerSettings(gifting_system_enabled) == "1" ? '' : 'do not'); ?> can send gifts.
+				</p>
+				<p style="margin: 5px 0 0 5px;">
+					<input type="checkbox" name="petsplacingenabled" <?php echo (GetServerSettings(enable_pets) == "1" ? 'checked="on"' : ''); ?> />&nbsp;&nbsp;Users <?php echo (GetServerSettings(enable_pets) == "1" ? '' : 'do not'); ?> can place pets in hotel rooms.
+				</p>
+				<p style="margin: 5px 0 0 5px;">
+					<input type="checkbox" name="petsscratchingenabled" <?php echo (GetServerSettings(pet_scratching_account_days_old_enabled) == "1" ? 'checked="on"' : ''); ?> />&nbsp;&nbsp;Users <?php echo (GetServerSettings(pet_scratching_account_days_old_enabled) == "1" ? 'do not' : ''); ?> can scratch pets with young account.
+				</p>
+				<p style="margin: 5px 0 5px 5px;">
+					Accounts needs to be X days old to scratch if enabled:<br /><input type="number" name="accountdaysold" style="text-align:center;" value="<?php echo GetServerSettings(pet_scratching_account_days_old); ?>" />
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
 					Max favorites per user:<br /><input type="number" name="maxfavoritesperuser" style="text-align:center;" value="<?php echo GetServerSettings(max_favorites_per_user); ?>" />

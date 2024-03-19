@@ -43,9 +43,9 @@ if(isset($_GET['query']))
 	{
 		foreach($query as $string)
 		{
-			if(!isset($_POST[substr($string, strpos($string, "-") + 1)]) && $searchkey == substr($string, strpos($string, "-") + 1))
+			if(!isset($_POST[substr($string, strpos($string, "*") + 1)]) && $searchkey == substr($string, strpos($string, "*") + 1))
 			{
-				$searchparams[substr($string, strpos($string, "-") + 1)] = substr($string, 0, strlen($string) - strlen(substr($string, strpos($string, "-"))));
+				$searchparams[substr($string, strpos($string, "*") + 1)] = substr($string, 0, strlen($string) - strlen(substr($string, strpos($string, "*"))));
 			}
 		}
 	}
@@ -58,7 +58,6 @@ if(strlen($searchparams['name']) > 0 || strlen($searchparams['behavior']) > 0 ||
 	{
 		switch($searchkey)
 		{
-			case 'page_id':
 			case 'enabled':
 				if(is_numeric($searchvalue))
 				{
@@ -99,13 +98,11 @@ if(strlen($searchparams['name']) > 0 || strlen($searchparams['behavior']) > 0 ||
 		}
 	}
 	
-	$orderby = (is_numeric($searchparams['page_id'])) ? " ORDER BY catalog_item_order ASC" : "";
-	
 	$whreCase = join(" AND ", $searchstring);
 	if(strlen($whreCase) > 0)
 	{
-		$allwhreCase = " WHERE " . $whreCase . $orderby;
-		$itemdefsquerystring .= "WHERE " . $whreCase . $orderby . " ";
+		$allwhreCase = " WHERE " . $whreCase;
+		$itemdefsquerystring .= "WHERE " . $whreCase . " ";
 	}
 }
 
@@ -179,7 +176,7 @@ foreach($behaviorArray as $b)
 	<?php
 	while($defs = mysql_fetch_assoc($defsquery))
 	{
-		$hascataentry = mysql_query("SELECT * FROM catalog_items WHERE base_id = '" . $defs['id'] . "'");
+		$hascataentry = mysql_query("SELECT * FROM catalog_items WHERE item_ids = '" . $defs['id'] . "'");
 		
 		echo '<tr>';
 		echo '<td>#' . $defs["id"] . '</td>';
@@ -200,7 +197,7 @@ if(strlen($allwhreCase) > 0)
 	{
 		if(strlen($searchvalue) > 0)
 		{
-			$ss[] = "$searchvalue-$searchkey";
+			$ss[] = "$searchvalue*$searchkey";
 		}
 	}
 	

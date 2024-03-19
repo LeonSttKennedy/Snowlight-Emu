@@ -10,14 +10,14 @@
 	// Client Configuration
 	
 	// Connection information
-	define('CLIENT_HOST', '192.168.15.72'); // Server IP
+	define('CLIENT_HOST', '127.0.0.1'); // Server IP
 	define('CLIENT_PORT', 38101); // Server port
 	
 	// Swf path
-	define('CLIENT_BASE', 'http://192.168.15.72/cdn.classichabbo.com/r38/gordon/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0'); // Base
-	define('CLIENT_SWFNAME', "Uber.swf");
+	define('CLIENT_BASE', 'http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0'); // Base
+	define('CLIENT_SWFNAME', "Uber2.swf");
 	
-	define('CLIENT_GAMEDATABASE', 'http://192.168.15.72/cdn.classichabbo.com/r38/gordon/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0'); // Gamedata
+	define('CLIENT_GAMEDATABASE', 'http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0'); // Gamedata
 	
 	define('CLIENT_LOADING', 'Welcome to '.SITE_NAME.' BETA! Now loading.'); // Loading message
 	define('CLIENT_CROSSDOMAIN', 1);

@@ -285,12 +285,12 @@ function trim(value)
 
 function popClient()
 {
-	window.open('http://<?php echo SITE_DOMAIN; ?>/client.html', 'uberHotel BETA', 'width=980,height=600,location=no,status=no,menubar=no,directories=no,toolbar=no,resizable=no,scrollbars=no'); return false;
+	window.open('http://<?php echo SITE_DOMAIN; ?>/client.php', 'uberHotel BETA', 'width=980,height=600,location=no,status=no,menubar=no,directories=no,toolbar=no,resizable=no,scrollbars=no'); return false;
 }
 
 function popSsoClient(username)
 {
-	window.open('http://<?php echo SITE_DOMAIN; ?>/client.html?username=' + username, 'uberHotel BETA', 'width=980,height=600,location=no,status=no,menubar=no,directories=no,toolbar=no,resizable=no,scrollbars=no'); return false;
+	window.open('http://<?php echo SITE_DOMAIN; ?>/client.php?username=' + username, 'uberHotel BETA', 'width=980,height=600,location=no,status=no,menubar=no,directories=no,toolbar=no,resizable=no,scrollbars=no'); return false;
 }
 </script>
 </head>
@@ -312,7 +312,7 @@ function popSsoClient(username)
 		<ul id="list-main" class="listmnu">
 			<li><a href="index.php?_cmd=main">Main page</a></li>
 			<?php if($GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hotel_admin')){ ?><li><a href="index.php?_cmd=todo"><b>Todo list</b></a></li><?php } ?>
-			<li><a href="../index.html">Return to site</a></li>
+			<li><a href="../">Return to site</a></li>
 			<li><a href="#" onclick="popClient(); return false">Open game client</a>
 			<li><a href="index.php?_cmd=forum" style="color: darkred;">Staff discussion board</a></li>
 			<li><a href="index.php?_cmd=getstaff">Staff overview</a></li>
@@ -322,9 +322,9 @@ function popSsoClient(username)
 		<?php if ($GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hotel_admin')) { ?>
 		<h2>
 			Server Management
-			<a href="#" onclick="Toggle('hotel'); return false"><div class="plus" id="plus-hotel">-</div></a>		
+			<a href="#" onclick="Toggle('emu'); return false"><div class="plus" id="plus-emu">-</div></a>		
 		</h2>
-		<ul id="list-hotel" class="listmnu">
+		<ul id="list-emu" class="listmnu">
 			<li><a href="index.php?_cmd=servertexts">Server texts</a></li>
 			<li><a href="index.php?_cmd=serversettings">Server settings</a></li>	
 		</ul>
@@ -415,7 +415,7 @@ function popSsoClient(username)
 			
 				echo 'uberHotel is currently <b style="color: darkgreen;">online</b>.';
 				echo '<br /><br />';
-				echo 'Users online: <a style="text-decoration: underline; " href="/onlineusers.html">' . $sysData['active_connections'] . '</a><br />';
+				echo 'Users online: <a style="text-decoration: underline; " href="http://' . SITE_DOMAIN . '/onlineusers.php">' . $sysData['active_connections'] . '</a><br />';
 				echo 'Daily Player Peak: ' . $sysData['daily_player_peak'] . '<br />';
 				echo 'All Time Player Peak: ' . $sysData['all_time_player_peak'] . '<br />';
 				echo 'Rooms loaded: ' . $sysData['rooms_loaded'] . '<br />';

@@ -16,7 +16,7 @@ padding: 4px 10px 6px 10px;
 <div class="charentry">
 <div class="inner">
 <div class="left" style="width: 65%;">
-<img src="http://www.habbo.com/habbo-imaging/avatarimage?size=b&action=wav&figure=<?php GetUserInfo($_SESSION['id'], "figure"); ?>" alt="Avatar" align="left" />
+<img src="https://imager.habboon.pw/?size=b&action=wav&figure=<?php GetUserInfo($_SESSION['id'], "figure"); ?>" alt="Avatar" align="left" />
 <p style="margin-top: 25px; margin-left: 5px; font-size: 125%;">
 <strong><?php GetUserInfo($_SESSION['id'], "username"); ?></strong>
 <br />

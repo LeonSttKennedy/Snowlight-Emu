@@ -39,8 +39,9 @@ while ($user = mysql_fetch_array($get))
 		if($badgedefassoc['code'] == "ADM" || $badgedefassoc['code'] == "HBA" || $badgedefassoc['code'] == "NWB")
 		{
 			$userq = mysql_fetch_assoc(mysql_query("SELECT * FROM users WHERE id = '" . $user[1] . "' LIMIT 1"));
+			$charsq = mysql_fetch_assoc(mysql_query("SELECT * FROM characters WHERE id = '" . $user[1] . "' LIMIT 1"));
 			echo '<tr>';
-			echo '<td>' . $userq['account_name'] . '</td>';
+			echo '<td>' . $charsq['username'] . '</td>';
 			echo '<td>' . $GetUsers->GetRankName($user[1]) . '</td>';
 			echo '<td><a href="mailto:' . $userq['account_email'] . '">' . $userq['account_email'] . '</a></td>';
 			echo '</tr>';

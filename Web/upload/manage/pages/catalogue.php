@@ -44,9 +44,9 @@ if(isset($_GET['query']))
 	{
 		foreach($query as $string)
 		{
-			if(!isset($_POST[substr($string, strpos($string, "-") + 1)]) && $searchkey == substr($string, strpos($string, "-") + 1))
+			if(!isset($_POST[substr($string, strpos($string, "*") + 1)]) && $searchkey == substr($string, strpos($string, "*") + 1))
 			{
-				$searchparams[substr($string, strpos($string, "-") + 1)] = substr($string, 0, strlen($string) - strlen(substr($string, strpos($string, "-"))));
+				$searchparams[substr($string, strpos($string, "*") + 1)] = substr($string, 0, strlen($string) - strlen(substr($string, strpos($string, "*"))));
 			}
 		}
 	}
@@ -62,7 +62,7 @@ if(is_numeric($searchparams['parent_id']) || strlen($searchparams['title']) > 0 
 			$searchstring[] = "$searchkey = '$searchvalue'";
 		}
 		
-		if(strlen($searchvalue) > 0 && !is_numeric($searchvalue))
+		if(strlen($searchparams['title']) > 0)
 		{
 			$searchstring[] = "$searchkey LIKE '%$searchvalue%'";
 		}
@@ -191,7 +191,7 @@ if(strlen($allwhreCase) > 0)
 	{
 		if(strlen($searchvalue) > 0)
 		{
-			$ss[] = "$searchvalue-$searchkey";
+			$ss[] = "$searchvalue*$searchkey";
 		}
 	}
 	

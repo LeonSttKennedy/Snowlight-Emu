@@ -20,24 +20,24 @@ switch ($id)
 {
 	case "external_variables":
 	
-		echo @file_get_contents("http://192.168.15.72/cdn.classichabbo.com/r38/gordon/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/external_variables.txt");	
+		echo @file_get_contents("http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/external_variables.txt");	
 		$get = mysql_query("SELECT * FROM external_variables");
 		
 		while ($ext = mysql_fetch_assoc($get))
 		{
-			echo $ext['skey'] . '=' . $ext['sval'] . LB;
+			$GetTemplate->WriteLine($ext['skey'] . '=' . $ext['sval'] . LB);
 		}
 		
 		break;
 
 	case "external_flash_texts":
 	
-		echo @file_get_contents("http://192.168.15.72/cdn.classichabbo.com/r38/gordon/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/external_flash_texts.txt");	
+		echo @file_get_contents("http://127.0.0.1/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/external_flash_texts.txt");	
 		$get = mysql_query("SELECT * FROM external_texts");
 		
 		while ($ext = mysql_fetch_assoc($get))
 		{
-			echo $ext['skey'] . '=' . $ext['sval'] . LB;
+			$GetTemplate->WriteLine($ext['skey'] . '=' . $ext['sval'] . LB);
 		}
 		
 		break;

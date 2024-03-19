@@ -35,7 +35,7 @@ require_once "top.php";
 <br />
 
 <p>
-	<a style="font-size: 120%;" href="http://roy.mine.nu/manage/index.php?_cmd=uberdown">
+	<a style="font-size: 120%;" href="index.php?_cmd=uberdown">
 	
 		<img src="images/uberdown.PNG" style="vertical-align: middle; margin-right: 10px;">
 		

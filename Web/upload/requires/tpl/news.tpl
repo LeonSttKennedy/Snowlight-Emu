@@ -18,7 +18,10 @@ if(!isset($_GET['id']))
 }
 
 $newsid = explode("-", $_GET['id']);
-$articleqquerystring = isset($_GET['categoryid']) ? "SELECT * FROM articles WHERE category_id = '" . $_GET['categoryid'] . "' ORDER BY published DESC LIMIT 1" : "SELECT * FROM articles WHERE id = '$newsid[0]' LIMIT 1";
+$cattag = isset($_GET['id']) ? "AND" : "OR";
+$catid = isset($_GET['categoryid']) ? $cattag . " category_id = '" . $_GET['categoryid'] . "' ORDER BY published DESC" : "";
+
+$articleqquerystring = "SELECT * FROM articles WHERE id = '$newsid[0]' " . $catid . " LIMIT 1";
 $articleq = mysql_query($articleqquerystring);
 $article = mysql_fetch_array($articleq);
 
@@ -53,9 +56,18 @@ padding: 4px 10px 6px 10px;
 <div class="column2" id="column2">
 <div class="charentry">
 <div class="inner">
-<div class="left" style="width: 65%;">
-<h3>Recent news articles</h3><br />
+<div class="left" style="width: 100%;">
 <?php
+if(isset($_GET['categoryid']))
+{
+	TemplateManager::WriteLine('<h3>News from ' . strtolower($category) . ' category</h3>');
+	TemplateManager::WriteLine('<a href="http://'.SITE_DOMAIN.'/news.php">&larrhk; Return to all news</a><br /><br />');
+}
+else
+{
+	TemplateManager::WriteLine('<h3>Recent news articles</h3><br />');
+}
+
 $num = mysql_num_rows(mysql_query($recentstoriesq));
 if($num > 0)
 {
@@ -82,8 +94,10 @@ if($num > 0)
 			}
 			else
 			{
+				$catstr = isset($_GET['categoryid']) ? "categoryid=". $_GET['categoryid'] . "&" : "";
+				
 				TemplateManager::WriteLine('<li class="'.$color.'">
-						<a href="http://'.SITE_DOMAIN.'/news.php?id=' . $news['id'] . '-' . $news['seo_link'] . '">'.$news['title'].'</a><br />
+						<a href="http://'.SITE_DOMAIN.'/news.php?' . $catstr . 'id=' . $news['id'] . '-' . $news['seo_link'] . '">'.$news['title'].'</a><br />
 						<small>'.@date("D, d M Y H:i:s", $news['published']).'</small><br />
 					</li>');
 			}

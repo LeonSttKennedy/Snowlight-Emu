@@ -20,6 +20,8 @@ class TemplateManager extends Security
 
 	public function Init()
 	{
+		$this->SetParam('www', "http://" . SITE_DOMAIN);
+				
 		if($this->isLogged())
 		{	
 			$this->SetParam('username', $_SESSION["account_name"]);

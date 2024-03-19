@@ -81,6 +81,10 @@ function SeasonalCurrency($currency)
 		case "shells":
 			$str_retun = 'Shells';
 			break;
+			
+		case "diamonds":
+			$str_retun = 'Diamonds';
+			break;
 	}
 	
 	return $str_retun;
@@ -127,9 +131,9 @@ if(isset($_GET['query']))
 	{
 		foreach($query as $string)
 		{
-			if(!isset($_POST[substr($string, strpos($string, "-") + 1)]) && $searchkey == substr($string, strpos($string, "-") + 1))
+			if(!isset($_POST[substr($string, strpos($string, "*") + 1)]) && $searchkey == substr($string, strpos($string, "*") + 1))
 			{
-				$searchparams[substr($string, strpos($string, "-") + 1)] = substr($string, 0, strlen($string) - strlen(substr($string, strpos($string, "-"))));
+				$searchparams[substr($string, strpos($string, "*") + 1)] = substr($string, 0, strlen($string) - strlen(substr($string, strpos($string, "*"))));
 			}
 		}
 	}
@@ -187,7 +191,7 @@ if(is_numeric($searchparams['page_id']) || strlen($searchparams['name']) > 0 || 
 		}
 	}
 	
-	$orderby = (is_numeric($searchparams['page_id'])) ? " ORDER BY catalog_item_order ASC" : "";
+	$orderby = (is_numeric($searchparams['page_id'])) ? " ORDER BY order_id ASC" : "";
 	
 	$whreCase = join(" AND ", $searchstring);
 	if(strlen($whreCase) > 0)
@@ -200,6 +204,8 @@ if(is_numeric($searchparams['page_id']) || strlen($searchparams['name']) > 0 || 
 $catalogueitemsquerystring .= "LIMIT $start,$limit";
 $catalogueitemsquery = mysql_query($catalogueitemsquerystring);
 $all = intval(mysql_num_rows(mysql_query("SELECT * FROM catalog_items" . $allwhreCase)));
+
+echo $catalogueitemsquerystring;
 
 if (isset($_POST['update-order']))
 {
@@ -218,7 +224,7 @@ if (isset($_POST['update-order']))
 		
 		$id = intval(substr($key, 4));
 
-		mysql_query("UPDATE catalog_items SET order_num = '" . intval($value) . "' WHERE id = '" . $id .  "' LIMIT 1");
+		mysql_query("UPDATE catalog_items SET order_id = '" . intval($value) . "' WHERE id = '" . $id .  "' LIMIT 1");
 	}
 	
 	fMessage('ok', 'Updated page order.');
@@ -313,7 +319,7 @@ Enabled:&nbsp;&nbsp;<input type="radio" name="enabled" <?php echo ((is_numeric($
 		echo '<tr>';
 		echo '<td>#' . $item["id"] . '</td>';
 		echo '<td>' . (strlen($parentpagecaption) > 0 ?  $parentpagecaption : '-') . '</td>';
-		echo '<td>' . ((is_numeric($searchparams['page_id']) && $searchparams['name'] == "" && $searchparams['cost_credits_min'] < 1 && $searchparams['cost_credits_max'] < 1  && $searchparams['cost_pixels_max'] < 1 && $searchparams['cost_pixels_min'] < 1 && $searchparams['enabled'] == "") ? '<input style="text-align: center; font-weight: bold; margin: 2px;" type="text" size="3" value="' . $item['catalog_item_order'] . '" name="ord-' . $item['id'] . '">' : $item["catalog_item_order"]) . '</td>';
+		echo '<td>' . ((is_numeric($searchparams['page_id']) && $searchparams['name'] == "" && $searchparams['cost_credits_min'] < 1 && $searchparams['cost_credits_max'] < 1  && $searchparams['cost_pixels_max'] < 1 && $searchparams['cost_pixels_min'] < 1 && $searchparams['enabled'] == "") ? '<input style="text-align: center; font-weight: bold; margin: 2px;" type="text" size="3" value="' . $item['order_id'] . '" name="ord-' . $item['id'] . '">' : $item["order_id"]) . '</td>';
 		echo '<td>' . $item["name"] . '</td>';
 		echo '<td><center>' . $item["cost_credits"] . '&nbsp;CR&nbsp;&&nbsp;' . $item["cost_activitypoints"] . '&nbsp;AP</center></td>';
 		echo '<td><center>'. SeasonalCurrency($item["seasonal_currency"]) . '</center></td>';
@@ -333,7 +339,7 @@ if(strlen($allwhreCase) > 0)
 	{
 		if(strlen($searchvalue) > 0)
 		{
-			$ss[] = "$searchvalue-$searchkey";
+			$ss[] = "$searchvalue*$searchkey";
 		}
 	}
 	

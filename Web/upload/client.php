@@ -19,7 +19,20 @@ $GetTemplate->WriteLine("
 ");
 $GetTemplate->WriteLine("<title>".SITE_NAME." - Client</title>");
 
+$forwardType = 0;
+$forwardId = 0;
 $ssousername = $_GET['username'] != null && $GetUsers->HasRight($GetUsers->Name2Id($_SESSION['account_name']), 'hk_external_login') ? $_GET['username'] : $_SESSION['account_name'];
+
+if (isset($_GET['forwardType']) && isset($_GET['forwardId']) && is_numeric($_GET['forwardType']) && is_numeric($_GET['forwardId']))
+{
+	$forwardType = intval($_GET['forwardType']);
+	$forwardId = intval($_GET['forwardId']);
+	
+	if ($forwardType >= 3 || $forwardType <= 0)
+	{
+		return;
+	}
+}
 ?>
 
 <script type="text/javascript">
@@ -43,6 +56,15 @@ $ssousername = $_GET['username'] != null && $GetUsers->HasRight($GetUsers->Name2
             "productdata.load.url" : BaseUrl + "/productdata.txt", 
             "furnidata.load.url" : BaseUrl + "/furnidata.txt", 
             "use.sso.ticket" : "<?php echo CLIENT_SSOTICKET; ?>", 
+<?php
+
+if ($forwardType > 0)
+{
+	echo '            "forward.type" : "' . $forwardType . '",' . LB;
+	echo '            "forward.id" : "' . $forwardId . '",' . LB;
+}
+
+?>
             "sso.ticket" : "<?php echo $GetUsers->SSO($ssousername); ?>", 
             "processlog.enabled" : "0", 
             "flash.client.url" : BaseUrl, 
