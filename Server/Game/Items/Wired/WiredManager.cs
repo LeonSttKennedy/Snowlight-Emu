@@ -700,6 +700,7 @@ namespace Snowlight.Game.Items.Wired
                                                 case 1:
                                                     NewPosition = new Vector2(Move.RoomPosition.X - 1, Move.RoomPosition.Y);
                                                     break;
+
                                                 case 2:
                                                     NewPosition = new Vector2(Move.RoomPosition.X + 1, Move.RoomPosition.Y);
                                                     break;
@@ -828,6 +829,7 @@ namespace Snowlight.Game.Items.Wired
 
                             #region match_to_sshot
                             case WiredActionTypes.match_to_sshot:
+
                                 string[] Selected = ActionItem.WiredData.Data5.Split('+');
                                 foreach (string FullData in Selected)
                                 {

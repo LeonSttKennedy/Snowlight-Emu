@@ -59,7 +59,10 @@ namespace Snowlight.Game.Items
         ChickenTrampoline = 52,
         FrogPond = 53,
         MonkeyPond = 54,
-        BlackHole = 55
+        BlackHole = 55,
+        TotemLeg = 56,
+        TotemHead = 57,
+        TotemPlanet = 58
     }
 
     public static class ItemBehaviorUtil
@@ -283,6 +286,22 @@ namespace Snowlight.Game.Items
                 case "poster":
 
                     return ItemBehavior.Poster;
+
+                case "totemleg":
+
+                    return ItemBehavior.TotemLeg;
+
+                case "totemhead":
+
+                    return ItemBehavior.TotemHead;
+
+                case "totemplanet":
+
+                    return ItemBehavior.TotemPlanet;
+
+                case "none":
+
+                    return ItemBehavior.None;
 
                 default:
 

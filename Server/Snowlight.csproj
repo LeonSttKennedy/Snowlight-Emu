@@ -305,6 +305,9 @@
     <Compile Include="Game\Achievements\AchievementCache.cs" />
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
     <Compile Include="Game\Achievements\AchievementManager.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\TotemHandler.cs" />
+    <Compile Include="Game\Items\TotemUtil.cs" />
+    <Compile Include="Game\Misc\AntiMutant.cs" />
     <Compile Include="Game\Misc\Caches\MarketplaceFiltersCache.cs" />
     <Compile Include="Game\Quests\DailyQuest.cs" />
     <Compile Include="Game\Quests\Quest.cs" />

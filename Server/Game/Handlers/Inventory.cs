@@ -18,6 +18,7 @@ using Snowlight.Storage;
 using Snowlight.Communication.Incoming;
 using Snowlight.Game.Messenger;
 using Snowlight.Game.FriendStream;
+using Snowlight.Game.Misc;
 
 namespace Snowlight.Game.Handlers
 {
@@ -103,8 +104,6 @@ namespace Snowlight.Game.Handlers
 
         private static void SetFigure(Session Session, ClientMessage Message)
         {
-            // todo: verify data(!!!!)
-
             string NewGender = Message.PopString().ToLower();
             string NewFigure = UserInputFilter.FilterString(Message.PopString());
 
@@ -118,6 +117,11 @@ namespace Snowlight.Game.Handlers
                 return;
             }
 
+            if (!AntiMutant.ValidateLook(NewFigure, NewGender))
+            {
+                return;
+            }
+                        
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 Session.CharacterInfo.UpdateFigure(MySqlClient, NewGender, NewFigure);

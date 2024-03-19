@@ -96,10 +96,12 @@ namespace Snowlight.Game.Catalog
             mPrice = mClubOffer.Price - Convert.ToInt32(Math.Ceiling(Double * mDiscountPercentage));
             return mPrice;
         }
+
         public void SetClubSubscriptionOffer(CatalogClubOffer CatalogClubSubOffer)
         {
             mClubOffer = CatalogClubSubOffer;
         }
+
         public void UpdateUserIdList(SqlDatabaseClient MySqlClient, uint UserId)
         {
             if(mUserIds.Contains(UserId))

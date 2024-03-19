@@ -25,6 +25,10 @@ namespace Snowlight.Game.Handlers
             // something to do with user notifs...
             DataRouter.RegisterHandler(3105, new ProcessRequestCallback(SurpressingHandler));
 
+            // com.sulake.habbo.communication.messages.outgoing.quest.StartCampaignMessageComposer;
+            // something about quests needs to be investigated...
+            DataRouter.RegisterHandler(3108, new ProcessRequestCallback(SurpressingHandler));
+
             // com.sulake.habbo.communication.messages.outgoing.quest.FriendRequestQuestCompleteMessageComposer;
             // this is packet to complete the friend request quest, should only be completed if quest is active....
             // someone needs to code this ^_^

@@ -578,10 +578,16 @@ namespace Snowlight.Game.Rooms
             bool IsOwner = Instance.CheckUserRights(Session, true);
 
             Pet Pet = Session.InventoryCache.GetPet(PetId);
-            if (Pet == null || Pet.IsInRoom) return;
+            if (Pet == null || Pet.IsInRoom)
+            {
+                return;
+            }
 
             RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
-            if (Actor == null) return;
+            if (Actor == null)
+            {
+                return;
+            }
 
             Vector2 DesiredPosition = IsOwner ? new Vector2(X, Y) : Actor.SquareInFront;
             if (!Instance.CanInitiateMoveToPosition(DesiredPosition)) 
@@ -629,14 +635,23 @@ namespace Snowlight.Game.Rooms
         private static void GetPetInfo(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-            if (Instance == null) return;
+            if (Instance == null)
+            {
+                return;
+            }
 
             uint PetId = Message.PopWiredUInt32();
             RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
-            if (Actor == null) return;
+            if (Actor == null)
+            {
+                return;
+            }
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-            if (PetData == null) return;
+            if (PetData == null) 
+            {
+                return;
+            }
 
             Session.SendData(PetInfoComposer.Compose(PetData));
             Session.SendData(PetTrainingPanelComposer.Compose(PetData));
@@ -647,14 +662,23 @@ namespace Snowlight.Game.Rooms
         private static void TakePet(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-            if (Instance == null) return;
+            if (Instance == null)
+            {
+                return;
+            }
 
             uint PetId = Message.PopWiredUInt32();
             RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
-            if (Actor == null) return;
+            if (Actor == null) 
+            {
+                return;
+            }
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-            if (PetData == null || (PetData.OwnerId != Session.CharacterId && !Session.HasRight("hotel_admin"))) return;
+            if (PetData == null || (PetData.OwnerId != Session.CharacterId && !Session.HasRight("hotel_admin")))
+            {
+                return;
+            }
 
             PetData.MoveToUserInventory();
             RoomManager.MarkWriteback(PetData);
@@ -667,24 +691,36 @@ namespace Snowlight.Game.Rooms
         private static void PetTrainerPanel(Session Session, ClientMessage Message)
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-            if (Instance == null) return;
+            if (Instance == null)
+            {
+                return;
+            }
 
             uint PetId = Message.PopWiredUInt32();
             RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
-            if (Actor == null) return;
+            if (Actor == null)
+            {
+                return;
+            }
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-            if (PetData == null) return;
+            if (PetData == null)
+            {
+                return;
+            }
 
             Session.SendData(PetTrainingPanelComposer.Compose(PetData));
         }
 
         private static void RespectPet(Session Session, ClientMessage Message)
         {
-            if (Session.CharacterInfo.RespectCreditPets <= 0) return;
+            if (Session.CharacterInfo.RespectCreditPets <= 0)
+            {
+                return;
+            }
 
             TimeSpan TotalDaysRegistered = DateTime.Now - UnixTimestamp.GetDateTimeFromUnixTimestamp(Session.CharacterInfo.TimestampRegistered);
-            if(ServerSettings.PetScratchingAccountDaysOldEnabled &&
+            if (ServerSettings.PetScratchingAccountDaysOldEnabled &&
                 TotalDaysRegistered.Days < ServerSettings.PetScratchingAccountDaysOld)
             {
                 Session.SendData(PetRespectErrorComposer.Compose(TotalDaysRegistered.Days));
@@ -692,14 +728,23 @@ namespace Snowlight.Game.Rooms
             }
 
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-            if (Instance == null) return;
+            if (Instance == null)
+            {
+                return;
+            }
 
             uint PetId = Message.PopWiredUInt32();
             RoomActor Actor = Instance.GetActorByReferenceId(PetId, RoomActorType.AiBot);
-            if (Actor == null) return;
+            if (Actor == null)
+            {
+                return;
+            }
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-            if (PetData == null) return;
+            if (PetData == null)
+            {
+                return;
+            }
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
@@ -828,7 +873,7 @@ namespace Snowlight.Game.Rooms
                                     if (UserAchievement != null)
                                     {
                                         Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
-                                            0, 0));
+                                            0, 0, 0));
                                     }
                                 }
                             }
@@ -846,7 +891,7 @@ namespace Snowlight.Game.Rooms
                                     if (UserAchievement != null)
                                     {
                                         Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
-                                            0, 0));
+                                           0, 0, 0));
                                     }
                                 }
                             }

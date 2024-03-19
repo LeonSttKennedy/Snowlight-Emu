@@ -28,18 +28,18 @@ namespace Snowlight.Communication.Outgoing
                 {
                     foreach (SubscriptionGifts DealItems in Gift.DealItems)
                     {
-                        if(DealItems.DefinitionId == -1)
+                        if (DealItems.DefinitionId == -1)
                         {
                             continue;
                         }
 
                         if (DealItems.Definition.TypeLetter == "s" || DealItems.Definition.TypeLetter == "i")
                         {
-                            Message.AppendStringWithBreak(DealItems.Definition.TypeLetter);
-                            Message.AppendUInt32(DealItems.Definition.SpriteId);
-                            Message.AppendStringWithBreak(DealItems.ShowPresetFlags ? DealItems.PresetFlags : string.Empty); // unknown
-                            Message.AppendInt32(DealItems.Amount); // amount
-                            Message.AppendInt32(-1);
+                            Message.AppendStringWithBreak(DealItems.Definition.TypeLetter);                                             // Product Type
+                            Message.AppendUInt32(DealItems.Definition.SpriteId);                                                        // Sprite Id
+                            Message.AppendStringWithBreak(DealItems.ShowPresetFlags ? DealItems.PresetFlags : string.Empty);            // Extra Param
+                            Message.AppendInt32(DealItems.Amount);                                                                      // Product Count
+                            Message.AppendInt32(-1);                                                                                    // Expiration
                         }
                         else
                         {
@@ -49,11 +49,11 @@ namespace Snowlight.Communication.Outgoing
                 }
                 else
                 {
-                    Message.AppendStringWithBreak(Gift.Definition.TypeLetter);
-                    Message.AppendUInt32(Gift.Definition.SpriteId);
-                    Message.AppendStringWithBreak(Gift.ShowPresetFlags ? Gift.PresetFlags : string.Empty); // unknown
-                    Message.AppendInt32(Gift.Amount);   // amount
-                    Message.AppendInt32(-1);
+                    Message.AppendStringWithBreak(Gift.Definition.TypeLetter);                                  // Product Type
+                    Message.AppendUInt32(Gift.Definition.SpriteId);                                             // Sprite Id
+                    Message.AppendStringWithBreak(Gift.ShowPresetFlags ? Gift.PresetFlags : string.Empty);      // Extra Param
+                    Message.AppendInt32(Gift.Amount);                                                           // Product Count
+                    Message.AppendInt32(-1);                                                                    // Expiration
                 }
 
                 Message.AppendInt32(-1);                                                    // Added in RELEASE63-34159-34129-201106010852

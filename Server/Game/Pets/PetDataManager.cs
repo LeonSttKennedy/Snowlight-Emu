@@ -63,7 +63,7 @@ namespace Snowlight.Game.Pets
                 }
 
                 NewTrickData[PetType].Add(new PetTricks((string)Row["trick"], (Row["needs_toy"].ToString() == "1"),
-                    (ItemBehavior)(int)Row["toy_behavior_id"]));
+                    ItemBehaviorUtil.FromString((string)Row["behavior"])));
             }
 
             DataTable CommandsTable = MySqlClient.ExecuteQueryTable("SELECT * FROM pet_commands ORDER BY order_id ASC");

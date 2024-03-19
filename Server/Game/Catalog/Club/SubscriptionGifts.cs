@@ -63,9 +63,27 @@ namespace Snowlight.Game.Catalog
         {
             get
             {
-                return mPresetFlags.Length > 0;
+                bool ShowPresetFlags = true;
+
+                if (IsDeal)
+                {
+                    foreach (SubscriptionGifts Item in mDealGifts)
+                    {
+                        if (Item.Definition.Behavior.Equals(ItemBehavior.Moodlight))
+                        {
+                            ShowPresetFlags = false;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    ShowPresetFlags = Definition.Behavior != ItemBehavior.Moodlight;
+                }
+
+                return ShowPresetFlags;
             }
-        }   
+        }
 
         public string PresetFlags
         {

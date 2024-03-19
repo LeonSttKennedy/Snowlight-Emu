@@ -17,8 +17,7 @@ namespace Snowlight.Communication.Outgoing
 
             foreach (Item SongDisk in Disks)
             {
-                uint SongId = 0;
-                uint.TryParse(SongDisk.DisplayFlags, out SongId);
+                uint.TryParse(SongDisk.DisplayFlags, out uint SongId);
 
                 Message.AppendUInt32(SongDisk.Id);
                 Message.AppendUInt32(SongId);

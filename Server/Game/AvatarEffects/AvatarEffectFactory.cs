@@ -14,8 +14,7 @@ namespace Snowlight.Game.AvatarEffects
 
             string RawId = MySqlClient.ExecuteScalar("INSERT INTO avatar_effects (user_id,sprite_id,duration) VALUES (@userid,@spriteid,@duration); SELECT LAST_INSERT_ID();").ToString();
 
-            uint Id = 0;
-            uint.TryParse(RawId, out Id);
+            uint.TryParse(RawId, out uint Id);
 
             if (Id == 0)
             {

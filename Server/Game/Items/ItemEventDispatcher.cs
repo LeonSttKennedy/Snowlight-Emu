@@ -51,6 +51,7 @@ namespace Snowlight.Game.Items
             PuzzleboxHandler.Register();
             WelcomeGiftHandler.Register();
             WiredHandler.Register();
+            TotemHandler.Register();
         }
 
         public static void InvokeItemEventHandler(Session Session, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData = 0)

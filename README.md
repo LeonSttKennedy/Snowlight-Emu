@@ -25,7 +25,7 @@ implemented in the official build. See RetroDev for more information on
 how to contribute to the project.
 
 We would like to extend our thanks to all contributers and supporters
-of this project and other existent projects. (Like: Skylight, PlusEMU, Uber, Phoenix, Mango, IDK Project, ThrustRP & Reality and Another Projects contributers)
+of this project and other existent projects (Like: Skylight, PlusEMU, Uber, Phoenix, Mango, IDK Project, Arcturus, ThrustRP & Reality and Another Projects contributers).
 
 # FEATURES
 

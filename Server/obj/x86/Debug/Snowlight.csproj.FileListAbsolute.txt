@@ -24,6 +24,6 @@ D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server
 D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.TrustInfo.xml
 D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.exe.manifest
 D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.application
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.csproj.CopyComplete
 D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.exe
 D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.pdb
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.csproj.Up2Date

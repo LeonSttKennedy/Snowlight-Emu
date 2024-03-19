@@ -127,7 +127,8 @@ namespace Snowlight.Game.Achievements
 
                 int ProgressRemainder = NewProgress - TargetLevelData.Requirement;
 
-                /* Don't reset the user progress
+                /*
+                 * We don't need reset the user progress
                  * NewProgress = 0;
                  */
 
@@ -154,7 +155,7 @@ namespace Snowlight.Game.Achievements
                 Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
 
                 Session.SendData(AchievementUnlockedComposer.Compose(AchievementData, TargetLevel, TargetLevelData.PointsReward,
-                    TargetLevelData.ActivityPointsReward));
+                    (int)TargetLevelData.SeasonalCurrency, TargetLevelData.ActivityPointsReward));
 
                 Session.AchievementCache.AddOrUpdateData(MySqlClient, AchievementGroup, NewLevel, NewProgress);
 

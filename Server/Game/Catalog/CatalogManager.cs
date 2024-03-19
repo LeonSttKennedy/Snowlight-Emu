@@ -194,7 +194,10 @@ namespace Snowlight.Game.Catalog
 
                     foreach (DataRow PetRow in RaceTable.Rows)
                     {
-                        Item.AddPetRaceData(new PetRaceData((int)PetRow["pet_breed"], (PetRow["sellable"].ToString() == "1"), (PetRow["breed_is_rare"].ToString() == "1")));
+                        PetRaceData RaceData = new PetRaceData((int)PetRow["pet_breed"],
+                            (PetRow["sellable"].ToString() == "1"), (PetRow["breed_is_rare"].ToString() == "1"));
+
+                        Item.AddPetRaceData(RaceData);
                     }
 
                     if (Item.DefinitionId > 0 && Item.Definition == null)
@@ -211,8 +214,7 @@ namespace Snowlight.Game.Catalog
                     }
                     else
                     {
-                        uint _ParentId = uint.Parse(ParentId.ToString());
-                        CatalogItem ParentItem = GetCatalogItemByAbsoluteId(_ParentId);
+                        CatalogItem ParentItem = GetCatalogItemByAbsoluteId((uint)ParentId);
                         ParentItem.AddItem(Item);
                     }
                 }

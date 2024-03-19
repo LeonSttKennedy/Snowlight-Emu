@@ -209,7 +209,7 @@ namespace Snowlight.Game.Catalog
                                                 if (UserAchievement != null)
                                                 {
                                                     Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
-                                                        0, 0));
+                                                        0 , 0, 0));
                                                 }
                                             }
                                         }
@@ -227,7 +227,7 @@ namespace Snowlight.Game.Catalog
                                                 if (UserAchievement != null)
                                                 {
                                                     Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
-                                                        0, 0));
+                                                        0, 0, 0));
                                                 }
                                             }
                                         }
@@ -352,7 +352,10 @@ namespace Snowlight.Game.Catalog
                 if (Item.BadgeCode != string.Empty)
                 {
                     Badge BadgeToGive = RightsManager.GetBadgeByCode(Item.BadgeCode);
-                    if (BadgeToGive == null) return;
+                    if (BadgeToGive == null)
+                    {
+                        return;
+                    }
 
                     if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
                     {
@@ -709,7 +712,7 @@ namespace Snowlight.Game.Catalog
                                 if (UserAchievement != null)
                                 {
                                     Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
-                                        0, 0));
+                                        0, 0, 0));
                                 }
                             }
                         }
@@ -727,7 +730,7 @@ namespace Snowlight.Game.Catalog
                                 if (UserAchievement != null)
                                 {
                                     Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
-                                        0, 0));
+                                        0, 0, 0));
                                 }
                             }
                         }

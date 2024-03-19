@@ -587,7 +587,8 @@ namespace Snowlight.Game.Sessions
                         Badge BadgeData = RightsManager.GetBadgeByCode(AchievementData.GroupName + AchLevel);
                         AchievementLevel TargetLevelData = AchievementData.Levels[AchLevel];
 
-                        SendData(AchievementUnlockedComposer.Compose(AchievementData, UserData.Level, PointsBonuses, ActivityPointsBonuses));
+                        SendData(AchievementUnlockedComposer.Compose(AchievementData, UserData.Level, PointsBonuses, 
+                            (int)TargetLevelData.SeasonalCurrency, ActivityPointsBonuses));
 
                         Info.UpdateActivityPointsBalance(MySqlClient, TargetLevelData.SeasonalCurrency, ActivityPointsBonuses);
                         if (TargetLevelData.SeasonalCurrency == SeasonalCurrencyList.Pixels)
@@ -619,7 +620,10 @@ namespace Snowlight.Game.Sessions
                 if (ServerSettings.LoginBadgeEnabled)
                 {
                     Badge BadgeToGive = RightsManager.GetBadgeByCode(ServerSettings.LoginBadgeCode);
-                    if (BadgeToGive == null) return;
+                    if (BadgeToGive == null)
+                    {
+                        return;
+                    }
 
                     if (!mBadgeCache.Badges.Contains(BadgeToGive))
                     {

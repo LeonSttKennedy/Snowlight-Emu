@@ -554,10 +554,16 @@ namespace Snowlight.Game.Rooms
                 if (Instance.Info.BadgeCode != string.Empty)
                 {
                     RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
-                    if (Actor == null) return;
+                    if (Actor == null)
+                    {
+                        return;
+                    }
 
                     Badge BadgeToGive = RightsManager.GetBadgeByCode(Instance.Info.BadgeCode);
-                    if (BadgeToGive == null) return;
+                    if (BadgeToGive == null)
+                    {
+                        return;
+                    }
 
                     if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
                     {

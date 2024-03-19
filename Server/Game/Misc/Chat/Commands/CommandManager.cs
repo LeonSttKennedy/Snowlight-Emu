@@ -35,7 +35,9 @@ namespace Snowlight.Game.Misc
             RoomActor Actor = (Instance == null ? null : Instance.GetActorByReferenceId(Session.CharacterId));
 
             if (!Message.StartsWith(mPrefix))
+            {
                 return false;
+            }
 
             if (Message == mPrefix + "commands")
             {
@@ -114,6 +116,7 @@ namespace Snowlight.Game.Misc
                 {
                     Session.SendData(NotificationMessageComposer.Compose(List.ToString()));
                 }
+
                 return true;
             }
 
@@ -121,7 +124,9 @@ namespace Snowlight.Game.Misc
             string[] Split = Message.Split(' ');
 
             if (Split.Length == 0)
+            {
                 return false;
+            }
 
             IChatCommand Cmd = null;
             if (mUsefulCommands.TryGetValue(Split[0].ToLower(), out Cmd))
@@ -153,8 +158,10 @@ namespace Snowlight.Game.Misc
                 }
 
                 Cmd.Execute(Session, Instance, Actor, Split);
+
                 return true;
             }
+
             return false;
         }
         private static void RegisterNormal()

@@ -227,13 +227,22 @@ namespace Snowlight.Game.Rooms
                     if (Poll.BadgeReward != string.Empty)
                     {
                         RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-                        if (Instance == null) return;
+                        if (Instance == null)
+                        {
+                            return;
+                        }
 
                         RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
-                        if (Actor == null) return;
+                        if (Actor == null)
+                        {
+                            return;
+                        }
 
                         Badge BadgeToGive = RightsManager.GetBadgeByCode(Poll.BadgeReward);
-                        if (BadgeToGive == null) return;
+                        if (BadgeToGive == null)
+                        {
+                            return;
+                        }
 
                         if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
                         {

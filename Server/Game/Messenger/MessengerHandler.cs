@@ -135,7 +135,7 @@ namespace Snowlight.Game.Messenger
             List<MessengerCategories> Categories = new List<MessengerCategories>();
 
             MySqlClient.SetParameter("id", UserId);
-            DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM messenger_category WHERE user_id = @id");
+            DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM messenger_category WHERE user_id = @id ORDER BY order_id ASC");
 
             foreach (DataRow Row in Table.Rows)
             {

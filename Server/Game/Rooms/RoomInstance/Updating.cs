@@ -298,19 +298,31 @@ namespace Snowlight.Game.Rooms
         public void ExecuteTriggers(RoomActor Actor)
         {
             Vector2 Redirect = mRedirectGrid[Actor.Position.X, Actor.Position.Y];
-            if (Redirect != null) Actor.Position = new Vector3(Redirect.X, Redirect.Y, GetUserStepHeight(Redirect));
+            if (Redirect != null)
+            {
+                Actor.Position = new Vector3(Redirect.X, Redirect.Y, GetUserStepHeight(Redirect));
+            }
 
             RoomTriggers Action = mTileTriggers[Actor.Position.X, Actor.Position.Y];
-            if (Action == null || Action.RoomPosition == null) return;
+            if (Action == null || Action.RoomPosition == null)
+            {
+                return;
+            }
 
             Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
-            if (Session == null) return;
+            if (Session == null)
+            {
+                return;
+            }
 
             RoomInstance Instance = null;
             if (!Session.IsTeleporting)
             {
                 Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
-                if (Instance == null) return;
+                if (Instance == null)
+                {
+                    return;
+                }
             }
 
             if (Actor.Position.X == Action.RoomPosition.X && Actor.Position.Y == Action.RoomPosition.Y)
@@ -321,20 +333,31 @@ namespace Snowlight.Game.Rooms
 
                         if (Actor.IsMoving)
                         {
+                            Actor.StopMoving();
                             Actor.RemoveStatus("mv");
-                            Actor.Pathfinder.Clear();
+                            Actor.UpdateNeeded = true;
                         }
 
                         Actor.MoveTo(Action.ToRoomPosition.GetVector2());
 
                         Vector2 NextStep = Actor.GetNextStep();
-                        if (NextStep == null) break;
+                        if (NextStep == null)
+                        {
+                            break;
+                        }
 
                         Actor.SetStatus("mv", NextStep.X + "," + NextStep.Y + "," + (Math.Round(GetUserStepHeight(NextStep), 1)).ToString().Replace(',', '.'));
                         Actor.PositionToSet = NextStep;
 
-                        if (Actor.UserStatusses.ContainsKey("sit")) Actor.RemoveStatus("sit");
-                        if (Actor.UserStatusses.ContainsKey("lay")) Actor.RemoveStatus("lay");
+                        if (Actor.UserStatusses.ContainsKey("sit"))
+                        {
+                            Actor.RemoveStatus("sit");
+                        }
+                        
+                        if (Actor.UserStatusses.ContainsKey("lay"))
+                        {
+                            Actor.RemoveStatus("lay");
+                        }
 
                         Actor.BodyRotation = Rotation.Calculate(Actor.Position.GetVector2(), NextStep, Actor.MoonWalkEnabled);
                         Actor.HeadRotation = Actor.BodyRotation;
@@ -343,7 +366,10 @@ namespace Snowlight.Game.Rooms
 
                     case RoomTriggerList.TELEPORT:
 
-                        if (Actor.Type != RoomActorType.UserCharacter) break;
+                        if (Actor.Type != RoomActorType.UserCharacter)
+                        {
+                            break;
+                        }
 
                         if (Action.ToRoomId == Session.CurrentRoomId || Action.ToRoomId == 0)
                         {
@@ -355,7 +381,10 @@ namespace Snowlight.Game.Rooms
                         {
                             if (!Actor.IsMoving && Actor.Pathfinder.IsCompleted)
                             {
-                                if (Instance == null) break;
+                                if (Instance == null)
+                                {
+                                    break;
+                                }
 
                                 Actor.BlockWalking();
                                 
