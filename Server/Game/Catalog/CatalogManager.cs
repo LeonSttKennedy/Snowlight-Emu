@@ -186,7 +186,7 @@ namespace Snowlight.Game.Catalog
                         (string)Row["name"], (int)Row["cost_credits"], (int)Row["cost_activitypoints"],
                         SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()),
                         (int)Row["amount"], (string)Row["preset_flags"], (int)Row["club_restriction"],
-                        (string)Row["badge_code"]);
+                        (int)Row["order_id"], (string)Row["badge_code"]);
 
                     MySqlClient.SetParameter("enabled", "1");
                     MySqlClient.SetParameter("item_id", Item.Id);
@@ -210,7 +210,10 @@ namespace Snowlight.Game.Catalog
                     {
                         mCatalogItems[PageId].Add(Item);
                         mCatalogItemsIdIndex[Item.Id] = Item;
-                        mCatalogItemsNameIndex[Item.DisplayName] = Item;
+
+                        string Identifier = Item.DisplayName.StartsWith("rare pet") ? "p" + Item.OrderId + " " + Item.DisplayName : Item.DisplayName;
+
+                        mCatalogItemsNameIndex[Identifier] = Item;
                     }
                     else
                     {
@@ -462,12 +465,15 @@ namespace Snowlight.Game.Catalog
             /* 
              * Posters has same SpriteId, and still impossible count his offers by extradata.
              * 
-             * oLJYhO => Message received
-             * oL  = 3020 > Message Header Id
+             * Client side message example:
+             * oLJYhO => Server has received this message
+             * 
+             * If we decoded this message example we had this:
+             * oL  = 3020 > ClientMessage Header Id
              * J   = 2    > int ItemType
              * YhO = 4001 > uint Sprite
              */
-            
+
             int ItemType = Message.PopWiredInt32();
             uint Sprite = Message.PopWiredUInt32();
 
@@ -541,7 +547,7 @@ namespace Snowlight.Game.Catalog
                 uint Id = Message.PopWiredUInt32();
 
                 Item UserItem = Session.InventoryCache.GetItem(Id);
-                if (UserItem != null && MarketplaceManager.CanSellItem(UserItem))
+                if (UserItem != null && UserItem.CanSell)
                 {
                     MarketplaceManager.SellItem(Session, Id, ItemType, AskingPrice);
                 }
@@ -689,8 +695,10 @@ namespace Snowlight.Game.Catalog
         {
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                Session.SendData(VoucherManager.TryRedeemVoucher(MySqlClient, Session, Message.PopString()) ?
-                    CatalogRedeemOkComposer.Compose() : CatalogRedeemErrorComposer.Compose(0));
+                string Code = Message.PopString();
+
+                Session.SendData(VoucherManager.TryRedeemVoucher(MySqlClient, Session, Code) ?
+                    CatalogRedeemOkComposer.Compose() : CatalogRedeemErrorComposer.Compose(VoucherManager.ErrorChecker(Code)));
             }
         }
 
@@ -700,9 +708,13 @@ namespace Snowlight.Game.Catalog
 
             string ItemName = Message.PopString();
 
-            if (mCatalogItemsNameIndex.ContainsKey(ItemName))
+            ItemRotationSettings Settings = mRotationPages[179];
+
+            string PetIdentifier = ItemName.StartsWith("rare pet") ? "p" + Settings.LastIndex + " " + ItemName : ItemName;
+
+            if (mCatalogItemsNameIndex.ContainsKey(PetIdentifier))
             {
-                PetItem = mCatalogItemsNameIndex[ItemName];
+                PetItem = mCatalogItemsNameIndex[PetIdentifier];
             }
 
             if (PetItem == null)

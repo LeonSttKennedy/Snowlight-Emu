@@ -558,7 +558,12 @@ namespace Snowlight.Game.Rooms
 
         private static void PlacePet(Session Session, ClientMessage Message)
         {
-            if(!Session.HasRight("hotel_admin") && !ServerSettings.PetsEnabled)
+            /* 
+             * needs to investigate a visual bug when pet is placed.
+             * This bug ocour to session that are placing a pet if ActorId and PetId are equals
+             */
+
+            if (!Session.HasRight("hotel_admin") && !ServerSettings.PetsEnabled)
             {
                 Session.SendData(PetPlacementErrorComposer.Compose(PetPlacingError.PetsDisabledInThisHotel));
                 return;
@@ -622,10 +627,10 @@ namespace Snowlight.Game.Rooms
             Session.InventoryCache.RemovePet(Pet.Id);
             Session.SendData(InventoryPetRemovedComposer.Compose(Pet.Id));
 
-            if(Instance.Info.OwnerId != Session.CharacterId)
+            if (Instance.Info.OwnerId != Session.CharacterId)
             {
                 QuestManager.ProgressUserQuest(Session, QuestType.PET_TO_OTHER_ROOM, 1);
-                if(Instance.PetActorCount > 1)
+                if (Instance.PetActorCount > 1)
                 {
                     QuestManager.ProgressUserQuest(Session, QuestType.PETS_IN_ROOM, (uint)Instance.PetActorCount);
                 }

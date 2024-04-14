@@ -16,11 +16,6 @@ namespace Snowlight.Game.Misc
             {
                 return mMinPrice;
             }
-
-            set
-            {
-                mMinPrice = value;
-            }
         }
 
         public int MaxPrice
@@ -28,11 +23,6 @@ namespace Snowlight.Game.Misc
             get
             {
                 return mMaxPrice;
-            }
-
-            set
-            {
-                mMaxPrice = value;
             }
         }
 
@@ -42,11 +32,6 @@ namespace Snowlight.Game.Misc
             {
                 return mSearchQuery;
             }
-
-            set
-            {
-                mSearchQuery = value;
-            }
         }
 
         public int FilterMode
@@ -54,11 +39,6 @@ namespace Snowlight.Game.Misc
             get
             {
                 return mFilterMode;
-            }
-
-            set
-            {
-                mFilterMode = value;
             }
         }
 

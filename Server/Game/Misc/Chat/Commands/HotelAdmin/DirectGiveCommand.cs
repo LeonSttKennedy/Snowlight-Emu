@@ -33,7 +33,7 @@ namespace Snowlight.Game.Misc
         {
             if (Params.Length < 4)
             {
-                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_invalid_syntax") + " - :directgive <username> <type: coins/credits, pixels, snowflake, hearts, giftpoints or shells> <quantity>"));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_invalid_syntax") + " - :directgive <username> <type: coins/credits, pixels, snowflake, hearts, giftpoints, shells, diamonds, clubgiftpoints or marketplacetokens> <quantity>"));
                 return;
             }
 
@@ -172,6 +172,21 @@ namespace Snowlight.Game.Misc
                             if (int.TryParse(Params[3], out Amount))
                             {
                                 TargetSession.SubscriptionManager.GiveGiftPoints(Amount);
+                                TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                goto End;
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
+                    case "marketplacetokens":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                TargetSession.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, Amount);
                                 TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
                                 goto End;
                             }

@@ -18,6 +18,7 @@ namespace Snowlight.Game.Items
         private int mAmount;
         private string mPresetFlags;
         private int mClubRestriction;
+        private int mOrderId;
         private string mBadgeCode;
 
         private List<PetRaceData> mPetRaceData;
@@ -107,6 +108,13 @@ namespace Snowlight.Game.Items
                 return mDefinitionId == -1 && mDealItems.Count > 1;
             }
         }
+        public int OrderId
+        {
+            get
+            {
+                return mOrderId;
+            }
+        }
         public string BadgeCode
         {
             get
@@ -133,7 +141,7 @@ namespace Snowlight.Game.Items
 
         public CatalogItem(uint Id, int BaseId, string Name, int CostCredits, int CostActivityPoints, 
             SeasonalCurrencyList SeasonalCurrency, int Amount, string PresetFlags, int ClubRestriction, 
-            string BadgeCode)
+            int OrderId, string BadgeCode)
         {
             mId = Id;
             mDefinitionId = BaseId;
@@ -144,6 +152,7 @@ namespace Snowlight.Game.Items
             mAmount = Amount;
             mPresetFlags = PresetFlags;
             mClubRestriction = ClubRestriction;
+            mOrderId = OrderId;
             mBadgeCode = BadgeCode;
 
             mPetRaceData = new List<PetRaceData>();

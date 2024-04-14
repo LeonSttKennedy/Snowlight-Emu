@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
+using Snowlight.Util;
+using Snowlight.Game.Misc;
+using Snowlight.Game.Bots;
+using Snowlight.Game.Items;
+using Snowlight.Game.Quests;
 using Snowlight.Specialized;
 using Snowlight.Game.Sessions;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Items;
 using Snowlight.Game.Pathfinding;
-using Snowlight.Game.Bots;
-using Snowlight.Game.Achievements;
-using Snowlight.Game.Quests;
-using Snowlight.Util;
 using Snowlight.Game.Items.Wired;
+using Snowlight.Game.Achievements;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Rooms
 {
@@ -353,7 +354,7 @@ namespace Snowlight.Game.Rooms
                         {
                             Actor.RemoveStatus("sit");
                         }
-                        
+
                         if (Actor.UserStatusses.ContainsKey("lay"))
                         {
                             Actor.RemoveStatus("lay");
@@ -362,6 +363,11 @@ namespace Snowlight.Game.Rooms
                         Actor.BodyRotation = Rotation.Calculate(Actor.Position.GetVector2(), NextStep, Actor.MoonWalkEnabled);
                         Actor.HeadRotation = Actor.BodyRotation;
                         Actor.UpdateNeeded = true;
+
+                        Instance.BroadcastMessage(RollerEventComposer.Compose(Actor.Position.GetVector2(), 
+                            Actor.PositionToSet, Action.Id, new List<RollerEvents>() { new RollerEvents(Actor.Position.Z, 
+                            Instance.GetUserStepHeight(Actor.PositionToSet), Actor.Id, 0, MovementType.Walk) }));
+
                         break;
 
                     case RoomTriggerList.TELEPORT:

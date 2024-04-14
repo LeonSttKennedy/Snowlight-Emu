@@ -179,6 +179,7 @@ namespace Snowlight
                     // Catalog, pets and items
                     ItemDefinitionManager.Initialize(MySqlClient);
                     CatalogManager.Initialize(MySqlClient);
+                    VoucherManager.Initialize(MySqlClient);
                     CatalogSubGifts.Initialize(MySqlClient);
                     CatalogPurchaseHandler.Initialize();
                     Inventory.Initialize();

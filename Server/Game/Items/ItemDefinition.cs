@@ -55,6 +55,8 @@ namespace Snowlight.Game.Items
         private bool mAllowGift;
         private bool mAllowInventoryStack;
 
+        private string mPetStatussesInteraction;
+
         public uint Id
         {
             get
@@ -248,6 +250,14 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public string PetStatusses
+        {
+            get
+            {
+                return mPetStatussesInteraction;
+            }
+        }
+
         public ItemDefinition(uint Id, uint SpriteId, string Name, string PublicName, ItemType Type, ItemBehavior Behavior, int BehaviorData,
             ItemStackingBehavior StackingBehavior, ItemWalkableMode Walkable, int RoomLimit, int SizeX, int SizeY, float Height, string AdjustableHeight,
             bool AllowRecycle, bool AllowTrade, bool AllowSell, bool AllowGift, bool AllowInventoryStack)
@@ -272,12 +282,19 @@ namespace Snowlight.Game.Items
             mAllowGift = AllowGift;
             mAllowInventoryStack = AllowInventoryStack;
 
+            mPetStatussesInteraction = string.Empty;
+
             string[] splitedHeights = AdjustableHeight.Split('|');
 
             for(int i = 0; i < splitedHeights.Length; i++)
             {
                 mAdjustableHeight.Add(float.Parse(splitedHeights[i], CultularUtils.NumberFormatInfo));
             }
+        }
+
+        public void SetPetStatussesInteraction(string Status)
+        {
+            mPetStatussesInteraction = Status;
         }
     }
 }

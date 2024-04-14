@@ -312,11 +312,26 @@ namespace Snowlight.Game.Rights
         {
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
+                MySqlClient.SetParameter("userid", mUserId);
+                bool CreateNewRecord = (MySqlClient.ExecuteScalar("SELECT null FROM user_subscriptions WHERE user_id = @userid LIMIT 1") == null);
+
                 GiftPoints += Quantity;
 
                 MySqlClient.SetParameter("userid", mUserId);
                 MySqlClient.SetParameter("giftpoints", mGiftPoints);
-                MySqlClient.ExecuteNonQuery("UPDATE user_subscriptions SET gift_points = @giftpoints WHERE user_id = @userid LIMIT 1");
+                if(CreateNewRecord)
+                {
+                    MySqlClient.SetParameter("createstamp", mTimestampExpire);
+                    MySqlClient.SetParameter("expirestamp", mTimestampExpire);
+                    MySqlClient.SetParameter("lastupdate", mTimestampExpire);
+                    MySqlClient.SetParameter("level", ((int)mBaseLevel).ToString());
+
+                    MySqlClient.ExecuteNonQuery("INSERT INTO user_subscriptions (user_id,subscription_level,timestamp_created,timestamp_expire,timestamp_last_gift_point,gift_points) VALUES (@userid,@level,@createstamp,@expirestamp,@lastupdate,@giftpoints)");
+                }
+                else
+                {
+                    MySqlClient.ExecuteNonQuery("UPDATE user_subscriptions SET gift_points = @giftpoints WHERE user_id = @userid LIMIT 1");
+                }
             }
         }
         #endregion

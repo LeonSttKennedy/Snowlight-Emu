@@ -87,6 +87,11 @@ namespace Snowlight.Communication.ResponseCache
         {
             lock (mCachedResponses)
             {
+                if(Request == null)
+                {
+                    return null;
+                }
+
                 foreach (ResponseCacheItem Item in mCachedResponses)
                 {
                     if (Item.GroupId == GroupId && Item.Request.ToString() == Request.ToString())

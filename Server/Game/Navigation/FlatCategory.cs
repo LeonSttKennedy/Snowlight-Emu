@@ -8,6 +8,7 @@ namespace Snowlight.Game.Navigation
         private bool mVisible;
         private string mTitle;
         private bool mAllowTrading;
+        private bool mIsDefault;
         private string mRequiredRight;
 
         public int Id
@@ -42,6 +43,14 @@ namespace Snowlight.Game.Navigation
             }
         }
 
+        public bool Default
+        {
+            get
+            {
+                return mIsDefault;
+            }
+        }
+
         public bool AllowTrading
         {
             get
@@ -50,12 +59,13 @@ namespace Snowlight.Game.Navigation
             }
         }
 
-        public FlatCategory(int Id, bool Visible, string Title, string RequiredRight, bool AllowTrading)
+        public FlatCategory(int Id, bool Visible, string Title, string RequiredRight, bool Default, bool AllowTrading)
         {
             mId = Id;
             mVisible = Visible;
             mTitle = Title;
             mRequiredRight = RequiredRight;
+            mIsDefault = Default;
             mAllowTrading = AllowTrading;
         }
     }

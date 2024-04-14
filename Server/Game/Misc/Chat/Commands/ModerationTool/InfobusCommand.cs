@@ -134,7 +134,7 @@ namespace Snowlight.Game.Misc
                             RoomInfo InfobusRoom = RoomInfoLoader.GetRoomInfo(17);
                             string Question = InfobusPoolQuestion != null ? InfobusPoolQuestion : ExternalTexts.GetValue("command_infobus_question_empty");
                             string Options = InfobusManager.InfobusPoolOptions.Count > 0 ? string.Join(", ", InfobusManager.InfobusPoolOptions) : ExternalTexts.GetValue("command_infobus_options_empty");
-                            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_infobus_status", new string[] { InfobusRoom.CurrentUsers.ToString(), Question, Options })));
+                            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_infobus_status", new string[] { InfobusRoom.CurrentUsers.ToString(), Question, Options, ServerSettings.InfobusStatus.ToString() })));
                             return;
                         }
 

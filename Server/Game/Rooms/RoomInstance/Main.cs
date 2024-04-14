@@ -177,15 +177,28 @@ namespace Snowlight.Game.Rooms
                 }
 
                 // Static objects
-                MySqlClient.SetParameter("id", RoomId);
+                MySqlClient.SetParameter("modelname", Info.ModelName);
                 MySqlClient.SetParameter("enabled", "1");
-                DataTable StaticObjectTable = MySqlClient.ExecuteQueryTable("SELECT * FROM static_objects WHERE room_id = @id AND enabled = @enabled");
+                DataTable StaticObjectTable = MySqlClient.ExecuteQueryTable("SELECT * FROM static_objects WHERE room_model = @modelname AND enabled = @enabled");
 
                 foreach (DataRow Row in StaticObjectTable.Rows)
                 {
-                    mStaticObjects.Add(new StaticObject((string)Row["name"], Vector3.FromString((string)Row["position"]),
-                        (int)Row["size_x"], (int)Row["size_y"], (int)Row["rotation"], (float)Row["height"],
-                         (Row["walkable"].ToString() == "1"), (Row["is_seat"].ToString() == "1")));
+                    uint Id = (uint)Row["id"];
+                    string ItemName = (string)Row["name"];
+                    Vector3 RoomPosition = Vector3.FromString((string)Row["position"]);
+                    int RoomRotation = (int)Row["rotation"];
+
+                    if (ItemName.Equals("hububar"))
+                    {
+                        Item Hububar = new Item(Id, 175, 0, Info.Id, RoomPosition, string.Empty, RoomRotation, string.Empty, string.Empty, false, 0, 0, 0, null);
+                        mItems.Add(Id, Hububar);
+                    }
+                    else
+                    {
+                        mStaticObjects.Add(new StaticObject(Id, ItemName, RoomPosition, (int)Row["size_x"], (int)Row["size_y"],
+                              RoomRotation, (float)Row["height"], (Row["walkable"].ToString() == "1"),
+                              (Row["is_seat"].ToString() == "1")));
+                    }
                 }
 
                 // Rights

@@ -751,6 +751,16 @@ namespace Snowlight.Game.Characters
                 return int.Parse(MySqlClient.ExecuteScalar("SELECT COUNT(*) FROM rooms WHERE owner_id = @ownerid LIMIT 1").ToString());
             }
         }
+        public int GetClubGiftsCount()
+        {
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                MySqlClient.SetParameter("userid", mId);
+                DataRow Row = MySqlClient.ExecuteQueryRow("SELECT gift_points FROM user_subscriptions WHERE user_id = @userid LIMIT 1");
+
+                return Row != null ? (int)Row[0] : 0;
+            }
+        }
         public void UpdateTags(SqlDatabaseClient MySqlClient)
         {
             mTags.Clear();

@@ -7,32 +7,39 @@ using System.Text;
 
 namespace Snowlight.Communication.Outgoing
 {
+    public enum MarketplaceCanSell
+    {
+        CanSell = 1,
+        NoTradingPrivilege = 2,
+        TradingDisabled = 3,
+        WithoutTokens = 4
+    }
     public static class CatalogMarketplaceCanSellComposer
     {
         public static ServerMessage Compose(Session Session)
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.MARKETPLACE_CAN_SELL);
 
-            int ErrorCode = 1;
-
-            if (!Session.CharacterInfo.AllowTrade)
-            {
-                ErrorCode = 2;
-            }
+            MarketplaceCanSell ErrorCode = MarketplaceCanSell.CanSell;
 
             if (!Session.HasRight("trade"))
             {
-                ErrorCode = 3;
+                ErrorCode = MarketplaceCanSell.NoTradingPrivilege;
+            }
+
+            if (!Session.CharacterInfo.AllowTrade)
+            {
+                ErrorCode = MarketplaceCanSell.TradingDisabled;
             }
 
             if (ServerSettings.MarketplaceTokensBuyEnabled && Session.CharacterInfo.MarketplaceTokens == 0)
             {
-                ErrorCode = 4;
+                ErrorCode = MarketplaceCanSell.WithoutTokens;
             }
 
             int TokensCount = ServerSettings.MarketplaceTokensBuyEnabled ? Session.CharacterInfo.MarketplaceTokens : int.MaxValue;
 
-            Message.AppendInt32(ErrorCode); // Error Code
+            Message.AppendInt32((int)ErrorCode); // Error Code
             Message.AppendInt32(TokensCount); // Token Count
             return Message;
         }

@@ -172,6 +172,13 @@ namespace Snowlight.Game.Misc
                             goto End;
                         }
 
+                    case "commands":
+                        {
+                            ToSend = ExternalTexts.GetValue("command_update_commands");
+                            CommandManager.Initialize();
+                            goto End;
+                        }
+
                     case "filter":
                         {
                             ToSend = ExternalTexts.GetValue("command_update_filter");

@@ -1002,13 +1002,22 @@ namespace Snowlight.Game.Bots.Behavior
 
         public override void PerformUpdate(RoomInstance Instance)
         {
-            if(mSelfActor == null) return;
+            if (mSelfActor == null)
+            {
+                return;
+            }
 
             Bot Bot = (Bot)mSelfActor.ReferenceObject;
-            if(Bot == null) return;
+            if (Bot == null)
+            {
+                return;
+            }
 
             Pet Pet = Bot.PetData;
-            if(Pet == null) return;
+            if (Pet == null)
+            {
+                return;
+            }
 
             double TimeSinceLastMessage = (UnixTimestamp.GetCurrent() - mChatDelayer);
 
@@ -1507,9 +1516,6 @@ namespace Snowlight.Game.Bots.Behavior
                         ChangeActionToIdle();
                     }
 
-                    string status = Behavior.Equals(ItemBehavior.FrogPond) ? "dip" : 
-                        (Behavior.Equals(ItemBehavior.MonkeyPond) ? "swm" : "pla");
-
                     if (mActionData == 0)
                     {
                         if (InteractionItem != null && 
@@ -1540,7 +1546,7 @@ namespace Snowlight.Game.Bots.Behavior
                             }
 
                             mSelfActor.ClearStatusses();
-                            mSelfActor.SetStatus(status, Math.Round(mSelfActor.Position.Z, 1).ToString().Replace(',', '.'));
+                            mSelfActor.SetStatus(Interaction.Definition.PetStatusses, Math.Round(mSelfActor.Position.Z, 1).ToString().Replace(',', '.'));
                             mSelfActor.UpdateNeeded = true;
 
                             Interaction.RequestUpdate(1);

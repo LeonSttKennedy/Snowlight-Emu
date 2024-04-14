@@ -167,6 +167,12 @@ namespace Snowlight.Game.Misc
         private static void RegisterNormal()
         {
             Register("about", new AboutCommand());
+            
+            if (ServerSettings.MarketplaceTokensBuyEnabled)
+            {
+                Register("buytokens", new BuyTokensCommand());
+            }
+
             Register("disablemimic", new DisableMimicCommand());
             Register("disablegifts", new DisableGiftsCommand());
             Register("disablediagonal", new DisableDiagonalCommand());

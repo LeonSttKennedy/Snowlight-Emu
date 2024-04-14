@@ -280,6 +280,24 @@ namespace Snowlight.Util
         }
         #endregion
 
+        #region Global Settings
+        private static bool mRoomEventsEnabled;
+
+        public static bool RoomEventsEnabled
+        {
+            get
+            {
+                return mRoomEventsEnabled;
+            }
+
+            set
+            {
+                mRoomEventsEnabled = value;
+            }
+
+        }
+        #endregion
+
         #region Infobus Settings
         private static InfobusStatus mInfobusStatus;
 
@@ -330,6 +348,7 @@ namespace Snowlight.Util
         private static bool mMarketplaceEnabled;
         private static int mMarketplaceTax;
         private static bool mMarketplaceTokensBuyEnabled;
+        private static bool mMarketplaceBoostProtectionEnabled;
         private static int mMarketplaceTokensPrice;
         private static int mMarketplacePremiumTokens;
         private static int mMarketplaceDefaultTokens;
@@ -372,6 +391,18 @@ namespace Snowlight.Util
             set
             {
                 mMarketplaceTokensBuyEnabled = value;
+            }
+        }
+        public static bool MarketplaceBoostProtectionEnabled
+        {
+            get
+            {
+                return mMarketplaceBoostProtectionEnabled;
+            }
+
+            set
+            {
+                mMarketplaceBoostProtectionEnabled = value;
             }
         }
         public static int MarketplaceTokensPrice
@@ -827,7 +858,9 @@ namespace Snowlight.Util
             GiftingSystemSpriteIds = GiftSpriteIds;
             GiftingSystemBoxCount = (int)Row["gifting_system_box_count"];
             GiftingSystemRibbonCount = (int)Row["gifting_system_ribbon_count"];
-            
+
+            RoomEventsEnabled = (Row["room_events_enabled"].ToString() == "1");
+
             InfobusStatus = Infobus_Status;
             
             LoginBadgeEnabled = (Row["login_badge_enabled"].ToString() == "1");
@@ -836,6 +869,7 @@ namespace Snowlight.Util
             MarketplaceEnabled = (Row["marketplace_enabled"].ToString() == "1");
             MarketplaceTax = (int)Row["marketplace_tax"];
             MarketplaceTokensBuyEnabled = (Row["marketplace_tokens_buy_enabled"].ToString() == "1");
+            MarketplaceBoostProtectionEnabled = (Row["marketplace_boost_protection_enabled"].ToString() == "1");
             MarketplaceTokensPrice = (int)Row["marketplace_tokens_price"];
             MarketplacePremiumTokens = (int)Row["marketplace_premium_tokens"];
             MarketplaceNormalTokens = (int)Row["marketplace_default_tokens"];

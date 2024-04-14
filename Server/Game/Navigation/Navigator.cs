@@ -89,7 +89,8 @@ namespace Snowlight.Game.Navigation
                 foreach (DataRow Row in Table.Rows)
                 {
                     mFlatCategories.Add(new FlatCategory((int)Row["id"], (Row["visible"].ToString() == "1"),
-                        (string)Row["title"], (string)Row["required_right"], (Row["allow_trading"].ToString() == "1")));
+                        (string)Row["title"], (string)Row["required_right"], (Row["default"].ToString() == "1"),
+                        (Row["allow_trading"].ToString() == "1")));
                     NumberLoaded++;
                 }
 
@@ -170,6 +171,44 @@ namespace Snowlight.Game.Navigation
             mCacheController.ClearCacheGroup(GroupId);
         }
 
+        public static FlatCategory GetCategory(uint CategoryId)
+        {
+            FlatCategory ReturnCategory = null;
+
+            lock (mFlatCategories)
+            {
+                foreach (FlatCategory Category in mFlatCategories)
+                {
+                    if (Category.Id == CategoryId)
+                    {
+                        ReturnCategory = Category;
+                        break;
+                    }
+                }
+            }
+
+            return ReturnCategory;
+        }
+
+        public static FlatCategory GetDefaultCategory()
+        {
+            FlatCategory ReturnCategory = null;
+
+            lock (mFlatCategories)
+            {
+                foreach (FlatCategory Category in mFlatCategories)
+                {
+                    if (Category.Default)
+                    {
+                        ReturnCategory = Category;
+                        break;
+                    }
+                }
+            }
+
+            return ReturnCategory;
+        }
+
         public static bool CanTradeInCategory(int CategoryId)
         {
             if (CategoryId < 1)
@@ -191,7 +230,7 @@ namespace Snowlight.Game.Navigation
             return false;
         }
 
-        private static NavigatorOfficialItem GetRoomAds()
+        private static NavigatorOfficialItem GetNavigatorRoomAds()
         {
             List<NavigatorOfficialItem> RoomAds = mOfficialItems.Where(O => O.IsAdvertsement).ToList();
 
@@ -210,7 +249,7 @@ namespace Snowlight.Game.Navigation
                 return;
             }
 
-            Response = NavigatorFlatCategoriesComposer.Compose(Session, mFlatCategories);
+            Response = NavigatorFlatCategoriesComposer.Compose(mFlatCategories);
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -227,7 +266,7 @@ namespace Snowlight.Game.Navigation
 
             IEnumerable<NavigatorOfficialItem> Official = mOfficialItems.OrderByDescending(O => O.GetTotalUsersInPublicRoom()).Where(O => !O.IsAdvertsement);
 
-            Response = NavigatorOfficialRoomsComposer.Message(Official.ToList(), GetRoomAds());
+            Response = NavigatorOfficialRoomsComposer.Message(Official.ToList(), GetNavigatorRoomAds());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -252,7 +291,7 @@ namespace Snowlight.Game.Navigation
                  orderby RoomInstance.Value.Event.TimestampStarted descending
                  select RoomInstance.Value).Take(50);
 
-            Response = NavigatorRoomListComposer.Compose(Category, 12, string.Empty, Rooms.ToList(), GetRoomAds(), true);
+            Response = NavigatorRoomListComposer.Compose(Category, 12, string.Empty, Rooms.ToList(), GetNavigatorRoomAds(), true);
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -300,7 +339,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 6, string.Empty, Rooms, GetRoomAds());
+            Response = NavigatorRoomListComposer.Compose(0, 6, string.Empty, Rooms, GetNavigatorRoomAds());
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             Session.SendData(Response);
         }
@@ -348,7 +387,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 3, string.Empty, Rooms, GetRoomAds());
+            Response = NavigatorRoomListComposer.Compose(0, 3, string.Empty, Rooms, GetNavigatorRoomAds());
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             Session.SendData(Response);
         }
@@ -374,7 +413,7 @@ namespace Snowlight.Game.Navigation
                  orderby RoomInstance.Value.CachedNavigatorUserCount descending
                  select RoomInstance.Value).Take(50);
 
-            Response = NavigatorRoomListComposer.Compose(Category, 1, string.Empty, Rooms.ToList(), GetRoomAds());
+            Response = NavigatorRoomListComposer.Compose(Category, 1, string.Empty, Rooms.ToList(), GetNavigatorRoomAds());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -401,7 +440,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 2, string.Empty, Rooms, GetRoomAds());
+            Response = NavigatorRoomListComposer.Compose(0, 2, string.Empty, Rooms, GetNavigatorRoomAds());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -445,7 +484,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(0, 7, string.Empty, Rooms, GetRoomAds());
+            Response = NavigatorRoomListComposer.Compose(0, 7, string.Empty, Rooms, GetNavigatorRoomAds());
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             Session.SendData(Response);
         }
@@ -479,14 +518,24 @@ namespace Snowlight.Game.Navigation
                  RoomInstance.Value.Info.Type != RoomType.Public
                  select RoomInstance.Value).Take(50);
 
-            Response = NavigatorRoomListComposer.Compose(0, 4, string.Empty, Rooms.ToList(), GetRoomAds());
+            Response = NavigatorRoomListComposer.Compose(0, 4, string.Empty, Rooms.ToList(), GetNavigatorRoomAds());
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
             Session.SendData(Response);
         }
 
+        public static void GetUserRooms(Session Session, bool ClearCache = false)
+        {
+            if(ClearCache)
+            {
+                ClearCacheGroup(Session.CharacterId);
+            }
+
+            GetUserRooms(Session, new ClientMessage(OpcodesIn.NAVIGATOR_GET_USER_ROOMS));
+        }
+
         public static void GetUserRooms(Session Session, ClientMessage Message)
         {
-            ServerMessage Response = Message != null ? TryGetResponseFromCache(Session.CharacterId, Message) : null;
+            ServerMessage Response = TryGetResponseFromCache(Session.CharacterId, Message);
 
             if (Response != null)
             {
@@ -510,16 +559,9 @@ namespace Snowlight.Game.Navigation
 
             IEnumerable<RoomInfo> RoomsToSend = Rooms.OrderByDescending(U => U.CurrentUsers);
 
-            Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, RoomsToSend.ToList(), GetRoomAds());
-            
-            if (Message == null)
-            {
-                ClearCacheGroup(Session.CharacterId);
-            }
-            else
-            {
-                AddToCacheIfNeeded(Session.CharacterId, Message, Response);
-            }
+            Response = NavigatorRoomListComposer.Compose(0, 5, string.Empty, RoomsToSend.ToList(), GetNavigatorRoomAds());
+
+            AddToCacheIfNeeded(Session.CharacterId, Message, Response);
 
             Session.SendData(Response);
         }
@@ -558,9 +600,32 @@ namespace Snowlight.Game.Navigation
                 return;
             }
 
+            int QueryMinLimit = 0;
+            int QueryMaxLimit = 64;
+
             Dictionary<uint, RoomInfo> Rooms = new Dictionary<uint, RoomInfo>();
             string Query = UserInputFilter.FilterString(Message.PopString()).ToLower().Trim();
             int SearchEventCatId = 0;
+
+            bool OnlyTag = false;
+            bool OnlyOwner = false;
+
+            if(Query.StartsWith("tag:"))
+            {
+                OnlyTag = true;
+            }
+            else if(Query.StartsWith("owner:"))
+            {
+                OnlyOwner = true;
+            }
+
+            if(OnlyOwner || OnlyTag)
+            {
+                QueryMinLimit = Query.IndexOf(":") + 1;
+                QueryMaxLimit += QueryMinLimit;
+
+                Query = Query.Substring(QueryMinLimit);
+            }
 
             if (mEventSearchQueries.ContainsKey(Query.ToLower()))
             {
@@ -568,9 +633,9 @@ namespace Snowlight.Game.Navigation
             }
 
             // Limit query length. just a precaution.
-            if (Query.Length > 64)
+            if (Query.Length > QueryMaxLimit)
             {
-                Query = Query.Substring(0, 64);
+                Query = Query.Substring(0, QueryMaxLimit);
             }
 
             if (Query.Length > 0)
@@ -590,6 +655,12 @@ namespace Snowlight.Game.Navigation
 
                 foreach (RoomInstance Instance in InstanceMatches)
                 {
+                    if(OnlyOwner && !Instance.Info.OwnerName.Equals(Query) ||
+                        OnlyTag && !Instance.SearchableTags.Contains(Query))
+                    {
+                        continue;
+                    }
+
                     Rooms.Add(Instance.RoomId, Instance.Info);
                 }
 
@@ -622,7 +693,7 @@ namespace Snowlight.Game.Navigation
                 }
             }
 
-            Response = NavigatorRoomListComposer.Compose(1, 9, Query, Rooms.Values.Take(50).ToList(), GetRoomAds());
+            Response = NavigatorRoomListComposer.Compose(1, 9, Query, Rooms.Values.Take(50).ToList(), GetNavigatorRoomAds());
             AddToCacheIfNeeded(0, Message, Response);
             Session.SendData(Response);
         }
@@ -753,6 +824,17 @@ namespace Snowlight.Game.Navigation
 
             Session.SendData(FriendBarResultComposer.Compose(true));
             Session.SendData(MessengerFollowResultComposer.Compose(SelectedInstance.First().Info));
+        }
+
+        public static int UserHasRoomWithEvent(uint UserId)
+        {
+            IEnumerable<RoomInstance> Rooms =
+                (from RoomInstance in RoomManager.RoomInstances
+                    where (RoomInstance.Value.HasOngoingEvent && RoomInstance.Value.Info.OwnerId == UserId)
+                    orderby RoomInstance.Value.Event.TimestampStarted descending
+                    select RoomInstance.Value);
+
+            return Rooms.Count();
         }
     }
 }

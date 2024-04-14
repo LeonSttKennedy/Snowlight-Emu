@@ -17,9 +17,9 @@ namespace Snowlight.Communication.Outgoing
 
             foreach (StaticObject Object in Objects)
             {
-                Message.AppendBoolean(Object.FirstIlustration);             // ?? no effect
-                Message.AppendStringWithBreak("SNW");                       // ?? No appearent effect
-                Message.AppendStringWithBreak(Object.Name);                 // Name
+                Message.AppendBoolean(Object.FirstIlustration);             // Lock orientation
+                Message.AppendStringWithBreak("SNW");                       // Object ?
+                Message.AppendStringWithBreak(Object.Name);                 // Object ?
                 Message.AppendInt32(Object.Position.X);                     // X
                 Message.AppendInt32(Object.Position.Y);                     // Y
                 Message.AppendInt32((int)Object.Position.Z);                // Z

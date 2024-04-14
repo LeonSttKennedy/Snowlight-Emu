@@ -2,11 +2,12 @@
 using System.Data;
 
 using Snowlight.Storage;
-using Snowlight.Specialized;
+using Snowlight.Game.Misc;
 using Snowlight.Game.Rooms;
-using Snowlight.Communication.Outgoing;
+using Snowlight.Specialized;
 using System.Collections.Generic;
 using Snowlight.Game.Items.Wired;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Items
 {
@@ -30,6 +31,7 @@ namespace Snowlight.Game.Items
         private uint mSoundManagerId;
         private int mSoundManagerOrder;
         private double mExpireTimestamp;
+
         private bool mTimmerRunning;
         private WiredData mWiredData;
 
@@ -202,7 +204,7 @@ namespace Snowlight.Game.Items
         {
             get
             {
-                return (!mUntradable && Definition.AllowSell);
+                return (!mUntradable && Definition.AllowTrade && Definition.AllowSell);
             }
         }
 
@@ -348,6 +350,7 @@ namespace Snowlight.Game.Items
             mSoundManagerId = SoundManagerId;
             mSoundManagerOrder = SoundManagerOrder;
             mExpireTimestamp = ExpireTimestamp;
+
             mTimmerRunning = false;
 
             if (WiredManager != null && (mCachedDefinition.Behavior == ItemBehavior.WiredCondition || mCachedDefinition.Behavior == ItemBehavior.WiredTrigger || mCachedDefinition.Behavior == ItemBehavior.WiredEffect))
@@ -463,6 +466,13 @@ namespace Snowlight.Game.Items
                 MySqlClient.SetParameter("soundmgrorder", mSoundManagerOrder);
                 MySqlClient.ExecuteNonQuery("UPDATE items SET user_id = @userid, room_id = @roomid, room_pos = @roompos, room_wall_pos = @roomwallpos, room_rot = @roomrot, flags = @flags, flags_display = @flagsd, soundmanager_id = @soundmgrid, soundmanager_order = @soundmgrorder WHERE id = @id LIMIT 1");
             }
+        }
+
+        public void UpdateRoomRotation(RoomInstance Instance, int Rotation)
+        {
+            mRoomRot = Rotation;
+
+            Instance.BroadcastMessage(RoomItemUpdatedComposer.Compose(this));
         }
 
         public void BroadcastStateUpdate(RoomInstance Instance)

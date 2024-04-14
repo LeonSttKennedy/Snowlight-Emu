@@ -23,11 +23,6 @@ namespace Snowlight.Game.Catalog
             return Convert.ToInt32(Math.Ceiling(Double * ServerSettings.MarketplaceTax));
         }
 
-        public static bool CanSellItem(Item UserItem)
-        {
-            return UserItem.CanTrade && UserItem.CanSell;
-        }
-
         public static double FormatTimestamp()
         {
             return UnixTimestamp.GetCurrent() - (ServerSettings.MarketplaceOfferTotalHours * 60 * 60);
@@ -118,7 +113,7 @@ namespace Snowlight.Game.Catalog
                 return;
             }
 
-            if (Offer.UserId == Session.CharacterInfo.Id)
+            if (ServerSettings.MarketplaceBoostProtectionEnabled && Offer.UserId == Session.CharacterInfo.Id)
             {
                 Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("catalog_marketplace_boosting_error")));
                 return;
@@ -190,49 +185,60 @@ namespace Snowlight.Game.Catalog
 
         public static void SellItem(Session Session, uint ItemID, int ItemType, int SellingPrice)
         {
-            bool SellOK = false;
+            MarketplaceSellOk ErrorCode = MarketplaceSellOk.TechinicalError;
 
-            Item UserItem = Session.InventoryCache.GetItem(ItemID);
-            if (UserItem == null || SellingPrice > ServerSettings.MarketplaceMaxPrice || !CanSellItem(UserItem))
+            if (ServerSettings.MarketplaceEnabled)
             {
-                SellOK = false;
-            }
-            else
-            {
-                int Comission = CalculateComissionPrice(SellingPrice);
-                int TotalPrice = Comission + SellingPrice;
-
-                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                Item UserItem = Session.InventoryCache.GetItem(ItemID);
+                if (UserItem == null || SellingPrice > ServerSettings.MarketplaceMaxPrice || !UserItem.CanSell)
                 {
-                    MySqlClient.SetParameter("def_id", UserItem.DefinitionId);
-                    MySqlClient.SetParameter("user_id", Session.CharacterInfo.Id);
-                    MySqlClient.SetParameter("price", SellingPrice);
-                    MySqlClient.SetParameter("total_price", TotalPrice);
-                    MySqlClient.SetParameter("public_name", UserItem.Definition.Name);
-                    MySqlClient.SetParameter("sprite_id", UserItem.Definition.SpriteId);
-                    MySqlClient.SetParameter("item_type", ItemType);
-                    MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
-                    MySqlClient.SetParameter("extra_data", UserItem.Flags);
-                    string RawId = MySqlClient.ExecuteScalar("INSERT INTO catalog_marketplace_offers (item_id, user_id, asking_price, total_price, public_name, sprite_id, item_type, timestamp, extra_data) VALUES (@def_id, @user_id, @price, @total_price, @public_name, @sprite_id, @item_type, @timestamp, @extra_data); SELECT LAST_INSERT_ID();").ToString();
+                    ErrorCode = MarketplaceSellOk.TechinicalError;
+                }
+                else
+                {
+                    int Comission = CalculateComissionPrice(SellingPrice);
+                    int TotalPrice = Comission + SellingPrice;
 
-                    uint.TryParse(RawId, out uint Id);
-                    if (Id > 0)
+                    using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                     {
-                        SellOK = true;
-                        UserItem.RemovePermanently(MySqlClient);
-                        Session.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, -1);
-                        Session.InventoryCache.RemoveItem(ItemID);
-                        Session.SendData(InventoryRefreshComposer.Compose());
+                        MySqlClient.SetParameter("def_id", UserItem.DefinitionId);
+                        MySqlClient.SetParameter("user_id", Session.CharacterInfo.Id);
+                        MySqlClient.SetParameter("price", SellingPrice);
+                        MySqlClient.SetParameter("total_price", TotalPrice);
+                        MySqlClient.SetParameter("public_name", UserItem.Definition.Name);
+                        MySqlClient.SetParameter("sprite_id", UserItem.Definition.SpriteId);
+                        MySqlClient.SetParameter("item_type", ItemType);
+                        MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
+                        MySqlClient.SetParameter("extra_data", UserItem.Flags);
+                        string RawId = MySqlClient.ExecuteScalar("INSERT INTO catalog_marketplace_offers (item_id, user_id, asking_price, total_price, public_name, sprite_id, item_type, timestamp, extra_data) VALUES (@def_id, @user_id, @price, @total_price, @public_name, @sprite_id, @item_type, @timestamp, @extra_data); SELECT LAST_INSERT_ID();").ToString();
 
-                        MarketplaceFiltersCache UserCache = Session.MarketplaceFiltersCache;
-                        SerializeOffers(Session, UserCache.MinPrice, UserCache.MaxPrice, UserCache.SearchQuery, UserCache.FilterMode);
+                        uint.TryParse(RawId, out uint Id);
+                        if (Id > 0)
+                        {
+                            ErrorCode = MarketplaceSellOk.SellOK;
+                            UserItem.RemovePermanently(MySqlClient);
+                            Session.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, -1);
+                            Session.InventoryCache.RemoveItem(ItemID);
+                            Session.SendData(InventoryRefreshComposer.Compose());
 
-                        Session.SendData(CatalogMarketplaceSerializeOwnOffersComposer.Compose(Session.CharacterId));
+                            MarketplaceFiltersCache UserCache = Session.MarketplaceFiltersCache;
+                            SerializeOffers(Session, UserCache.MinPrice, UserCache.MaxPrice, UserCache.SearchQuery, UserCache.FilterMode);
+
+                            Session.SendData(CatalogMarketplaceSerializeOwnOffersComposer.Compose(Session.CharacterId));
+                        }
+                        else
+                        {
+                            ErrorCode = MarketplaceSellOk.TechinicalError;
+                        }
                     }
                 }
             }
+            else
+            {
+                ErrorCode = MarketplaceSellOk.MarketplaceDisabled;
+            }
 
-            Session.SendData(CatalogMarketplaceSellItemComposer.Compose(SellOK));
+            Session.SendData(CatalogMarketplaceSellItemComposer.Compose(ErrorCode));
         }
 
         public static void CancelOffer(Session Session, SqlDatabaseClient MySqlClient, uint OfferId)

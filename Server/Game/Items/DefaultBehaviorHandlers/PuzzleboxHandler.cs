@@ -77,7 +77,10 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                 double Z = Instance.GetUserStepHeight(NewPoint);
                                 Vector3 TargetVector3 = new Vector3(NewPoint.X, NewPoint.Y, Z);
 
-                                Instance.BroadcastMessage(RollerEventComposer.Compose(Item.RoomPosition, TargetVector3, 0, 0, Item.Id));
+                                Instance.BroadcastMessage(RollerEventComposer.Compose(Item.RoomPosition.GetVector2(), NewPoint, 0,
+                                    new List<RollerEvents>() { new RollerEvents(Item.RoomPosition.Z,
+                                    Instance.GetUserStepHeight(NewPoint), 0, Item.Id) } ));
+
                                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                                 {
                                     Item.MoveToRoom(MySqlClient, Item.RoomId, TargetVector3, Item.RoomRotation);

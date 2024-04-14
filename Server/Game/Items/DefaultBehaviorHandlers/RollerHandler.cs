@@ -1,20 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Rooms;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Specialized;
+using System.Collections.Generic;
+
 using Snowlight.Storage;
+using Snowlight.Game.Misc;
+using Snowlight.Game.Rooms;
+using Snowlight.Specialized;
+using Snowlight.Game.Sessions;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 {
     public static class RollerHandler
     {
         private static int mRollerTick = 4;
-        private static bool mCanRollerOut = false;
-        private static List<Item> mRollerOutItem = new List<Item>();
+        private static Dictionary<uint, int> mRollerTicks = new Dictionary<uint, int>();
+        private static Dictionary<uint, List<RollerEvents>> mRollerEvents = new Dictionary<uint, List<RollerEvents>>();
+        private static List<uint> mRollerItemsIds = new List<uint>();
 
         public static void Register()
         {
@@ -27,124 +30,163 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             {
                 case ItemEventType.UpdateTick:
 
-                    mRollerOutItem.Clear();
-
-                    if (mCanRollerOut)
+                    if (mRollerTicks[Instance.Info.Id] == 0)
                     {
-                        List<RoomActor> ActorsToMove = Instance.GetActorsOnPosition(Item.RoomPosition.GetVector2()).ToList();
-                        
-                        if (ActorsToMove.Count > 0)
-                        {
-                            foreach (RoomActor Actor in ActorsToMove)
-                            {
-                                if (Actor.IsMoving)
-                                {
-                                    continue;
-                                }
+                        mRollerTicks[Instance.Info.Id] = mRollerTick;
 
-                                if (Instance.IsValidStep(Actor.Position.GetVector2(), Item.SquareInFront, false))
+                        mRollerItemsIds.Clear();
+
+                        mRollerEvents.Clear();
+                        RollerEvents RollerEvent = null;
+
+                        List<Item> RoomRollers = Instance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.Roller).ToList();
+
+                        foreach (Item Roller in RoomRollers)
+                        {
+                            if(!mRollerEvents.ContainsKey(Roller.Id))
+                            {
+                                mRollerEvents[Roller.Id] = new List<RollerEvents>();
+                            }
+
+                            List<RoomActor> ActorsToMove = Instance.GetActorsOnPosition(Roller.RoomPosition.GetVector2()).ToList();
+
+                            if (ActorsToMove.Count > 0)
+                            {
+                                foreach (RoomActor Actor in ActorsToMove)
                                 {
-                                    Actor.PositionToSet = Item.SquareInFront;
-                                    Instance.BroadcastMessage(RollerEventComposer.Compose(Actor.Position, new Vector3(
-                                        Actor.PositionToSet.X, Actor.PositionToSet.Y,
-                                        Instance.GetUserStepHeight(Actor.PositionToSet)), Item.Id, Actor.Id, 0));
+                                    if (Actor.IsMoving)
+                                    {
+                                        continue;
+                                    }
+
+                                    if (Instance.IsValidStep(Actor.Position.GetVector2(), Roller.SquareInFront, false))
+                                    {
+                                        Actor.PositionToSet = Roller.SquareInFront;
+
+                                        RollerEvent = new RollerEvents(Actor.Position.Z, Instance.GetUserStepHeight(Actor.PositionToSet),
+                                            Actor.Id, 0, MovementType.Slide);
+
+                                        if (RollerEvent != null)
+                                        {
+                                            mRollerEvents[Roller.Id].Add(RollerEvent);
+
+                                            RollerEvent = null;
+                                        }
+                                    }
                                 }
                             }
-                        }
 
-                        List<Item> ItemsToMove = Instance.GetItemsOnPosition(Item.RoomPosition.GetVector2()).ToList();
-                        List<Item> ItemsOnNextTile = Instance.GetItemsOnPosition(Item.SquareInFront).ToList();
+                            List<Item> ItemsToMove = Instance.GetItemsOnPosition(Roller.RoomPosition.GetVector2()).OrderBy(O => O.RoomPosition.Z).ToList();
+                            List<Item> ItemsOnNextTile = Instance.GetItemsOnPosition(Roller.SquareInFront).ToList();
 
-                        if (ItemsToMove.Count > 0)
-                        {
-                            double NextZ = 0.0;
-                            bool NextRollerIsClear = true;
-
-                            bool NextPositionIsRoller = ItemsOnNextTile.Where(O => O.Definition.Behavior.Equals(ItemBehavior.Roller)).ToList().Count > 0;
-                            bool NextRoller = false;
-
-                            foreach (Item Items in ItemsOnNextTile)
+                            if (ItemsToMove.Count > 0)
                             {
-                                if (Items.Definition.Behavior.Equals(ItemBehavior.Roller))
-                                {
-                                    if (Items.ActiveHeight > NextZ)
-                                    {
-                                        NextZ = Items.ActiveHeight;
+                                double NextZ = 0.0;
+                                bool NextRollerIsClear = true;
 
+                                bool NextPositionIsRoller = ItemsOnNextTile.Where(O => O.Definition.Behavior.Equals(ItemBehavior.Roller)).ToList().Count > 0;
+                                bool NextRoller = false;
+
+                                foreach (Item Items in ItemsOnNextTile)
+                                {
+                                    if (Items.Definition.Behavior.Equals(ItemBehavior.Roller))
+                                    {
                                         NextRoller = true;
                                     }
                                 }
-                            }
 
-                            if (NextRoller)
-                            {
-                                foreach (Item Items in ItemsOnNextTile)
+                                if (NextRoller)
                                 {
-                                    if (Items.ActiveHeight > NextZ)
+                                    foreach (Item Items in ItemsOnNextTile)
                                     {
-                                        NextZ = Items.ActiveHeight;
+                                        if (Instance.GetUserStepHeight(Items.RoomPosition.GetVector2()) > Roller.ActiveHeight)
+                                        {
+                                            NextRollerIsClear = false;
+                                        }
+                                    }
+                                }
 
-                                        NextRollerIsClear = false;
+                                foreach (Item MoveItem in ItemsToMove)
+                                {
+                                    if (MoveItem == null || MoveItem == Roller || 
+                                        MoveItem.Definition.Behavior == ItemBehavior.Roller)
+                                    {
+                                        continue;
+                                    }
+
+                                    if (Roller.RoomPosition.Z < MoveItem.RoomPosition.Z
+                                        && NextRollerIsClear
+                                        && !mRollerItemsIds.Contains(MoveItem.Id)
+                                        && Instance.IsValidPosition(Roller.SquareInFront)
+                                        && Instance.GetActorsOnPosition(Roller.SquareInFront).Count == 0)
+                                    {
+                                        mRollerItemsIds.Add(MoveItem.Id);
+
+                                        if (!NextPositionIsRoller)
+                                        {
+                                            NextZ -= Roller.ActiveHeight;
+                                        }
+                                        else
+                                        {
+                                            NextZ = MoveItem.RoomPosition.Z;
+                                        }
+
+                                        Vector3 TargetVector3 = new Vector3(Roller.SquareInFront.X, Roller.SquareInFront.Y, NextZ);
+
+                                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                        {
+                                            MoveItem.MoveToRoom(MySqlClient, MoveItem.RoomId, TargetVector3, MoveItem.RoomRotation);
+                                        }
+
+                                        RollerEvent = new RollerEvents(MoveItem.RoomPosition.Z, NextZ, 0, MoveItem.Id);
+                                        if (mRollerEvents != null)
+                                        {
+                                            mRollerEvents[Roller.Id].Add(RollerEvent);
+
+                                            RollerEvent = null;
+                                        }
                                     }
                                 }
                             }
 
-                            foreach (Item MoveItem in ItemsToMove)
+                            if (mRollerEvents[Roller.Id].Count > 0)
                             {
-                                if (MoveItem.Definition.Behavior == ItemBehavior.Roller ||
-                                    MoveItem == Item || MoveItem == null)
-                                {
-                                    continue;
-                                }
-
-                                if (!mRollerOutItem.Contains(MoveItem) && Instance.IsValidPosition(Item.SquareInFront)
-                                    && Item.RoomPosition.Z < MoveItem.RoomPosition.Z && Instance.GetActorsOnPosition(Item.SquareInFront).Count == 0)
-                                {
-                                    
-                                    if(!NextPositionIsRoller)
-                                    {
-                                        NextZ = MoveItem.RoomPosition.Z - Item.ActiveHeight;
-                                    }
-                                    else
-                                    {
-                                        NextZ = MoveItem.RoomPosition.Z;
-                                    }
-
-                                    Vector3 TargetVector3 = new Vector3(Item.SquareInFront.X, Item.SquareInFront.Y, NextZ);
-
-                                    Instance.BroadcastMessage(RollerEventComposer.Compose(MoveItem.RoomPosition, TargetVector3, 0, 0, MoveItem.Id));
-
-                                    using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                                    {
-                                        MoveItem.MoveToRoom(MySqlClient, MoveItem.RoomId, TargetVector3, MoveItem.RoomRotation);
-                                    }
-
-                                    Instance.RegenerateRelativeHeightmap(true);
-
-                                    mRollerOutItem.Add(MoveItem);
-                                }
+                                Instance.RegenerateRelativeHeightmap(true);
+                                Instance.BroadcastMessage(RollerEventComposer.Compose(Roller.RoomPosition.GetVector2(), Roller.SquareInFront, Roller.Id, mRollerEvents[Roller.Id]));
                             }
                         }
-
-                        mRollerTick = 4;
-                        mCanRollerOut = false;
                     }
                     else
                     {
-                        mRollerTick--;
-
-                        if(mRollerTick == 0)
-                        {
-                            mCanRollerOut = true;
-                        }
+                        mRollerTicks[Instance.Info.Id]--;
                     }
 
-                    goto case ItemEventType.InstanceLoaded;
+                    Item.RequestUpdate(4);
+                    break;
 
                 case ItemEventType.InstanceLoaded:
                 case ItemEventType.Placed:
 
-                    Item.RequestUpdate(2);
+                    if (!mRollerTicks.ContainsKey(Instance.Info.Id))
+                    {
+                        mRollerTicks.Add(Instance.Info.Id, mRollerTick);
+                    }
+
+                    Item.RequestUpdate(0);
+                    break;
+
+                case ItemEventType.Removing:
+
+                    List<Item> RemaingRollers = Instance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.Roller).ToList();
+
+                    if(RemaingRollers.Count == 0)
+                    {
+                        if (mRollerTicks.ContainsKey(Instance.Info.Id))
+                        {
+                            mRollerTicks.Remove(Instance.Info.Id);
+                        }
+                    }
+
                     break;
             }
 

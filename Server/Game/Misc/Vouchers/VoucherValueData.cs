@@ -10,6 +10,7 @@ namespace Snowlight.Game.Misc
         private int mValueActivityPoints;
         private SeasonalCurrencyList mSeasonalCurrency;
         private List<uint> mValueFurni;
+        private bool mCanReedemInCatalog;
 
         public int ValueCredits
         {
@@ -41,12 +42,22 @@ namespace Snowlight.Game.Misc
             }
         }
 
-        public VoucherValueData(int ValueCredits, int ValueActivityPoints, SeasonalCurrencyList SeasonalCurrency, List<uint> ValueFurni)
+        public bool CanReedemInCatalog
+        {
+            get
+            {
+                return mCanReedemInCatalog;
+            }
+        }
+
+        public VoucherValueData(int ValueCredits, int ValueActivityPoints, SeasonalCurrencyList SeasonalCurrency, List<uint> ValueFurni, bool CanReedemInCatalog)
         {
             mValueCredits = ValueCredits;
             mValueActivityPoints = ValueActivityPoints;
             mSeasonalCurrency = SeasonalCurrency;
             mValueFurni = ValueFurni;
+            mCanReedemInCatalog = CanReedemInCatalog;
+
         }
     }
 }

@@ -20,8 +20,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             {
                 case ItemEventType.Interact:
 
-                    int ItemValue = 0;
-                    int.TryParse(Item.Flags, out ItemValue);
+                    int.TryParse(Item.Flags, out int ItemValue);
 
                     using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                     {

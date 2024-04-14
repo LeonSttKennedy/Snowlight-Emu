@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Snowlight.Game.Items
+namespace Snowlight.Game.Misc
 {
     public enum TotemType
     {

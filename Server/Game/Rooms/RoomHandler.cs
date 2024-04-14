@@ -1038,6 +1038,17 @@ namespace Snowlight.Game.Rooms
                 AccessType = RoomAccessType.Open;
             }
 
+            FlatCategory SelectedCategory = Navigator.GetCategory((uint)CategoryId);
+            if(SelectedCategory.RequiredRight.Length > 0 && !Session.HasRight(SelectedCategory.RequiredRight))
+            {
+                FlatCategory DefaultCategory = Navigator.GetDefaultCategory();
+
+                CategoryId = DefaultCategory.Id;
+                
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("selected_category_min_rank", new string[] { SelectedCategory.Title,
+                    DefaultCategory.Title })));
+            }
+
             Instance.Info.EditRoom(Name, Description, AccessType, Password, UserLimit, CategoryId, Tags, AllowPets,
                 AllowPetEating, AllowBlocking, HideWalls, WallThickness, FloorThickness);
 
@@ -1150,18 +1161,41 @@ namespace Snowlight.Game.Rooms
         {
             RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
 
-            if (Instance == null || !Instance.CheckUserRights(Session, true))
+            if (Instance == null)
             {
                 return;
             }
 
-            int ErrorCode = 0;
+            RoomCanCreateEventError ErrorCode = RoomCanCreateEventError.CanCreate;
 
-            // 6 = Event feature is disabled
-            
+            if(!Session.InRoom)
+            {
+                ErrorCode = RoomCanCreateEventError.NeedToBeInaRoom;
+            }
+
+            if(!Instance.CheckUserRights(Session, true))
+            {
+                ErrorCode = RoomCanCreateEventError.OnlyRoomOwner;
+            }
+
             if (Instance.Info.AccessType != RoomAccessType.Open)
             {
-                ErrorCode = 3;
+                ErrorCode = RoomCanCreateEventError.DoorLocked;
+            }
+
+            if(!ServerSettings.RoomEventsEnabled)
+            {
+                ErrorCode = RoomCanCreateEventError.EventsAreDisabled;
+            }
+
+            if (Instance.HasOngoingEvent)
+            {
+                ErrorCode = RoomCanCreateEventError.AlreadyCreated;
+            }
+
+            if(Navigator.UserHasRoomWithEvent(Instance.Info.OwnerId) > 0)
+            {
+                ErrorCode = RoomCanCreateEventError.AlreadyCreatedInAnotherRoom;
             }
 
             Session.SendData(RoomCanCreateEventComposer.Compose(ErrorCode));
@@ -1318,7 +1352,8 @@ namespace Snowlight.Game.Rooms
             }
 
             Instance.DeleteRoom(Session);
-            Navigator.GetUserRooms(Session, null);
+
+            Navigator.GetUserRooms(Session, true);
         }
 
         private static void IgnoreUser(Session Session, ClientMessage Message)

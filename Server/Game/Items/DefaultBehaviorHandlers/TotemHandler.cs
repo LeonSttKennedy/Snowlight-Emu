@@ -1,20 +1,20 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Rooms;
-using Snowlight.Specialized;
 using Snowlight.Storage;
 using Snowlight.Game.Misc;
-using Snowlight.Communication.Outgoing;
-using System.Linq;
+using Snowlight.Game.Rooms;
+using Snowlight.Specialized;
+using Snowlight.Game.Sessions;
 using Snowlight.Game.AvatarEffects;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 {
     public static class TotemHandler
     {
-        private static double mLastUserInteraction = 0;
+        private static Dictionary<uint, double> mLastUserInteraction = new Dictionary<uint, double>();
 
         public static void Register()
         {
@@ -143,6 +143,11 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     if (CurrentItemState != NewItemState)
                     {
+                        if(TotemLegItem != null && Item.RoomRotation != TotemLegItem.RoomRotation)
+                        {
+                            Item.UpdateRoomRotation(Instance, TotemLegItem.RoomRotation);
+                        }
+
                         Item.Flags = NewItemState.ToString();
                         Item.DisplayFlags = Item.Flags;
 
@@ -152,6 +157,11 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         Instance.RegenerateRelativeHeightmap(true);
                     }
 
+                    goto case ItemEventType.InstanceLoaded;
+
+                case ItemEventType.InstanceLoaded:
+
+                    Item.RequestUpdate(1);
                     break;
             }
 
@@ -162,9 +172,32 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
         {
             switch (Event)
             {
+                case ItemEventType.InstanceLoaded:
+
+                    if (!mLastUserInteraction.ContainsKey(Item.Id))
+                    {
+                        mLastUserInteraction.Add(Item.Id, 0);
+                    }
+
+                    break;
+
                 case ItemEventType.Placed:
 
-                    mLastUserInteraction = 0;
+                    if(mLastUserInteraction.ContainsKey(Item.Id))
+                    {
+                        mLastUserInteraction.Remove(Item.Id);
+                    }
+
+                    mLastUserInteraction.Add(Item.Id , 0);
+
+                    break;
+
+                case ItemEventType.Removing:
+
+                    if (mLastUserInteraction.ContainsKey(Item.Id))
+                    {
+                        mLastUserInteraction.Remove(Item.Id);
+                    }
 
                     break;
 
@@ -226,7 +259,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     }
                     else
                     {
-                        DateTime LastInteraction = UnixTimestamp.GetDateTimeFromUnixTimestamp(mLastUserInteraction);
+                        DateTime LastInteraction = UnixTimestamp.GetDateTimeFromUnixTimestamp(mLastUserInteraction[Item.Id]);
                         bool CanGiveEffect = DateTime.Compare(LastInteraction.AddDays(1), DateTime.Now) <= 0;
 
                         TotemType Leg = TotemUtil.GetLegTypeFromInt(int.Parse(TotemLeg.Flags));
@@ -263,7 +296,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                 Session.SendData(UserEffectAddedComposer.Compose(Effect));
                             }
 
-                            mLastUserInteraction = UnixTimestamp.GetCurrent();
+                            mLastUserInteraction[Item.Id] = UnixTimestamp.GetCurrent();
                         }
                     }
 

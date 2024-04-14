@@ -70,7 +70,7 @@ namespace Snowlight.Game.Rooms
 
             double Height = mStackHeight[Position.X, Position.Y];
 
-            if (Effect.InteractionHeight >= 0)
+            if (Effect != null && Effect.InteractionHeight >= 0)
             {
                 Height -= mStackTopItemHeight[Position.X, Position.Y];
             }
@@ -158,7 +158,7 @@ namespace Snowlight.Game.Rooms
                         continue;
                     }
 
-                    double TotalItemStackHeight = Item.RoomPosition.Z + Math.Round(Item.ActiveHeight, 1);
+                    double TotalItemStackHeight = Item.RoomPosition.Z + Item.ActiveHeight;
                     List<Vector2> AffectedTiles = CalculateAffectedTiles(Item, Item.RoomPosition.GetVector2(), Item.RoomRotation);
 
                     RoomTileEffect Effect = new RoomTileEffect();
@@ -244,7 +244,7 @@ namespace Snowlight.Game.Rooms
                 foreach (StaticObject Object in mStaticObjects)
                 {
                     double TotalItemStackHeightOld = mCachedModel.Heightmap.FloorHeight[Object.Position.X, Object.Position.Y] + Object.Height;
-                    double TotalItemStackHeight = Object.Position.Z + Math.Round(Object.Height, 1);
+                    double TotalItemStackHeight = Object.Position.Z + Object.Height;
 
                     List<Vector2> AffectedTiles = CalculateAffectedTiles(Object, Object.Position.GetVector2(), Object.Rotation);
                     UserMovementNode MovimentNode = UserMovementNode.Blocked;
@@ -265,6 +265,7 @@ namespace Snowlight.Game.Rooms
                             mStackHeight[Tile.X, Tile.Y] = TotalItemStackHeight;
                             mStackTopItemHeight[Tile.X, Tile.Y] = Object.Height;
                             mUserMovementNodes[Tile.X, Tile.Y] = MovimentNode;
+                            mFurniMap[Tile.X, Tile.Y] = Object.Id;
 
                             if (Object.IsSeat)
                             {

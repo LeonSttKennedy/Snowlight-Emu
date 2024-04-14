@@ -45,7 +45,7 @@ namespace Snowlight.Communication
             }
         }
 
-        public ClientMessage(uint MessageId, byte[] Body)
+        public ClientMessage(uint MessageId, byte[] Body = null)
         {
             if (Body == null)
             {

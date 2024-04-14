@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
+using System.Timers;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
+
+using Snowlight.Util;
 using Snowlight.Storage;
+using Snowlight.Game.Bots;
+using Snowlight.Game.Misc;
+using Snowlight.Game.Rooms;
+using Snowlight.Specialized;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Communication.Incoming;
-using Snowlight.Game.Rooms;
-using Snowlight.Specialized;
-using System.Collections.ObjectModel;
-using Snowlight.Util;
 using Snowlight.Communication.Outgoing;
-using System.Text.RegularExpressions;
-using System.Timers;
-using System.Data;
-using Snowlight.Game.Bots;
 
 namespace Snowlight.Game.Items.Wired
 {
@@ -820,7 +822,8 @@ namespace Snowlight.Game.Items.Wired
 
                                         mInstance.RegenerateRelativeHeightmap();
                                         mInstance.BroadcastMessage(RoomItemUpdatedComposer.Compose(Move));
-                                        mInstance.BroadcastMessage(RollerEventComposer.Compose(FinalizedOld, FinalizedPosition, Item.Id, 0, Move.Id));
+                                        mInstance.BroadcastMessage(RollerEventComposer.Compose(FinalizedOld.GetVector2(), FinalizedPosition.GetVector2(),
+                                            Item.Id, new List<RollerEvents>() { new RollerEvents(FinalizedOld.Z, FinalizedPosition.Z, 0, Move.Id) }));
                                         ItemEventDispatcher.InvokeItemEventHandler(null, Move, mInstance, ItemEventType.Moved, IsRotationOnly ? 1 : 0);
                                     }
                                 }

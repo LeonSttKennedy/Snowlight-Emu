@@ -48,7 +48,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     RoomManager.MarkWriteback(Item, true);
 
                     Item.BroadcastStateUpdate(Instance);
-                    Instance.RegenerateRelativeHeightmap();
+                    Instance.RegenerateRelativeHeightmap(true);
                     break;
             }
 

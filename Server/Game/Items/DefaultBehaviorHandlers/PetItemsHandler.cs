@@ -194,9 +194,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
         }
         private static bool HandleToySwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
-            string status = Item.Definition.Behavior.Equals(ItemBehavior.FrogPond) ? "dip" :
-                (Item.Definition.Behavior.Equals(ItemBehavior.MonkeyPond) ? "swm" : "pla");
-
             switch (Event)
             {
                 case ItemEventType.InstanceLoaded:
@@ -215,7 +212,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                 case ItemEventType.UpdateTick:
 
-                    List<RoomActor> Actors = Instance.GetActorsOnPosition(Item.RoomPosition.GetVector2()).Where(O => O.UserStatusses.ContainsKey(status)).ToList();
+                    List<RoomActor> Actors = Instance.GetActorsOnPosition(Item.RoomPosition.GetVector2()).Where(O => O.UserStatusses.ContainsKey(Item.Definition.PetStatusses)).ToList();
 
                     string Flags;
 
@@ -295,6 +292,11 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         }
                     }
 
+                    goto case ItemEventType.InstanceLoaded;
+
+                case ItemEventType.InstanceLoaded:
+
+                    Item.RequestUpdate(1);
                     break;
             }
 

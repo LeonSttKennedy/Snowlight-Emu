@@ -33,7 +33,7 @@ namespace Snowlight.Game.Misc
         {
             if (Params.Length < 4)
             {
-                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_invalid_syntax") + " - :massgive <method: room or all> <type: coins/credits, pixels, snowflakes, hearts, giftpoints or shells> <quantity>"));
+                Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_invalid_syntax") + " - :massgive <method: room or all> <type: coins/credits, pixels, snowflake, hearts, giftpoints, shells, diamonds, clubgiftpoints or marketplacetokens> <quantity>"));
                 return;
             }
 
@@ -427,6 +427,116 @@ namespace Snowlight.Game.Misc
                                                     {
                                                         TargetSession.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, SeasonalCurrencyList.Diamonds, Amount);
                                                         TargetSession.SendData(UserActivityPointsBalanceComposer.Compose(TargetSession.CharacterInfo.ActivityPoints));
+                                                        TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
+                                                    }
+                                                }
+                                            }
+                                            goto End;
+                                        }
+
+                                    default:
+                                        {
+                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_method_error", Type), 0, ChatType.Whisper));
+                                            return;
+                                        }
+                                }
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
+                    case "clubgiftpoints":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                switch (Type.ToLower())
+                                {
+                                    case "room":
+                                        {
+                                            foreach (RoomActor RoomActors in Instance.Actors)
+                                            {
+                                                if (!RoomActors.IsBot)
+                                                {
+                                                    Session TargetSession = SessionManager.GetSessionByCharacterId(RoomActors.ReferenceId);
+
+                                                    if (TargetSession.CharacterId != Session.CharacterId)
+                                                    {
+                                                        TargetSession.SubscriptionManager.GiveGiftPoints(Amount);
+                                                        TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                                    }
+                                                }
+                                            }
+                                            goto End;
+                                        }
+
+                                    case "all":
+                                        {
+                                            Dictionary<uint, Session> Sessions = SessionManager.Sessions;
+                                            foreach (Session TargetSession in Sessions.Values)
+                                            {
+                                                if (TargetSession.Authenticated && !TargetSession.Stopped)
+                                                {
+                                                    if (TargetSession.CharacterId != Session.CharacterId)
+                                                    {
+                                                        TargetSession.SubscriptionManager.GiveGiftPoints(Amount);
+                                                        TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
+                                                    }
+                                                }
+                                            }
+                                            goto End;
+                                        }
+
+                                    default:
+                                        {
+                                            Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_method_error", Type), 0, ChatType.Whisper));
+                                            return;
+                                        }
+                                }
+                            }
+                            else
+                            {
+                                Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_give_quantity_error"), 0, ChatType.Whisper));
+                                return;
+                            }
+                        }
+
+                    case "marketplacetokens":
+                        {
+                            if (int.TryParse(Params[3], out Amount))
+                            {
+                                switch (Type.ToLower())
+                                {
+                                    case "room":
+                                        {
+                                            foreach (RoomActor RoomActors in Instance.Actors)
+                                            {
+                                                if (!RoomActors.IsBot)
+                                                {
+                                                    Session TargetSession = SessionManager.GetSessionByCharacterId(RoomActors.ReferenceId);
+
+                                                    if (TargetSession.CharacterId != Session.CharacterId)
+                                                    {
+                                                        TargetSession.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, Amount);
+                                                        TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Type }) + "\r\n- " + Session.CharacterInfo.Username));
+                                                    }
+                                                }
+                                            }
+                                            goto End;
+                                        }
+
+                                    case "all":
+                                        {
+                                            Dictionary<uint, Session> Sessions = SessionManager.Sessions;
+                                            foreach (Session TargetSession in Sessions.Values)
+                                            {
+                                                if (TargetSession.Authenticated && !TargetSession.Stopped)
+                                                {
+                                                    if (TargetSession.CharacterId != Session.CharacterId)
+                                                    {
+                                                        TargetSession.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, Amount);
                                                         TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_give_targetuser_success", new string[] { Amount.ToString(), Currency }) + "\r\n- " + Session.CharacterInfo.Username));
                                                     }
                                                 }

@@ -24,28 +24,28 @@ namespace Snowlight.Game.Items
 
             foreach (DataRow Row in Table.Rows)
             {
-                ItemStackingBehavior Behavior = ItemStackingBehavior.Normal;
+                ItemStackingBehavior StackingBehavior = ItemStackingBehavior.Normal;
 
                 switch (Row["stacking_behavior"].ToString().ToLower())
                 {
                     case "terminator":
 
-                        Behavior = ItemStackingBehavior.Terminator;
+                        StackingBehavior = ItemStackingBehavior.Terminator;
                         break;
 
                     case "initiator":
 
-                        Behavior = ItemStackingBehavior.Initiator;
+                        StackingBehavior = ItemStackingBehavior.Initiator;
                         break;
 
                     case "ignore":
 
-                        Behavior = ItemStackingBehavior.Ignore;
+                        StackingBehavior = ItemStackingBehavior.Ignore;
                         break;
 
                     case "disable":
 
-                        Behavior = ItemStackingBehavior.InitiateAndTerminate;
+                        StackingBehavior = ItemStackingBehavior.InitiateAndTerminate;
                         break;
                 }
 
@@ -64,13 +64,25 @@ namespace Snowlight.Game.Items
                         break;
                 }
 
-                mDefinitions.Add((uint)Row["id"], new ItemDefinition((uint)Row["id"], (uint)Row["sprite_id"],
+                string Behavior = Row["behavior"].ToString();
+
+                ItemDefinition Definition = new ItemDefinition((uint)Row["id"], (uint)Row["sprite_id"],
                     (string)Row["name"], (string)Row["public_name"], GetTypeFromString(Row["type"].ToString()),
-                    ItemBehaviorUtil.FromString((Row["behavior"].ToString())), (int)Row["behavior_data"], Behavior, 
+                    ItemBehaviorUtil.FromString(Behavior), (int)Row["behavior_data"], StackingBehavior,
                     WMode, (int)Row["room_limit"], (int)Row["size_x"], (int)Row["size_y"], (float)Row["height"],
-                    (string)Row["height_adjustable"],(Row["allow_recycling"].ToString() == "1"),
+                    (string)Row["height_adjustable"], (Row["allow_recycling"].ToString() == "1"),
                     (Row["allow_trading"].ToString() == "1"), (Row["allow_selling"].ToString() == "1"),
-                    (Row["allow_gifting"].ToString() == "1"), (Row["allow_inventory_stacking"].ToString() == "1")));
+                    (Row["allow_gifting"].ToString() == "1"), (Row["allow_inventory_stacking"].ToString() == "1"));
+
+                mDefinitions.Add((uint)Row["id"], Definition);
+
+                MySqlClient.SetParameter("itembehavior", Behavior);
+                DataRow PetStatusRow = MySqlClient.ExecuteQueryRow("SELECT * FROM pet_interactions WHERE behavior = @itembehavior LIMIT 1");
+
+                if(PetStatusRow != null)
+                {
+                    Definition.SetPetStatussesInteraction(PetStatusRow["trick"].ToString());
+                }
 
                 Count++;             
             }
@@ -150,7 +162,7 @@ namespace Snowlight.Game.Items
 
         public static ItemDefinition GetDefinitionByName(string Name)
         {
-            return mDefinitions.Values.Where(Def => Def.Name.Equals(Name)).ToList().FirstOrDefault(); ;
+            return mDefinitions.Values.Where(Def => Def.Name.Equals(Name)).ToList().FirstOrDefault();
         }
     }
 }

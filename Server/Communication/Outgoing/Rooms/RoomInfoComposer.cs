@@ -3,6 +3,7 @@
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
 using System.Collections.Generic;
+using Snowlight.Game.Navigation;
 
 namespace Snowlight.Communication.Outgoing
 {
@@ -43,9 +44,9 @@ namespace Snowlight.Communication.Outgoing
             }
 
             Message.AppendBoolean(Info.AllowPets);
-            Message.AppendBoolean(true); // Always
-            Message.AppendBoolean(CheckEntry); // stuff
-            Message.AppendBoolean(false); // Always
+            Message.AppendBoolean(true); // Something to do with room ad
+            Message.AppendBoolean(CheckEntry); // Room forward
+            Message.AppendBoolean(Navigator.StaffPickedContainsRoom(Info.Id)); // Staff Pick
             return Message;
         }
     }

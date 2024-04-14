@@ -98,27 +98,48 @@ namespace Snowlight.Game.Misc
 
                 string UserText = ExternalTexts.GetValue("command_userinfo_information",
                     new string[] { Username, Info.Id.ToString(), Info.HasLinkedSession.ToString(),
-                    Info.Motto, Info.Gender.ToString(), Info.CreditsBalance.ToString(),
-                    string.Join("\n", ActivityPoints), Info.IsMuted.ToString(),
+                    Info.Motto, Info.Gender.ToString(), Info.CreditsBalance.ToString(), string.Join("\n", ActivityPoints),
+                    Info.MarketplaceTokens.ToString(), Info.GetClubGiftsCount().ToString(), Info.IsMuted.ToString(),
                     Info.GetRoomCount().ToString()});
-                
+
                 string RoomText = string.Empty;
 
                 if (Info.HasLinkedSession)
                 {
                     Session TargetSession = SessionManager.GetSessionByCharacterId(CharacterResolverCache.GetUidFromName(Username));
+
                     if (TargetSession.CurrentRoomId != 0)
                     {
                         RoomInfo RoomInfo = RoomInfoLoader.GetRoomInfo(TargetSession.CurrentRoomId, true);
 
+                        string RoomAccess = string.Empty;
+                        switch (RoomInfo.AccessType)
+                        {
+                            default:
+                            case RoomAccessType.Open:
+
+                                RoomAccess = "Open";
+                                break;
+
+                            case RoomAccessType.Locked:
+
+                                RoomAccess = "Doorbell";
+                                break;
+
+                            case RoomAccessType.PasswordProtected:
+
+                                RoomAccess = "Password";
+                                break;
+                        }
+
                         RoomText = ExternalTexts.GetValue("command_userinfo_roominformation",
-                            new string[] { RoomInfo.Id.ToString(), RoomInfo.Name, 
+                            new string[] { RoomInfo.Id.ToString(), RoomInfo.Name,
                                 (RoomInfo.Type == RoomType.Public ? ExternalTexts.GetValue("command_userinfo_roominformation_publicroom") : RoomInfo.OwnerName),
-                                RoomInfo.CurrentUsers.ToString(), RoomInfo.MaxUsers.ToString() });
+                                RoomInfo.CurrentUsers.ToString(), RoomInfo.MaxUsers.ToString(), RoomAccess });
                     }
                 }
 
-                Session.SendData(NotificationMessageComposer.Compose(UserText + RoomText));
+                Session.SendData(MessageOfTheDayComposer.Compose(UserText + RoomText));
             }
         }
     }
