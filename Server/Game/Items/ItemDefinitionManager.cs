@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using Snowlight.Storage;
 using Snowlight.Util;
+using Snowlight.Utils;
 
 namespace Snowlight.Game.Items
 {
@@ -24,6 +25,8 @@ namespace Snowlight.Game.Items
 
             foreach (DataRow Row in Table.Rows)
             {
+                uint DefinitionId = (uint)Row["id"];
+
                 ItemStackingBehavior StackingBehavior = ItemStackingBehavior.Normal;
 
                 switch (Row["stacking_behavior"].ToString().ToLower())
@@ -66,7 +69,7 @@ namespace Snowlight.Game.Items
 
                 string Behavior = Row["behavior"].ToString();
 
-                ItemDefinition Definition = new ItemDefinition((uint)Row["id"], (uint)Row["sprite_id"],
+                ItemDefinition Definition = new ItemDefinition(DefinitionId, (uint)Row["sprite_id"],
                     (string)Row["name"], (string)Row["public_name"], GetTypeFromString(Row["type"].ToString()),
                     ItemBehaviorUtil.FromString(Behavior), (int)Row["behavior_data"], StackingBehavior,
                     WMode, (int)Row["room_limit"], (int)Row["size_x"], (int)Row["size_y"], (float)Row["height"],
@@ -74,7 +77,7 @@ namespace Snowlight.Game.Items
                     (Row["allow_trading"].ToString() == "1"), (Row["allow_selling"].ToString() == "1"),
                     (Row["allow_gifting"].ToString() == "1"), (Row["allow_inventory_stacking"].ToString() == "1"));
 
-                mDefinitions.Add((uint)Row["id"], Definition);
+                mDefinitions.Add(DefinitionId, Definition);
 
                 MySqlClient.SetParameter("itembehavior", Behavior);
                 DataRow PetStatusRow = MySqlClient.ExecuteQueryRow("SELECT * FROM pet_interactions WHERE behavior = @itembehavior LIMIT 1");
@@ -82,6 +85,23 @@ namespace Snowlight.Game.Items
                 if(PetStatusRow != null)
                 {
                     Definition.SetPetStatussesInteraction(PetStatusRow["trick"].ToString());
+                }
+
+                MySqlClient.SetParameter("definitionid", DefinitionId);
+                DataRow PetTypeInteractorRow = MySqlClient.ExecuteQueryRow("SELECT * FROM pet_item_configs WHERE definition_id = @definitionid LIMIT 1");
+
+                if (PetTypeInteractorRow != null)
+                {
+                    List<int> PetTypes = new List<int>();
+
+                    string[] splitedTypes = PetTypeInteractorRow["pet_type_list"].ToString().Split('|');
+
+                    for (int i = 0; i < splitedTypes.Length; i++)
+                    {
+                        PetTypes.Add(int.Parse(splitedTypes[i]));
+                    }
+
+                    Definition.SetPetTypeInteractors(PetTypes);
                 }
 
                 Count++;             

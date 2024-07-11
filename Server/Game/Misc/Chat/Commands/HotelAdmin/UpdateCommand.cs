@@ -15,6 +15,7 @@ using Snowlight.Game.Navigation;
 using Snowlight.Game.Achievements;
 using Snowlight.Game.Advertisements;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Moderation;
 
 namespace Snowlight.Game.Misc
 {
@@ -183,6 +184,14 @@ namespace Snowlight.Game.Misc
                         {
                             ToSend = ExternalTexts.GetValue("command_update_filter");
                             ChatWordFilter.Initialize(MySqlClient);
+                            goto End;
+                        }
+
+                    case "helptool":
+                        {
+                            ToSend = ExternalTexts.GetValue("command_update_helptool");
+                            HelpTool.Initialize(MySqlClient);
+                            ModerationPresets.Initialize(MySqlClient);
                             goto End;
                         }
 

@@ -122,21 +122,14 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                     {
                                         mRollerItemsIds.Add(MoveItem.Id);
 
+                                        NextZ = MoveItem.RoomPosition.Z;
+
                                         if (!NextPositionIsRoller)
                                         {
                                             NextZ -= Roller.ActiveHeight;
                                         }
-                                        else
-                                        {
-                                            NextZ = MoveItem.RoomPosition.Z;
-                                        }
 
                                         Vector3 TargetVector3 = new Vector3(Roller.SquareInFront.X, Roller.SquareInFront.Y, NextZ);
-
-                                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                                        {
-                                            MoveItem.MoveToRoom(MySqlClient, MoveItem.RoomId, TargetVector3, MoveItem.RoomRotation);
-                                        }
 
                                         RollerEvent = new RollerEvents(MoveItem.RoomPosition.Z, NextZ, 0, MoveItem.Id);
                                         if (mRollerEvents != null)
@@ -144,6 +137,11 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                             mRollerEvents[Roller.Id].Add(RollerEvent);
 
                                             RollerEvent = null;
+                                        }
+
+                                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                        {
+                                            MoveItem.MoveToRoom(MySqlClient, MoveItem.RoomId, TargetVector3, MoveItem.RoomRotation);
                                         }
                                     }
                                 }

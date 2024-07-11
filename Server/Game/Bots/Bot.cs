@@ -221,6 +221,7 @@ namespace Snowlight.Game.Bots
                     break;
 
                 case "guide":
+
                     mBrain = new GuideBot();
                     break;
 

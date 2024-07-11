@@ -9,6 +9,7 @@ using Snowlight.Game.Misc;
 using Snowlight.Communication.Outgoing;
 using System.Linq;
 using System.Web.UI.WebControls;
+using Microsoft.Win32;
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 {
@@ -18,11 +19,12 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
         {
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.PetNest, new ItemEventHandler(HandleNestSwitch));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.PetFood, new ItemEventHandler(HandleFoodSwitch));
-            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.PetBall, new ItemEventHandler(HandleToySwitch));
-            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.ChickenTrampoline, new ItemEventHandler(HandleToySwitch));
-            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FrogPond, new ItemEventHandler(HandleToySwitch));
-            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.MonkeyPond, new ItemEventHandler(HandleToySwitch));
-            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.DragonTree, new ItemEventHandler(HandleToySwitch));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.BallToy, new ItemEventHandler(HandleToySwitch));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.ChickenToy, new ItemEventHandler(HandleToySwitch));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FrogToy, new ItemEventHandler(HandleToySwitch));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.MonkeyToy, new ItemEventHandler(HandleToySwitch));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.DragonToy, new ItemEventHandler(HandleToySwitch));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.SpiderToy, new ItemEventHandler(HandleSpiderToySwitch));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.PetWaterBowl, new ItemEventHandler(HandleWaterSwitch));
         }
 
@@ -238,6 +240,75 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     }
 
                     Item.RequestUpdate(1);
+                    break;
+            }
+
+            return true;
+        }
+        private static bool HandleSpiderToySwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        {
+            switch (Event)
+            {
+                case ItemEventType.InstanceLoaded:
+                case ItemEventType.Moved:
+                case ItemEventType.Placed:
+
+                    if (Item.DisplayFlags != "0")
+                    {
+                        Item.Flags = "0";
+                        Item.DisplayFlags = "0";
+                        Item.BroadcastStateUpdate(Instance);
+                    }
+
+                    Item.RequestUpdate(1);
+                    break;
+
+                case ItemEventType.UpdateTick:
+
+                    List<RoomActor> Actors = Instance.GetActorsOnPosition(Item.RoomPosition.GetVector2()).Where(O => O.UserStatusses.ContainsKey(Item.Definition.PetStatusses)).ToList();
+
+                    int.TryParse(Item.DisplayFlags, out int CurrentState);
+
+                    bool IsRewind = false;
+
+                    int NewState = CurrentState;
+
+                    if (CurrentState == (Item.Definition.BehaviorData - 1))
+                    {
+                        IsRewind = true;
+                    }
+                    else if (CurrentState == 0)
+                    {
+                        IsRewind = false;
+                    }
+
+                    if (Actors.Count == 0)
+                    {
+                        if (Item.TemporaryInteractionReferenceIds.ContainsKey(0))
+                        {
+                            Item.TemporaryInteractionReferenceIds.Remove(0);
+                        }
+                    }
+                    else
+                    {
+                        if(IsRewind)
+                        {
+                            NewState--;
+                        }
+                        else
+                        {
+                            NewState++;
+                        }
+                    }
+
+                    if (CurrentState != NewState)
+                    {
+                        Item.Flags = NewState.ToString();
+                        Item.DisplayFlags = Item.Flags;
+                        Item.BroadcastStateUpdate(Instance);
+                    }
+
+                    Item.RequestUpdate(2);
                     break;
             }
 

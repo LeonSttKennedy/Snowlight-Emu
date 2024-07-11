@@ -23,8 +23,8 @@ namespace Snowlight.Communication.Outgoing
                 int LinkType = (int)Events.LinkType;
 
                 string IMG = Events.EventType == EventStreamType.AchievementEarned ?
-                    "http://192.168.15.3/cdn.classichabbo.com/r38/gordon/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/album1584/" + Events.ExtraData[0] + ".gif" :
-                    "?http://www.habbo.com/habbo-imaging/avatarimage?figure=" + Events.UserInfo.Figure + ".gif";
+                    "http://127.0.0.1/cdn.classichabbo.com/r38/gordon/RELEASE63-35255-34886-201108111108_ce2d130905ba279edbfb4208cd5035c0/c_images/album1584/" + Events.ExtraData[0] + ".gif" :
+                    "http://127.0.0.1/friendstream/index.gif?figure=" + Events.UserInfo.Figure + ".gif";
 
                 TimeSpan ElapsedTime = DateTime.Now - UnixTimestamp.GetDateTimeFromUnixTimestamp(Events.Timestamp);
 

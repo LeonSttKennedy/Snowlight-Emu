@@ -141,7 +141,7 @@ namespace Snowlight.Game.Rooms
             }
 
             Session.SendData(RoomUserObjectListComposer.Compose(ActorObjects));
-            Session.SendData(RoomStaticObjectsComposer.Compose(this, mStaticObjects));
+            Session.SendData(RoomStaticObjectsComposer.Compose(mStaticObjects));
             Session.SendData(RoomFloorObjectsComposer.Compose(GetFloorItems()));
             Session.SendData(RoomWallObjectsComposer.Compose(GetWallItems()));
             Session.SendData(RoomUserStatusListComposer.Compose(ActorObjects));

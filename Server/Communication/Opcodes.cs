@@ -87,6 +87,7 @@ namespace Snowlight.Communication
         public const uint USER_BADGE_INVENTORY = 229;
         public const uint ROLLER_EVENT = 230;
         public const uint SESSION_PARAMS = 257;
+        public const uint PRIVATE_ROOM_ADS = 258;
         public const uint MESSENGER_ERROR_EVENT = 260;
         public const uint MESSENGER_IM_ERROR = 261;
         public const uint USER_INFO_UPDATE = 266;
@@ -409,7 +410,7 @@ namespace Snowlight.Communication
         public const uint ROOM_ADD_TO_STAFF_PICKED = 483;
         public const uint USER_CHANGE_MOTTO = 484;
         public const uint FRIEND_BAR_FIND_NEW_FRIENDS = 490;
-        public const uint FRIEND_STREAM_GET_EVENTS = 500;
+        public const uint GET_FRIEND_STREAM_EVENTS = 500;
         public const uint ALLOW_FRIEND_STREAM_EVENTS = 501;
         public const uint FRIEND_STREAM_LIKE_EVENT = 502;
         public const uint SESSION_DISCONNECT_EVENT = 512;

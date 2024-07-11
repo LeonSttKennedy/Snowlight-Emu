@@ -44,7 +44,7 @@ namespace Snowlight.Game.Bots
 
             foreach (string Trigger in mTriggers)
             {
-                if (UserQuery.Contains(Trigger.ToLower()))
+                if (UserQuery.StartsWith(Trigger.ToLower()))
                 {
                     return true;
                 }

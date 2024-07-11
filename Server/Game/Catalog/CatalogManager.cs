@@ -687,7 +687,9 @@ namespace Snowlight.Game.Catalog
             Response = CatalogClubOffersComposer.Compose(CorrectedOffers,
                 Session.SubscriptionManager.IsActive ?
                 Session.SubscriptionManager.TimestampExpire : UnixTimestamp.GetCurrent());
+            
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
+            
             Session.SendData(Response);
         }
 

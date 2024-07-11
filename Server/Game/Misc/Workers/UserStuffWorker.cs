@@ -5,16 +5,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-using Snowlight.Storage;
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Achievements;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Characters;
-using Snowlight.Game.Rooms;
 using Snowlight.Util;
+using Snowlight.Storage;
+using Snowlight.Game.Rooms;
 using Snowlight.Game.Rights;
 using Snowlight.Game.Catalog;
+using Snowlight.Game.Sessions;
+using Snowlight.Game.Characters;
+using Snowlight.Game.Achievements;
 using System.Collections.ObjectModel;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Misc
 {
@@ -25,7 +25,7 @@ namespace Snowlight.Game.Misc
 
         private static DateTime CurrentDay
         {
-            get 
+            get
             {
                 return mCurrentDay;
             }
@@ -100,6 +100,10 @@ namespace Snowlight.Game.Misc
                                 Session.SubscriptionManager.UpdateUserBadge();
                                 #endregion
 
+                                #region Check User Subscription
+                                CheckSubStatus(Session);
+                                #endregion
+
                                 if (CurrentDay != DateTime.Today)
                                 {
                                     CurrentDay = DateTime.Today;
@@ -113,6 +117,25 @@ namespace Snowlight.Game.Misc
             }
             catch (ThreadAbortException) { }
         }
+
+        #region Subscription
+        private static void CheckSubStatus(Session Session)
+        {
+            // if subscription isn't active
+            if (!Session.SubscriptionManager.IsActive)
+            {
+                // and if subscription level isn't changed
+                if (Session.SubscriptionManager.SubscriptionLevel != ClubSubscriptionLevel.None)
+                {
+                    // we can expire user subscription
+                    Session.SubscriptionManager.Expire();
+
+                    // and send a new data to client
+                    Session.SendData(SubscriptionStatusComposer.Compose(Session.SubscriptionManager));
+                }
+            }
+        }
+        #endregion
 
         #region Activity Points and Credits
         private static void DeliveryStuff(Session Session, SqlDatabaseClient MySqlClient)

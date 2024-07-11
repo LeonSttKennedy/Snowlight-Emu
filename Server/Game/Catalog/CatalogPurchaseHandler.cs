@@ -636,7 +636,10 @@ namespace Snowlight.Game.Catalog
 
             CatalogItem Item = CatalogManager.GetCatalogItemByAbsoluteId(ItemId);
 
-            if (Item == null) return;
+            if (Item == null)
+            {
+                return;
+            }
 
             Session.SendData(CatalogCanGiftComposer.Compose(Item.Id, Item.CanGift()));
         }

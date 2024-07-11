@@ -1,6 +1,7 @@
 ﻿using Snowlight.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
@@ -56,6 +57,7 @@ namespace Snowlight.Game.Items
         private bool mAllowInventoryStack;
 
         private string mPetStatussesInteraction;
+        private List<int> mPetTypeInteractors;
 
         public uint Id
         {
@@ -244,8 +246,10 @@ namespace Snowlight.Game.Items
                 return (mBehavior != ItemBehavior.Bed &&
                     mBehavior != ItemBehavior.Dice && mBehavior != ItemBehavior.HoloDice &&
                     mBehavior != ItemBehavior.LoveShuffler && mBehavior != ItemBehavior.HabboWheel &&
-                    mBehavior != ItemBehavior.StaticItem && mBehavior != ItemBehavior.PetBall &&
-                    mBehavior != ItemBehavior.PetNest && mBehavior != ItemBehavior.PetFood && BehaviorData > 1) ||
+                    mBehavior != ItemBehavior.StaticItem && mBehavior != ItemBehavior.BallToy &&
+                    mBehavior != ItemBehavior.PetNest && mBehavior != ItemBehavior.PetFood &&
+                    mBehavior != ItemBehavior.MonkeyToy && mBehavior != ItemBehavior.SpiderToy &&
+                    BehaviorData > 1) ||
                     (mBehavior == ItemBehavior.PetNest && BehaviorData == 2);
             }
         }
@@ -255,6 +259,16 @@ namespace Snowlight.Game.Items
             get
             {
                 return mPetStatussesInteraction;
+            }
+        }
+
+        public ReadOnlyCollection<int> PetTypeInteractors
+        {
+            get
+            {
+                List<int> Copy = new List<int>();
+                Copy.AddRange(mPetTypeInteractors);
+                return Copy.AsReadOnly();
             }
         }
 
@@ -283,6 +297,7 @@ namespace Snowlight.Game.Items
             mAllowInventoryStack = AllowInventoryStack;
 
             mPetStatussesInteraction = string.Empty;
+            mPetTypeInteractors = null;
 
             string[] splitedHeights = AdjustableHeight.Split('|');
 
@@ -295,6 +310,11 @@ namespace Snowlight.Game.Items
         public void SetPetStatussesInteraction(string Status)
         {
             mPetStatussesInteraction = Status;
+        }
+
+        public void SetPetTypeInteractors(List<int> PetTypeList)
+        {
+            mPetTypeInteractors = PetTypeList;
         }
     }
 }

@@ -357,7 +357,7 @@ namespace Snowlight.Game.Catalog
                     offers = rawList.OrderBy(o => o.GetTotalSoldsToday()).GroupBy(o => o.GroupBy()).Reverse().ToList();
                     break;
 
-                case 4: //lest traded today
+                case 4: //least traded today
                     offers = rawList.OrderBy(o => o.GetTotalSoldsToday()).GroupBy(o => o.GroupBy()).ToList();
                     break;
 

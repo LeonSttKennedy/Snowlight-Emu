@@ -46,7 +46,7 @@ namespace Snowlight.Game.Items
         Gift = 39,
         PuzzleBox = 40,
         PetNest = 41,
-        PetBall = 42,
+        BallToy = 42,
         PetFood = 43,
         PetWaterBowl = 44,
         GameCounter = 45,
@@ -55,14 +55,15 @@ namespace Snowlight.Game.Items
         Platform = 48,
         WelcomeGift = 49,
         RoomBackground = 50,
-        DragonTree = 51,
-        ChickenTrampoline = 52,
-        FrogPond = 53,
-        MonkeyPond = 54,
+        DragonToy = 51,
+        ChickenToy = 52,
+        FrogToy = 53,
+        MonkeyToy = 54,
         BlackHole = 55,
         TotemLeg = 56,
         TotemHead = 57,
-        TotemPlanet = 58
+        TotemPlanet = 58,
+        SpiderToy = 59
     }
 
     public static class ItemBehaviorUtil
@@ -235,21 +236,29 @@ namespace Snowlight.Game.Items
 
                     return ItemBehavior.PetNest;
 
-                case "petball":
+                case "ball_toy":
 
-                    return ItemBehavior.PetBall;
+                    return ItemBehavior.BallToy;
 
-                case "chicken_trampoline":
+                case "chicken_toy":
 
-                    return ItemBehavior.ChickenTrampoline;
+                    return ItemBehavior.ChickenToy;
 
-                case "frog_pond":
+                case "frog_toy":
 
-                    return ItemBehavior.FrogPond;
+                    return ItemBehavior.FrogToy;
 
-                case "monkey_pond":
+                case "monkey_toy":
 
-                    return ItemBehavior.MonkeyPond;
+                    return ItemBehavior.MonkeyToy;
+
+                case "dragon_toy":
+
+                    return ItemBehavior.DragonToy;
+
+                case "spider_toy":
+
+                    return ItemBehavior.SpiderToy;
 
                 case "petfood":
 
@@ -274,10 +283,6 @@ namespace Snowlight.Game.Items
                 case "room_background":
 
                     return ItemBehavior.RoomBackground;
-
-                case "dragon_tree":
-
-                    return ItemBehavior.DragonTree;
 
                 case "hole":
 

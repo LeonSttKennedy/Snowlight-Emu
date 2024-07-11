@@ -35,7 +35,7 @@ namespace Snowlight.Game.Catalog
 
             mWorkerThread = new Thread(new ThreadStart(ProcessThread));
             mWorkerThread.Priority = ThreadPriority.Lowest;
-            mWorkerThread.Name = "CatalogStuffWorkerThread";
+            mWorkerThread.Name = "DailyStuffWorkerThread";
             mWorkerThread.Start();
         }
 
@@ -61,6 +61,8 @@ namespace Snowlight.Game.Catalog
                         if (CurrentDay != DateTime.Today)
                         {
                             CatalogManager.RefreshCatalogData(MySqlClient, true);
+                            CatalogManager.ClearCacheGroup(0); // Clear catalog cache for a correct update.
+
                             QuestManager.ReloadQuests(MySqlClient);
                             CurrentDay = DateTime.Today;
                         }

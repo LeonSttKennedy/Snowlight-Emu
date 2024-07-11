@@ -248,7 +248,7 @@ namespace Snowlight.Game.Rooms
 
                     List<Vector2> AffectedTiles = CalculateAffectedTiles(Object, Object.Position.GetVector2(), Object.Rotation);
                     UserMovementNode MovimentNode = UserMovementNode.Blocked;
-
+                    
                     if (Object.Walkable)
                     {
                         MovimentNode = UserMovementNode.Walkable;

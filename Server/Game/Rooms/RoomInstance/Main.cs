@@ -196,8 +196,8 @@ namespace Snowlight.Game.Rooms
                     else
                     {
                         mStaticObjects.Add(new StaticObject(Id, ItemName, RoomPosition, (int)Row["size_x"], (int)Row["size_y"],
-                              RoomRotation, (float)Row["height"], (Row["walkable"].ToString() == "1"),
-                              (Row["is_seat"].ToString() == "1")));
+                          RoomRotation, (float)Row["height"], (Row["walkable"].ToString() == "1"),
+                          (Row["is_seat"].ToString() == "1")));
                     }
                 }
 

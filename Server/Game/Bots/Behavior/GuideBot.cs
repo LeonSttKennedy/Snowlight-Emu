@@ -45,7 +45,10 @@ namespace Snowlight.Game.Bots.Behavior
         {
             mSelfActor = Instance.GetActorByReferenceId(mSelfBot.Id, RoomActorType.AiBot);
 
-            if (mSelfActor == null) return;
+            if (mSelfActor == null)
+            {
+                return;
+            }
 
             mNeedsRotation = false;
             mNextSpeechAttempt = RandomGenerator.GetNext(20, 255);

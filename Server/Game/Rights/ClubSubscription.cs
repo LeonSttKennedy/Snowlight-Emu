@@ -32,9 +32,9 @@ namespace Snowlight.Game.Rights
         {
             get
             {
-                int Compare = DateTime.Compare(SubscriptionExpire, DateTime.Now);
+                int Compare = DateTime.Compare(ExpireDateTime, DateTime.Now);
 
-                return (mBaseLevel > ClubSubscriptionLevel.None && Compare >= 0);
+                return (mBaseLevel > ClubSubscriptionLevel.None && Compare > 0);
             }
         }
 
@@ -54,7 +54,7 @@ namespace Snowlight.Game.Rights
             }
         }
 
-        public DateTime SubscriptionExpire
+        public DateTime ExpireDateTime
         {
             get
             {
@@ -68,9 +68,11 @@ namespace Snowlight.Game.Rights
             {
                 double Time = mHcTime;
 
+                double CorrectCount = UnixTimestamp.GetCurrent() >= mTimestampExpire ? mTimestampExpire : UnixTimestamp.GetCurrent();
+
                 if (mBaseLevel == ClubSubscriptionLevel.BasicClub)
                 {
-                    Time += (UnixTimestamp.GetCurrent() - mTimestampCreated);
+                    Time += (CorrectCount - mTimestampCreated);
                 }
 
                 return Time;
@@ -83,9 +85,11 @@ namespace Snowlight.Game.Rights
             {
                 double Time = mVipTime;
 
+                double CorrectCount = UnixTimestamp.GetCurrent() >= mTimestampExpire ? mTimestampExpire : UnixTimestamp.GetCurrent();
+
                 if (mBaseLevel == ClubSubscriptionLevel.VipClub)
                 {
-                    Time += (UnixTimestamp.GetCurrent() - mTimestampCreated);
+                    Time += (CorrectCount - mTimestampCreated);
                 }
 
                 return Time;
@@ -113,14 +117,6 @@ namespace Snowlight.Game.Rights
             get
             {
                 return (mTimestampExpire - UnixTimestamp.GetCurrent());
-            }
-        }
-
-        public DateTime ExpireDateTime
-        {
-            get
-            {
-                return UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampExpire);
             }
         }
 
@@ -204,7 +200,10 @@ namespace Snowlight.Game.Rights
 
             if (!IsActive)
             {
-                Expire();
+                if (mBaseLevel != ClubSubscriptionLevel.None)
+                {
+                    Expire();
+                }
             }
         }
 
@@ -215,6 +214,9 @@ namespace Snowlight.Game.Rights
             mBaseLevel = ClubSubscriptionLevel.None;
             mTimestampCreated = 0;
             mTimestampExpire = 0;
+
+            // Clear catalog cache for user
+            CatalogManager.ClearCacheGroup(mUserId);
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {

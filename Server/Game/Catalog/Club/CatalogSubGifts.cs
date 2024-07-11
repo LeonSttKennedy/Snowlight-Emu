@@ -54,7 +54,6 @@ namespace Snowlight.Game.Catalog
                                 Row["item_name"].ToString(), Row["preset_flags"].ToString(), (int)Row["amount"],
                                 (int)Row["days_need"], (Row["isvip"].ToString() == "1"));
 
-
                     if (ParentId == -1)
                     {
                         if (!mClubGifts.ContainsKey(GiftId))
@@ -89,7 +88,7 @@ namespace Snowlight.Game.Catalog
         }
         private static void GetClubGifts(Session Session, ClientMessage Message)
         {
-            ServerMessage Response = (CatalogManager.CacheEnabled ? CatalogManager.CacheController.TryGetResponse(0, Message)
+            ServerMessage Response = (CatalogManager.CacheEnabled ? CatalogManager.CacheController.TryGetResponse(Session.CharacterId, Message)
                 : null);
 
             if (Response != null)
@@ -101,10 +100,10 @@ namespace Snowlight.Game.Catalog
             {
                 Response = ClubGiftListComposer.Compose(Session.SubscriptionManager, mClubGifts.Values.ToList());
             }
-            
+
             if (CatalogManager.CacheEnabled)
             {
-                CatalogManager.CacheController.AddIfNeeded(0, Message, Response);
+                CatalogManager.CacheController.AddIfNeeded(Session.CharacterId, Message, Response);
             }
 
             Session.SendData(Response);

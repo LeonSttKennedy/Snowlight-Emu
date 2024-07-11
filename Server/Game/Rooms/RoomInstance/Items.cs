@@ -221,8 +221,12 @@ namespace Snowlight.Game.Rooms
                             {
                                 MatchedTile = AffectedTile;
 
+                                bool RollerMatch = StackItem.Definition.Behavior == ItemBehavior.Roller &&
+                                    Item.Definition.Behavior == ItemBehavior.Roller;
+
                                 if (StackItem.Definition.Behavior == ItemBehavior.Roller &&
-                                    (Item.Definition.SizeX != 1 || Item.Definition.SizeY != 1))
+                                    (Item.Definition.SizeX != 1 || Item.Definition.SizeY != 1)
+                                    || RollerMatch)
                                 {
                                     return -1;
                                 }

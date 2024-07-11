@@ -21,7 +21,7 @@ namespace Snowlight.Game.FriendStream
     {
         public static void Initialize()
         {
-            DataRouter.RegisterHandler(OpcodesIn.FRIEND_STREAM_GET_EVENTS, new ProcessRequestCallback(GetEventStream));
+            DataRouter.RegisterHandler(OpcodesIn.GET_FRIEND_STREAM_EVENTS, new ProcessRequestCallback(GetEventStream));
             DataRouter.RegisterHandler(OpcodesIn.ALLOW_FRIEND_STREAM_EVENTS, new ProcessRequestCallback(EnableEventStream));
             DataRouter.RegisterHandler(OpcodesIn.FRIEND_STREAM_LIKE_EVENT, new ProcessRequestCallback(LikeEventStream));
         }

@@ -129,23 +129,27 @@ namespace Snowlight.Game.Bots.Behavior
             {
                 default:
 
-                    return ItemBehavior.PetBall;
+                    return ItemBehavior.BallToy;
+
+                case 8:
+
+                    return RandomGenerator.GetNext(0, 3) == 0 ? ItemBehavior.BallToy : ItemBehavior.SpiderToy;
 
                 case 10:
 
-                    return ItemBehavior.ChickenTrampoline;
+                    return ItemBehavior.ChickenToy;
 
                 case 11:
 
-                    return ItemBehavior.FrogPond;
+                    return ItemBehavior.FrogToy;
 
                 case 12:
 
-                    return ItemBehavior.DragonTree;
+                    return RandomGenerator.GetNext(0, 3) == 0 ? ItemBehavior.BallToy : ItemBehavior.DragonToy;
 
                 case 14:
 
-                    return RandomGenerator.GetNext(0, 3) == 0 ? ItemBehavior.MonkeyPond : ItemBehavior.PetBall;
+                    return RandomGenerator.GetNext(0, 3) == 0 ? ItemBehavior.BallToy : ItemBehavior.MonkeyToy;
 
             }
         }
@@ -778,7 +782,7 @@ namespace Snowlight.Game.Bots.Behavior
                                 ExpAdd = RandomGenerator.GetNext(1, 10);
                             }
 
-                            Trick = new PetTricks("rll", true, ItemBehavior.DragonTree);
+                            Trick = new PetTricks("rll", true, ItemBehavior.DragonToy);
 
                             ChangeActionToPerformingTrick(Trick);
                             break;
@@ -792,7 +796,7 @@ namespace Snowlight.Game.Bots.Behavior
                                 ExpAdd = RandomGenerator.GetNext(1, 10);
                             }
 
-                            Trick = new PetTricks("hg", true, ItemBehavior.DragonTree);
+                            Trick = new PetTricks("hg", true, ItemBehavior.DragonToy);
 
                             ChangeActionToPerformingTrick(Trick);
                             break;
@@ -820,7 +824,7 @@ namespace Snowlight.Game.Bots.Behavior
                                 ExpAdd = RandomGenerator.GetNext(1, 10);
                             }
 
-                            Trick = new PetTricks("rng", true, ItemBehavior.DragonTree);
+                            Trick = new PetTricks("rng", true, ItemBehavior.DragonToy);
 
                             ChangeActionToPerformingTrick(Trick);
                             break;
@@ -848,7 +852,7 @@ namespace Snowlight.Game.Bots.Behavior
                                 ExpAdd = RandomGenerator.GetNext(1, 10);
                             }
 
-                            Trick = new PetTricks("swg", true, ItemBehavior.DragonTree);
+                            Trick = new PetTricks("swg", true, ItemBehavior.DragonToy);
 
                             ChangeActionToPerformingTrick(Trick);
                             break;
@@ -1044,7 +1048,7 @@ namespace Snowlight.Game.Bots.Behavior
                                     if (RandomGenerator.GetNext(0, 4) == 0)
                                     {
                                         if (mSelfBot.PetData.Type == 12 ||
-                                            GetInteractionItemByType(mSelfBot.PetData.Type) == ItemBehavior.PetBall &&
+                                            GetInteractionItemByType(mSelfBot.PetData.Type) == ItemBehavior.BallToy &&
                                             RandomGenerator.GetNext(0, 4) == 3)
                                         {
                                             goto case 7;
@@ -1535,12 +1539,19 @@ namespace Snowlight.Game.Bots.Behavior
                         Item Interaction = GetItemByPosition(mSelfActor.Position.GetVector2(), Behavior);
                         if (Interaction != null && mSelfActor.Position.GetVector2().Equals(Interaction.RoomPosition.GetVector2()))
                         {
-                            bool NeedsRotation = mSelfActor.HeadRotation != Interaction.RoomRotation + 2 &&
-                                mSelfActor.BodyRotation != Interaction.RoomRotation + 2;
+                            int RotToAdd = 2;
+
+                            if(Interaction.Definition.Behavior == ItemBehavior.SpiderToy)
+                            {
+                                RotToAdd = Interaction.RoomRotation == 6 ? -4 : 0;
+                            }
+
+                            bool NeedsRotation = mSelfActor.HeadRotation != Interaction.RoomRotation + RotToAdd &&
+                                mSelfActor.BodyRotation != Interaction.RoomRotation + RotToAdd;
 
                             if (NeedsRotation)
                             {
-                                mSelfActor.HeadRotation = Interaction.RoomRotation + 2;
+                                mSelfActor.HeadRotation = Interaction.RoomRotation + RotToAdd;
                                 mSelfActor.BodyRotation = mSelfActor.HeadRotation;
                                 mSelfActor.UpdateNeeded = true;
                             }
