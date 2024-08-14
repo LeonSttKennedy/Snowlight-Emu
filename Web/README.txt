@@ -1,7 +1,7 @@
 RainbowCMS
 GNU / GPL License
 PHP / MySQL - Open Source
-© 2021 Souza
+© 2024 wels1
 
 * Initial Considerations
 I would like to thank Roy (Meth0d) by allowing me to use the design RetroCMS / uberhotel.org RainbowCMS for the development of reading and for being you.
@@ -18,4 +18,4 @@ Only Snowlight emulator.
 * Credits
 Leo "At0m" - CMS Developer.
 Meth0d - By Design.
-Souza - By continue with the project (CMS & EMULATOR) .
+wels1 - By continue with the project (CMS & EMULATOR) .
