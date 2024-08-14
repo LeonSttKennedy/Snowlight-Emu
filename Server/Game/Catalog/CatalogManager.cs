@@ -277,7 +277,8 @@ namespace Snowlight.Game.Catalog
                     CountLoaded++;
                 }
 
-                DataTable ClubTable = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_subscriptions");
+                MySqlClient.SetParameter("enabled", "1");
+                DataTable ClubTable = MySqlClient.ExecuteQueryTable("SELECT * FROM catalog_subscriptions WHERE enabled = @enabled");
 
                 foreach (DataRow Row in ClubTable.Rows)
                 {

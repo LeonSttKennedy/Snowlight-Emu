@@ -97,7 +97,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                                 if (NextRoller)
                                 {
-                                    foreach (Item Items in ItemsOnNextTile)
+                                    foreach (Item Items in ItemsOnNextTile.Where(O=> O.RoomPosition.Z > Roller.RoomPosition.Z))
                                     {
                                         if (Instance.GetUserStepHeight(Items.RoomPosition.GetVector2()) > Roller.ActiveHeight)
                                         {
@@ -114,7 +114,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                         continue;
                                     }
 
-                                    if (Roller.RoomPosition.Z < MoveItem.RoomPosition.Z
+                                    if (Roller.RoomPosition.Z < MoveItem.RoomPosition.Z 
                                         && NextRollerIsClear
                                         && !mRollerItemsIds.Contains(MoveItem.Id)
                                         && Instance.IsValidPosition(Roller.SquareInFront)

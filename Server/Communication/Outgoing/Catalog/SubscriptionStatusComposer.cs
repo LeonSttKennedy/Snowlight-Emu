@@ -7,17 +7,17 @@ namespace Snowlight.Communication.Outgoing
     {
         public static ServerMessage Compose(ClubSubscription SubscriptionManager, bool BoughtFromCatalog = false)
         {
-            TimeSpan TimeSpan = SubscriptionManager.ExpireDateTime - DateTime.Now;
-            int DisplayMonths = 0;
-            int DisplayDays = 0;
+            // @Gclub_habboSGRBHJIH[MAHHHH
 
-            if (TimeSpan.TotalSeconds > 0)
+            int DisplayMonths = SubscriptionManager.DaysLeft / 31;
+            int DisplayDays = SubscriptionManager.DaysLeft;
+
+            if(DisplayMonths >= 1)
             {
-                DisplayMonths = (int)Math.Floor((double)(TimeSpan.Days / 31.0));
-                DisplayDays = TimeSpan.Days - (31 * DisplayMonths);
+                DisplayMonths--;
             }
 
-            // @Gclub_habboSGRBHJIH[MAHHHH
+            DisplayDays -= DisplayMonths * 31;
 
             ServerMessage Message = new ServerMessage(OpcodesOut.SUBSCRIPTION_STATUS);
             Message.AppendStringWithBreak("habbo_club");

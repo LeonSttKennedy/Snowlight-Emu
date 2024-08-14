@@ -183,12 +183,19 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                 case ItemEventType.Placed:
 
-                    if(mLastUserInteraction.ContainsKey(Item.Id))
+                    if (Item.Flags.Equals(string.Empty) || Item.DisplayFlags.Equals(string.Empty))
+                    {
+                        Item.Flags = "0";
+                        Item.DisplayFlags = Item.Flags;
+                        RoomManager.MarkWriteback(Item, true);
+                    }
+
+                    if (mLastUserInteraction.ContainsKey(Item.Id))
                     {
                         mLastUserInteraction.Remove(Item.Id);
                     }
 
-                    mLastUserInteraction.Add(Item.Id , 0);
+                    mLastUserInteraction.Add(Item.Id, 0);
 
                     break;
 

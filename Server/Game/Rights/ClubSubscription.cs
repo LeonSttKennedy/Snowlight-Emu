@@ -32,9 +32,7 @@ namespace Snowlight.Game.Rights
         {
             get
             {
-                int Compare = DateTime.Compare(ExpireDateTime, DateTime.Now);
-
-                return (mBaseLevel > ClubSubscriptionLevel.None && Compare > 0);
+                return UnixTimestamp.GetCurrent() < mTimestampExpire;
             }
         }
 
@@ -117,6 +115,14 @@ namespace Snowlight.Game.Rights
             get
             {
                 return (mTimestampExpire - UnixTimestamp.GetCurrent());
+            }
+        }
+
+        public int DaysLeft
+        {
+            get
+            {
+                return (int)Math.Ceiling(TimeLeft / 86400.0);
             }
         }
 

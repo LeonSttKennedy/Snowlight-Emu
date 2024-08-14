@@ -322,18 +322,18 @@ CREATE TABLE IF NOT EXISTS `articles_categories` (
 --
 
 INSERT INTO `articles_categories` (`id`, `caption`) VALUES
-(0, 'Uncategorized'),
-(1, 'Uber'),
-(2, 'Technical'),
-(3, 'Updates'),
-(4, 'Competitions'),
-(5, 'Polls'),
-(6, 'Sponsored'),
-(7, 'Credits'),
-(8, 'Uber Club'),
-(9, 'VIP'),
-(10, 'Furni'),
-(11, 'Support');
+(1, 'Uncategorized'),
+(2, 'Uber'),
+(3, 'Technical'),
+(4, 'Updates'),
+(5, 'Competitions'),
+(6, 'Polls'),
+(7, 'Sponsored'),
+(8, 'Credits'),
+(9, 'Uber Club'),
+(10, 'VIP'),
+(11, 'Furni'),
+(12, 'Support');
 
 -- --------------------------------------------------------
 

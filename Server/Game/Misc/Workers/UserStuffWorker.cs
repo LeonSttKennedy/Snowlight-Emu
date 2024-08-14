@@ -124,15 +124,11 @@ namespace Snowlight.Game.Misc
             // if subscription isn't active
             if (!Session.SubscriptionManager.IsActive)
             {
-                // and if subscription level isn't changed
-                if (Session.SubscriptionManager.SubscriptionLevel != ClubSubscriptionLevel.None)
-                {
-                    // we can expire user subscription
-                    Session.SubscriptionManager.Expire();
+                // we can expire user subscription
+                Session.SubscriptionManager.Expire();
 
-                    // and send a new data to client
-                    Session.SendData(SubscriptionStatusComposer.Compose(Session.SubscriptionManager));
-                }
+                // and send a new data to client
+                Session.SendData(SubscriptionStatusComposer.Compose(Session.SubscriptionManager));
             }
         }
         #endregion
@@ -209,9 +205,9 @@ namespace Snowlight.Game.Misc
                             ActivityPointsToDelivery.Add(ServerSettings.ActivityPointsType, ServerSettings.MoreActivityPointsAmount);
                         }
                     }
-                }
 
-                Session.CharacterInfo.SetLastActivityPointsUpdate(MySqlClient);
+                    Session.CharacterInfo.SetLastActivityPointsUpdate(MySqlClient);
+                }
             }
             #endregion
 
