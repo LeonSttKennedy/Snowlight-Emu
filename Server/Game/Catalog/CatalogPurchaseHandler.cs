@@ -423,8 +423,6 @@ namespace Snowlight.Game.Catalog
 
                 double ExpireTimestamp = 0;
 
-                MySqlClient.SetParameter("giftusername", GiftUser);
-
                 CharacterInfo GiftReceiverInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, CharacterResolverCache.GetUidFromName(GiftUser));
 
                 Session GiftReceiverSession = SessionManager.GetSessionByCharacterId(GiftReceiverInfo.Id);
@@ -435,7 +433,7 @@ namespace Snowlight.Game.Catalog
                     return;
                 }
 
-                if (GiftReceiverInfo.AllowGifting)
+                if (!GiftReceiverInfo.AllowGifting)
                 {
                     Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("target_user_disabled_receipt_gifts", GiftUser)));
                     Session.SendData(CatalogGiftsWrappingErrorComposer.Composer());

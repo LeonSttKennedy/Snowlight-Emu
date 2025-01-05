@@ -10,6 +10,71 @@ if (!HK_LOGGED_IN || !$GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hk_cat
 	exit;
 }
 
+function SeasonalCurrencyEnuntoString($currency)
+{
+	switch($currency)
+	{
+		default:		
+		case 0:
+			$str_return = 'pixels';
+			break;
+				
+		case 1:
+			$str_return = 'snowflakes';
+			break;
+				
+		case 2:
+			$str_return = 'hearts';
+			break;
+							
+		case 3:
+			$str_return = 'giftpoints';
+			break;
+										
+		case 4:
+			$str_return = 'shells';
+			break;
+			
+		case 5:
+			$str_return = 'diamonds';
+			break;
+	}
+	
+	return $str_return;
+}
+
+function SeasonalCurrencyString($currency)
+{
+	switch($currency)
+	{
+		case "pixels":
+			$str_return = 'Pixels';
+			break;
+				
+		case "snowflakes":
+			$str_return = 'Snowflakes';
+			break;
+				
+		case "hearts":
+			$str_return = 'Hearts';
+			break;
+							
+		case "giftpoints":
+			$str_return = 'Gift Points';
+			break;
+										
+		case "shells":
+			$str_return = 'Shells';
+			break;
+			
+		case "diamonds":
+			$str_return = 'Diamonds';
+			break;
+	}
+	
+	return $str_return;
+}
+
 if (isset($_GET['switch']) && is_numeric($_GET['switch']))
 {
 	$getvalue = mysql_result(mysql_query("SELECT enabled FROM vouchers WHERE id = '" . intval($_GET['switch']) . "' LIMIT 1"), 0);
@@ -32,6 +97,28 @@ if (isset($_GET['switch']) && is_numeric($_GET['switch']))
 	}
 }
 
+if (isset($_GET['cr']) && is_numeric($_GET['cr']))
+{
+	$getvalue = mysql_result(mysql_query("SELECT can_reedem_in_catalog FROM vouchers WHERE id = '" . intval($_GET['cr']) . "' LIMIT 1"), 0);
+	$newState = "1";
+
+	if ($getvalue == "1")
+	{
+		$newState = "0";
+	}
+	
+	mysql_query("UPDATE vouchers SET can_reedem_in_catalog = '" . $newState . "' WHERE id = '" . intval($_GET['cr']) . "' LIMIT 1");
+	$getvalue = $newState;
+	if($getvalue == "1")
+	{
+		fMessage('ok', "Voucher code now can reedem in catalogue");
+	}
+	else
+	{
+		fMessage('ok', "Voucher code catalogue reedem disabled successfully");
+	}
+}
+
 if (isset($_GET['del']) && is_numeric($_GET['del']))
 {
 	mysql_query("DELETE FROM vouchers WHERE id = '" . intval($_GET['del']) . "' LIMIT 1");
@@ -42,7 +129,8 @@ if (isset($_POST['v-code']))
 {
 	$vCode = $_POST['v-code'];
 	$vCreditsValue = $_POST['v-cvalue'];
-	$vPixelsValue = $_POST['v-pvalue'];
+	$vCurrencyValue = $_POST['v-pvalue'];
+	$vCurrencyType = $_POST['v-ctype'];
 	$vFurniValue = $_POST['v-fvalue'];
 	$vUses = $_POST['v-uses'];
 	
@@ -50,13 +138,17 @@ if (isset($_POST['v-code']))
 	{
 		fMessage('error', 'Please enter a voucher code.');
 	}
-	else if (!is_numeric($vCreditsValue) || intval($vCreditsValue) <= 0 || intval($vCreditsValue) > 5000)
+	else if (!is_numeric($vCreditsValue) || intval($vCreditsValue) < 0 || intval($vCreditsValue) > 5000)
 	{
-		fMessage('error', 'Invalid credit value. Must be numeric and a value between 1 - 5000.');
+		fMessage('error', 'Invalid credit value. Must be numeric and a value between 0 - 5000.');
 	}
-	else if (!is_numeric($vPixelsValue) || intval($vPixelsValue) <= 0 || intval($vPixelsValue) > 5000)
+	else if (!is_numeric($vCurrencyValue) || intval($vCurrencyValue) < 0 || intval($vCurrencyValue) > 5000)
 	{
-		fMessage('error', 'Invalid pixel value. Must be numeric and a value between 1 - 5000.');
+		fMessage('error', 'Invalid seasonal currency value. Must be numeric and a value between 0 - 5000.');
+	}
+	else if(!is_numeric($vCurrencyValue) || intval($vCurrencyType) < 0)
+	{
+		fMessage('error', 'Invalid seasonal currency type. Review your entry.');
 	}
 	else if (!is_numeric($vUses) || intval($vUses) <= 0)
 	{
@@ -64,7 +156,7 @@ if (isset($_POST['v-code']))
 	}
 	else
 	{
-		mysql_query("INSERT INTO vouchers (id, code, value_credits, value_pixels, value_furni, uses, enabled) VALUES (NULL, '" . $vCode . "', '" . $vCreditsValue . "', '" . $vPixelsValue . "', '" . $vFurniValue . "', '" . $vUses . "', '1')");
+		mysql_query("INSERT INTO vouchers (id, code, value_credits, value_activity_points, seasonal_currency, value_furni, uses, enabled) VALUES (NULL, '" . $vCode . "', '" . $vCreditsValue . "', '" . $vCurrencyValue . "', '" . SeasonalCurrencyEnuntoString($vCurrencyType) . "', '" . $vFurniValue . "', '" . $vUses . "', '1')");
 		fMessage('ok', 'Voucher is now live and redeemable.');
 	}
 }
@@ -101,9 +193,10 @@ require_once "top.php";
 	<thead>
 		<td>Voucher code</td>
 		<td>Credits Amount</td>
-		<td>Pixels Amount</td>
+		<td>Currency Amount</td>
 		<td>Furniture</td>
 		<td>Uses remaining</td>
+		<td>Catalogue reedem</td>
 		<td>Enable/Disable</td>
 		<td>Delete</td>
 	</thead>
@@ -111,16 +204,17 @@ require_once "top.php";
 
 	$get = mysql_query("SELECT * FROM vouchers ORDER BY enabled DESC");
 
-	while ($user = mysql_fetch_assoc($get))
+	while ($voucher = mysql_fetch_assoc($get))
 	{
 		echo '<tr>';
-		echo '<td>' . $user['code'] . '</td>';
-		echo '<td>' . $user['value_credits'] . ' credits</td>';
-		echo '<td>' . $user['value_pixels'] . ' pixels</td>';
-		echo '<td>' . $user['value_furni'] . '</td>';
-		echo '<td>' . $user['uses'] . '</td>';
-		echo '<td><input type="button" value="'	. (($user['enabled'] == "1")? 'Disable' : 'Enable') . '" onclick="document.location = \'index.php?_cmd=vouchers&switch=' . $user['id'] . '\';"></td>';
-		echo '<td><input type="button" value="Delete" onclick="document.location = \'index.php?_cmd=vouchers&del=' . $user['id'] . '\';"></td>';
+		echo '<td>' . $voucher['code'] . '</td>';
+		echo '<td>' . $voucher['value_credits'] . ' credits</td>';
+		echo '<td>' . $voucher['value_activity_points'] . ' ' . SeasonalCurrencyString($voucher['seasonal_currency']) . '</td>';
+		echo '<td>' . $voucher['value_furni'] . '</td>';
+		echo '<td>' . $voucher['uses'] . '</td>';
+		echo '<td><input type="button" value="'	. (($voucher['can_reedem_in_catalog'] == "1")? 'Disable' : 'Enable') . '" onclick="document.location = \'index.php?_cmd=vouchers&cr=' . $voucher['id'] . '\';"></td>';
+		echo '<td><input type="button" value="'	. (($voucher['enabled'] == "1")? 'Disable' : 'Enable') . '" onclick="document.location = \'index.php?_cmd=vouchers&switch=' . $voucher['id'] . '\';"></td>';
+		echo '<td><input type="button" value="Delete" onclick="document.location = \'index.php?_cmd=vouchers&del=' . $voucher['id'] . '\';"></td>';
 		echo '</tr>';
 	}
 
@@ -144,12 +238,24 @@ require_once "top.php";
 		<p style="font-size: 80%; color: darkred;">Credit value be between: 1 - 5000</p>
 		<input type="text" name="v-cvalue"><br />
 		<br />
-		Pixel value:<br />
-		<p style="font-size: 80%; color: darkred;">Pixels value be between: 1 - 5000</p>
+		Seasonal currency value:<br />
+		<p style="font-size: 80%; color: darkred;">Seasonal currency value be between: 0 - 5000</p>
 		<input type="text" name="v-pvalue"><br />
 		<br />
+		Seasonal currency type:<br />
+		<p style="font-size: 80%; color: darkred;">In case of voucher doesn't need activity points insert 0 in up text box</p>
+		<select name="v-ctype">
+			<option value="" disabled selected hidden>Without activity points</option>
+			<option value="0">Pixels</option>
+			<option value="1">Snowflakes</option>
+			<option value="2">Hearts</option>
+			<option value="3">Gift Points</option>
+			<option value="4">Shells</option>
+			<option value="5">Diamonds</option>
+		</select><br />
+		<br />
 		Furni value:<br />
-		<p style="font-size: 80%; color: darkred;">Can be used a '|' to separe multiple itens IDs.</p>
+		<p style="font-size: 80%; color: darkred;">Can be used a '|' to separe multiple items IDs.</p>
 		<input type="text" name="v-fvalue"><br />
 		<br />
 		Uses:<br />

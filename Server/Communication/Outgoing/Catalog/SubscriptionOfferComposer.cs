@@ -15,7 +15,7 @@ namespace Snowlight.Communication.Outgoing
         public static ServerMessage Compose(ClubSubscription UserSubscription, SubscriptionOffer SubOffer)
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.SUBSCRIPTION_OFFER);
-            
+
             TimeSpan OfferExpire = SubOffer.TimestampExpire - DateTime.Now;
             DateTime ExpireTime = UnixTimestamp.GetDateTimeFromUnixTimestamp(UserSubscription.TimestampExpire + SubOffer.ClubSubscriptionOffer.LengthSeconds);
 

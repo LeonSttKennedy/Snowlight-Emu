@@ -18,6 +18,7 @@ namespace Snowlight.Game.Catalog
         private int mAmount;
         private int mDaysNeed;
         private bool mIsVip;
+        private bool mOneTimeRedeem;
 
         private List<SubscriptionGifts> mDealGifts;
 
@@ -146,6 +147,19 @@ namespace Snowlight.Game.Catalog
             }
         }
 
+        public bool OneTimeRedeem
+        {
+            get
+            {
+                return mOneTimeRedeem;
+            }
+
+            set
+            {
+                mOneTimeRedeem = value;
+            }
+        }
+
         public List<SubscriptionGifts> DealItems
         {
             get
@@ -162,7 +176,7 @@ namespace Snowlight.Game.Catalog
             }
         }
 
-        public SubscriptionGifts(uint Id, int DefinitionId, string ItemName, string PresetFlags, int Amount, int DaysNeed, bool IsVip)
+        public SubscriptionGifts(uint Id, int DefinitionId, string ItemName, string PresetFlags, int Amount, int DaysNeed, bool IsVip, bool OneTimeRedeem)
         {
             mId = Id;
             mDefinitionId = DefinitionId;
@@ -171,6 +185,7 @@ namespace Snowlight.Game.Catalog
             mAmount = Amount;
             mDaysNeed = DaysNeed;
             mIsVip = IsVip;
+            mOneTimeRedeem = OneTimeRedeem;
 
             mDealGifts = new List<SubscriptionGifts>();
         }

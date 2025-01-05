@@ -1,10 +1,10 @@
 ﻿using System;
 
+using Snowlight.Util;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
-using Snowlight.Util;
 
 namespace Snowlight.Game.Handlers
 {

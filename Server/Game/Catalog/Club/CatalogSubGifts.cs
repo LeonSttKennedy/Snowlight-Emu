@@ -52,7 +52,7 @@ namespace Snowlight.Game.Catalog
 
                     SubscriptionGifts Gift = new SubscriptionGifts(GiftId, (int)Row["definition_id"],
                                 Row["item_name"].ToString(), Row["preset_flags"].ToString(), (int)Row["amount"],
-                                (int)Row["days_need"], (Row["isvip"].ToString() == "1"));
+                                (int)Row["days_need"], (Row["isvip"].ToString() == "1"), (Row["one_time_redeem"].ToString() == "1"));
 
                     if (ParentId == -1)
                     {
@@ -192,6 +192,12 @@ namespace Snowlight.Game.Catalog
                         Session.SendData(InventoryRefreshComposer.Compose());
                     }
 
+                    if (SelectedItem.OneTimeRedeem)
+                    {
+                        Session.SubscriptionManager.AddGiftRedeem(MySqlClient, SelectedItem.Id);
+                        GetClubGifts(Session, new ClientMessage(OpcodesIn.CATALOG_CLUB_GIFTS));
+                    }
+
                     Session.SendData(ClubGiftRedeemComposer.Compose(GiftToDelivery));
                 }
             }
@@ -201,12 +207,15 @@ namespace Snowlight.Game.Catalog
         {
             bool CanSelect = false;
 
-            switch(Gift.IsVip)
+            bool WasGiftRedeemed = Gift.OneTimeRedeem && Subscription.OneTimeGiftsRedeem.Contains(Gift.Id);
+
+            switch (Gift.IsVip)
             {
                 case true:
                     
                     if (Subscription.SubscriptionLevel == ClubSubscriptionLevel.VipClub &&
-                        Subscription.PastVipTimeInDays >= Gift.DaysNeed)
+                        Subscription.PastVipTimeInDays >= Gift.DaysNeed &&
+                        !WasGiftRedeemed)
                     {
                         CanSelect = true;
                     }
@@ -217,7 +226,7 @@ namespace Snowlight.Game.Catalog
                     int SubTotalDays = Subscription.PastHcTimeInDays + Subscription.PastVipTimeInDays;
 
                     if (Subscription.SubscriptionLevel >= ClubSubscriptionLevel.BasicClub &&
-                        SubTotalDays >= Gift.DaysNeed)
+                        SubTotalDays >= Gift.DaysNeed && !WasGiftRedeemed)
                     {
                         CanSelect = true;
                     }

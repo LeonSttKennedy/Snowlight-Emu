@@ -60,6 +60,7 @@ namespace Snowlight.Game.Characters
         private double mTimestampLastOnline;
         private double mTimestampRegistered;
         private double mTimestampLastActivityPointsUpdate;
+        private double mTimestampLastReceivedDailyReward;
         private double mTimestampLastNameChange;
 
         private double mLastRespectUpdate;
@@ -76,7 +77,6 @@ namespace Snowlight.Game.Characters
         private int mFavoriteGroupId;
 
         private bool mIsOnline;
-        private bool mReceivedDailyReward;
 
         private bool mAllowFriendStream;
         private bool mAllowMimic;
@@ -580,12 +580,8 @@ namespace Snowlight.Game.Characters
         {
             get
             {
-                return mReceivedDailyReward;
-            }
-
-            set
-            {
-                mReceivedDailyReward = value;
+                DateTime LastReceivedDailyReward = UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastReceivedDailyReward);
+                return LastReceivedDailyReward.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy");
             }
         }
         public bool AllowMimic
@@ -656,7 +652,7 @@ namespace Snowlight.Game.Characters
             int ModerationTicketsAbusive, double ModerationTicketCooldown, int ModerationBans, int ModerationCautions,
             double TimestampLastOnline, double TimestampRegistered, int RespectPoints, int RespectCreditHuman,
             int RespectCreditPets, double TimestampLastRespectUpdate, double ModerationMutedUntil, double TimestampLastNameChange, int MarketplaceTokens,
-            int RegularVisitor, int TimeOnline, int FavoriteGroupId, bool Online, bool ReceivedDailyReward, bool AllowFriendStream, bool AllowMimic, bool AllowGifts, bool AllowTrade)
+            int RegularVisitor, int TimeOnline, int FavoriteGroupId, bool Online, double TimestampLastReceivedDailyReward, bool AllowFriendStream, bool AllowMimic, bool AllowGifts, bool AllowTrade)
         {
             mSessionId = SessionId;
             mId = Id;
@@ -709,7 +705,7 @@ namespace Snowlight.Game.Characters
             mFavoriteGroupId = FavoriteGroupId;
 
             mIsOnline = Online;
-            mReceivedDailyReward = ReceivedDailyReward;
+            mTimestampLastReceivedDailyReward = TimestampLastReceivedDailyReward;
 
             mAllowFriendStream = AllowFriendStream;
             mAllowMimic = AllowMimic;
@@ -750,6 +746,20 @@ namespace Snowlight.Game.Characters
                 MySqlClient.SetParameter("ownerid", mId);
                 return int.Parse(MySqlClient.ExecuteScalar("SELECT COUNT(*) FROM rooms WHERE owner_id = @ownerid LIMIT 1").ToString());
             }
+        }
+        public int GetFriendsCount()
+        {
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                MySqlClient.SetParameter("userid", mId);
+                return int.Parse(MySqlClient.ExecuteScalar("SELECT COUNT(*) FROM messenger_friendships WHERE user_1_id = @userid AND confirmed = '1' LIMIT 1").ToString());
+            }
+        }
+        public int GetFriendListSizeLimit(SqlDatabaseClient MySqlClient)
+        {
+            return HasRight(MySqlClient, "club_vip") ? ServerSettings.VipUserFriendListSize :
+                    (HasRight(MySqlClient,"club_regular") ? ServerSettings.HcUserFriendListSize :
+                    ServerSettings.NormalUserFriendListSize);
         }
         public int GetClubGiftsCount()
         {
@@ -1019,9 +1029,19 @@ namespace Snowlight.Game.Characters
 
         public void UpdateReceivedDailyReward(SqlDatabaseClient MySqlClient)
         {
+            mTimestampLastReceivedDailyReward = UnixTimestamp.GetCurrent();
+
             MySqlClient.SetParameter("userid", mId);
-            MySqlClient.SetParameter("data", mReceivedDailyReward ? "1" :  "0");
-            MySqlClient.ExecuteNonQuery("UPDATE characters SET received_daily_reward = @data WHERE id = @userid LIMIT 1");
+            MySqlClient.SetParameter("lastreceiveddailyreward", mTimestampLastReceivedDailyReward);
+            MySqlClient.ExecuteNonQuery("UPDATE characters SET daily_reward_last_update = @lastreceiveddailyreward WHERE id = @userid LIMIT 1");
+        }
+
+        private bool HasRight(SqlDatabaseClient MySqlClient, string Right)
+        {
+            AchievementCache mAchievementCache = new AchievementCache(MySqlClient, mId);
+            BadgeCache mBadgeCache = new BadgeCache(MySqlClient, mId, mAchievementCache);
+
+            return mBadgeCache != null && mBadgeCache.HasRight(Right);
         }
     }
 }

@@ -69,7 +69,7 @@ class Users extends Security
 		$initial_figure = "hr-3194-40-31.cc-3039-100.sh-290-62.hd-3092-1.lg-270-110.fa-1206-62.ha-3129-100"; // Figure
 		$initial_motto = "uberHotel Newbie"; // Motto
 		$initial_credits = "100"; // Credits
-		$initial_pixels = "0,1500"; // 0 = Pixels | , = Separator char | 1500 = Initial Value
+		$initial_pixels = "0,150"; // 0 = Pixels | , = Separator char | 150 = Initial Value
 
 		mysql_query("INSERT INTO users (account_password, account_email) VALUES ('".$sha1_password."', '".$entered_email."');");
 		$last = mysql_insert_id();
@@ -233,9 +233,86 @@ class Users extends Security
 		echo $user_data[''.$value.''];
 	}
 	
+	public function GetSubscriptionValue($uid, $value)
+	{
+		$result = mysql_query("SELECT * FROM user_subscriptions WHERE user_id = '$uid' LIMIT 1");
+		$subscription_data = mysql_fetch_array($result);
+		return $subscription_data[''.$value.''];
+	}
+	
+	public function GetSubscriptionString($uid)
+	{
+		$level = Users::GetSubscriptionValue($uid, 'subscription_level');
+		
+		$daysstr = "Join now!";
+		$levelstr = "";
+		
+		switch($level)
+		{
+			case "2":
+				$levelstr = "vip";
+				break;
+				
+			default:
+			case "1":
+			case "0":
+				$levelstr = "uc";
+				break;
+		}
+		
+		$days = Users::GetSubscriptionDays($uid);
+		
+		if($days > 0)
+		{
+			$daysstr = $days . " " . $levelstr . " days left";
+		}
+		
+		echo $daysstr;
+	}
+	
+	public function GetSubscriptionDays($uid)
+	{
+		$subscription_expire = Users::GetSubscriptionValue($uid, 'timestamp_expire');
+		
+		$dategmt0 = time() - (3600 * 3); 
+		
+		$diff = $subscription_expire - $dategmt0;
+		
+		$ceil = ceil($diff / 86400.0);
+		
+		return $ceil;
+	}
+	
+	public function GetSubscriptionType($uid)
+	{
+		$level = Users::GetSubscriptionValue($uid, 'subscription_level');
+		
+		$imagestr = "";
+		
+		switch($level)
+		{
+			case "2":
+				$imagestr = "vip";
+				break;
+				
+			default:
+			case "1":
+			case "0":
+				$imagestr = "hc";
+				break;
+		}
+		
+		if(Users::GetSubscriptionDays($uid) <= 0)
+		{
+			$imagestr = "hc";
+		}
+		
+		echo $imagestr;
+	}
+	
 	public function GetActivityPointsValue($uid, $seasonalcurrency)
 	{
-		//$return = "Not Found Information";
+		$return = "0";
 		
 		$result = mysql_result(mysql_query("SELECT activity_points_balance FROM characters WHERE account_uid = '$uid' LIMIT 1"), 0);
 		
@@ -292,9 +369,14 @@ class Users extends Security
 					case "HBA":
 						$rankstring = "Administrator";
 						break;
-				
+					
+					case "US09":
 					case "NWB":
 						$rankstring = "Moderator";
+						break;
+						
+					case "XXX":
+						$rankstring = "Trial Moderator";
 						break;
 				}
 			}

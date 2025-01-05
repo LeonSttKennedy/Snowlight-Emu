@@ -48,7 +48,7 @@ namespace Snowlight.Util
         {
             int CountLoaded = 0;
             Clear();
-            DataTable TextsTable = MySqlClient.ExecuteQueryTable("SELECT identifier, display_text FROM server_ingame_texts ORDER BY identifier ASC;");
+            DataTable TextsTable = MySqlClient.ExecuteQueryTable("SELECT identifier, display_text FROM server_ingame_texts ORDER BY identifier ASC");
             
             foreach(DataRow Row in TextsTable.Rows)
             {

@@ -1,6 +1,6 @@
 	<div class="serverstatus">
 		<div class="onlinecounter">              
-			<img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_users.png" /> <?php CheckUsersOnline(); ?>
+			<img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_users.png" /> <?php CheckUsersOnline(); ?>&nbsp;
 		</div> 
 <?php
 if($_SESSION['login'])

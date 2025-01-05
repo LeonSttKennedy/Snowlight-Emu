@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Snowlight.Game.Rooms;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Characters;
+using System.Collections.ObjectModel;
 
 namespace Snowlight.Game.Rights
 {
@@ -27,6 +28,7 @@ namespace Snowlight.Game.Rights
         private double mHcTime;
         private double mVipTime;
         private int mGiftPoints;
+        private List<uint> mOneTimeGiftsRedeem;
 
         public bool IsActive
         {
@@ -139,8 +141,7 @@ namespace Snowlight.Game.Rights
         {
             get
             {
-                DateTime DT = UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastGiftPoint);
-                return new DateTime(DT.Year, DT.Month, DT.Day, 0, 0, 0);
+                return UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastGiftPoint);
             }
         }
 
@@ -148,8 +149,7 @@ namespace Snowlight.Game.Rights
         {
             get
             {
-                DateTime DT = UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastGiftPoint).AddMonths(1);
-                return new DateTime(DT.Year, DT.Month, DT.Day, 0, 0, 0);
+                return UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastGiftPoint).AddMonths(1);
             }
         }
 
@@ -157,15 +157,9 @@ namespace Snowlight.Game.Rights
         {
             get
             {
-                bool Give = false;
                 int Compare = DateTime.Compare(DateTime.Now, NextGiftPointDateTime);
 
-                if (Compare > -1)
-                {
-                    Give = true;
-                }
-
-                return IsActive && (Give || mTimestampLastGiftPoint == 0);
+                return IsActive && Compare >= 0 || !IsActive && mTimestampLastGiftPoint > 0;
             }
         }
 
@@ -190,10 +184,20 @@ namespace Snowlight.Game.Rights
                 mGiftPoints = value;
             }
         }
+
+        public ReadOnlyCollection<uint> OneTimeGiftsRedeem
+        {
+            get
+            {
+                List<uint> Copy = new List<uint>();
+                Copy.AddRange(mOneTimeGiftsRedeem);
+                return Copy.AsReadOnly();
+            }
+        }
         #endregion
 
         public ClubSubscription(uint UserId, ClubSubscriptionLevel BaseLevel, double TimestampCreated, double TimestampExpired,
-            double TimestampLastGiftPoint, double HcTime, double VipTime, int GiftPoints)
+            double TimestampLastGiftPoint, double HcTime, double VipTime, int GiftPoints, List<uint> OneTimeGiftRedeem)
         {
             mUserId = UserId;
             mBaseLevel = BaseLevel;
@@ -203,6 +207,7 @@ namespace Snowlight.Game.Rights
             mHcTime = HcTime;
             mVipTime = VipTime;
             mGiftPoints = GiftPoints;
+            mOneTimeGiftsRedeem = OneTimeGiftRedeem;
 
             if (!IsActive)
             {
@@ -215,21 +220,24 @@ namespace Snowlight.Game.Rights
 
         public void Expire()
         {
+            // If user has to win points give it to him
+            AddGiftPoints(true);
+
+            // Clear catalog cache for user
+            CatalogManager.ClearCacheGroup(mUserId);
+
             mHcTime = PastHcTime;
             mVipTime = PastVipTime;
             mBaseLevel = ClubSubscriptionLevel.None;
             mTimestampCreated = 0;
             mTimestampExpire = 0;
 
-            // Clear catalog cache for user
-            CatalogManager.ClearCacheGroup(mUserId);
-
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 MySqlClient.SetParameter("userid", mUserId);
                 MySqlClient.SetParameter("hctime", mHcTime);
                 MySqlClient.SetParameter("viptime", mVipTime);
-                MySqlClient.ExecuteNonQuery("UPDATE user_subscriptions SET subscription_level = '0', timestamp_created = 0, timestamp_expire = 0, past_time_hc = @hctime, past_time_vip = @viptime WHERE user_id = @userid LIMIT 1");
+                MySqlClient.ExecuteNonQuery("UPDATE user_subscriptions SET subscription_level = '0', timestamp_created = 0, timestamp_expire = 0, timestamp_last_gift_point = 0, past_time_hc = @hctime, past_time_vip = @viptime WHERE user_id = @userid LIMIT 1");
             }
         }
 
@@ -259,7 +267,7 @@ namespace Snowlight.Game.Rights
 
                 if (CreateNewRecord)
                 {
-                    mGiftPoints = (int)SubscriptionLevel;
+                    mGiftPoints = 0; // New club users starts with 0 club gift points :)
 
                     mTimestampLastGiftPoint = UnixTimestamp.GetCurrent();
 
@@ -281,6 +289,7 @@ namespace Snowlight.Game.Rights
 
         #region Club Gifts
 
+        #region Points
         #region Automatically addiction
         public void AddGiftPoints(bool AddPoints = false)
         {
@@ -293,11 +302,11 @@ namespace Snowlight.Game.Rights
                         TimeSpan TimeSpan = DateTime.Now - LastPointDelivery;
                         int TotalMonths = (int)TimeSpan.TotalDays / 31;
 
-                        GiftPoints += TotalMonths > 1 ? TotalMonths * (int)SubscriptionLevel : (int)SubscriptionLevel;
+                        GiftPoints += TotalMonths > 1 ? TotalMonths * (int)mBaseLevel : (int)mBaseLevel;
 
                         DateTime NewDt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, TimestampCreated.Day, 0, 0, 0); // Club points must be given on the day of subscription in the next month :)
 
-                        mTimestampLastGiftPoint = UnixTimestamp.ConvertToUnixTimestamp(NewDt);
+                        mTimestampLastGiftPoint = IsActive ? UnixTimestamp.ConvertToUnixTimestamp(NewDt) : 0;
 
                         MySqlClient.SetParameter("userid", mUserId);
                         MySqlClient.SetParameter("giftpoints", mGiftPoints);
@@ -329,9 +338,9 @@ namespace Snowlight.Game.Rights
                 MySqlClient.SetParameter("giftpoints", mGiftPoints);
                 if(CreateNewRecord)
                 {
-                    MySqlClient.SetParameter("createstamp", mTimestampExpire);
+                    MySqlClient.SetParameter("createstamp", mTimestampCreated);
                     MySqlClient.SetParameter("expirestamp", mTimestampExpire);
-                    MySqlClient.SetParameter("lastupdate", mTimestampExpire);
+                    MySqlClient.SetParameter("lastupdate", mTimestampLastGiftPoint);
                     MySqlClient.SetParameter("level", ((int)mBaseLevel).ToString());
 
                     MySqlClient.ExecuteNonQuery("INSERT INTO user_subscriptions (user_id,subscription_level,timestamp_created,timestamp_expire,timestamp_last_gift_point,gift_points) VALUES (@userid,@level,@createstamp,@expirestamp,@lastupdate,@giftpoints)");
@@ -344,6 +353,31 @@ namespace Snowlight.Game.Rights
         }
         #endregion
 
+        #endregion
+
+        #region One Time Only Redeem
+
+        public void AddGiftRedeem(SqlDatabaseClient MySqlClient, uint DefinitionId)
+        {
+            if (WasGiftRedeemed(DefinitionId))
+            {
+                return;
+            }
+
+            mOneTimeGiftsRedeem.Add(DefinitionId);
+
+            MySqlClient.SetParameter("userid", mUserId);
+            MySqlClient.SetParameter("onetimelist", string.Join("|", mOneTimeGiftsRedeem));
+            MySqlClient.ExecuteNonQuery("UPDATE user_subscriptions SET one_time_gifts_redeem = @onetimelist WHERE user_id = @userid LIMIT 1");
+        }
+
+        public bool WasGiftRedeemed(uint DefinitionId)
+        {
+            return mOneTimeGiftsRedeem.Contains(DefinitionId);
+        }
+
+        #endregion
+        
         #endregion
 
         #region Club Badges

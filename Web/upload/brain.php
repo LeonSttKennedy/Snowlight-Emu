@@ -8,6 +8,7 @@
 \==========================================================================*/
 
 header('Content-Type: text/html; charset=iso-8859-1');
+date_default_timezone_set("GMT");
 
 define('DS', DIRECTORY_SEPARATOR);
 define('LB', chr(13));

@@ -96,10 +96,22 @@ a:hover
 }
 
 
-.attention {
-background-color: #D80000 ;
-border: 1px solid #FFF35E;
-color: #FFFFFF;
+.attention
+{
+	background-color: #D80000 ;
+	border: 1px solid #FFF35E;
+	color: #FFFFFF;
+}
+
+.attention p.error a 
+{
+	color: #000000;
+	text-decoration: none; 
+}
+
+.attention p.error a:hover
+{
+	text-decoration: underline;
 }
 
 .txt

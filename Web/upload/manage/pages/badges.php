@@ -12,29 +12,19 @@ if (!HK_LOGGED_IN || !$GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hotel_
 
 $data = null;
 $u = 0;
+$usrSearch = "";
 
-if (isset($_GET['u']) && is_numeric($_GET['u']))
+if (isset($_GET['u']) && is_numeric($_GET['u']) || isset($_POST['usrsearch']))
 {
 	$u = intval($_GET['u']);
-	$getData = mysql_query("SELECT id,username FROM characters WHERE id = '" . $u . "' LIMIT 1");
+	$usrSearch = $_POST['usrsearch'];
+	
+	$getData = mysql_query("SELECT id,username FROM characters WHERE id = '$u' OR username = '$usrSearch' LIMIT 1");
 	
 	if (mysql_num_rows($getData) > 0)
 	{
 		$data = mysql_fetch_assoc($getData);
 	}
-}
-else if (isset($_POST['usrsearch']))
-{
-	$usrSearch = $_POST['usrsearch'];
-	$getData = mysql_query("SELECT id,username FROM characters WHERE username = '" . $usrSearch . "' LIMIT 1");
-	
-	if (mysql_num_rows($getData) > 0)
-	{
-		$data = mysql_fetch_assoc($getData);
-		
-		header("Location: index.php?_cmd=badges&u=" . $data['id']);
-		exit;
-	}	
 	else
 	{
 		fMessage('error', 'User not found!');

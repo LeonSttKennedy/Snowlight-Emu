@@ -176,7 +176,7 @@ foreach($behaviorArray as $b)
 	<?php
 	while($defs = mysql_fetch_assoc($defsquery))
 	{
-		$hascataentry = mysql_query("SELECT * FROM catalog_items WHERE item_ids = '" . $defs['id'] . "'");
+		$hascataentry = mysql_query("SELECT * FROM catalog_items WHERE base_id = '" . $defs['id'] . "'");
 		
 		echo '<tr>';
 		echo '<td>#' . $defs["id"] . '</td>';

@@ -60,7 +60,7 @@ class TemplateManager extends Security
         return $str;
 	}
 
-	public function Head_Foot(){echo "<!---- RainbowCMS - Created by LeoXDR edited by Souza --->";}
+	public function Head_Foot(){echo "<!---- RainbowCMS - Created by LeoXDR edited by wSaturnino --->";}
 	public function Down_Foot(){echo "<!---- Developed with the permission of Meth0d and based in RetroCMS style. --->";}
 
 	public function GetHeader()	{ require_once('requires/tpl/header.tpl');	}

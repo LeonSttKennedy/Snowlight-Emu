@@ -2,7 +2,7 @@
 <body> 
 	<div class="wrapper">	
 		<div id="navi"> 
-			<div style="float: left; width: 55%;"> 
+			<div style="float: left; width: 50%;"> 
 				<ul class="navilist"> 
 					<?php require_once("menu.tpl") ?>
 				</ul> 

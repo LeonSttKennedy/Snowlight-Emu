@@ -515,6 +515,7 @@ namespace Snowlight.Game.Rooms
 
             Session.RoomAuthed = true;
             Session.RoomJoined = true;
+            Session.RoomJoinedTimestamp = UnixTimestamp.GetCurrent();
 
             ModerationLogs.LogRoomEntry(Session.CharacterId, Instance.RoomId);
             MessengerHandler.MarkUpdateNeeded(Session, 0, false);

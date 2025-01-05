@@ -60,7 +60,7 @@ $motdtext = explode("|", GetServerSettings(motd_text));
 					Credits:<br /><input type="number" name="activitypointscredits" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_credits_amount); ?>" />
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
-					Activity Points:<br /><input type="number" name="activitypointspixels" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_pixels_amount); ?>" />
+					Activity Points:<br /><input type="number" name="activitypointspixels" style="text-align:center;" value="<?php echo GetServerSettings(activitypoints_amount); ?>" />
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
 					<input type="checkbox" name="activitypointstovipenabled" <?php echo (GetServerSettings(more_activitypoints_for_vip_users) == "1" ? 'checked="on"' : ''); ?> />&nbsp;&nbsp;Users with VIP Subscription <?php echo (GetServerSettings(more_activitypoints_for_vip_users) == "1" ? '' : 'do not'); ?> will win more bonuses while logged in.
@@ -69,7 +69,27 @@ $motdtext = explode("|", GetServerSettings(motd_text));
 					To VIP Credits:<br /><input type="number" name="activitypointstovipcredits" style="text-align:center;" value="<?php echo GetServerSettings(more_activitypoints_credits_amount); ?>" />
 				</p>
 				<p style="margin: 5px 0 5px 5px;">
-					To VIP Activity Points:<br /><input type="number" name="activitypointstovippixels" style="text-align:center;" value="<?php echo GetServerSettings(more_activitypoints_pixels_amount); ?>" />
+					To VIP Activity Points:<br /><input type="number" name="activitypointstovippixels" style="text-align:center;" value="<?php echo GetServerSettings(more_activitypoints_amount); ?>" />
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="border-width: 2px; border-style:dashed; border-color:#93c1a7;">
+				<h2 style="margin: 0;">Daily Reward</h2><br />
+				<p style="margin: 5px 0 0 5px;">
+					<input type="checkbox" name="dailyrewardenabled" <?php echo (GetServerSettings(activitypoints_enabled) == "1" ? 'checked="on"' : ''); ?> />&nbsp;&nbsp;Users <?php echo (GetServerSettings(daily_reward_enabled) == "1" ? '' : 'do not'); ?> will win daily reward.
+				</p>
+				<p style="margin: 5px 0 5px 5px;">
+					Type:<br /><select name="dailyrewardtype"><?php foreach($currenciesarray as $string) { echo '<option value="' . $string . '" ' . ((GetServerSettings(daily_activitypoints_type) == $string) ? 'selected' : '') . '>' . ucfirst($string) . '</option>'; }?></select>
+				</p>
+				<p style="margin: 5px 0 5px 5px;">
+					Time to wait (in Min):<br /><input type="number" name="dailyrewardwait" style="text-align:center;" value="<?php echo GetServerSettings(daily_reward_wait_time); ?>" />
+				</p>
+				<p style="margin: 5px 0 5px 5px;">
+					Credits:<br /><input type="number" name="activitypointscredits" style="text-align:center;" value="<?php echo GetServerSettings(daily_credits_amount); ?>" />
+				</p>
+				<p style="margin: 5px 0 5px 5px;">
+					Activity Points:<br /><input type="number" name="activitypointspixels" style="text-align:center;" value="<?php echo GetServerSettings(daily_activitypoints_amount); ?>" />
 				</p>
 			</td>
 		</tr>

@@ -47,7 +47,7 @@ function ClubRestrictionString($restrictionid)
 			break;
 				
 		case 1:
-			$restriction = 'For HC Members';
+			$restriction = 'For UC Members';
 			break;
 				
 		case 2:
@@ -63,31 +63,31 @@ function SeasonalCurrency($currency)
 	switch($currency)
 	{
 		case "pixels":
-			$str_retun = 'Pixels';
+			$str_return = 'Pixels';
 			break;
 				
 		case "snowflakes":
-			$str_retun = 'Snowflakes';
+			$str_return = 'Snowflakes';
 			break;
 				
 		case "hearts":
-			$str_retun = 'Hearts';
+			$str_return = 'Hearts';
 			break;
 							
 		case "giftpoints":
-			$str_retun = 'Gift Points';
+			$str_return = 'Gift Points';
 			break;
 										
 		case "shells":
-			$str_retun = 'Shells';
+			$str_return = 'Shells';
 			break;
 			
 		case "diamonds":
-			$str_retun = 'Diamonds';
+			$str_return = 'Diamonds';
 			break;
 	}
 	
-	return $str_retun;
+	return $str_return;
 }
 
 $limit = 15;
@@ -121,7 +121,8 @@ $searchparams = array(
 	'cost_credits_min' => (isset($_POST['cost_credits_min']) && is_numeric($_POST['cost_credits_min']) && $_POST['cost_credits_min'] > 0 && $_POST['cost_credits_min'] <= $maxcredits) ? $_POST['cost_credits_min'] : "",
 	'cost_credits_max' => (isset($_POST['cost_credits_max']) && is_numeric($_POST['cost_credits_max']) && $_POST['cost_credits_max'] > 0 && $_POST['cost_credits_max'] <= $maxcredits) ? $_POST['cost_credits_max'] : "",
 	'cost_pixels_min' => (isset($_POST['cost_credits_min']) && is_numeric($_POST['cost_pixels_min']) && $_POST['cost_pixels_min'] > 0 && $_POST['cost_pixels_min'] <= $maxpixels) ? $_POST['cost_pixels_min'] : "",
-	'cost_pixels_max' => (isset($_POST['cost_credits_max']) && is_numeric($_POST['cost_pixels_max']) && $_POST['cost_pixels_max'] > 0 && $_POST['cost_pixels_max'] <= $maxpixels) ? $_POST['cost_pixels_max'] : ""
+	'cost_pixels_max' => (isset($_POST['cost_credits_max']) && is_numeric($_POST['cost_pixels_max']) && $_POST['cost_pixels_max'] > 0 && $_POST['cost_pixels_max'] <= $maxpixels) ? $_POST['cost_pixels_max'] : "",
+	'parent_id' => (isset($_POST['parent_id']) && is_numeric($_POST['parent_id'])) ? $_POST['parent_id'] : "-1"
 );
 
 if(isset($_GET['query']))
@@ -153,7 +154,7 @@ if(is_numeric($searchparams['page_id']) || strlen($searchparams['name']) > 0 || 
 				{
 					$searchstring[] = "$searchkey = '$searchvalue'";
 				}
-			continue;
+				continue;
 			
 			case 'cost_credits_min':
 				if(is_numeric($searchparams["cost_credits_min"]) && $searchparams["cost_credits_min"] > 0)
@@ -192,20 +193,20 @@ if(is_numeric($searchparams['page_id']) || strlen($searchparams['name']) > 0 || 
 	}
 	
 	$orderby = (is_numeric($searchparams['page_id'])) ? " ORDER BY order_id ASC" : "";
-	
-	$whreCase = join(" AND ", $searchstring);
-	if(strlen($whreCase) > 0)
-	{
-		$allwhreCase = " WHERE " . $whreCase . $orderby;
-		$catalogueitemsquerystring .= "WHERE " . $whreCase . $orderby . " ";
-	}
+}
+
+$searchstring[] = "parent_id = '" . ((isset($_POST['parent_id']) && is_numeric($_POST['parent_id'])) ? $_POST['parent_id'] : '-1') . "'";
+$whreCase = join(" AND ", $searchstring);
+if(strlen($whreCase) > 0)
+{
+	$allwhreCase = " WHERE " . $whreCase . $orderby;
+	$catalogueitemsquerystring .= "WHERE " . $whreCase . $orderby . " ";
 }
 
 $catalogueitemsquerystring .= "LIMIT $start,$limit";
+
 $catalogueitemsquery = mysql_query($catalogueitemsquerystring);
 $all = intval(mysql_num_rows(mysql_query("SELECT * FROM catalog_items" . $allwhreCase)));
-
-echo $catalogueitemsquerystring;
 
 if (isset($_POST['update-order']))
 {
@@ -243,6 +244,7 @@ require_once "top.php";
 
 <h2>Search a catalogue item</h2><br />
 <form method="post">
+Parent id:&nbsp;&nbsp;<input type="text" name="parent_id" value="<?php echo ((is_numeric($searchparams['parent_id']) && $searchparams['parent_id'] > 0) ?  $searchparams['parent_id'] : ''); ?>"><br /><br />
 Item name:&nbsp;&nbsp;<input type="text" name="name" value="<?php echo ((strlen($searchparams['name']) > 0) ?  $searchparams['name'] : ''); ?>"><br /><br />
 Parent page:&nbsp;&nbsp;<select name="page_id">
 <option value="" disabled selected hidden></option>
@@ -262,7 +264,7 @@ while($pageid = mysql_fetch_array($getcatalogpages))
 foreach($pageIDs as $id)
 {
 	$getparentid = mysql_fetch_assoc(mysql_query("SELECT * FROM catalog WHERE id = '" . $id . "' LIMIT 1"));
-	echo '<option value="' . intval($getparentid['id']) . '" ' . ($getparentid['id'] == $searchparams['page_id'] ? 'selected' : '') . '>' . $getparentid['title'] . '</option>';
+	echo '<option value="' . $id . '" ' . ($getparentid['id'] == $searchparams['page_id'] ? 'selected' : '') . '>' . $getparentid['title'] . '</option>';
 }
 ?>
 </select><br /><br />
@@ -324,7 +326,7 @@ Enabled:&nbsp;&nbsp;<input type="radio" name="enabled" <?php echo ((is_numeric($
 		echo '<td><center>' . $item["cost_credits"] . '&nbsp;CR&nbsp;&&nbsp;' . $item["cost_activitypoints"] . '&nbsp;AP</center></td>';
 		echo '<td><center>'. SeasonalCurrency($item["seasonal_currency"]) . '</center></td>';
 		echo '<td>' . ($item["enabled"] == "1" ? 'Yes' : 'No') . '</td>';
-		echo '<td>' . $item["amount"] . '</td>';
+		echo '<td>' . $item["amount"]. '</td>';
 		echo '<td>' . ClubRestrictionString($item['club_restriction']) . '</td>';
 		echo '<td><input type="button" value="Edit" onclick="window.location = \'index.php?_cmd=catalogueitemsedit&itemId=' . $item["id"] . '\';">&nbsp;<input type="button" value="Delete" onclick="if(confirm(\'Do you really want to delete this item ' . $item["name"] . ' ( #' . $item["id"] . ' )\ ?\')){window.location = \'index.php?_cmd=catalogueitems&doDel=' . $item["id"] . '\';}"></td>';
 		echo '</tr>';

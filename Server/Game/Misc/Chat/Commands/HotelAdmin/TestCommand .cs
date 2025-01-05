@@ -80,6 +80,24 @@ namespace Snowlight.Game.Misc
             ServerMessage N = new ServerMessage(916);
             N.AppendInt32(Id);
             Session.SendData(N);*/
+
+            /*
+            * I don't know what these request needs
+            * Maybe needs to be called when loading a public room?
+            
+            int.TryParse(Params[1], out int QueueInt1);
+            int.TryParse(Params[3], out int QueueInt2);
+            int.TryParse(Params[4], out int QueueInt3);
+            int.TryParse(Params[6], out int QueueInt4);
+
+            ServerMessage Queue = new ServerMessage(259);
+            Queue.AppendInt32(QueueInt1);
+            Queue.AppendStringWithBreak(Params[2]);
+            Queue.AppendInt32(QueueInt2);
+            Queue.AppendInt32(QueueInt3);
+            Queue.AppendStringWithBreak(Params[5]);
+            Queue.AppendInt32(QueueInt4);
+            Session.SendData(Queue);*/
         }
     }
 }

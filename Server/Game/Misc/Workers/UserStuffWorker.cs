@@ -71,7 +71,7 @@ namespace Snowlight.Game.Misc
                         {
                             foreach (Session Session in Sessions.Values)
                             {
-                                if (!Session.Authenticated || Session.Stopped || !Session.InRoom)
+                                if (!Session.Authenticated || Session.Stopped)
                                 {
                                     continue;
                                 }
@@ -137,7 +137,7 @@ namespace Snowlight.Game.Misc
         private static void DeliveryStuff(Session Session, SqlDatabaseClient MySqlClient)
         {
             TimeSpan TS = UnixTimestamp.ElapsedTime(Session.CharacterInfo.LastActivityPointsUpdate);
-            TimeSpan TSLastLogin = UnixTimestamp.ElapsedTime(Session.CharacterInfo.TimestampLastOnline);
+            TimeSpan TSLastJoinedRoom = UnixTimestamp.ElapsedTime(Session.RoomJoinedTimestamp);
 
             int CreditsAmount = 0;
             Dictionary<SeasonalCurrencyList, int> ActivityPointsToDelivery = new Dictionary<SeasonalCurrencyList, int>();
@@ -145,7 +145,7 @@ namespace Snowlight.Game.Misc
             #region Daily login reward
             if (ServerSettings.DailyRewardEnabled && !Session.CharacterInfo.ReceivedDailyReward)
             {
-                if (Session.InRoom && TSLastLogin.TotalMinutes >= ServerSettings.DailyRewardWaitTime)
+                if (Session.InRoom && TSLastJoinedRoom.TotalMinutes >= ServerSettings.DailyRewardWaitTime)
                 {
                     if (ServerSettings.DailyRewardCreditsAmount > 0)
                     {
@@ -164,7 +164,6 @@ namespace Snowlight.Game.Misc
                         }
                     }
 
-                    Session.CharacterInfo.ReceivedDailyReward = true;
                     Session.CharacterInfo.UpdateReceivedDailyReward(MySqlClient);
                 }
             }

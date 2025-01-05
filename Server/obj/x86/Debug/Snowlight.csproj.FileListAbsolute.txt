@@ -1,29 +1,59 @@
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.AssemblyReference.cache
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.SuggestedBindingRedirects.cache
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.CoreCompileInputs.cache
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe.config
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe.manifest
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.application
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.pdb
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\MySql.Data.dll
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.TrustInfo.xml
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.exe.manifest
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.application
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.CopyComplete
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.exe
-C:\Users\Xablau\Documents\Bkp\Recovered data 11-07 19_25_13\Resultado de Digitalização Profunda\Partição Perdida1(NTFS)\Other lost files\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.pdb
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\bin\Snowlight.exe.config
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\bin\Snowlight.exe.manifest
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\bin\Snowlight.application
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\bin\Snowlight.exe
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\bin\Snowlight.pdb
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\bin\MySql.Data.dll
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.csproj.AssemblyReference.cache
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.csproj.CoreCompileInputs.cache
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.TrustInfo.xml
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.exe.manifest
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.application
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.exe
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.pdb
-D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Snowlight-Emu\Server\obj\x86\Debug\Snowlight.csproj.Up2Date
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.csproj.AssemblyReference.cache
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.csproj.SuggestedBindingRedirects.cache
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.csproj.CoreCompileInputs.cache
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.exe.config
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.exe.manifest
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.application
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.exe
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.pdb
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/MySql.Data.dll
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.TrustInfo.xml
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.exe.manifest
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.application
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.csproj.CopyComplete
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.exe
+C:/Users/Xablau/Documents/Bkp/Recovered data 11-07 19_25_13/Resultado de Digitalização Profunda/Partição Perdida1(NTFS)/Other lost files/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.pdb
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/bin/Snowlight.exe.config
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/bin/Snowlight.exe.manifest
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/bin/Snowlight.application
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/bin/Snowlight.exe
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/bin/Snowlight.pdb
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/bin/MySql.Data.dll
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/obj/x86/Debug/Snowlight.csproj.AssemblyReference.cache
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/obj/x86/Debug/Snowlight.csproj.CoreCompileInputs.cache
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/obj/x86/Debug/Snowlight.TrustInfo.xml
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/obj/x86/Debug/Snowlight.exe.manifest
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/obj/x86/Debug/Snowlight.application
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/obj/x86/Debug/Snowlight.exe
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/obj/x86/Debug/Snowlight.pdb
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Snowlight-Emu/Server/obj/x86/Debug/Snowlight.csproj.Up2Date
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.exe.config
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.exe.manifest
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.application
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.exe
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/Snowlight.pdb
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/bin/MySql.Data.dll
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.csproj.AssemblyReference.cache
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.csproj.CoreCompileInputs.cache
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.TrustInfo.xml
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.exe.manifest
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.application
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.csproj.Up2Date
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.exe
+D:/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.pdb
+/mnt/AC58D76C58D73434/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.exe
+/mnt/AC58D76C58D73434/Arquivos/ESTUDO/ESTUDO/Snowlight-master/Snowlight-master/Server/obj/x86/Debug/Snowlight.pdb
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe.config
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe.manifest
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.application
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.exe
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\Snowlight.pdb
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\bin\MySql.Data.dll
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.AssemblyReference.cache
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.CoreCompileInputs.cache
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.TrustInfo.xml
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.exe.manifest
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.application
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.Up2Date
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.exe
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.pdb

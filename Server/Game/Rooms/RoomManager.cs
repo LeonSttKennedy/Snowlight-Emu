@@ -464,6 +464,7 @@ namespace Snowlight.Game.Rooms
                 Session.AbsoluteRoomId = 0;
                 Session.RoomAuthed = false;
                 Session.RoomJoined = false;
+                Session.RoomJoinedTimestamp = 0;
 
                 MessengerHandler.MarkUpdateNeeded(Session, 0, false);
 

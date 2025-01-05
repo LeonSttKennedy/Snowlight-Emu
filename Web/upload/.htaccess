@@ -1,0 +1,14 @@
+RewriteEngine On
+
+ErrorDocument 400 /error.php?e=400
+ErrorDocument 401 /error.php?e=401
+ErrorDocument 403 /error.php?e=403
+ErrorDocument 404 /error.php?e=404
+ErrorDocument 500 /error.php?e=500 
+
+RewriteRule ^flash_client_error(|/)$ /client_error.php
+RewriteRule ^client_error(|/)$ /client_error.php
+
+RewriteRule ^account/disconnected(|/)$ /disconnected.php
+
+RewriteRule habbo-imaging/avatar.gif habbo-imaging/avatar.php

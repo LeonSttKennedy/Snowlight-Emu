@@ -126,14 +126,34 @@ echo '<thead>';
 echo '<td>Set ID</td>';
 echo '<td>Right ID</td>';
 echo '</thead>';
+
+$rightIDs = Array();
 $rights = mysql_query("SELECT * FROM rights ORDER BY set_id,right_id ASC");
 while($rightsassoc = mysql_fetch_assoc($rights))
 {
-	echo '<tr>';
-	echo '<td>' . $rightsassoc["set_id"] . '</td>';
-	echo '<td>' . $rightsassoc["right_id"] . '</td>';
-	echo '</tr>';
+	$sets = mysql_query("SELECT * FROM rights WHERE set_id = '" . $rightsassoc["set_id"] . "'");
+	if(mysql_num_rows($sets) > 0 && !in_array($rightsassoc["set_id"], $rightIDs))
+	{
+		array_push($rightIDs, $rightsassoc["set_id"]);
+	}
 }
+
+foreach($rightIDs as $id)
+{
+	$setsarray = Array();
+	
+	echo '<tr>';
+	echo '<td style="width: 10%; text-align: center;">' . $id . '</td>';
+	$getparentid = mysql_query("SELECT * FROM rights WHERE set_id = '$id'");
+	while($assoc = mysql_fetch_assoc($getparentid))
+	{
+		array_push($setsarray, $assoc["right_id"]);
+	}
+
+	echo '<td style="width: 90%;">' . join("<br />", $setsarray) . '</td>';
+	echo '</tr>';	
+}
+
 echo '</table>';
 echo '<br />';
 echo 'To manage rights sets <a href="index.php?_cmd=rightsets">click here</a>.';

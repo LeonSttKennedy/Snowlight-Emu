@@ -322,9 +322,9 @@ function popSsoClient(username)
 		<?php if ($GetUsers->HasRight($GetUsers->Name2Id(USER_NAME), 'hotel_admin')) { ?>
 		<h2>
 			Server Management
-			<a href="#" onclick="Toggle('emu'); return false"><div class="plus" id="plus-emu">-</div></a>		
+			<a href="#" onclick="Toggle('hotel'); return false"><div class="plus" id="plus-hotel">-</div></a>		
 		</h2>
-		<ul id="list-emu" class="listmnu">
+		<ul id="list-hotel" class="listmnu">
 			<li><a href="index.php?_cmd=servertexts">Server texts</a></li>
 			<li><a href="index.php?_cmd=serversettings">Server settings</a></li>	
 		</ul>

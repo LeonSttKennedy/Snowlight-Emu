@@ -58,6 +58,7 @@ namespace Snowlight.Game.Sessions
         private uint mRoomId;
         private bool mRoomAuthed;
         private bool mRoomJoined;
+        private double mRoomJoinedTimestamp;
 
         private string mUserAgent;
 
@@ -303,6 +304,19 @@ namespace Snowlight.Game.Sessions
             }
         }
 
+        public double RoomJoinedTimestamp
+        {
+            get
+            {
+                return mRoomJoinedTimestamp;
+            }
+
+            set
+            {
+                mRoomJoinedTimestamp = value;
+            }
+        }
+
         public string UserAgent
         {
             get
@@ -446,21 +460,36 @@ namespace Snowlight.Game.Sessions
                 MySqlClient.SetParameter("userid", CharacterId);
                 DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM user_subscriptions WHERE user_id = @userid");
 
-                mSubscriptionManager = (Row != null ? new ClubSubscription(CharacterId,
+                ClubSubscription UserSubscription = new ClubSubscription(CharacterId, ClubSubscriptionLevel.None, 0, 0, 0, 0, 0, 0, new List<uint>() { });
+
+                if (Row != null)
+                {
+                    string[] SplitedIds = Row["one_time_gifts_redeem"].ToString().Split('|');
+
+                    List<uint> GiftRedeemList = new List<uint>();
+
+                    foreach (string StringIds in SplitedIds)
+                    {
+                        if (uint.TryParse(StringIds, out uint UserId))
+                        {
+                            if (!GiftRedeemList.Contains(UserId))
+                            {
+                                GiftRedeemList.Add(UserId);
+                            }
+                        }
+                    }
+
+                    UserSubscription = new ClubSubscription(CharacterId,
                     (ClubSubscriptionLevel)int.Parse((Row["subscription_level"].ToString())), (double)Row["timestamp_created"],
                     (double)Row["timestamp_expire"], (double)Row["timestamp_last_gift_point"],
-                    (double)Row["past_time_hc"], (double)Row["past_time_vip"], (int)Row["gift_points"]) :
-                    new ClubSubscription(CharacterId, ClubSubscriptionLevel.None, 0, 0, 0, 0, 0, 0));
+                    (double)Row["past_time_hc"], (double)Row["past_time_vip"], (int)Row["gift_points"], GiftRedeemList);
+                }
+
+                mSubscriptionManager = UserSubscription;
 
                 mSubscriptionManager.AddGiftPoints(true);
 
                 mAvatarEffectCache.CheckEffectExpiry(this);
-
-                if (mCharacterInfo.DateTimeLastLogin.ToString("dd-MM-yyyy") != DateTime.Now.ToString("dd-MM-yyyy"))
-                {
-                    mCharacterInfo.ReceivedDailyReward = false;
-                    mCharacterInfo.UpdateReceivedDailyReward(MySqlClient);
-                }
 
                 mCharacterInfo.Online = true;
                 mCharacterInfo.UpdateOnline(MySqlClient);
@@ -636,6 +665,7 @@ namespace Snowlight.Game.Sessions
 
                 mCharacterInfo.TimestampLastOnline = UnixTimestamp.GetCurrent();
                 mCharacterInfo.UpdateLastOnline(MySqlClient);
+                mCharacterInfo.SetLastActivityPointsUpdate(MySqlClient);
 
                 mSubscriptionManager.UpdateUserBadge();
             }

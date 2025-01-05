@@ -38,7 +38,7 @@ namespace Snowlight.Game.Quests
 
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
-            mDailyQuestsSettings = new DailyQuest(0, 0 , 0);
+            mDailyQuestsSettings = new DailyQuest(0, 0, 0);
             mQuests = new Dictionary<uint, Quest>();
             mSyncRoot = new object();
 

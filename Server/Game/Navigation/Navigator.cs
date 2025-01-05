@@ -644,8 +644,8 @@ namespace Snowlight.Game.Navigation
                     (from RoomInstance in RoomManager.RoomInstances
                     where RoomInstance.Value.HumanActorCount > 0 &&
                         RoomInstance.Value.Info.Type == RoomType.Flat &&
-                        (RoomInstance.Value.Info.OwnerName.StartsWith(Query) ||
-                        RoomInstance.Value.SearchableTags.Contains(Query) ||
+                        (OnlyOwner && RoomInstance.Value.Info.OwnerName.StartsWith(Query) ||
+                        OnlyTag && RoomInstance.Value.SearchableTags.Contains(Query) ||
                         RoomInstance.Value.Info.Name.Contains(Query) ||
                         (RoomInstance.Value.HasOngoingEvent &&
                         (RoomInstance.Value.Event.Name.StartsWith(Query) ||
@@ -655,12 +655,6 @@ namespace Snowlight.Game.Navigation
 
                 foreach (RoomInstance Instance in InstanceMatches)
                 {
-                    if(OnlyOwner && !Instance.Info.OwnerName.Equals(Query) ||
-                        OnlyTag && !Instance.SearchableTags.Contains(Query))
-                    {
-                        continue;
-                    }
-
                     Rooms.Add(Instance.RoomId, Instance.Info);
                 }
 

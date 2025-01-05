@@ -15,17 +15,23 @@ padding: 4px 10px 6px 10px;
 <div class="content texthtml">
 <div class="charentry">
 <div class="inner">
-<div class="left" style="width: 65%;">
-<img src="https://imager.habboon.pw/?size=b&action=wav&figure=<?php GetUserInfo($_SESSION['id'], "figure"); ?>" alt="Avatar" align="left" />
+<div class="left" style="width: 55%;">
+<img src="http://www.habbo.com/habbo-imaging/avatarimage?size=b&action=wav&figure=<?php GetUserInfo($_SESSION['id'], "figure"); ?>" alt="Avatar" align="left" />
 <p style="margin-top: 25px; margin-left: 5px; font-size: 125%;">
 <strong><?php GetUserInfo($_SESSION['id'], "username"); ?></strong>
 <br />
-<em>"<?php GetUserInfo($_SESSION['id'], "motto"); ?>"</em>
+<em style="font-size: 90%;">"<?php GetUserInfo($_SESSION['id'], "motto"); ?>"</em>
+<br />
+<p style="font-size: 70%;">Last login:&nbsp;<?php echo date("M j\, Y g:i:s A", Users::GetUserData($_SESSION['id'], "timestamp_lastvisit")); ?></p>
 </p>
 </div>
-<div class="right" style="margin-top: 20px; width: 35%; font-size: 110%;">
-<a style="font-size: 150%;" href="client.php" onclick="window.open('client.php', 'client', 'width=1100,height=700,location=false,status=false,menubar=false,directories=false,toolbar=false,resizable=true,scrollbars=false'); return false;">Enter &raquo;</a>
-<p><img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_credits.png" style="margin-right: 5px;" /><?php GetUserInfo($_SESSION['id'], "credits_balance"); ?>&nbsp;&nbsp;<img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_ap.png" style="margin-left: 5px; margin-right: 5px;" /><?php Users::GetActivityPointsValue($_SESSION['id'], 0); ?></p>
+<div class="right" style="margin-top: 20px; width: 45%; font-size: 90%;">
+	<a style="font-size: 180%;" href="client.php" onclick="window.open('client.php', 'client', 'width=1100,height=700,location=false,status=false,menubar=false,directories=false,toolbar=false,resizable=true,scrollbars=false'); return false;">Enter &raquo;</a>
+	<p>
+		<img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_credits.png" style="margin-left: 5px; margin-right: 5px;" /><?php GetUserInfo($_SESSION['id'], "credits_balance"); ?>&nbsp;&nbsp;
+		<img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_<?php Users::GetSubscriptionType($_SESSION['id']); ?>.png" style="margin-left: 5px; margin-right: 5px;" /><?php Users::GetSubscriptionString($_SESSION['id']); ?>&nbsp;&nbsp;
+		<img src="http://<?php echo SITE_DOMAIN; ?>/images/icon_ap.png" style="margin-left: 5px; margin-right: 5px;" /><?php Users::GetActivityPointsValue($_SESSION['id'], 0); ?>
+	</p>
 </div>
 <div class="clear">
 </div>

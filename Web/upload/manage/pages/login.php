@@ -90,29 +90,9 @@ body
 {
 	display: block;
 	margin: 10px auto;
-	border-color: #000;
-	border-width: 1px 1px 3px 1px;
-	border-style: solid;
-	border-radius: 5px;
+	border: 1px solid #000;
 	width: 400px;
 	padding: 5px 15px 10px 15px;
-}
-
-#loginblock > .error
-{
-	display:block;
-	background-color: #F8E0E0;
-	color: #8A0808;
-	border: 1px solid #000;
-	border-radius: 5px;
-	margin:8px 4px 20px 4px;
-	text-align:center;
-	padding: 8px;
-}
-
-#loginblock > .error b
-{
-	color: darkred;
 }
 
 #loginblock .info
@@ -128,112 +108,64 @@ input.biginput
 	text-align: center;
 	padding: 3px;
 }
-
-input.bigbutton
-{
-	width: 100%;
-	font-size: 2em;
-	text-align: center;
-	padding: 3px;
-	background-color: #FAFAFA;
-	border: 1px solid #F2F2F2;
-	border-radius: 5px;
-	text-decoration: none;
-	transition-duration: 0.4s;
-	margin-right:5px;
-	margin-top:12px;
-	cursor: pointer;
-}
-
-input.lightgreen 
-{
-  background-color: #FAFAFA;
-  border: 1px solid #F2F2F2;
-}
-
-input.lightgreen:hover 
-{
-  background-color: #0e9c3d;
-  border: 1px solid #008000;
-  color: white;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
-
-input.red 
-{
-  background-color: #FAFAFA;
-  border: 1px solid #F2F2F2;
-}
-
-input.red:hover 
-{
-  background-color: #ff0000;
-  border: 1px solid #e50000;
-  color: white;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
 </style>
 </head>
-	<body>
+<body>
 
-		<div id="text">
+<div id="text">
 
-			<img src="http://<?php echo hk_www; ?>/images/lock.png" style="vertical-align: middle;">&nbsp;
-			<b>uberHotel Housekeeping</b> Login
+	<img src="http://<?php echo hk_www; ?>/images/lock.png" style="vertical-align: middle;">&nbsp;
+	<b>uberHotel Housekeeping</b> Login
 
-		</div>
+</div>
 
-		<div id="loginblock">
-			<?php
-	
-			if (isset($_SESSION['HK_LOGIN_ERROR']))
-			{
-		echo '
-			<div class="error">
-				<b>' . $_SESSION['HK_LOGIN_ERROR'] . '</b>
-			</div>
-				';
-				unset($_SESSION['HK_LOGIN_ERROR']);
-			}
-	
-			?>
-	
-			<div class="info">
-						<p>
-							This service is intended for staff only and monitored closely, with 24 hour IP Address records being taken. All activity
-							is recorded, and abuse or unauthorized access will be dealt with appropriately.
-						</p>
+<div id="loginblock">
+
+	<div class="info">
+				<p>
+					This service is intended for staff only and monitored closely, with 24 hour IP Address records being taken. All activity
+					is recorded, and abuse or unauthorized access will be dealt with appropriately.
+				</p>
 				
-						<p>
-							Your username and password to this area are personal. <i>Never</i> give them to anyone under
-							<i>any</i> circumstances.
-						</p>
+				<p>
+					Your username and password to this area are personal. <i>Never</i> give them to anyone under
+					<i>any</i> circumstances.
+				</p>
 
-						<p>
-							Please provide proper authentication in order to access this service.
-						</p>
-			</div>
+				
+				<p>
+					Please provide proper authentication in order to access this service.
+				</p>
+	</div>
 
-			<form method="post">
+	<form method="post">
 
-				<input type="text" name="usr" class="biginput" value="<?php if (LOGGED_IN) { echo USER_NAME; } ?>"><br />
-				<br />
-				<input type="password" name="pwd" class="biginput" value=""><br />
-				<br />
-				<br />
-				<input type="submit" class="bigbutton lightgreen" value="Log in">
-				<br />
-				<br />
-				<input type="button" onclick="document.location = '/';" class="bigbutton red" value="Get me out of here">
+		<input type="text" name="usr" class="biginput" value="<?php if (LOGGED_IN) { echo USER_NAME; } ?>"><br />
+		<br />
+		<input type="password" name="pwd" class="biginput" value=""><br />
+		<br />
+		<input type="submit" class="biginput" value="Log in">
+		<input type="button" onclick="document.location = '/';" class="biginput" value="Get me out of here">
 
-			</form>
-
-		<?php if (LOGGED_IN) { ?>
-			<p>
-				You are currently logged in to the main site as <b><?php echo USER_NAME; ?></b>.
-			</p>
-		<?php } ?>	
+	</form>
 	
-		</div>
-	</body>
+	<?php
+	
+	if (isset($_SESSION['HK_LOGIN_ERROR']))
+	{
+		echo '<b style="color: darkred;">' . $_SESSION['HK_LOGIN_ERROR'] . '</b>';
+		unset($_SESSION['HK_LOGIN_ERROR']);
+	}
+	
+	?>
+	
+				<?php if (LOGGED_IN) { ?>
+				<p>
+					You are currently logged in to the main site as <b><?php echo USER_NAME; ?></b>.
+				</p>
+				<?php } ?>	
+	
+</div>
+
+</body>
 </html>

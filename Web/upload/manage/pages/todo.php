@@ -42,7 +42,7 @@ while ($n = mysql_fetch_assoc($getNotes))
 {
 	echo '<div style="border: 1px solid; margin-top: 20px; margin-bottom: 20px; margin-left: 5px; margin-right: 20px;">';
 	echo '<div style="margin: 1px; padding: 5px; background-color: #E0E0F8;">' . $n['date'] . '&nbsp;&nbsp;<small>(<a href="index.php?_cmd=todo&del=' . $n['id'] . '">Mark as complete</a>)</small></div>';
-	echo '<div style="margin: 1px; padding: 5px;">' . $n['content'] . '</div>';
+	echo '<div style="margin: 1px; padding: 5px;">' . $n['content'], true, true . '</div>';
 	echo '</div>';
 }
 

@@ -264,6 +264,7 @@ namespace Snowlight.Game.Messenger
 
             if (TargetId < 1 || TargetId == Session.CharacterId)
             {
+                Session.SendData(MessengerErrorEvent.Compose(Session.CharacterId, MessengerErrorCode.RequestNotFound));
                 return;
             }
 
@@ -273,14 +274,27 @@ namespace Snowlight.Game.Messenger
             {
                 TargetUserInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, TargetId);
 
+                if((Session.MessengerFriendCache.Friends.Count + 1) > Session.FriendListSizeLimit)
+                {
+                    Session.SendData(MessengerErrorEvent.Compose(Session.CharacterId, MessengerErrorCode.FriendListOwnLimit));
+                    return;
+                }
+
+                if ((TargetUserInfo.GetFriendsCount() + 1) > TargetUserInfo.GetFriendListSizeLimit(MySqlClient))
+                {
+                    Session.SendData(MessengerErrorEvent.Compose(Session.CharacterId, MessengerErrorCode.FriendListOfRequester));
+                    return;
+                }
+
                 if (!TargetUserInfo.PrivacyAcceptFriends)
                 {
-                    Session.SendData(MessengerErrorEvent.Compose(39, 3));
+                    Session.SendData(MessengerErrorEvent.Compose(Session.CharacterId, MessengerErrorCode.FriendRequestDisabled));
                     return;
                 }
 
                 if (FriendshipExists(MySqlClient, Session.CharacterId, TargetUserInfo.Id, false))
                 {
+                    Session.SendData(MessengerErrorEvent.Compose(Session.CharacterId, MessengerErrorCode.RequestNotFound));
                     return;
                 }
 
