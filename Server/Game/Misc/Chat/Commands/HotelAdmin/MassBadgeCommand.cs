@@ -40,7 +40,7 @@ namespace Snowlight.Game.Misc
             string BadgeCode = UserInputFilter.FilterString(Params[2].Trim());
 
             // Verify if badge code is in database
-            Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
+            BadgeDefinition BadgeToGive = RightsManager.GetBadgeDefinitionByCode(BadgeCode);
             if (BadgeToGive == null)
             {
                 Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_dmbadge_badge_error"), 0, ChatType.Whisper));
@@ -63,13 +63,13 @@ namespace Snowlight.Game.Misc
                                         Session TargetSession = SessionManager.GetSessionByCharacterId(RoomActors.ReferenceId);
                                         if (TargetSession.CharacterId != Session.CharacterId)
                                         {
-                                            if (!TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                                            if (!TargetSession.BadgeCache.ContainsCode(BadgeCode))
                                             {
-                                                TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
-                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
-                                                TargetSession.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+                                                TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, TargetSession.AchievementCache,"static");
 
-                                                TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
+                                                InventoryBadge UserBadge = Session.BadgeCache.GetBadge(BadgeCode);
+                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                                                TargetSession.NewItemsCache.SendNewItems(TargetSession);
 
                                                 TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
                                                 TargetSession.SendData(RoomChatComposer.Compose(RoomActors.Id, ExternalTexts.GetValue("command_dmbadge_targetuser_success"), 1, ChatType.Whisper));
@@ -89,13 +89,13 @@ namespace Snowlight.Game.Misc
                                     {
                                         if (TargetSession.CharacterId != Session.CharacterId)
                                         {
-                                            if (!TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                                            if (!TargetSession.BadgeCache.ContainsCode(BadgeCode))
                                             {
-                                                TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
-                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
-                                                TargetSession.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+                                                TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, TargetSession.AchievementCache, "static");
 
-                                                TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
+                                                InventoryBadge UserBadge = Session.BadgeCache.GetBadge(BadgeCode);
+                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                                                TargetSession.NewItemsCache.SendNewItems(TargetSession);
 
                                                 TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
                                                 TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_dmbadge_targetuser_success") + "\r\n- " + Session.CharacterInfo.Username));

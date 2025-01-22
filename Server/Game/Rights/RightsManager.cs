@@ -8,12 +8,12 @@ namespace Snowlight.Game.Rights
 {
     public static class RightsManager
     {
-        private static Dictionary<uint, Badge> mBadges;
+        private static Dictionary<uint, BadgeDefinition> mBadgesDefinitions;
         private static Dictionary<uint, List<string>> mRightSets;
 
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
-            mBadges = new Dictionary<uint, Badge>();
+            mBadgesDefinitions = new Dictionary<uint, BadgeDefinition>();
             mRightSets = new Dictionary<uint,List<string>>();
 
             RebuildCache(MySqlClient);
@@ -21,9 +21,9 @@ namespace Snowlight.Game.Rights
 
         public static void RebuildCache(SqlDatabaseClient MySqlClient)
         {
-            lock (mBadges)
+            lock (mBadgesDefinitions)
             {
-                mBadges.Clear();
+                mBadgesDefinitions.Clear();
                 mRightSets.Clear();
 
                 DataTable BadgeTable = MySqlClient.ExecuteQueryTable("SELECT id,code,rights_sets FROM badge_definitions");
@@ -46,7 +46,7 @@ namespace Snowlight.Game.Rights
                         }
                     }
 
-                    mBadges.Add((uint)Row["id"], new Badge((uint)Row["id"], (string)Row["code"], Sets));
+                    mBadgesDefinitions.Add((uint)Row["id"], new BadgeDefinition((uint)Row["id"], (string)Row["code"], Sets));
                 }
 
                 foreach (DataRow Row in RightsTable.Rows)
@@ -83,14 +83,14 @@ namespace Snowlight.Game.Rights
             return Rights;
         }
 
-        public static Badge GetBadgeById(uint Id)
+        public static BadgeDefinition GetBadgeDefinitionById(uint Id)
         {
-            return (mBadges.ContainsKey(Id) ? mBadges[Id] : null);
+            return (mBadgesDefinitions.ContainsKey(Id) ? mBadgesDefinitions[Id] : null);
         }
 
-        public static Badge GetBadgeByCode(string BadgeCode)
+        public static BadgeDefinition GetBadgeDefinitionByCode(string BadgeCode)
         {
-            foreach (Badge Badge in mBadges.Values)
+            foreach (BadgeDefinition Badge in mBadgesDefinitions.Values)
             {
                 if (Badge.Code == BadgeCode)
                 {
@@ -101,7 +101,7 @@ namespace Snowlight.Game.Rights
             return null;
         }
 
-        public static List<string> GetRightsForBadge(Badge Badge)
+        public static List<string> GetRightsForBadge(BadgeDefinition Badge)
         {
             List<string> Rights = new List<string>();
 

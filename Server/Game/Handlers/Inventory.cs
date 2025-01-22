@@ -62,7 +62,7 @@ namespace Snowlight.Game.Handlers
         private static void SetBadgeOrder(Session Session, ClientMessage Message)
         {
             int i = 0;
-            Dictionary<int, Badge> NewSettings = new Dictionary<int, Badge>();
+            Dictionary<int, InventoryBadge> NewSettings = new Dictionary<int, InventoryBadge>();
 
             while (Message.RemainingLength > 0)
             {
@@ -73,7 +73,7 @@ namespace Snowlight.Game.Handlers
 
                 int SlotId = Message.PopWiredInt32();
                 string BadgeCode = Message.PopString();
-                Badge BadgeRef = RightsManager.GetBadgeByCode(BadgeCode);
+                InventoryBadge BadgeRef = Session.BadgeCache.GetBadge(BadgeCode);
 
                 if (BadgeRef == null || !Session.BadgeCache.ContainsCode(BadgeCode) || SlotId >= 6 ||
                     SlotId <= 0 || NewSettings.ContainsKey(SlotId))

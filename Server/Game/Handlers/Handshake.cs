@@ -71,11 +71,8 @@ namespace Snowlight.Game.Handlers
             }
 
             SubscriptionOffer SubscriptionOffer = SubscriptionOfferManager.CheckForSubOffer(Session.SubscriptionManager.SubscriptionLevel, Session.CharacterId);
-            if (SubscriptionOffer != null)
+            if (SubscriptionOffer != null && SubscriptionOffer.ShowExtendNotification && SubscriptionOffer.BaseOffer.LengthDays == 31)
             {
-                CatalogClubOffer CatalogClubOffer = CatalogManager.ClubOffers.Values.Where(O => O.Level == SubscriptionOffer.OffertedLevel && O.LengthDays == 31).FirstOrDefault();
-                SubscriptionOffer.SetClubSubscriptionOffer(CatalogClubOffer);
-
                 Session.SendData(SubscriptionOfferComposer.Compose(Session.SubscriptionManager, SubscriptionOffer));
             }
         }

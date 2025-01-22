@@ -30,6 +30,13 @@ namespace Snowlight.Game.Rights
         private int mGiftPoints;
         private List<uint> mOneTimeGiftsRedeem;
 
+        public uint UserId
+        {
+            get 
+            {
+                return mUserId; 
+            }
+        }
         public bool IsActive
         {
             get
@@ -46,7 +53,7 @@ namespace Snowlight.Game.Rights
             }
         }
 
-        public DateTime TimestampCreated
+        public DateTime DateTimeCreated
         {
             get
             {
@@ -127,7 +134,13 @@ namespace Snowlight.Game.Rights
                 return (int)Math.Ceiling(TimeLeft / 86400.0);
             }
         }
-
+        public double TimestampCreated
+        {
+            get
+            {
+                return mTimestampCreated;
+            }
+        }
         public double TimestampExpire
         {
             get
@@ -287,6 +300,15 @@ namespace Snowlight.Game.Rights
             }
         }
 
+        public bool HasUserEverBeenMember()
+        {
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                MySqlClient.SetParameter("userid", mUserId);
+                return (MySqlClient.ExecuteScalar("SELECT null FROM user_subscriptions WHERE user_id = @userid LIMIT 1") != null);
+            }
+        }
+
         #region Club Gifts
 
         #region Points
@@ -304,9 +326,19 @@ namespace Snowlight.Game.Rights
 
                         GiftPoints += TotalMonths > 1 ? TotalMonths * (int)mBaseLevel : (int)mBaseLevel;
 
-                        DateTime NewDt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, TimestampCreated.Day, 0, 0, 0); // Club points must be given on the day of subscription in the next month :)
+                        DateTime NewDt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTimeCreated.Day, 0, 0, 0); // Club points must be given on the day of subscription in the next month :)
 
                         mTimestampLastGiftPoint = IsActive ? UnixTimestamp.ConvertToUnixTimestamp(NewDt) : 0;
+
+                        if (IsActive && mGiftPoints > 0)
+                        {
+                            Session Session = SessionManager.GetSessionByCharacterId(mUserId);
+                            if (Session != null)
+                            {
+                                Session.SendData(ClubGiftReadyComposer.Compose(mGiftPoints));
+
+                            }
+                        }
 
                         MySqlClient.SetParameter("userid", mUserId);
                         MySqlClient.SetParameter("giftpoints", mGiftPoints);

@@ -351,22 +351,24 @@ namespace Snowlight.Game.Catalog
                 #region Delivery Badge
                 if (Item.BadgeCode != string.Empty)
                 {
-                    Badge BadgeToGive = RightsManager.GetBadgeByCode(Item.BadgeCode);
+                    BadgeDefinition BadgeToGive = RightsManager.GetBadgeDefinitionByCode(Item.BadgeCode);
                     if (BadgeToGive == null)
                     {
                         return;
                     }
 
-                    if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
+                    if (!Session.BadgeCache.ContainsCode(Item.BadgeCode))
                     {
-                        Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
+                        Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, Session.AchievementCache, "static");
 
                         if (!NewItems.ContainsKey(4))
                         {
                             NewItems.Add(4, new List<uint>());
                         }
 
-                        NewItems[4].Add(BadgeToGive.Id);
+                        InventoryBadge UserBadge = Session.BadgeCache.GetBadge(Item.BadgeCode);
+
+                        NewItems[4].Add(UserBadge.Id);
                     }
                 }
                 #endregion
@@ -388,7 +390,7 @@ namespace Snowlight.Game.Catalog
 
                 if (NewItems.Count > 0)
                 {
-                    Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
+                    Session.NewItemsCache.SendNewItems(Session);
                 }
             }
         }
@@ -755,6 +757,13 @@ namespace Snowlight.Game.Catalog
                         }
 
                         Session.SubscriptionManager.UpdateUserBadge();
+
+                        SubscriptionOffer SubscriptionOffer = SubscriptionOfferManager.CheckForSubOffer(Session.SubscriptionManager.SubscriptionLevel, Session.CharacterId);
+                        if (SubscriptionOffer != null && SubscriptionOffer.BaseOffer.Id == Offer.Id 
+                            && !SubscriptionOffer.BasicSubscriptionReminder)
+                        {
+                            SubscriptionOffer.UpdateUserIdList(MySqlClient, Session.CharacterId);
+                        }
 
                         // Clear catalog cache for user (in case of changes)
                         CatalogManager.ClearCacheGroup(Session.CharacterId);

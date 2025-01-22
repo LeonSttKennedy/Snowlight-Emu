@@ -685,9 +685,9 @@ namespace Snowlight.Game.Catalog
                 CorrectedOffers.Add(Offer);
             }
 
-            Response = CatalogClubOffersComposer.Compose(CorrectedOffers,
-                Session.SubscriptionManager.IsActive ?
-                Session.SubscriptionManager.TimestampExpire : UnixTimestamp.GetCurrent());
+            Response = CatalogClubOffersComposer.Compose(Session.SubscriptionManager, CorrectedOffers,
+                Session.SubscriptionManager.IsActive ? Session.SubscriptionManager.TimestampExpire :
+                UnixTimestamp.GetCurrent());
 
             AddToCacheIfNeeded(Session.CharacterId, Message, Response);
 

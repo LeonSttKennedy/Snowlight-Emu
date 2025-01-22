@@ -12591,6 +12591,7 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
   `normal_user_friend_list_size` int(11) NOT NULL DEFAULT '300',
   `hc_user_friend_list_size` int(11) NOT NULL DEFAULT '800',
   `vip_user_friend_list_size` int(11) NOT NULL DEFAULT '1100',
+  `subscription_reminder_when_days_left` int(10) NOT NULL DEFAULT '5',
   `wordfilter_maximum_count` int(2) NOT NULL DEFAULT '5',
   `wordfilter_time_muted` int(11) NOT NULL DEFAULT '300' COMMENT '300 = 5 min'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -12599,8 +12600,8 @@ CREATE TABLE IF NOT EXISTS `server_settings` (
 -- Extraindo dados da tabela `server_settings`
 --
 
-INSERT INTO `server_settings` (`activitypoints_enabled`, `activitypoints_type`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_amount`, `more_activitypoints_amount`, `daily_reward_enabled`, `daily_reward_wait_time`, `daily_activitypoints_type`, `daily_activitypoints_amount`, `daily_credits_amount`, `motd_enabled`, `motd_type`, `motd_text`, `name_change_wait_days`, `gifting_system_enabled`, `new_gifting_system`, `gifting_system_price`, `gifting_system_spriteids`, `gifting_system_box_count`, `gifting_system_ribbon_count`, `infobus_status`, `login_badge_enabled`, `login_badge_code`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_console_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_enabled`, `marketplace_boost_protection_enabled`, `marketplace_tax`, `marketplace_tokens_buy_enabled`, `marketplace_tokens_price`, `marketplace_premium_tokens`, `marketplace_default_tokens`, `marketplace_min_price`, `marketplace_max_price`, `marketplace_offer_hours`, `marketplace_avarage_days`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `enable_pets`, `pet_scratching_account_days_old_enabled`, `pet_scratching_account_days_old`, `room_events_enabled`, `normal_user_friend_list_size`, `hc_user_friend_list_size`, `vip_user_friend_list_size`, `wordfilter_maximum_count`, `wordfilter_time_muted`) VALUES
-('1', 'pixels', '1', 30, 15, 35, 15, 35, '1', 5, 'pixels', 120, 120, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', 15, '1', '1', 1, '3372|3373|3374|3375|3376|3377|3378|3379|3380|3381', 7, 11, 'closed', '1', 'Z63', '1', '1', '1', '1', '1', '0', 1, '1', 1, 10, 5, 1, 10000, 48, 7, 30, 500, 12, 10, 20, '1', '1', 14, '1', 300, 600, 1100, 5, 300);
+INSERT INTO `server_settings` (`activitypoints_enabled`, `activitypoints_type`, `more_activitypoints_for_vip_users`, `activitypoints_interval`, `activitypoints_credits_amount`, `more_activitypoints_credits_amount`, `activitypoints_amount`, `more_activitypoints_amount`, `daily_reward_enabled`, `daily_reward_wait_time`, `daily_activitypoints_type`, `daily_activitypoints_amount`, `daily_credits_amount`, `motd_enabled`, `motd_type`, `motd_text`, `name_change_wait_days`, `gifting_system_enabled`, `new_gifting_system`, `gifting_system_price`, `gifting_system_spriteids`, `gifting_system_box_count`, `gifting_system_ribbon_count`, `infobus_status`, `login_badge_enabled`, `login_badge_code`, `moderation_actionlogs_enabled`, `moderation_chatlogs_enabled`, `moderation_console_chatlogs_enabled`, `moderation_roomlogs_enabled`, `marketplace_enabled`, `marketplace_boost_protection_enabled`, `marketplace_tax`, `marketplace_tokens_buy_enabled`, `marketplace_tokens_price`, `marketplace_premium_tokens`, `marketplace_default_tokens`, `marketplace_min_price`, `marketplace_max_price`, `marketplace_offer_hours`, `marketplace_avarage_days`, `max_favorites_per_user`, `max_furni_per_room`, `max_furni_stacking`, `max_pets_per_room`, `max_rooms_per_user`, `enable_pets`, `pet_scratching_account_days_old_enabled`, `pet_scratching_account_days_old`, `room_events_enabled`, `normal_user_friend_list_size`, `hc_user_friend_list_size`, `vip_user_friend_list_size`, `subscription_reminder_when_days_left`, `wordfilter_maximum_count`, `wordfilter_time_muted`) VALUES
+('1', 'pixels', '1', 30, 15, 35, 15, 35, '1', 5, 'pixels', 120, 120, '1', 'MessageOfTheDayComposer', 'Welcome to uberHotel.org BETA.\\n\\n\\nThank you for participating in the uberHotel.org BETA test. We hope to gather relevant feedback and ideas to help make this hotel into a success.\\n\\nPlease submit any bugs, feedback, or ideas via:\\nhttp://snowlight.uservoice.com\\n\\n\\nHave fun, and thank you for joining us!|', 15, '1', '1', 1, '3372|3373|3374|3375|3376|3377|3378|3379|3380|3381', 7, 11, 'closed', '1', 'Z63', '1', '1', '1', '1', '1', '0', 1, '1', 1, 10, 5, 1, 10000, 48, 7, 30, 500, 12, 10, 20, '1', '1', 14, '1', 300, 600, 1100, 5, 5, 300);
 
 -- --------------------------------------------------------
 
@@ -15906,9 +15907,13 @@ INSERT INTO `static_objects` (`id`, `room_model`, `name`, `position`, `size_x`, 
 CREATE TABLE IF NOT EXISTS `subscription_offers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `discount_percentage` int(11) NOT NULL DEFAULT '1',
-  `offerted_level` enum('2','1') NOT NULL DEFAULT '2',
   `user_ids_list` text NOT NULL,
   `expire_timestamp` double(11,0) NOT NULL DEFAULT '0',
+  `offer_id` int(10) unsigned NOT NULL,
+  `catalog_enabled` enum('0','1') NOT NULL DEFAULT '0',
+  `basic_club_reminder_expiration` enum('0','1') NOT NULL DEFAULT '0',
+  `show_extend_notification` enum('0','1') NOT NULL,
+  `only_for_user_never_been_club_member` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

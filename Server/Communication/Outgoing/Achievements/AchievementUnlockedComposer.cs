@@ -9,7 +9,7 @@ namespace Snowlight.Communication.Outgoing
     {
         public static ServerMessage Compose(Achievement Achievement, int Level, int PointReward, int ActivityPointsType, int PixelReward)
         {
-            Badge Badge = RightsManager.GetBadgeByCode(Achievement.GroupName);
+            BadgeDefinition Badge = RightsManager.GetBadgeDefinitionByCode(Achievement.GroupName);
 
             ServerMessage Message = new ServerMessage(OpcodesOut.ACHIEVEMENT_UNLOCKED);
             Message.AppendUInt32(Achievement.Id);                                                           // Achievement ID

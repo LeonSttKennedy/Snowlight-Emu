@@ -46,7 +46,6 @@ namespace Snowlight.Game.Catalog
                 foreach (DataRow Row in SubOffersTable.Rows)
                 {
                     uint OfferId = (uint)Row["id"];
-                    ClubSubscriptionLevel OfferLevel = (ClubSubscriptionLevel)int.Parse((Row["offerted_level"].ToString()));
 
                     string[] SplitedIds = Row["user_ids_list"].ToString().Split('|');
 
@@ -65,9 +64,10 @@ namespace Snowlight.Game.Catalog
 
                     if (!mSubscriptionOffers.ContainsKey(OfferId))
                     {
-                        mSubscriptionOffers.Add(OfferId, new SubscriptionOffer(OfferId,
-                                int.Parse(Row["discount_percentage"].ToString()), OfferLevel,
-                                UserIdList, double.Parse(Row["expire_timestamp"].ToString())));
+                        mSubscriptionOffers.Add(OfferId, new SubscriptionOffer(OfferId, int.Parse(Row["discount_percentage"].ToString()),
+                                 UserIdList, double.Parse(Row["expire_timestamp"].ToString()), (uint)Row["offer_id"],
+                                 (Row["catalog_enabled"].ToString() == "1"), (Row["basic_club_reminder_expiration"].ToString() == "1"),
+                                 (Row["show_extend_notification"].ToString() == "1"), (Row["only_for_user_never_been_club_member"].ToString() == "1")));
                     }
 
                     CountLoaded++;
@@ -80,7 +80,12 @@ namespace Snowlight.Game.Catalog
 
         public static SubscriptionOffer CheckForSubOffer(ClubSubscriptionLevel UserLevel, uint UserId)
         {
-            return mSubscriptionOffers.Values.Where(O => O.OffertedLevel == UserLevel && !O.UserIds.Contains(UserId) && UnixTimestamp.GetCurrent() < O.Timestamp).ToList().FirstOrDefault();
+            return mSubscriptionOffers.Values.Where(O => O.BaseOffer.Level == UserLevel && !O.UserIds.Contains(UserId) && O.Enabled).ToList().FirstOrDefault();
+        }
+
+        public static SubscriptionOffer CheckForSubOfferReminder()
+        {
+            return mSubscriptionOffers.Values.Where(O => O.BasicSubscriptionReminder && O.Enabled).ToList().FirstOrDefault();
         }
 
         public static SubscriptionOffer GetOffer(uint OfferId)
@@ -102,10 +107,10 @@ namespace Snowlight.Game.Catalog
                     Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
                 }
 
-                double Length = 86400 * SubOffer.ClubSubscriptionOffer.LengthDays;
+                double Length = 86400 * SubOffer.BaseOffer.LengthDays;
 
                 // Extend membership
-                Session.SubscriptionManager.AddOrExtend((int)SubOffer.ClubSubscriptionOffer.Level, Length);
+                Session.SubscriptionManager.AddOrExtend((int)SubOffer.BaseOffer.Level, Length);
                 
                 Session.SubscriptionManager.UpdateUserBadge();
 

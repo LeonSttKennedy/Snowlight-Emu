@@ -16,21 +16,21 @@ namespace Snowlight.Game.Rights
         private uint mUserId;
         private object mSyncRoot;
 
-        private Dictionary<int, Badge> mEquippedBadges;
-        private List<Badge> mStaticBadges;
-        private Dictionary<string, Badge> mAchievementBadges;
+        private Dictionary<int, InventoryBadge> mEquippedBadges;
+        private List<InventoryBadge> mStaticBadges;
+        private Dictionary<string, InventoryBadge> mAchievementBadges;
         private List<string> mIndexCache;
         private List<string> mRightsCache;
 
-        public SortedDictionary<int, Badge> EquippedBadges
+        public SortedDictionary<int, InventoryBadge> EquippedBadges
         {
             get
             {
-                SortedDictionary<int, Badge> Copy = new SortedDictionary<int, Badge>();
+                SortedDictionary<int, InventoryBadge> Copy = new SortedDictionary<int, InventoryBadge>();
 
                 lock (mSyncRoot)
                 {
-                    foreach (KeyValuePair<int, Badge> Data in mEquippedBadges)
+                    foreach (KeyValuePair<int, InventoryBadge> Data in mEquippedBadges)
                     {
                         Copy.Add(Data.Key, Data.Value);
                     }
@@ -40,11 +40,11 @@ namespace Snowlight.Game.Rights
             }
         }
 
-        public List<Badge> Badges
+        public List<InventoryBadge> Badges
         {
             get
             {
-                List<Badge> Copy = new List<Badge>();
+                List<InventoryBadge> Copy = new List<InventoryBadge>();
 
                 lock (mSyncRoot)
                 {
@@ -52,7 +52,7 @@ namespace Snowlight.Game.Rights
                     Copy.AddRange(mAchievementBadges.Values.ToList());
                 }
 
-                return Copy;
+                return Copy.OrderBy(B => B.Id).ToList();
             }
         }
 
@@ -61,9 +61,9 @@ namespace Snowlight.Game.Rights
             mUserId = UserId;
             mSyncRoot = new object();
 
-            mEquippedBadges = new Dictionary<int, Badge>();
-            mStaticBadges = new List<Badge>();
-            mAchievementBadges = new Dictionary<string, Badge>();
+            mEquippedBadges = new Dictionary<int, InventoryBadge>();
+            mStaticBadges = new List<InventoryBadge>();
+            mAchievementBadges = new Dictionary<string, InventoryBadge>();
             mIndexCache = new List<string>();
             mRightsCache = new List<string>();
 
@@ -72,31 +72,32 @@ namespace Snowlight.Game.Rights
 
         public void ReloadCache(SqlDatabaseClient MySqlClient, AchievementCache UserAchievementCache)
         {
-            Dictionary<int, Badge> EquippedBadges = new Dictionary<int, Badge>();
-            List<Badge> StaticBadges = new List<Badge>();
-            Dictionary<string, Badge> AchievementBadges = new Dictionary<string, Badge>();
+            Dictionary<int, InventoryBadge> EquippedBadges = new Dictionary<int, InventoryBadge>();
+            List<InventoryBadge> StaticBadges = new List<InventoryBadge>();
+            Dictionary<string, InventoryBadge> AchievementBadges = new Dictionary<string, InventoryBadge>();
             List<string> IndexCache = new List<string>();
 
             MySqlClient.SetParameter("userid", mUserId);
-            DataTable Table = MySqlClient.ExecuteQueryTable("SELECT badge_id,slot_id,source_type,source_data FROM badges WHERE user_id = @userid");
+            DataTable Table = MySqlClient.ExecuteQueryTable("SELECT id,badge_id,slot_id,source_type,source_data FROM badges WHERE user_id = @userid");
 
             foreach (DataRow Row in Table.Rows)
             {
-                Badge Badge = RightsManager.GetBadgeById((uint)Row["badge_id"]);
+                BadgeDefinition Badge = RightsManager.GetBadgeDefinitionById((uint)Row["badge_id"]);
 
                 if (Badge == null)
                 {
                     continue;
                 }
 
+                uint Id = (uint)Row["id"];
                 string SourceType = Row["source_type"].ToString();
                 string SourceData = Row["source_data"].ToString();
 
-                Badge BadgeToEquip = null;
+                InventoryBadge BadgeToEquip = null;
 
                 if (SourceType == "static")
                 {
-                    BadgeToEquip = Badge;
+                    BadgeToEquip = new InventoryBadge(Id, Badge);
                     StaticBadges.Add(BadgeToEquip);
                 }
                 else if (SourceType == "achievement")
@@ -118,7 +119,7 @@ namespace Snowlight.Game.Rights
 
                     string Code = UserAchievement.GetBadgeCodeForLevel();
 
-                    BadgeToEquip = (Badge.Code == Code ? Badge : RightsManager.GetBadgeByCode(Code));
+                    BadgeToEquip = new InventoryBadge(Id, (Badge.Code == Code ? Badge : RightsManager.GetBadgeDefinitionByCode(Code)));
                     AchievementBadges.Add(SourceData, BadgeToEquip);
                 }
 
@@ -131,7 +132,7 @@ namespace Snowlight.Game.Rights
                         EquippedBadges.Add(SlotId, BadgeToEquip);
                     }
 
-                    IndexCache.Add(BadgeToEquip.Code);
+                    IndexCache.Add(BadgeToEquip.Definition.Code);
                 }
             }
 
@@ -152,14 +153,14 @@ namespace Snowlight.Game.Rights
 
             lock (mSyncRoot)
             {
-                foreach (Badge Badge in mStaticBadges)
+                foreach (InventoryBadge Badge in mStaticBadges)
                 {
-                    Rights.AddRange(RightsManager.GetRightsForBadge(Badge));
+                    Rights.AddRange(RightsManager.GetRightsForBadge(Badge.Definition));
                 }
 
-                foreach (Badge Badge in mAchievementBadges.Values)
+                foreach (InventoryBadge Badge in mAchievementBadges.Values)
                 {
-                    Rights.AddRange(RightsManager.GetRightsForBadge(Badge));
+                    Rights.AddRange(RightsManager.GetRightsForBadge(Badge.Definition));
                 }
             }
 
@@ -182,7 +183,7 @@ namespace Snowlight.Game.Rights
             }
         }
 
-        public void UpdateAchievementBadge(SqlDatabaseClient MySqlClient, string AchievementGroup, Badge NewBadge, string SourceType = "achievement")
+        public void UpdateAchievementBadge(SqlDatabaseClient MySqlClient, string AchievementGroup, BadgeDefinition NewBadge, AchievementCache UserAchievementCache, string SourceType = "achievement")
         {
             MySqlClient.SetParameter("userid", mUserId);
             MySqlClient.SetParameter("sourcetype", SourceType);
@@ -193,7 +194,7 @@ namespace Snowlight.Game.Rights
             {
                 if (mAchievementBadges.ContainsKey(AchievementGroup))
                 {
-                    Badge OldBadge = mAchievementBadges[AchievementGroup];
+                    BadgeDefinition OldBadge = mAchievementBadges[AchievementGroup].Definition;
 
                     if (OldBadge == NewBadge)
                     {
@@ -202,36 +203,44 @@ namespace Snowlight.Game.Rights
                     }
 
                     mIndexCache.Remove(OldBadge.Code);
-                    mAchievementBadges[AchievementGroup] = NewBadge;
+
+                    uint Id = mAchievementBadges[AchievementGroup].Id;
+                    InventoryBadge NewInventoryBadge = new InventoryBadge(Id, NewBadge);
+
+                    mAchievementBadges[AchievementGroup] = NewInventoryBadge;
 
                     MySqlClient.ExecuteNonQuery("UPDATE badges SET badge_id = @badgeid WHERE user_id = @userid AND source_type = @sourcetype AND source_data = @sourcedata LIMIT 1");
 
-                    foreach (KeyValuePair<int, Badge> Badge in mEquippedBadges)
+                    foreach (KeyValuePair<int, InventoryBadge> Badge in mEquippedBadges)
                     {
                         if (Badge.Value.Id == OldBadge.Id)
                         {
-                            mEquippedBadges[Badge.Key] = NewBadge;
+                            mEquippedBadges[Badge.Key] = NewInventoryBadge;
                             break;
                         }
                     }
                 }
                 else
                 {
-                    mAchievementBadges.Add(AchievementGroup, NewBadge);
-                    MySqlClient.ExecuteNonQuery("INSERT INTO badges (user_id,badge_id,source_type,source_data) VALUES (@userid,@badgeid,@sourcetype,@sourcedata)");
+                    string RawId = MySqlClient.ExecuteScalar("INSERT INTO badges (user_id,badge_id,source_type,source_data) VALUES (@userid,@badgeid,@sourcetype,@sourcedata); SELECT LAST_INSERT_ID();").ToString(); ;
+                    uint.TryParse(RawId, out uint Id);
+                    InventoryBadge NewInventoryBadge = new InventoryBadge(Id, NewBadge);
+
+                    mAchievementBadges.Add(AchievementGroup, NewInventoryBadge);
                 }
 
                 mRightsCache = RegenerateRights();
                 mIndexCache.Add(NewBadge.Code);
+                ReloadCache(MySqlClient, UserAchievementCache);
             }
         }
 
-        public void UpdateBadgeOrder(SqlDatabaseClient MySqlClient, Dictionary<int, Badge> NewSettings)
+        public void UpdateBadgeOrder(SqlDatabaseClient MySqlClient, Dictionary<int, InventoryBadge> NewSettings)
         {
             MySqlClient.SetParameter("userid", mUserId);
             MySqlClient.ExecuteNonQuery("UPDATE badges SET slot_id = 0 WHERE user_id = @userid");
 
-            foreach (KeyValuePair<int, Badge> EquippedBadge in NewSettings)
+            foreach (KeyValuePair<int, InventoryBadge> EquippedBadge in NewSettings)
             {
                 MySqlClient.SetParameter("userid", mUserId);
                 MySqlClient.SetParameter("slotid", EquippedBadge.Key);
@@ -249,16 +258,16 @@ namespace Snowlight.Game.Rights
         {
             lock (mSyncRoot)
             {
-                foreach (KeyValuePair<string, Badge> Data in mAchievementBadges)
+                foreach (KeyValuePair<string, InventoryBadge> Data in mAchievementBadges)
                 {
-                    if (Data.Value.Code.StartsWith(BadgeCodePrefix))
+                    if (Data.Value.Definition.Code.StartsWith(BadgeCodePrefix))
                     {
-                        mIndexCache.Remove(Data.Value.Code);
+                        mIndexCache.Remove(Data.Value.Definition.Code);
                         mAchievementBadges.Remove(Data.Key);
 
-                        foreach (KeyValuePair<int, Badge> EquipData in mEquippedBadges)
+                        foreach (KeyValuePair<int, InventoryBadge> EquipData in mEquippedBadges)
                         {
-                            if (EquipData.Value.Code.StartsWith(BadgeCodePrefix))
+                            if (EquipData.Value.Definition.Code.StartsWith(BadgeCodePrefix))
                             {
                                 mEquippedBadges.Remove(EquipData.Key);
                                 break;
@@ -287,6 +296,25 @@ namespace Snowlight.Game.Rights
             }
 
             return false;
+        }
+
+        public InventoryBadge GetBadge(string Code)
+        {
+            InventoryBadge UserBadge = null;
+
+            lock (mSyncRoot)
+            {
+                foreach (InventoryBadge Badge in Badges)
+                {
+                    if (Badge.Definition.Code == Code)
+                    {
+                        UserBadge = Badge;
+                        break;
+                    }
+                }
+            }
+
+            return UserBadge;
         }
     }
 }

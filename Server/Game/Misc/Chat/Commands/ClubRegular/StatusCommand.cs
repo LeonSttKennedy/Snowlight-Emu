@@ -9,6 +9,7 @@ using Snowlight.Storage;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication.Outgoing;
+using Microsoft.VisualBasic.Devices;
 
 
 namespace Snowlight.Game.Misc
@@ -53,6 +54,10 @@ namespace Snowlight.Game.Misc
             return new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
         }
 
+        static string GetOsName()
+        {
+            return new Microsoft.VisualBasic.Devices.ComputerInfo().OSFullName;
+        }
 
         public string PermissionRequired
         {
@@ -93,7 +98,7 @@ namespace Snowlight.Game.Misc
             string[] Args = { Uptime.Days.ToString(), Uptime.Hours.ToString(), Uptime.Minutes.ToString(), Uptime.Seconds.ToString(),
                             OnlineUsers.Count.ToString(), RoomManager.RoomInstances.Count.ToString(), daily.ToString(), alltime.ToString(),
                             GetProcessorArchitecture().ToString().ToLower(), Environment.ProcessorCount.ToString(),
-                            Math.Round(GetTotalMemoryInBytes() / 1024d / 1024d / 1024d, 2).ToString()
+                            Math.Round(GetTotalMemoryInBytes() / 1024d / 1024d / 1024d, 2).ToString(), GetOsName().ToString()
                         };
 
             Session.SendData(NotificationMessageComposer.Compose(string.Concat(new object[]
@@ -108,7 +113,8 @@ namespace Snowlight.Game.Misc
                             "[SYSTEM]",
                             "\nCPU architecture: " + Args[8],
                             "\nCPU cores: "+ Args[9],
-                            "\nMemory usage: " + Args[10] + " MB"
+                            "\nMemory usage: " + Args[10] + " MB",
+                            "\nOS: " + Args[11]
             })));
         }
     }

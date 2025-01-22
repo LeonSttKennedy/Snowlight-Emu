@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Snowlight.Game.Rights
 {
-    public class Badge
+    public class BadgeDefinition
     {
         private uint mId;
         private string mCode;
@@ -33,7 +33,7 @@ namespace Snowlight.Game.Rights
             }
         }
 
-        public Badge(uint Id, string Code, List<uint> RightsSets)
+        public BadgeDefinition(uint Id, string Code, List<uint> RightsSets)
         {
             mId = Id;
             mCode = Code;

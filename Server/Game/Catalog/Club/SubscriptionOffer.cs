@@ -13,11 +13,13 @@ namespace Snowlight.Game.Catalog
     {
         private uint mId;
         private int mDiscountPercentage;
-        private ClubSubscriptionLevel mOffertedLevel;
         private List<uint> mUserIds;
         private double mDoubleTimestamp;
-        private CatalogClubOffer mClubOffer;
-        private int mPrice;
+        private uint mBaseOfferId;
+        private bool mCatalogEnabled;
+        private bool mBasicSubscriptionReminder;
+        private bool mShowExtendNotification;
+        private bool mOnlyForNeverBeenMember;
 
         public uint Id 
         {
@@ -26,20 +28,7 @@ namespace Snowlight.Game.Catalog
                 return mId;
             }
         }
-        public int PriceDiscountPercentage
-        {
-            get
-            {
-                return mDiscountPercentage;
-            }
-        }
-        public ClubSubscriptionLevel OffertedLevel 
-        {
-            get
-            {
-                return mOffertedLevel;
-            }
-        }
+
         public ReadOnlyCollection<uint> UserIds
         {
             get
@@ -49,6 +38,7 @@ namespace Snowlight.Game.Catalog
                 return Copy.AsReadOnly();
             }
         }
+
         public double Timestamp 
         {
             get
@@ -56,6 +46,7 @@ namespace Snowlight.Game.Catalog
                 return mDoubleTimestamp;
             }
         }
+
         public DateTime TimestampExpire
         {
             get
@@ -63,43 +54,80 @@ namespace Snowlight.Game.Catalog
                 return UnixTimestamp.GetDateTimeFromUnixTimestamp(mDoubleTimestamp);
             }
         }
-        public CatalogClubOffer ClubSubscriptionOffer
-        {
-            get
-            {
-                return mClubOffer;
-            }
-        }
+
         public int Price
         {
             get
             {
-                return mPrice;
+                double Percentage = BaseOffer.Price / 100.0;
+                return BaseOffer.Price - Convert.ToInt32(Math.Ceiling(Percentage * mDiscountPercentage));
             }
         }
-        public SubscriptionOffer(uint Id, int Discount, ClubSubscriptionLevel OffertedLevel,  List<uint> UserIds,
-            double Timestamp)
+
+        public CatalogClubOffer BaseOffer
+        {
+            get
+            {
+                return CatalogManager.ClubOffers.Values.Where(O => O.Id == mBaseOfferId).FirstOrDefault();
+            }
+        }
+        public bool CatalogEnabled
+        {
+            get
+            {
+                return mCatalogEnabled;
+            }
+        }
+
+        public bool BasicSubscriptionReminder
+        {
+            get
+            {
+                return mBasicSubscriptionReminder;
+            }
+        }
+
+        public bool ShowExtendNotification
+        {
+            get
+            {
+                return mShowExtendNotification;
+            }
+        }
+
+
+        public bool OnlyForNeverBeenMember
+        {
+            get
+            {
+                return mOnlyForNeverBeenMember;
+            }
+        }
+
+        public bool Enabled
+        {
+            get
+            {
+                return UnixTimestamp.GetCurrent() < mDoubleTimestamp;
+            }
+        }
+
+        public SubscriptionOffer(uint Id, int Discount, List<uint> UserIds, double Timestamp,
+             uint OfferId, bool CatalogEnabled, bool BasicSubscriptionReminder,
+             bool ShowExtendNotification, bool OnlyForNeverBeenMember)
         {
             mId = Id;
             mDiscountPercentage = Discount;
-            mOffertedLevel = OffertedLevel;
             mDoubleTimestamp = Timestamp;
-            
-            mClubOffer = null;
+
             mUserIds = new List<uint>();
             mUserIds.AddRange(UserIds);
-        }
 
-        public int GetDiscountPrice()
-        {
-            double Double = mClubOffer.Price / 100.0;
-            mPrice = mClubOffer.Price - Convert.ToInt32(Math.Ceiling(Double * mDiscountPercentage));
-            return mPrice;
-        }
-
-        public void SetClubSubscriptionOffer(CatalogClubOffer CatalogClubSubOffer)
-        {
-            mClubOffer = CatalogClubSubOffer;
+            mBaseOfferId = OfferId;
+            mCatalogEnabled = CatalogEnabled;
+            mBasicSubscriptionReminder = BasicSubscriptionReminder;
+            mShowExtendNotification = ShowExtendNotification;
+            mOnlyForNeverBeenMember = OnlyForNeverBeenMember;
         }
 
         public void UpdateUserIdList(SqlDatabaseClient MySqlClient, uint UserId)

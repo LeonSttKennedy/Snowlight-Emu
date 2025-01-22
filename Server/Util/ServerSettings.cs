@@ -282,6 +282,7 @@ namespace Snowlight.Util
 
         #region Global Settings
         private static bool mRoomEventsEnabled;
+        private static int mBasicSubscriptionReminder;
 
         public static bool RoomEventsEnabled
         {
@@ -295,6 +296,19 @@ namespace Snowlight.Util
                 mRoomEventsEnabled = value;
             }
 
+        }
+
+        public static int BasicSubscriptionReminder
+        {
+            get
+            {
+                return mBasicSubscriptionReminder; 
+            }
+
+            set 
+            {
+                mBasicSubscriptionReminder = value; 
+            }
         }
         #endregion
 
@@ -860,6 +874,8 @@ namespace Snowlight.Util
             GiftingSystemRibbonCount = (int)Row["gifting_system_ribbon_count"];
 
             RoomEventsEnabled = (Row["room_events_enabled"].ToString() == "1");
+
+            BasicSubscriptionReminder = (int)Row["subscription_reminder_when_days_left"];
 
             InfobusStatus = Infobus_Status;
             

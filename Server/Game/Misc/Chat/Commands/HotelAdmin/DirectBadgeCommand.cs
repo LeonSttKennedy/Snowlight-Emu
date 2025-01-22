@@ -42,7 +42,7 @@ namespace Snowlight.Game.Misc
             string BadgeCode = UserInputFilter.FilterString(Params[2].Trim());
 
             // Verify if badge code is in database
-            Badge BadgeToGive = RightsManager.GetBadgeByCode(BadgeCode);
+            BadgeDefinition BadgeToGive = RightsManager.GetBadgeDefinitionByCode(BadgeCode);
             if (BadgeToGive == null)
             {
                 Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_dmbadge_badge_error"), 0, ChatType.Whisper));
@@ -78,13 +78,13 @@ namespace Snowlight.Game.Misc
             {
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
-                    if (!TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                    if (!TargetSession.BadgeCache.ContainsCode(BadgeCode))
                     {
-                        TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
-                        TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
-                        TargetSession.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+                        TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, TargetSession.AchievementCache, "static");
 
-                        TargetSession.BadgeCache.ReloadCache(MySqlClient, TargetSession.AchievementCache);
+                        InventoryBadge UserBadge = Session.BadgeCache.GetBadge(BadgeCode);
+                        TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                        TargetSession.NewItemsCache.SendNewItems(TargetSession);
 
                         TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
                         TargetSession.SendData(RoomChatComposer.Compose(TargetActor.Id, ExternalTexts.GetValue("command_dmbadge_targetuser_success"), 1, ChatType.Whisper));
@@ -93,7 +93,7 @@ namespace Snowlight.Game.Misc
                         ModerationLogs.LogModerationAction(MySqlClient, Session, "Had given a badge",
                             Session.CharacterInfo.Username + " had give a badge ( " + BadgeToGive.Code + " ) to " + TargetSession.CharacterInfo.Username);
                     }
-                    else if (TargetSession.BadgeCache.Badges.Contains(BadgeToGive))
+                    else if (TargetSession.BadgeCache.ContainsCode(BadgeCode))
                     {
                         Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_directbadge_error"), 0, ChatType.Whisper));
                     }

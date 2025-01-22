@@ -132,16 +132,12 @@ namespace Snowlight.Game.Achievements
                  * NewProgress = 0;
                  */
 
-                Badge BadgeData = RightsManager.GetBadgeByCode(AchievementGroup + TargetLevel);
+                BadgeDefinition BadgeData = RightsManager.GetBadgeDefinitionByCode(AchievementGroup + TargetLevel);
 
                 if (NewTarget > TotalLevels)
                 {
                     NewTarget = TotalLevels;
                 }
-
-                Session.BadgeCache.UpdateAchievementBadge(MySqlClient, AchievementGroup, BadgeData);
-                Session.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeData.Id);
-                Session.SendData(InventoryNewItemsComposer.Compose(4, BadgeData.Id));
 
                 Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, TargetLevelData.SeasonalCurrency,
                     TargetLevelData.ActivityPointsReward);
@@ -158,6 +154,12 @@ namespace Snowlight.Game.Achievements
                     (int)TargetLevelData.SeasonalCurrency, TargetLevelData.ActivityPointsReward));
 
                 Session.AchievementCache.AddOrUpdateData(MySqlClient, AchievementGroup, NewLevel, NewProgress);
+
+                Session.BadgeCache.UpdateAchievementBadge(MySqlClient, AchievementGroup, BadgeData, Session.AchievementCache);
+
+                InventoryBadge UserBadge = Session.BadgeCache.GetBadge(AchievementGroup + TargetLevel);
+                Session.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                Session.NewItemsCache.SendNewItems(Session);
 
                 Session.CharacterInfo.UpdateScore(MySqlClient, TargetLevelData.PointsReward);
                 Session.SendData(AchievementScoreUpdateComposer.Compose(Session.CharacterInfo.Score));

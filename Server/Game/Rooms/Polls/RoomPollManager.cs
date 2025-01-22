@@ -238,17 +238,19 @@ namespace Snowlight.Game.Rooms
                             return;
                         }
 
-                        Badge BadgeToGive = RightsManager.GetBadgeByCode(Poll.BadgeReward);
+                        BadgeDefinition BadgeToGive = RightsManager.GetBadgeDefinitionByCode(Poll.BadgeReward);
                         if (BadgeToGive == null)
                         {
                             return;
                         }
 
-                        if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
+                        if (!Session.BadgeCache.ContainsCode(Poll.BadgeReward))
                         {
-                            Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
-                            Session.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
-                            Session.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+                            Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, Session.AchievementCache,"static");
+
+                            InventoryBadge UserBadge = Session.BadgeCache.GetBadge(Poll.BadgeReward);
+                            Session.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                            Session.NewItemsCache.SendNewItems(Session);
                         }
                     }
                     #endregion

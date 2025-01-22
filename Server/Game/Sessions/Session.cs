@@ -576,26 +576,29 @@ namespace Snowlight.Game.Sessions
                 #endregion
 
                 #region ACH_RegistrationDuration
+                string ACH_RegistrationDuration = "ACH_RegistrationDuration";
                 TimeSpan TotalDaysRegistered = DateTime.Now - UnixTimestamp.GetDateTimeFromUnixTimestamp(Info.TimestampRegistered);
-                UserAchievement RegistrationDurationData = mAchievementCache.GetAchievementData("ACH_RegistrationDuration");
+                UserAchievement RegistrationDurationData = mAchievementCache.GetAchievementData(ACH_RegistrationDuration);
 
                 int IncreaseTotal = RegistrationDurationData != null ? (int)TotalDaysRegistered.TotalDays - RegistrationDurationData.Progress : (int)TotalDaysRegistered.TotalDays;
 
                 if (IncreaseTotal < 2)
                 {
-                    AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_RegistrationDuration", IncreaseTotal);
+                    AchievementManager.ProgressUserAchievement(MySqlClient, this, ACH_RegistrationDuration, IncreaseTotal);
                 }
                 else
                 {
                     MySqlClient.SetParameter("increasetotal", RegistrationDurationData != null ? RegistrationDurationData.Progress + IncreaseTotal : IncreaseTotal);
-                    DataRow AchievementsRow = MySqlClient.ExecuteQueryRow("SELECT * FROM achievements WHERE progress_needed <= @increasetotal AND group_name = 'ACH_RegistrationDuration' ORDER BY progress_needed DESC LIMIT 1");
+                    MySqlClient.SetParameter("ach_name", ACH_RegistrationDuration);
+                    DataRow AchievementsRow = MySqlClient.ExecuteQueryRow("SELECT * FROM achievements WHERE progress_needed <= @increasetotal AND group_name = @ach_name ORDER BY progress_needed DESC LIMIT 1");
 
                     int UserCurrentLevel = RegistrationDurationData != null ? RegistrationDurationData.Level : 0;
                     int AchLevel = AchievementsRow != null ? (int)AchievementsRow["level"] : 0;
 
                     MySqlClient.SetParameter("currentlevel", UserCurrentLevel);
                     MySqlClient.SetParameter("newlevel", AchLevel);
-                    DataTable BonusesTable = MySqlClient.ExecuteQueryTable("SELECT * FROM achievements WHERE level > @currentlevel AND level <= @newlevel AND group_name = 'ACH_RegistrationDuration'");
+                    MySqlClient.SetParameter("ach_name", ACH_RegistrationDuration);
+                    DataTable BonusesTable = MySqlClient.ExecuteQueryTable("SELECT * FROM achievements WHERE level > @currentlevel AND level <= @newlevel AND group_name = '@ach_name'");
 
                     int ActivityPointsBonuses = 0;
                     int PointsBonuses = 0;
@@ -607,13 +610,13 @@ namespace Snowlight.Game.Sessions
                     }
 
                     int ToIncreaseAch = (RegistrationDurationData != null ? RegistrationDurationData.Progress + IncreaseTotal : IncreaseTotal);
-                    mAchievementCache.AddOrUpdateData(MySqlClient, "ACH_RegistrationDuration", AchLevel, ToIncreaseAch);
+                    mAchievementCache.AddOrUpdateData(MySqlClient, ACH_RegistrationDuration, AchLevel, ToIncreaseAch);
 
                     if (UserCurrentLevel < AchLevel)
                     {
-                        Achievement AchievementData = AchievementManager.GetAchievement("ACH_RegistrationDuration");
+                        Achievement AchievementData = AchievementManager.GetAchievement(ACH_RegistrationDuration);
                         UserAchievement UserData = mAchievementCache.GetAchievementData(AchievementData.GroupName);
-                        Badge BadgeData = RightsManager.GetBadgeByCode(AchievementData.GroupName + AchLevel);
+                        BadgeDefinition BadgeData = RightsManager.GetBadgeDefinitionByCode(AchievementData.GroupName + AchLevel);
                         AchievementLevel TargetLevelData = AchievementData.Levels[AchLevel];
 
                         SendData(AchievementUnlockedComposer.Compose(AchievementData, UserData.Level, PointsBonuses, 
@@ -634,9 +637,11 @@ namespace Snowlight.Game.Sessions
                         mMessengerFriendCache.BroadcastToFriends(MessengerFriendEventComposer.Compose(Info.Id,
                             MessengerFriendEventType.AchievementUnlocked, BadgeData.Code));
 
-                        mBadgeCache.UpdateAchievementBadge(MySqlClient, AchievementData.GroupName, BadgeData);
-                        mNewItemsCache.MarkNewItem(MySqlClient, 4, BadgeData.Id);
-                        SendData(InventoryNewItemsComposer.Compose(4, BadgeData.Id));
+                        mBadgeCache.UpdateAchievementBadge(MySqlClient, AchievementData.GroupName, BadgeData, mAchievementCache);
+
+                        InventoryBadge UserBadge = mBadgeCache.GetBadge(AchievementData.GroupName + AchLevel);
+                        mNewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                        mNewItemsCache.SendNewItems(this);
 
                         SendInfoUpdate();
                     }
@@ -648,17 +653,19 @@ namespace Snowlight.Game.Sessions
                 #region Login Badge Reward
                 if (ServerSettings.LoginBadgeEnabled)
                 {
-                    Badge BadgeToGive = RightsManager.GetBadgeByCode(ServerSettings.LoginBadgeCode);
+                    BadgeDefinition BadgeToGive = RightsManager.GetBadgeDefinitionByCode(ServerSettings.LoginBadgeCode);
                     if (BadgeToGive == null)
                     {
                         return;
                     }
 
-                    if (!mBadgeCache.Badges.Contains(BadgeToGive))
+                    if (!mBadgeCache.ContainsCode(ServerSettings.LoginBadgeCode))
                     {
-                        mBadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
-                        mNewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
-                        SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+                        mBadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, mAchievementCache, "static");
+
+                        InventoryBadge UserBadge = mBadgeCache.GetBadge(ServerSettings.LoginBadgeCode);
+                        mNewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                        mNewItemsCache.SendNewItems(this);
                     }
                 }
                 #endregion

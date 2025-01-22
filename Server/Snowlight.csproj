@@ -452,6 +452,7 @@
     <Compile Include="Game\Pathfinding\PathfinderNode.cs" />
     <Compile Include="Game\Pets\PetTricks.cs" />
     <Compile Include="Game\Pets\PetCommands.cs" />
+    <Compile Include="Game\Rights\InventoryBadge.cs" />
     <Compile Include="Game\Rooms\Polls\RoomPollQuestions .cs" />
     <Compile Include="Game\Rooms\Polls\RoomPoll.cs" />
     <Compile Include="Game\Rooms\Polls\RoomPollManager.cs" />
@@ -488,7 +489,7 @@
     <Compile Include="Game\Pets\PetName.cs" />
     <Compile Include="Game\Pets\PetRaceData.cs" />
     <Compile Include="Game\Recycler\RecyclerManager.cs" />
-    <Compile Include="Game\Rights\Badge.cs" />
+    <Compile Include="Game\Rights\BadgeDefinition.cs" />
     <Compile Include="Game\Rights\BadgeCache.cs" />
     <Compile Include="Game\Rights\ClubSubscription.cs" />
     <Compile Include="Game\Rights\RightsManager.cs" />

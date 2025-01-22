@@ -560,21 +560,23 @@ namespace Snowlight.Game.Rooms
                         return;
                     }
 
-                    Badge BadgeToGive = RightsManager.GetBadgeByCode(Instance.Info.BadgeCode);
+                    BadgeDefinition BadgeToGive = RightsManager.GetBadgeDefinitionByCode(Instance.Info.BadgeCode);
                     if (BadgeToGive == null)
                     {
                         return;
                     }
 
-                    if (!Session.BadgeCache.Badges.Contains(BadgeToGive))
+                    if (!Session.BadgeCache.ContainsCode(Instance.Info.BadgeCode))
                     {
-                        Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, "static");
-                        Session.NewItemsCache.MarkNewItem(MySqlClient, 4, BadgeToGive.Id);
-                        Session.SendData(InventoryNewItemsComposer.Compose(4, BadgeToGive.Id));
+                        Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, Session.AchievementCache, "static");
+
+                        InventoryBadge UserBadge = Session.BadgeCache.GetBadge(Instance.Info.BadgeCode);
+                        Session.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                        Session.NewItemsCache.SendNewItems(Session);
 
                         Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_success"), 1, ChatType.Whisper));
                     }
-                    else if (Session.BadgeCache.Badges.Contains(BadgeToGive))
+                    else if (Session.BadgeCache.ContainsCode(Instance.Info.BadgeCode))
                     {
                         Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_error"), 4, ChatType.Whisper));
                     }
