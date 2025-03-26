@@ -56,10 +56,9 @@ namespace Snowlight.Game.Misc
 
                     int EffectId = int.Parse(Params[1]);
 
-                    if (EffectId > 0 && EffectId <= 70)
+                    if (EffectId > 0 && EffectId <= 76)
                     {
                         Actor.ApplyEffect(EffectId);
-                        Session.CurrentEffect = EffectId;
                     }
                     else
                     {

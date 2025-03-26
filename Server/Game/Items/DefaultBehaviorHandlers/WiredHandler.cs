@@ -27,7 +27,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.WiredTrigger, new ItemEventHandler(HandleWiredTrigger));
         }
 
-         private static bool HandleWiredTrigger(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+         private static bool HandleWiredTrigger(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -81,6 +81,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     break;
 
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {

@@ -14,7 +14,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.ExchangeItem, new ItemEventHandler(HandleExchangeRedemption));
         }
 
-        private static bool HandleExchangeRedemption(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleExchangeRedemption(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -26,6 +26,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     {
                         if (ItemValue != 0)
                         {
+                            Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
                             Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, ItemValue);
                             Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
                         }

@@ -15,11 +15,13 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.WelcomeGift, new ItemEventHandler(HandleWelcomeGift));
         }
 
-        private static bool HandleWelcomeGift(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleWelcomeGift(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     Session.SendData(WelcomeGiftComposer.Compose("defaultuser@meth0d.org", Item));
                     break;

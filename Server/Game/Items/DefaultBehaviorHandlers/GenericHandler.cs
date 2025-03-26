@@ -24,19 +24,20 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Rental, new ItemEventHandler(HandleRental));
         }
 
-        private static bool HandleGenericSwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleGenericSwitch(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {
                         return true;
                     }
 
-                    int CurrentState = 0;
-                    int.TryParse(Item.Flags, out CurrentState);
+                    int.TryParse(Item.Flags, out int CurrentState);
 
                     int NewState = CurrentState + 1;
 
@@ -62,7 +63,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleStepSwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleStepSwitch(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -95,20 +96,15 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleScoreboard(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleScoreboard(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
                 case ItemEventType.Interact:
 
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
                     if (!Instance.CheckUserRights(Session))
-                    {
-                        break;
-                    }
-
-                    RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
-
-                    if (Actor == null)
                     {
                         break;
                     }
@@ -119,8 +115,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         break;
                     }
 
-                    int Val = 0;
-                    int.TryParse(Item.DisplayFlags, out Val);
+                    int.TryParse(Item.DisplayFlags, out int Val);
 
                     if (RequestData == 1)
                     {
@@ -153,7 +148,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleRental(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleRental(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -192,7 +187,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     break;
             }
 
-            return HandleGenericSwitch(Session, Item, Instance, Event, RequestData);
+            return HandleGenericSwitch(Actor, Item, Instance, Event, RequestData);
         }
     }
 }

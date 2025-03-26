@@ -24,7 +24,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Roller, new ItemEventHandler(HandleRoller));
         }
 
-        private static bool HandleRoller(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleRoller(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -52,19 +52,19 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                             if (ActorsToMove.Count > 0)
                             {
-                                foreach (RoomActor Actor in ActorsToMove)
+                                foreach (RoomActor MoveActors in ActorsToMove)
                                 {
-                                    if (Actor.IsMoving)
+                                    if (MoveActors.IsMoving)
                                     {
                                         continue;
                                     }
 
-                                    if (Instance.IsValidStep(Actor.Position.GetVector2(), Roller.SquareInFront, false))
+                                    if (Instance.IsValidStep(MoveActors.Position.GetVector2(), Roller.SquareInFront, false))
                                     {
-                                        Actor.PositionToSet = Roller.SquareInFront;
+                                        MoveActors.PositionToSet = Roller.SquareInFront;
 
-                                        RollerEvent = new RollerEvents(Actor.Position.Z, Instance.GetUserStepHeight(Actor.PositionToSet),
-                                            Actor.Id, 0, MovementType.Slide);
+                                        RollerEvent = new RollerEvents(MoveActors.Position.Z, Instance.GetUserStepHeight(MoveActors.PositionToSet),
+                                            MoveActors.Id, 0, MovementType.Slide);
 
                                         if (RollerEvent != null)
                                         {

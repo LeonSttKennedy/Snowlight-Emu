@@ -15,10 +15,12 @@ namespace Snowlight.Game.Items
         Removing = 2,
         Interact = 3,
         UpdateTick = 4,
-        InstanceLoaded = 5
+        InstanceLoaded = 5,
+        WalkOnItem = 6,
+        WalkOffItem = 7
     }
 
-    public delegate bool ItemEventHandler(Session Session, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData);
+    public delegate bool ItemEventHandler(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData);
 
     public static class ItemEventDispatcher
     {
@@ -52,9 +54,13 @@ namespace Snowlight.Game.Items
             WelcomeGiftHandler.Register();
             WiredHandler.Register();
             TotemHandler.Register();
+            RollerRinkHandler.Register();
+            SkateRailHandler.Register();
+            IceSkatingHandler.Register();
+            BunnyRunHandler.Register();
         }
 
-        public static void InvokeItemEventHandler(Session Session, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData = 0)
+        public static void InvokeItemEventHandler(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData = 0)
         {
             lock (mSyncRoot)
             {
@@ -62,7 +68,7 @@ namespace Snowlight.Game.Items
                 {
                     foreach (ItemEventHandler EventHandler in mEventHandlers[Item.Definition.Behavior])
                     {
-                        if (!EventHandler.Invoke(Session, Item, Instance, Type, RequestData))
+                        if (!EventHandler.Invoke(Actor, Item, Instance, Type, RequestData))
                         {
                             return;
                         }

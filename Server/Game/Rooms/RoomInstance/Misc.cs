@@ -1,18 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 using Snowlight.Storage;
+using Snowlight.Game.Items;
+using Snowlight.Game.Music;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication;
-using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Characters;
-using Snowlight.Game.Items;
-using Snowlight.Game.Rooms.Events;
-using System.Collections.ObjectModel;
-using Snowlight.Game.Music;
-using Snowlight.Game.Rooms.Trading;
 using Snowlight.Game.Items.Wired;
+using Snowlight.Game.Rooms.Games;
+using Snowlight.Game.Rooms.Events;
+using Snowlight.Game.Rooms.Trading;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Rooms
 {
@@ -31,6 +32,7 @@ namespace Snowlight.Game.Rooms
         private RoomMusicController mMusicController;
         private Dictionary<uint, uint> mTemporaryStickieRights;
         private TradeManager mTradeManager;
+        private GameManager mGameManager;
         private WiredManager mWiredManager;
 
         public RoomMusicController MusicController
@@ -78,6 +80,14 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public GameManager GameManager
+        {
+            get
+            {
+                return mGameManager;
+            }
+        }
+
         public WiredManager WiredManager
         {
             get
@@ -85,6 +95,7 @@ namespace Snowlight.Game.Rooms
                 return mWiredManager;
             }
         }
+
         public void PickAllToUserInventory(Session Session)
         {
             List<Item> Copy = new List<Item>();
@@ -100,6 +111,8 @@ namespace Snowlight.Game.Rooms
                 {
                     continue;
                 }
+
+                ItemEventDispatcher.InvokeItemEventHandler(null, Item, this, ItemEventType.Removing);
 
                 TakeItem(Item.Id);
                 Session.InventoryCache.Add(Item);

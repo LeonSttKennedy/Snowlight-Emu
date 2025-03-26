@@ -18,11 +18,13 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.OneWayGate, new ItemEventHandler(HandleOneWayGate));
         }
 
-        private static bool HandleFixedGateSwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleFixedGateSwitch(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {
@@ -39,8 +41,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         }
                     }
 
-                    int CurrentState = 0;
-                    int.TryParse(Item.Flags, out CurrentState);
+                    int.TryParse(Item.Flags, out int CurrentState);
 
                     Item.Flags = (CurrentState == 0 ? 1 : 0).ToString();
                     Item.DisplayFlags = Item.Flags;
@@ -55,7 +56,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleOneWayGate(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleOneWayGate(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -83,13 +84,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     break;
 
                 case ItemEventType.Interact:
-
-                    RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
-
-                    if (Actor == null)
-                    {
-                        break;
-                    }
 
                     if (Actor.Position.X != Item.SquareInFront.X || Actor.Position.Y != Item.SquareInFront.Y)
                     {

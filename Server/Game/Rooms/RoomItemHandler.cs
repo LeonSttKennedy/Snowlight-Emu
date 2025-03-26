@@ -151,13 +151,14 @@ namespace Snowlight.Game.Rooms
                         {
                             Item.MoveToRoom(MySqlClient, Instance.RoomId, FinalizedPosition, Rotation);
 
-
                             Instance.RegenerateRelativeHeightmap();
 
                             Session.InventoryCache.RemoveItem(Item.Id);
                             Session.SendData(InventoryItemRemovedComposer.Compose(Item.Id));
 
-                            ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Placed);
+                            RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+
+                            ItemEventDispatcher.InvokeItemEventHandler(Actor, Item, Instance, ItemEventType.Placed);
 
                             Instance.BroadcastMessage(RoomFloorItemPlacedComposer.Compose(Item));
 
@@ -168,22 +169,10 @@ namespace Snowlight.Game.Rooms
                                 QuestManager.ProgressUserQuest(Session, QuestType.FURNI_STACK);
                             }
 
-                            if (Item.Definition.Behavior.Equals(ItemBehavior.BlackHole))
+                            if (!string.IsNullOrEmpty(Item.Definition.AchievementCode))
                             {
-                                string HoleACH = "ACH_RoomDecoHoleFurniCount";
-
-                                UserAchievement HoleCountAchData = Session.AchievementCache.GetAchievementData(HoleACH);
-
-                                int HoleCountAchData_Progress = HoleCountAchData != null ? HoleCountAchData.Progress : 0;
-
-                                int ActualRoomHoleCount = Instance.GetFloorItems().Where(I => I.Definition.Behavior.Equals(ItemBehavior.BlackHole)).Count();
-
-                                int Difference = ActualRoomHoleCount - HoleCountAchData_Progress;
-
-                                if (Difference > 0)
-                                {
-                                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, HoleACH, Difference);
-                                }
+                                int BehaviorFurniCount = Instance.GetFloorItems().Where(I => I.Definition.Behavior.Equals(Item.Definition.Behavior)).Count();
+                                Session.CheckProgressAchievement(MySqlClient, Item.Definition.AchievementCode, BehaviorFurniCount);
                             }
                         }
                     }
@@ -207,11 +196,12 @@ namespace Snowlight.Game.Rooms
                         {
                             Item.MoveToRoom(MySqlClient, Instance.RoomId, new Vector3(0, 0, 0), 0, WallPos);
 
-
                             Session.InventoryCache.RemoveItem(Item.Id);
                             Session.SendData(InventoryItemRemovedComposer.Compose(Item.Id));
 
-                            ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Placed);
+                            RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+
+                            ItemEventDispatcher.InvokeItemEventHandler(Actor, Item, Instance, ItemEventType.Placed);
 
                             Instance.BroadcastMessage(RoomWallItemPlacedComposer.Compose(Item));
 
@@ -220,21 +210,21 @@ namespace Snowlight.Game.Rooms
                                 Instance.GiveTemporaryStickieRights(Item.Id, Session.CharacterId);
                                 Session.SendData(StickyDataComposer.Compose(Item));
 
-                                CharacterInfo OwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, Instance.Info.OwnerId);
-
-                                if (OwnerInfo.HasLinkedSession)
-                                {
-                                    Session OwnerSession = SessionManager.GetSessionByCharacterId(Instance.Info.OwnerId);
-
-                                    AchievementManager.ProgressUserAchievement(MySqlClient, OwnerSession, "ACH_NotesReceived", 1);
-                                }
-                                else
-                                {
-                                    AchievementManager.OfflineProgressUserAchievement(MySqlClient, Instance.Info.OwnerId, "ACH_NotesReceived", 1);
-                                }
-
                                 if (Session.CharacterId != Instance.Info.OwnerId)
                                 {
+                                    CharacterInfo OwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, Instance.Info.OwnerId);
+
+                                    if (OwnerInfo.HasLinkedSession)
+                                    {
+                                        Session OwnerSession = SessionManager.GetSessionByCharacterId(Instance.Info.OwnerId);
+
+                                        AchievementManager.ProgressUserAchievement(MySqlClient, OwnerSession, "ACH_NotesReceived", 1);
+                                    }
+                                    else
+                                    {
+                                        AchievementManager.OfflineProgressUserAchievement(MySqlClient, Instance.Info.OwnerId, "ACH_NotesReceived", 1);
+                                    }
+
                                     AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_NotesLeft", 1);
                                 }
                             }
@@ -264,7 +254,9 @@ namespace Snowlight.Game.Rooms
             
             if (Instance.TakeItem(Item.Id))
             {
-                ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Removing);
+                RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+
+                ItemEventDispatcher.InvokeItemEventHandler(Actor, Item, Instance, ItemEventType.Removing);
 
                 using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                 {
@@ -306,14 +298,16 @@ namespace Snowlight.Game.Rooms
 
             if (FinalizedPosition != null)
             {
-                Item.MoveToRoom(null, Instance.RoomId, FinalizedPosition, NewRotation, string.Empty);
-                RoomManager.MarkWriteback(Item, false);         
+                RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
 
-                Instance.RegenerateRelativeHeightmap();
-                Instance.BroadcastMessage(RoomItemUpdatedComposer.Compose(Item));
-
-                ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Moved,
+                ItemEventDispatcher.InvokeItemEventHandler(Actor, Item, Instance, ItemEventType.Moved,
                     IsRotationOnly ? 1 : 0);
+
+                Item.MoveToRoom(null, Instance.RoomId, FinalizedPosition, NewRotation, string.Empty);
+                RoomManager.MarkWriteback(Item, false);
+
+                Instance.RegenerateRelativeHeightmap(true);
+                Instance.BroadcastMessage(RoomItemUpdatedComposer.Compose(Item));
 
                 QuestManager.ProgressUserQuest(Session, IsRotationOnly ? QuestType.FURNI_ROTATE : QuestType.FURNI_MOVE);
 
@@ -350,7 +344,9 @@ namespace Snowlight.Game.Rooms
 
                 Instance.BroadcastMessage(RoomWallItemMovedComposer.Compose(Item));
 
-                ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Moved);
+                RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+
+                ItemEventDispatcher.InvokeItemEventHandler(Actor, Item, Instance, ItemEventType.Moved);
             }
         }
 
@@ -536,6 +532,7 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
+            Data.CurrentPreset = PresetId;
             Preset.BackgroundOnly = !Message.PopWiredBoolean();
             Preset.ColorCode = UserInputFilter.FilterString(Message.PopString().Trim());
             Preset.ColorIntensity = Message.PopWiredInt32();

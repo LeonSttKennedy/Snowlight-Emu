@@ -13,6 +13,7 @@ using Snowlight.Game.Moderation;
 using Snowlight.Storage;
 using Snowlight.Game.Items;
 using Snowlight.Game.Pets;
+using Snowlight.Game.Rooms.Games;
 
 namespace Snowlight.Game.Rooms
 {
@@ -58,6 +59,10 @@ namespace Snowlight.Game.Rooms
         private int mAntiSpamTicks;
         private uint mFurniOnId;
         private bool mIsSitting;
+
+        private GameType mGameType;
+        private TagStatus mTagStatus;
+        private TeamColors mTeamColors;
 
         public uint Id
         {
@@ -611,6 +616,7 @@ namespace Snowlight.Game.Rooms
                 return mPathfinder;
             }
         }
+
         public CharacterGender Gender
         {
             get
@@ -632,6 +638,45 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public GameType PlayingGameType
+        {
+            get
+            {
+                return mGameType;
+            }
+
+            set
+            {
+                mGameType = value;
+            }
+        }
+
+        public TagStatus PlayerTagStatus
+        {
+            get
+            {
+                return mTagStatus;
+            }
+
+            set
+            {
+                mTagStatus = value;
+            }
+        }
+
+        public TeamColors PlayerTeamColor
+        {
+            get
+            {
+                return mTeamColors;
+            }
+
+            set
+            {
+                mTeamColors = value;
+            }
+        }
+
         public RoomActor(uint Id, RoomActorType Type, uint ReferenceId, object ReferenceObject, Vector3 Position,
             int Rotation, RoomInstance Instance)
         {
@@ -650,6 +695,10 @@ namespace Snowlight.Game.Rooms
             mEnableMoonWalk = false;
             mMovementSyncRoot = new object();
             mIsSitting = false;
+
+            mGameType = GameType.None;
+            mTagStatus = TagStatus.None;
+            mTeamColors = TeamColors.None;
 
             mPathfinder = PathfinderManager.CreatePathfinderInstance();
             mPathfinder.SetRoomInstance(mInstance, Id);
@@ -791,6 +840,8 @@ namespace Snowlight.Game.Rooms
                 mPathfinder.MoveTo(ToPosition);
             }
         }
+
+        /* Unused method
         public void MoveToPos(Vector2 ToPosition, bool teleport, bool IgnoreCanInitiate = false, bool IgnoreRedirections = false, bool DisableClipping = false)
         {
             Unidle();
@@ -830,15 +881,14 @@ namespace Snowlight.Game.Rooms
                         {
                             if (this.mPositionToSet.X == Item.RoomPosition.X && this.mPositionToSet.Y == Item.RoomPosition.Y)
                             {
-                                Session Session = SessionManager.GetSessionByCharacterId(this.ReferenceId);
-                                ItemEventDispatcher.InvokeItemEventHandler(Session, Item, mInstance, ItemEventType.Interact, this.MoveToAndInteractData);
+                                ItemEventDispatcher.InvokeItemEventHandler(this, Item, mInstance, ItemEventType.Interact, this.MoveToAndInteractData);
                             }
                         }
                     }
                 }
 
             }
-        }
+        }*/
 
         public Vector2 GetNextStep()
         {

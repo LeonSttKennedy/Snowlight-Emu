@@ -1523,7 +1523,9 @@ namespace Snowlight.Game.Rooms
 
             int RequestData = Message.PopWiredInt32();
 
-            ItemEventDispatcher.InvokeItemEventHandler(Session, Item, Instance, ItemEventType.Interact, RequestData);
+            RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+
+            ItemEventDispatcher.InvokeItemEventHandler(Actor, Item, Instance, ItemEventType.Interact, RequestData);
             
             QuestManager.ProgressUserQuest(Session, QuestType.EXPLORE_FIND_SPECIFIC_ITEM, Item.DefinitionId);
 

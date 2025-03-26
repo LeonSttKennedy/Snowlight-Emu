@@ -39,6 +39,7 @@ namespace Snowlight.Game.Rooms
                 return mCachedModel;
             }
         }
+
         public List<RoomActor>[,] RoomActorGrid
         {
             get
@@ -46,6 +47,7 @@ namespace Snowlight.Game.Rooms
                 return mUserGrid;
             }
         }
+
         public uint[,] FurniMap
         {
             get

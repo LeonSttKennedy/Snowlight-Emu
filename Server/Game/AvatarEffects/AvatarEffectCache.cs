@@ -53,9 +53,11 @@ namespace Snowlight.Game.AvatarEffects
 
                 foreach (DataRow Row in Table.Rows)
                 {
-                    mInner.Add((uint)Row["id"], new AvatarEffect((uint)Row["id"], (int)Row["sprite_id"],
+                    AvatarEffect Effect = new AvatarEffect((uint)Row["id"], (int)Row["sprite_id"],
                         (double)Row["duration"], (int)Row["quantity"], (Row["activated"].ToString() == "1"),
-                        (double)Row["timestamp_activated"]));
+                        (double)Row["timestamp_activated"]);
+
+                        mInner.Add((uint)Row["id"], Effect);
                 }                
             }
         }

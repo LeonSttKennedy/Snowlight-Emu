@@ -550,9 +550,6 @@ namespace Snowlight.Game.Sessions
                 #endregion
 
                 #region ACH_Login
-                UserAchievement LoginData = mAchievementCache.GetAchievementData("ACH_Login");
-                int LoginUserProgress = LoginData != null ? LoginData.Progress : 0;
-
                 if (Info.DateTimeLastLogin.ToString("dd-MM-yyyy") == DateTime.Now.ToString("dd-MM-yyyy"))
                 {
                     // If he logged today we will do nothing ;)
@@ -568,11 +565,7 @@ namespace Snowlight.Game.Sessions
                     Info.UpdateRegularVisitor(MySqlClient, 1);
                 }
 
-                int LoginToIncrease = Info.RegularVisitorinDays - LoginUserProgress;
-                if (LoginToIncrease > 0)
-                {
-                    AchievementManager.ProgressUserAchievement(MySqlClient, this, "ACH_Login", LoginToIncrease);
-                }
+                CheckProgressAchievement(MySqlClient, "ACH_Login", Info.RegularVisitorinDays);
                 #endregion
 
                 #region ACH_RegistrationDuration
@@ -818,6 +811,20 @@ namespace Snowlight.Game.Sessions
             {
                 SessionManager.StopSession(mId);
                 return;
+            }
+        }
+
+        public void CheckProgressAchievement(SqlDatabaseClient MySqlClient, string AchievementCode, int DifferenceCount)
+        {
+            UserAchievement AchievementData = mAchievementCache.GetAchievementData(AchievementCode);
+
+            int AchievementProgress = AchievementData != null ? AchievementData.Progress : 0;
+
+            int Difference = DifferenceCount - AchievementProgress;
+
+            if (Difference > 0)
+            {
+                AchievementManager.ProgressUserAchievement(MySqlClient, this, AchievementCode, Difference);
             }
         }
 

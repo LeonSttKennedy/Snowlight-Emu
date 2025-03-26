@@ -15,6 +15,7 @@ using Snowlight.Game.Characters;
 using Snowlight.Game.Achievements;
 using System.Collections.ObjectModel;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Rooms.Games;
 
 namespace Snowlight.Game.Misc
 {
@@ -94,9 +95,10 @@ namespace Snowlight.Game.Misc
                                 #endregion
 
                                 #region Delivery Some ACH FROM HERE
-                                TimeOnline(Session, MySqlClient);
-                                HabboTags(Session, MySqlClient);
-                                TradePass(Session, MySqlClient);
+                                GamesAchievements(MySqlClient, Session);
+                                TimeOnline(MySqlClient, Session);
+                                HabboTags(MySqlClient, Session);
+                                TradePass(MySqlClient, Session);
                                 Session.SubscriptionManager.UpdateUserBadge();
                                 #endregion
 
@@ -232,22 +234,78 @@ namespace Snowlight.Game.Misc
         #endregion
 
         #region Other Stuff
-        private static void TimeOnline(Session Session, SqlDatabaseClient MySqlClient)
+        private static void GamesAchievements(SqlDatabaseClient MySqlClient, Session Session)
+        {
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.CurrentRoomId);
+
+            if (Instance != null)
+            {
+                RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
+
+                switch (Actor.PlayingGameType)
+                {
+                    case GameType.RollerSkating:
+
+                        if (Instance.GameManager.RollerStrollerAchievement.ContainsKey(Session.CharacterId))
+                        {
+                            DateTime UserDateTime = Instance.GameManager.RollerStrollerAchievement[Session.CharacterId];
+                            TimeSpan RollerStrollerIncrease = DateTime.Now - UserDateTime;
+
+                            if (RollerStrollerIncrease.Minutes > 0)
+                            {
+                                int TotalMinutes = RollerStrollerIncrease.Minutes > 1 ? RollerStrollerIncrease.Minutes : 1;
+
+                                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_RbTagC", TotalMinutes);
+                                Instance.GameManager.RollerStrollerAchievement[Session.CharacterId] = DateTime.Now;
+                            }
+                        }
+
+                        break;
+
+                    case GameType.IceSkating:
+
+                        if (Instance.GameManager.IceIceBabyAchievement.ContainsKey(Session.CharacterId))
+                        {
+                            DateTime UserDateTime = Instance.GameManager.IceIceBabyAchievement[Session.CharacterId];
+                            TimeSpan IceIceBabyIncrease = DateTime.Now - UserDateTime;
+
+                            if (IceIceBabyIncrease.Minutes > 0)
+                            {
+                                int TotalMinutes = IceIceBabyIncrease.Minutes > 1 ? IceIceBabyIncrease.Minutes : 1;
+
+                                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_TagC", TotalMinutes);
+                                Instance.GameManager.IceIceBabyAchievement[Session.CharacterId] = DateTime.Now;
+                            }
+                        }
+
+                        break;
+
+                    case GameType.None:
+
+                        if (Instance.GameManager.RollerStrollerAchievement.ContainsKey(Session.CharacterId))
+                        {
+                            Instance.GameManager.RollerStrollerAchievement.Remove(Session.CharacterId);
+                        }
+                        else if (Instance.GameManager.IceIceBabyAchievement.ContainsKey(Session.CharacterId))
+                        {
+                            Instance.GameManager.IceIceBabyAchievement.Remove(Session.CharacterId);
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        private static void TimeOnline(SqlDatabaseClient MySqlClient, Session Session)
         {
             Session.CharacterInfo.UpdateTimeOnline(MySqlClient, 1);
 
             int UserOnlineTimeCount = Session.CharacterInfo.TimeOnline;
-            UserAchievement OnlineTimeData = Session.AchievementCache.GetAchievementData("ACH_AllTimeHotelPresence");
-            int CacheTime = OnlineTimeData != null ? OnlineTimeData.Progress : 0;
 
-            int TimeOnlineIncrease = UserOnlineTimeCount - CacheTime;
-
-            if(TimeOnlineIncrease > 0)
-            {
-                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_AllTimeHotelPresence", TimeOnlineIncrease);
-            }
+            Session.CheckProgressAchievement(MySqlClient, "ACH_AllTimeHotelPresence", UserOnlineTimeCount);
         }
-        private static void TradePass(Session Session, SqlDatabaseClient MySqlClient)
+
+        private static void TradePass(SqlDatabaseClient MySqlClient, Session Session)
         {
             TimeSpan TotalDaysRegistered = DateTime.Now - UnixTimestamp.GetDateTimeFromUnixTimestamp(Session.CharacterInfo.TimestampRegistered);
             if (TotalDaysRegistered.TotalDays >= 1 /*&& Session.CharacterInfo.VerifyedAccount*/)
@@ -255,7 +313,8 @@ namespace Snowlight.Game.Misc
                 AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_TraderPass", 1);
             }
         }
-        private static void HabboTags(Session Session, SqlDatabaseClient MySqlClient)
+
+        private static void HabboTags(SqlDatabaseClient MySqlClient, Session Session)
         {
             IList<string> HandleOldUserTags = Session.CharacterInfo.Tags;
             Session.CharacterInfo.UpdateTags(MySqlClient);
@@ -272,15 +331,8 @@ namespace Snowlight.Game.Misc
             }
 
             int UserTagsCount = Session.CharacterInfo.Tags.Count;
-            UserAchievement AvatarTagsData = Session.AchievementCache.GetAchievementData("ACH_AvatarTags");
-            int CacheTagsProgress = AvatarTagsData != null ? AvatarTagsData.Progress : 0;
 
-            int AvatarTagsIncrease = UserTagsCount - CacheTagsProgress;
-
-            if (AvatarTagsIncrease > 0)
-            {
-                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_AvatarTags", AvatarTagsIncrease);
-            }
+            Session.CheckProgressAchievement(MySqlClient, "ACH_AvatarTags", UserTagsCount);
         }
         #endregion
     }

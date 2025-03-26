@@ -8,6 +8,8 @@ using Snowlight.Specialized;
 using System.Collections.Generic;
 using Snowlight.Game.Items.Wired;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Sessions;
+using Snowlight.Game.Achievements;
 
 namespace Snowlight.Game.Items
 {

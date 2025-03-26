@@ -79,6 +79,17 @@ namespace Snowlight.Game.Items
 
                 mDefinitions.Add(DefinitionId, Definition);
 
+                MySqlClient.SetParameter("defid", DefinitionId);
+                bool AchievementCodeExists = (MySqlClient.ExecuteScalar("SELECT achievement_code FROM item_achievements WHERE definition_id = @defid LIMIT 1") != null);
+
+                if(AchievementCodeExists)
+                {
+                    MySqlClient.SetParameter("defid", DefinitionId);
+                    string AchievementCode = MySqlClient.ExecuteScalar("SELECT achievement_code FROM item_achievements WHERE definition_id = @defid LIMIT 1").ToString();
+
+                    Definition.SetAchievementCode(AchievementCode);
+                }
+
                 MySqlClient.SetParameter("itembehavior", Behavior);
                 DataRow PetStatusRow = MySqlClient.ExecuteQueryRow("SELECT * FROM pet_interactions WHERE behavior = @itembehavior LIMIT 1");
 

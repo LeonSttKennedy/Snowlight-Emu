@@ -90,8 +90,8 @@ namespace Snowlight.Game.Rooms
 
                         if (Item != null)
                         {
-                            ItemEventDispatcher.InvokeItemEventHandler(SessionManager.GetSessionByCharacterId(
-                                Actor.ReferenceId), Item, this, ItemEventType.Interact, Actor.MoveToAndInteractData);
+                            ItemEventDispatcher.InvokeItemEventHandler(Actor, Item, this,
+                                ItemEventType.Interact, Actor.MoveToAndInteractData);
                         }
 
                         Actor.MoveToAndInteract = 0;
@@ -180,6 +180,20 @@ namespace Snowlight.Game.Rooms
                             }
                         }
 
+                        Item CurrentItem = GetItem(mFurniMap[Actor.Position.X, Actor.Position.Y]);
+
+                        if (CurrentItem != null && Actor.FurniOnId != mFurniMap[NextStep.X, NextStep.Y])
+                        {
+                            ItemEventDispatcher.InvokeItemEventHandler(Actor, CurrentItem, this, ItemEventType.WalkOffItem);
+                        }
+
+                        Item FutureItem = GetItem(mFurniMap[NextStep.X, NextStep.Y]);
+
+                        if (FutureItem != null && Actor.FurniOnId != mFurniMap[NextStep.X, NextStep.Y])
+                        {
+                            ItemEventDispatcher.InvokeItemEventHandler(Actor, FutureItem, this, ItemEventType.WalkOnItem);
+                        }
+
                         Actor.FurniOnId = mFurniMap[NextStep.X, NextStep.Y];
 
                         // Request update for next @B cycle
@@ -206,6 +220,8 @@ namespace Snowlight.Game.Rooms
                     }
 
                     NewUserGrid[Actor.Position.X, Actor.Position.Y].Add(Actor);
+
+                    Actor.FurniOnId = mFurniMap[Actor.Position.X, Actor.Position.Y];
                 }
 
                 // Platform user updating
@@ -440,10 +456,11 @@ namespace Snowlight.Game.Rooms
 
             if (Effect.Type == RoomTileEffectType.Sit && !CurrentStatusses.ContainsKey("mv"))
             {
+                double Height = Actor.Type == RoomActorType.AiBot && ((Bot)Actor.ReferenceObject).PetData != null ?
+                    Effect.InteractionHeight / 2 : Effect.InteractionHeight;
+
                 string OldStatus = (CurrentStatusses.ContainsKey("sit") ? CurrentStatusses["sit"] : string.Empty);
-                string NewStatus = Actor.Type == RoomActorType.AiBot && ((Bot)Actor.ReferenceObject).PetData != null ? 
-                    Math.Round(Effect.InteractionHeight / 2, 1).ToString().Replace(',', '.') : 
-                    Math.Round(Effect.InteractionHeight, 1).ToString().Replace(',', '.');
+                string NewStatus = Math.Round(Height, 1).ToString().Replace(',', '.');
 
                 if (Actor.BodyRotation != Effect.Rotation)
                 {

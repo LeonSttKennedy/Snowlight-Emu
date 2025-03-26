@@ -1,13 +1,13 @@
 ﻿using System;
-using Snowlight.Storage;
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Catalog;
-using Snowlight.Game.Achievements;
 using System.Collections.Generic;
-using Snowlight.Game.Rooms;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Characters;
 using System.Collections.ObjectModel;
+
+using Snowlight.Storage;
+using Snowlight.Game.Rooms;
+using Snowlight.Game.Catalog;
+using Snowlight.Game.Sessions;
+using Snowlight.Game.Achievements;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Rights
 {
@@ -162,7 +162,7 @@ namespace Snowlight.Game.Rights
         {
             get
             {
-                return UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastGiftPoint).AddMonths(1);
+                return UnixTimestamp.GetDateTimeFromUnixTimestamp(mTimestampLastGiftPoint).AddDays(31);
             }
         }
 
@@ -326,9 +326,7 @@ namespace Snowlight.Game.Rights
 
                         GiftPoints += TotalMonths > 1 ? TotalMonths * (int)mBaseLevel : (int)mBaseLevel;
 
-                        DateTime NewDt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTimeCreated.Day, 0, 0, 0); // Club points must be given on the day of subscription in the next month :)
-
-                        mTimestampLastGiftPoint = IsActive ? UnixTimestamp.ConvertToUnixTimestamp(NewDt) : 0;
+                        mTimestampLastGiftPoint = IsActive ? UnixTimestamp.ConvertToUnixTimestamp(DateTime.Now) : 0;
 
                         if (IsActive && mGiftPoints > 0)
                         {
@@ -336,7 +334,6 @@ namespace Snowlight.Game.Rights
                             if (Session != null)
                             {
                                 Session.SendData(ClubGiftReadyComposer.Compose(mGiftPoints));
-
                             }
                         }
 

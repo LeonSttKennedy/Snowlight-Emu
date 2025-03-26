@@ -17,7 +17,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.GameCounter, new ItemEventHandler(HandleGameCounter));
         }
 
-        private static bool HandleGameCounter(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleGameCounter(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -25,6 +25,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     int CurrentState;
                     int NewState;
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {

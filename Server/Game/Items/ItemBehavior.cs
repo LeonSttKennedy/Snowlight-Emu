@@ -63,7 +63,13 @@ namespace Snowlight.Game.Items
         TotemLeg = 56,
         TotemHead = 57,
         TotemPlanet = 58,
-        SpiderToy = 59
+        SpiderToy = 59,
+        RollerRink = 60,
+        SkateRail = 61,
+        TagPole = 62,
+        IceSkating = 63,
+        EggTagPole = 64,
+        BunnyRun = 65
     }
 
     public static class ItemBehaviorUtil
@@ -163,6 +169,30 @@ namespace Snowlight.Game.Items
                 case "effectgenerator":
 
                     return ItemBehavior.AvatarEffectGenerator;
+
+                case "rollerrink":
+
+                    return ItemBehavior.RollerRink;
+
+                case "skaterail":
+
+                    return ItemBehavior.SkateRail;
+
+                case "tagpole":
+
+                    return ItemBehavior.TagPole;
+
+                case "iceskating":
+
+                    return ItemBehavior.IceSkating;
+
+                case "eggtagpole":
+
+                    return ItemBehavior.EggTagPole;
+
+                case "bunnyrun":
+
+                    return ItemBehavior.BunnyRun;
 
                 case "roller":
 

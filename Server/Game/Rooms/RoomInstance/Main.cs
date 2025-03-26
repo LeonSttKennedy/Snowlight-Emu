@@ -1,26 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text;
 using System.Linq;
 using System.Data;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
-using Snowlight.Specialized;
-using Snowlight.Game.Sessions;
-using Snowlight.Communication;
-using Snowlight.Game.Characters;
-using Snowlight.Communication.Outgoing;
 using Snowlight.Storage;
-using Snowlight.Game.Pathfinding;
-using Snowlight.Game.Bots;
-using Snowlight.Game.Rooms.Events;
-using Snowlight.Game.Items;
+using Snowlight.Specialized;
+using Snowlight.Communication;
 
+using Snowlight.Game.Bots;
 using Snowlight.Game.Pets;
 using Snowlight.Game.Music;
-using Snowlight.Game.Rooms.Trading;
-using Snowlight.Game.Items.Wired;
+using Snowlight.Game.Sessions;
+using Snowlight.Game.Characters;
+using Snowlight.Game.Pathfinding;
 using Snowlight.Game.Advertisements;
+
+using Snowlight.Game.Items;
+using Snowlight.Game.Items.Wired;
+
+using Snowlight.Game.Rooms.Games;
+using Snowlight.Game.Rooms.Events;
+using Snowlight.Game.Rooms.Trading;
+
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Rooms
 {
@@ -138,8 +142,8 @@ namespace Snowlight.Game.Rooms
             mMusicController = new RoomMusicController();
             mTemporaryStickieRights = new Dictionary<uint, uint>();
             mTradeManager = new TradeManager();
-            mRollerItems = new List<Item>[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
             mRoomTriggers = new List<RoomTriggers>();
+            mGameManager = new GameManager(this);
             mWiredManager = new WiredManager(this);
 
             mDiagonalEnabled = true;

@@ -305,7 +305,12 @@
     <Compile Include="Game\Achievements\AchievementCache.cs" />
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
     <Compile Include="Game\Achievements\AchievementManager.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\BunnyRunHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\IceSkatingHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\SkateRailHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\RollerRinkHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\TotemHandler.cs" />
+    <Compile Include="Game\Rooms\Games\GameManager.cs" />
     <Compile Include="Game\Misc\AntiMutant.cs" />
     <Compile Include="Game\Misc\Caches\MarketplaceFiltersCache.cs" />
     <Compile Include="Game\Misc\Chat\Commands\Normal\BuyTokensCommand .cs" />

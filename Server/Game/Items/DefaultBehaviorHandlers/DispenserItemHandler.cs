@@ -13,7 +13,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Dispenser, new ItemEventHandler(HandleDispenser));
         }
 
-        private static bool HandleDispenser(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleDispenser(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -41,35 +41,28 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     }
                 case ItemEventType.Interact:
                     {
-                        RoomActor InteractingActor = Instance.GetActorByReferenceId(Session.CharacterId);
-
-                        if (InteractingActor == null)
-                        {
-                            return true;
-                        }
-
-                        if (InteractingActor.Position.X != Item.SquareInFront.X || InteractingActor.Position.Y !=
+                        if (Actor.Position.X != Item.SquareInFront.X || Actor.Position.Y !=
                             Item.SquareInFront.Y)
                         {
-                            InteractingActor.MoveToItemAndInteract(Item, RequestData);
+                            Actor.MoveToItemAndInteract(Item, RequestData);
                             return true;
                         }
 
                         if (Item.TemporaryInteractionReferenceIds.Count == 0)
                         {
-                            Item.TemporaryInteractionReferenceIds.Add(0, InteractingActor.Id);
+                            Item.TemporaryInteractionReferenceIds.Add(0, Actor.Id);
 
-                            InteractingActor.BlockWalking();
-                            InteractingActor.PositionToSet = Item.SquareInFront;
+                            Actor.BlockWalking();
+                            Actor.PositionToSet = Item.SquareInFront;
 
-                            int NewRot = Rotation.Calculate(InteractingActor.Position.GetVector2(),
-                                Item.RoomPosition.GetVector2(), InteractingActor.MoonWalkEnabled);
+                            int NewRot = Rotation.Calculate(Actor.Position.GetVector2(),
+                                Item.RoomPosition.GetVector2(), Actor.MoonWalkEnabled);
 
-                            if (InteractingActor.BodyRotation != NewRot)
+                            if (Actor.BodyRotation != NewRot)
                             {
-                                InteractingActor.BodyRotation = NewRot;
-                                InteractingActor.HeadRotation = NewRot;
-                                InteractingActor.UpdateNeeded = true;
+                                Actor.BodyRotation = NewRot;
+                                Actor.HeadRotation = NewRot;
+                                Actor.UpdateNeeded = true;
                             }
 
                             Item.DisplayFlags = "1";

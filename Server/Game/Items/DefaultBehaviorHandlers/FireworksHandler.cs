@@ -22,7 +22,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Fireworks, new ItemEventHandler(HandleFireworks));
         }
 
-        private static bool HandleFireworks(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleFireworks(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             int.TryParse(Item.Flags, out int CurrentCharges);
 
@@ -50,12 +50,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                 case ItemEventType.Interact:
 
-                    RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
-
-                    if (Actor == null)
-                    {
-                        return true;
-                    }
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (Distance.Calculate(Actor.Position.GetVector2(), Item.RoomPosition.GetVector2()) > 1)
                     {

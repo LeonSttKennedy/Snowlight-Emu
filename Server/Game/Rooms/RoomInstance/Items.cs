@@ -23,7 +23,6 @@ namespace Snowlight.Game.Rooms
         private List<StaticObject> mStaticObjects;
         private RoomTileEffect[,] mTileEffects;
         private Vector2[,] mRedirectGrid;
-        private List<Item>[,] mRollerItems;
 
         private RoomTriggers[,] mTileTriggers;
         private List<RoomTriggers> mRoomTriggers;

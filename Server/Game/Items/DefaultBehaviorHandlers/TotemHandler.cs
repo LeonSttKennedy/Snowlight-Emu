@@ -23,11 +23,13 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.TotemPlanet, new ItemEventHandler(HandleTotemPlanet));
         }
 
-        private static bool HandleTotemLeg(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleTotemLeg(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {
@@ -73,11 +75,13 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleTotemHead(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleTotemHead(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {
@@ -168,7 +172,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleTotemPlanet(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleTotemPlanet(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -209,6 +213,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     break;
 
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {

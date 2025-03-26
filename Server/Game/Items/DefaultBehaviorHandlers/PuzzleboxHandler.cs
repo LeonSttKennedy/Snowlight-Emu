@@ -19,55 +19,48 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.PuzzleBox, new ItemEventHandler(HandlePuzzlebox));
         }
 
-        private static bool HandlePuzzlebox(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandlePuzzlebox(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
                 case ItemEventType.Interact:
                     {
-                        RoomActor InteractingActor = Instance.GetActorByReferenceId(Session.CharacterId);
-
-                        if (InteractingActor == null)
+                        if (Distance.Calculate(Actor.Position.GetVector2(), Item.RoomPosition.GetVector2()) < 2)
                         {
-                            return true;
-                        }
+                            int NewRot = Rotation.Calculate(Actor.Position.GetVector2(),
+                                Item.RoomPosition.GetVector2(), Actor.MoonWalkEnabled);
 
-                        if (Distance.Calculate(InteractingActor.Position.GetVector2(), Item.RoomPosition.GetVector2()) < 2)
-                        {
-                            int NewRot = Rotation.Calculate(InteractingActor.Position.GetVector2(),
-                                Item.RoomPosition.GetVector2(), InteractingActor.MoonWalkEnabled);
-
-                            if (InteractingActor.BodyRotation != NewRot)
+                            if (Actor.BodyRotation != NewRot)
                             {
-                                InteractingActor.BodyRotation = NewRot;
-                                InteractingActor.HeadRotation = NewRot;
-                                InteractingActor.UpdateNeeded = true;
+                                Actor.BodyRotation = NewRot;
+                                Actor.HeadRotation = NewRot;
+                                Actor.UpdateNeeded = true;
                             }
 
-                            if ((InteractingActor.BodyRotation % 2) != 0)
+                            if ((Actor.BodyRotation % 2) != 0)
                             {
-                                InteractingActor.BodyRotation--;
-                                InteractingActor.UpdateNeeded = true;
+                                Actor.BodyRotation--;
+                                Actor.UpdateNeeded = true;
                                 return true;
                             }
 
                             Vector2 NewPoint = new Vector2(0, 0);
-                            if (InteractingActor.BodyRotation == 4)
+                            if (Actor.BodyRotation == 4)
                             {
                                 NewPoint = new Vector2(Item.RoomPosition.X, Item.RoomPosition.Y + 1);
                             }
 
-                            if (InteractingActor.BodyRotation == 0)
+                            if (Actor.BodyRotation == 0)
                             {
                                 NewPoint = new Vector2(Item.RoomPosition.X, Item.RoomPosition.Y - 1);
                             }
 
-                            if (InteractingActor.BodyRotation == 6)
+                            if (Actor.BodyRotation == 6)
                             {
                                 NewPoint = new Vector2(Item.RoomPosition.X - 1, Item.RoomPosition.Y);
                             }
 
-                            if (InteractingActor.BodyRotation == 2)
+                            if (Actor.BodyRotation == 2)
                             {
                                 NewPoint = new Vector2(Item.RoomPosition.X + 1, Item.RoomPosition.Y);
                             }

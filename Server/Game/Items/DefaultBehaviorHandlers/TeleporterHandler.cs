@@ -17,12 +17,9 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Teleporter, new ItemEventHandler(HandleTeleporter));
         }
 
-        private static bool HandleTeleporter(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleTeleporter(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
-            RoomActor Actor = null;
-                    
-            uint LinkedRef = 0;
-            uint.TryParse(Item.Flags, out LinkedRef);
+            uint.TryParse(Item.Flags, out uint LinkedRef);
 
             switch (Event)
             {
@@ -67,16 +64,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     break;
 
                 case ItemEventType.Interact:
-
-                    if (Session != null)
-                    {
-                        Actor = Instance.GetActorByReferenceId(Session.CharacterId);
-                    }
-
-                    if (Actor == null)
-                    {
-                        break;
-                    }
 
                     bool IsInFront = (Actor.Position.X == Item.SquareInFront.X && Actor.Position.Y == Item.SquareInFront.Y);
                     bool IsInTele = !IsInFront && (Actor.Position.X == Item.RoomPosition.X &&

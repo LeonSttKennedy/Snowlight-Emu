@@ -21,7 +21,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.LoveShuffler, new ItemEventHandler(HandleLoveShuffler));
         }
 
-        private static bool HandleHabboWheel(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleHabboWheel(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -40,6 +40,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     break;
 
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {
@@ -72,7 +74,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleBottle(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleBottle(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -119,7 +121,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleDice(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleDice(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -138,17 +140,10 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                 case ItemEventType.Interact:
 
-                    RoomActor TargetActor = Instance.GetActorByReferenceId(Session.CharacterId);
-
-                    if (TargetActor == null)
+                    if (!Distance.TilesTouching(Actor.Position.GetVector2(), Item.RoomPosition.GetVector2())
+                        && !Distance.IsDiagonal(Actor.Position.GetVector2(), Item.RoomPosition.GetVector2()))
                     {
-                        break;
-                    }
-
-                    if (!Distance.TilesTouching(TargetActor.Position.GetVector2(), Item.RoomPosition.GetVector2())
-                        && !Distance.IsDiagonal(TargetActor.Position.GetVector2(), Item.RoomPosition.GetVector2()))
-                    {
-                        TargetActor.MoveToItemAndInteract(Item, RequestData);
+                        Actor.MoveToItemAndInteract(Item, RequestData);
                         break;
                     }
 
@@ -187,7 +182,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleLoveShuffler(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleLoveShuffler(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -199,6 +194,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     break;
 
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {

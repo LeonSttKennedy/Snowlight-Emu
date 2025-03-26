@@ -186,7 +186,7 @@ namespace Snowlight.Game.Catalog
 
                         if (NewItems.Count > 0)
                         {
-                            Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
+                            Session.NewItemsCache.SendNewItems(Session);
                         }
 
                         Session.SendData(InventoryRefreshComposer.Compose());

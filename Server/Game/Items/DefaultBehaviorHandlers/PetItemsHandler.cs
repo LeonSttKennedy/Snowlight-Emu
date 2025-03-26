@@ -28,7 +28,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.PetWaterBowl, new ItemEventHandler(HandleWaterSwitch));
         }
 
-        private static bool HandleNestSwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleNestSwitch(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -67,13 +67,14 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                 case ItemEventType.Interact:
 
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
                     if (!Instance.CheckUserRights(Session) || Item.Definition.BehaviorData != 2)
                     {
                         return true;
                     }
 
-                    int CurrentState = 0;
-                    int.TryParse(Item.Flags, out CurrentState);
+                    int.TryParse(Item.Flags, out int CurrentState);
 
                     int NewState = CurrentState + 1;
 
@@ -130,11 +131,13 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleWaterSwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleWaterSwitch(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
                 case ItemEventType.Interact:
+
+                    Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                     if (!Instance.CheckUserRights(Session))
                     {
@@ -194,7 +197,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
             return true;
         }
-        private static bool HandleToySwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleToySwitch(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -245,7 +248,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
             return true;
         }
-        private static bool HandleSpiderToySwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleSpiderToySwitch(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -314,7 +317,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
             return true;
         }
-        private static bool HandleFoodSwitch(Session Session, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        private static bool HandleFoodSwitch(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
@@ -349,9 +352,9 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                         if(CurrentFoodState >= Item.Definition.BehaviorData)
                         {
-                            RoomActor Actor = Instance.GetActor(Item.TemporaryInteractionReferenceIds[0]);
-                            Actor.ClearStatusses();
-                            Actor.UpdateNeeded = true;
+                            RoomActor InteractingActor = Instance.GetActor(Item.TemporaryInteractionReferenceIds[0]);
+                            InteractingActor.ClearStatusses();
+                            InteractingActor.UpdateNeeded = true;
 
                             Item.TemporaryInteractionReferenceIds.Remove(0);
                             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
