@@ -5,6 +5,7 @@ namespace Snowlight.Communication.Outgoing
 {
     public enum MessengerFriendEventType
     {
+        SentedIM = -1,
         EventStarted = 0,
         AchievementUnlocked = 1,
         QuestCompleted = 2

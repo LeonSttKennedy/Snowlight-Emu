@@ -86,8 +86,6 @@ namespace Snowlight.Game.Misc
                                     Session.CharacterInfo.SetLastRespectUpdate(MySqlClient);
                                     Session.SendData(UserObjectComposer.Compose(Session));
                                 }
-
-                                Session.SubscriptionManager.AddGiftPoints(true);
                                 #endregion
 
                                 #region Delivery Activity Points and Credits
@@ -123,6 +121,12 @@ namespace Snowlight.Game.Misc
         #region Subscription
         private static void CheckSubStatus(Session Session)
         {
+            // Check if user had points to win
+            Session.SubscriptionManager.AddGiftPoints(true);
+
+            // Clear catalog cache for user in case to received points
+            CatalogManager.ClearCacheGroup(Session.CharacterId);
+
             // if subscription isn't active
             if (!Session.SubscriptionManager.IsActive)
             {

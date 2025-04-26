@@ -172,7 +172,7 @@ namespace Snowlight.Game.Rights
             {
                 int Compare = DateTime.Compare(DateTime.Now, NextGiftPointDateTime);
 
-                return IsActive && Compare >= 0 || !IsActive && mTimestampLastGiftPoint > 0;
+                return IsActive && Compare >= 0;
             }
         }
 
@@ -222,6 +222,12 @@ namespace Snowlight.Game.Rights
             mGiftPoints = GiftPoints;
             mOneTimeGiftsRedeem = OneTimeGiftRedeem;
 
+            // If user has to win points give it to him
+            AddGiftPoints(true);
+
+            // Clear catalog cache for user
+            CatalogManager.ClearCacheGroup(mUserId);
+
             if (!IsActive)
             {
                 if (mBaseLevel != ClubSubscriptionLevel.None)
@@ -233,12 +239,6 @@ namespace Snowlight.Game.Rights
 
         public void Expire()
         {
-            // If user has to win points give it to him
-            AddGiftPoints(true);
-
-            // Clear catalog cache for user
-            CatalogManager.ClearCacheGroup(mUserId);
-
             mHcTime = PastHcTime;
             mVipTime = PastVipTime;
             mBaseLevel = ClubSubscriptionLevel.None;
@@ -312,6 +312,7 @@ namespace Snowlight.Game.Rights
         #region Club Gifts
 
         #region Points
+
         #region Automatically addiction
         public void AddGiftPoints(bool AddPoints = false)
         {
@@ -324,9 +325,9 @@ namespace Snowlight.Game.Rights
                         TimeSpan TimeSpan = DateTime.Now - LastPointDelivery;
                         int TotalMonths = (int)TimeSpan.TotalDays / 31;
 
-                        GiftPoints += TotalMonths > 1 ? TotalMonths * (int)mBaseLevel : (int)mBaseLevel;
+                        mGiftPoints += TotalMonths > 1 ? TotalMonths * (int)mBaseLevel : (int)mBaseLevel;
 
-                        mTimestampLastGiftPoint = IsActive ? UnixTimestamp.ConvertToUnixTimestamp(DateTime.Now) : 0;
+                        mTimestampLastGiftPoint = IsActive ? UnixTimestamp.ConvertToUnixTimestamp(LastPointDelivery.AddDays(31 * TotalMonths)) : 0;
 
                         if (IsActive && mGiftPoints > 0)
                         {
@@ -345,7 +346,7 @@ namespace Snowlight.Game.Rights
                 }
                 else
                 {
-                    GiftPoints--;
+                    mGiftPoints--;
                     MySqlClient.SetParameter("userid", mUserId);
                     MySqlClient.ExecuteNonQuery("UPDATE user_subscriptions SET gift_points = gift_points - 1 WHERE user_id = @userid LIMIT 1");
                 }
@@ -361,7 +362,7 @@ namespace Snowlight.Game.Rights
                 MySqlClient.SetParameter("userid", mUserId);
                 bool CreateNewRecord = (MySqlClient.ExecuteScalar("SELECT null FROM user_subscriptions WHERE user_id = @userid LIMIT 1") == null);
 
-                GiftPoints += Quantity;
+                mGiftPoints += Quantity;
 
                 MySqlClient.SetParameter("userid", mUserId);
                 MySqlClient.SetParameter("giftpoints", mGiftPoints);

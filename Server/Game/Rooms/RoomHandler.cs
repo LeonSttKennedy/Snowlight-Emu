@@ -1499,6 +1499,9 @@ namespace Snowlight.Game.Rooms
             {
                 Item.RemovePermanently(MySqlClient);
                 Instance.Info.ApplyDecoration(MySqlClient, DecorationKey, Item.Flags);
+
+                string Achievement = "ACH_RoomDeco" + char.ToUpper(DecorationKey[0]) + DecorationKey.Substring(1);
+                AchievementManager.ProgressUserAchievement(MySqlClient, Session, Achievement, 1);
             }
 
             Instance.BroadcastMessage(RoomDecorationComposer.Compose(DecorationKey, Item.Flags));

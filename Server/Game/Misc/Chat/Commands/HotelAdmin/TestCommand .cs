@@ -40,6 +40,15 @@ namespace Snowlight.Game.Misc
             /*ServerMessage IDK = new ServerMessage(254);
             Session.SendData(IDK);*/
 
+            /*ServerMessage Test = new ServerMessage(626);
+            Test.AppendInt32(2);
+            Test.AppendInt32(1);
+            Test.AppendStringWithBreak("uberHotel");
+            Test.AppendInt32(2);
+            Test.AppendStringWithBreak("meth0d");
+            SendData(Test);
+             */
+
             /*ServerMessage IDK = new ServerMessage(653);
             IDK.AppendInt32(42);
             Session.SendData(IDK);*/

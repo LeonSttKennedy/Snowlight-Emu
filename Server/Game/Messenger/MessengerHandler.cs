@@ -255,6 +255,7 @@ namespace Snowlight.Game.Messenger
             }
 
             TargetSession.SendData(MessengerImMessageComposer.Compose(Session.CharacterId, Text));
+            TargetSession.SendData(MessengerFriendEventComposer.Compose(Session.CharacterId, MessengerFriendEventType.SentedIM, Text));
         }
 
         private static void OnFriendRequest(Session Session, ClientMessage Message)

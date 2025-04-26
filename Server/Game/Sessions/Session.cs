@@ -487,8 +487,6 @@ namespace Snowlight.Game.Sessions
 
                 mSubscriptionManager = UserSubscription;
 
-                mSubscriptionManager.AddGiftPoints(true);
-
                 mAvatarEffectCache.CheckEffectExpiry(this);
 
                 mCharacterInfo.Online = true;
