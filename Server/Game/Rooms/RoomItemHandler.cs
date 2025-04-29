@@ -233,6 +233,15 @@ namespace Snowlight.Game.Rooms
 
                     break;
             }
+
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                int AllFurniCount = Instance.GetFloorItems().Count() + Instance.GetWallItems().Count();
+                Session.CheckProgressAchievement(MySqlClient, "ACH_RoomDecoFurniCount", AllFurniCount);
+
+                int DifferentFurniCount = Instance.GetFloorItems().GroupBy(I => I.Definition.Id).Count() + Instance.GetWallItems().GroupBy(I => I.Definition.Id).Count();
+                Session.CheckProgressAchievement(MySqlClient, "ACH_RoomDecoFurniTypeCount", DifferentFurniCount);
+            }
         }
 
         private static void TakeItem(Session Session, ClientMessage Message)

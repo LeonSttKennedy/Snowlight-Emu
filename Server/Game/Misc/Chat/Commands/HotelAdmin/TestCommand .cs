@@ -37,9 +37,6 @@ namespace Snowlight.Game.Misc
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {
-            /*ServerMessage IDK = new ServerMessage(254);
-            Session.SendData(IDK);*/
-
             /*ServerMessage Test = new ServerMessage(626);
             Test.AppendInt32(2);
             Test.AppendInt32(1);
@@ -94,6 +91,9 @@ namespace Snowlight.Game.Misc
             * I don't know what these request needs
             * Maybe needs to be called when loading a public room?
             
+            ServerMessage YouAreSpectator = new ServerMessage(254);
+            Session.SendData(YouAreSpectator);
+
             int.TryParse(Params[1], out int QueueInt1);
             int.TryParse(Params[3], out int QueueInt2);
             int.TryParse(Params[4], out int QueueInt3);

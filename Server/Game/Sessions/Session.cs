@@ -879,7 +879,7 @@ namespace Snowlight.Game.Sessions
                 mRatedRoomsCache.Dispose();
             }
 
-            if(mFriendStreamCache != null)
+            if (mFriendStreamCache != null)
             {
                 mFriendStreamCache.Dispose();
             }
