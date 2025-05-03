@@ -67,11 +67,12 @@ namespace Snowlight.Game.Misc
                                             {
                                                 TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, TargetSession.AchievementCache,"static");
 
-                                                InventoryBadge UserBadge = Session.BadgeCache.GetBadge(BadgeCode);
-                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                                                TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
+
+                                                InventoryBadge UserBadge = TargetSession.BadgeCache.GetBadge(BadgeCode);
+                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, UserBadge.Id);
                                                 TargetSession.NewItemsCache.SendNewItems(TargetSession);
 
-                                                TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
                                                 TargetSession.SendData(RoomChatComposer.Compose(RoomActors.Id, ExternalTexts.GetValue("command_dmbadge_targetuser_success"), 1, ChatType.Whisper));
                                             }
                                         }
@@ -93,11 +94,12 @@ namespace Snowlight.Game.Misc
                                             {
                                                 TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, TargetSession.AchievementCache, "static");
 
-                                                InventoryBadge UserBadge = Session.BadgeCache.GetBadge(BadgeCode);
-                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                                                TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
+
+                                                InventoryBadge UserBadge = TargetSession.BadgeCache.GetBadge(BadgeCode);
+                                                TargetSession.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, UserBadge.Id);
                                                 TargetSession.NewItemsCache.SendNewItems(TargetSession);
 
-                                                TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
                                                 TargetSession.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_dmbadge_targetuser_success") + "\r\n- " + Session.CharacterInfo.Username));
                                             }
                                         }

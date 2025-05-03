@@ -940,7 +940,6 @@ namespace Snowlight.Game.Rooms
                             break;
                     }
 
-                    Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
                     List<Item> GeneratedGenericItems = new List<Item>();
                     for (int a = 0; a < Amount; a++)
                     {
@@ -969,26 +968,10 @@ namespace Snowlight.Game.Rooms
 
                         int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
 
-                        if (!NewItems.ContainsKey(TabId))
-                        {
-                            NewItems.Add(TabId, new List<uint>());
-                        }
-
-                        NewItems[TabId].Add(GeneratedItem.Id);
+                        Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
                     }
 
-                    foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                    {
-                        foreach (uint NewItem in NewItemData.Value)
-                        {
-                            Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                        }
-                    }
-
-                    if (NewItems.Count > 0)
-                    {
-                        Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-                    }
+                    Session.NewItemsCache.SendNewItems(Session);
                 }
                 
                 Session.SendData(InventoryRefreshComposer.Compose());

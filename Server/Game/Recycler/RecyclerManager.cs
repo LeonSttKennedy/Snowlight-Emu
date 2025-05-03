@@ -12,6 +12,7 @@ using Snowlight.Game.Rooms;
 using Snowlight.Game.Items;
 using Snowlight.Communication.Incoming;
 using Snowlight.Util;
+using Snowlight.Game.Misc;
 
 namespace Snowlight.Game.Recycler
 {
@@ -164,7 +165,6 @@ namespace Snowlight.Game.Recycler
                 ItemsToRecycle.Add(Item);
             }
 
-            Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
             List<Item> GeneratedGenericItems = new List<Item>();
 
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
@@ -186,12 +186,8 @@ namespace Snowlight.Game.Recycler
 
                     int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
 
-                    if (!NewItems.ContainsKey(TabId))
-                    {
-                        NewItems.Add(TabId, new List<uint>());
-                    }
+                    Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
 
-                    NewItems[TabId].Add(GeneratedItem.Id);
                     Session.SendData(RecyclerResultComposer.Compose(true, GeneratedItem.Id));
                     
                     MySqlClient.SetParameter("item_id", GeneratedItem.Id);
@@ -199,18 +195,8 @@ namespace Snowlight.Game.Recycler
                     MySqlClient.ExecuteNonQuery("INSERT INTO user_gifts(item_id, base_ids, amounts, extra_data) VALUES(@item_id, @reward_id, '1', '')");
                 }
 
-                if (NewItems.Count > 0)
-                {
-                    foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                    {
-                        foreach (uint NewItem in NewItemData.Value)
-                        {
-                            Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                        }
-                    }
-                    Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-                    Session.SendData(InventoryRefreshComposer.Compose());
-                }
+                Session.NewItemsCache.SendNewItems(Session);
+                Session.SendData(InventoryRefreshComposer.Compose());
             }
         }
     }

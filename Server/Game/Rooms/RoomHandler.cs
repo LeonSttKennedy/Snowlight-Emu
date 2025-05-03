@@ -571,7 +571,7 @@ namespace Snowlight.Game.Rooms
                         Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, Session.AchievementCache, "static");
 
                         InventoryBadge UserBadge = Session.BadgeCache.GetBadge(Instance.Info.BadgeCode);
-                        Session.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                        Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, UserBadge.Id);
                         Session.NewItemsCache.SendNewItems(Session);
 
                         Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("onenter_room_win_badge_success"), 1, ChatType.Whisper));

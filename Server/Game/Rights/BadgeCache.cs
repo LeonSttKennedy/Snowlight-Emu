@@ -213,7 +213,7 @@ namespace Snowlight.Game.Rights
 
                     foreach (KeyValuePair<int, InventoryBadge> Badge in mEquippedBadges)
                     {
-                        if (Badge.Value.Id == OldBadge.Id)
+                        if (Badge.Value.Definition.Id == OldBadge.Id)
                         {
                             mEquippedBadges[Badge.Key] = NewInventoryBadge;
                             break;
@@ -222,11 +222,18 @@ namespace Snowlight.Game.Rights
                 }
                 else
                 {
-                    string RawId = MySqlClient.ExecuteScalar("INSERT INTO badges (user_id,badge_id,source_type,source_data) VALUES (@userid,@badgeid,@sourcetype,@sourcedata); SELECT LAST_INSERT_ID();").ToString(); ;
+                    string RawId = MySqlClient.ExecuteScalar("INSERT INTO badges (user_id,badge_id,source_type,source_data) VALUES (@userid,@badgeid,@sourcetype,@sourcedata); SELECT LAST_INSERT_ID();").ToString();
                     uint.TryParse(RawId, out uint Id);
                     InventoryBadge NewInventoryBadge = new InventoryBadge(Id, NewBadge);
 
-                    mAchievementBadges.Add(AchievementGroup, NewInventoryBadge);
+                    if (SourceType == "static")
+                    {
+                        mStaticBadges.Add(NewInventoryBadge);
+                    }
+                    else if (SourceType == "achievement")
+                    {
+                        mAchievementBadges.Add(AchievementGroup, NewInventoryBadge);
+                    }
                 }
 
                 mRightsCache = RegenerateRights();

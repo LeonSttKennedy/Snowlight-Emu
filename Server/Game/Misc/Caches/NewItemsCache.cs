@@ -9,6 +9,14 @@ using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Misc
 {
+    public enum NewItemsCategory
+    {
+        Floor = 1,
+        Wall = 2,
+        Pets = 3,
+        Badges = 4
+    }
+
     public class NewItemsCache : IDisposable
     {
         private uint mUserId;
@@ -53,7 +61,7 @@ namespace Snowlight.Game.Misc
 
                 foreach (DataRow Row in Table.Rows)
                 {
-                    MarkNewItem(null, (int)Row["tab_id"], (uint)Row["item_id"], false);
+                    MarkNewItem(null, (NewItemsCategory)(int)Row["tab_id"], (uint)Row["item_id"], false);
                 }               
             }
         }
@@ -70,10 +78,12 @@ namespace Snowlight.Game.Misc
             }
         }
 
-        public void MarkNewItem(SqlDatabaseClient MySqlClient, int TabId, uint ItemId, bool SynchronizeDatabase = true)
+        public void MarkNewItem(SqlDatabaseClient MySqlClient, NewItemsCategory Tab, uint ItemId, bool SynchronizeDatabase = true)
         {
             lock (mSyncRoot)
             {
+                int TabId = (int)Tab;
+
                 if (!mInner.ContainsKey(TabId))
                 {
                     mInner[TabId] = new List<uint>();

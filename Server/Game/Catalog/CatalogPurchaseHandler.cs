@@ -17,6 +17,7 @@ using Snowlight.Communication.Incoming;
 using System.Data;
 using Snowlight.Game.Characters;
 using System.Linq;
+using Snowlight.Game.Misc;
 
 namespace Snowlight.Game.Catalog
 {
@@ -144,8 +145,6 @@ namespace Snowlight.Game.Catalog
                     }
                     Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
                 }
-
-                Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
 
                 foreach (CatalogItem ToDelivery in ItemsToDelivery)
                 {
@@ -291,12 +290,7 @@ namespace Snowlight.Game.Catalog
 
                                     int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
 
-                                    if (!NewItems.ContainsKey(TabId))
-                                    {
-                                        NewItems.Add(TabId, new List<uint>());
-                                    }
-
-                                    NewItems[TabId].Add(GeneratedItem.Id);
+                                    Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
                                 }
 
                                 break;
@@ -335,12 +329,7 @@ namespace Snowlight.Game.Catalog
                                 Session.SendData(PetReceivedComposer.Compose(false, Pet));
                                 Session.SendData(InventoryPetAddedComposer.Compose(Pet));
 
-                                if (!NewItems.ContainsKey(3))
-                                {
-                                    NewItems.Add(3, new List<uint>());
-                                }
-
-                                NewItems[3].Add(Pet.Id);
+                                Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Pets, Pet.Id);
 
                                 AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_PetLover", 1);
                                 break;
@@ -361,14 +350,9 @@ namespace Snowlight.Game.Catalog
                     {
                         Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, Session.AchievementCache, "static");
 
-                        if (!NewItems.ContainsKey(4))
-                        {
-                            NewItems.Add(4, new List<uint>());
-                        }
-
                         InventoryBadge UserBadge = Session.BadgeCache.GetBadge(Item.BadgeCode);
 
-                        NewItems[4].Add(UserBadge.Id);
+                        Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, UserBadge.Id);
                     }
                 }
                 #endregion
@@ -379,19 +363,7 @@ namespace Snowlight.Game.Catalog
                 }
 
                 Session.SendData(InventoryRefreshComposer.Compose());
-
-                foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                {
-                    foreach (uint NewItem in NewItemData.Value)
-                    {
-                        Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                    }
-                }
-
-                if (NewItems.Count > 0)
-                {
-                    Session.NewItemsCache.SendNewItems(Session);
-                }
+                Session.NewItemsCache.SendNewItems(Session);
             }
         }
         #endregion
@@ -522,7 +494,6 @@ namespace Snowlight.Game.Catalog
 
                 string ED = "!" + GiftMessage + "|" + SpriteId + "|" + GiftBoxId + "|" + Ribbon;
 
-                Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
                 List<Item> GeneratedGenericItems = new List<Item>();
 
                 ItemDefinition ItemDef = ItemDefinitionManager.GetDefinitionBySpriteId(uint.Parse(SpriteId.ToString()));
@@ -563,12 +534,7 @@ namespace Snowlight.Game.Catalog
                         GiftReceiverSession.InventoryCache.Add(GeneratedItem);
                     }
 
-                    if (!NewItems.ContainsKey(1))
-                    {
-                        NewItems.Add(1, new List<uint>());
-                    }
-
-                    NewItems[1].Add(GeneratedItem.Id);
+                    GiftReceiverSession.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Floor, GeneratedItem.Id);
                 }
 
                 if (TotalCreditCost > 0)
@@ -590,19 +556,7 @@ namespace Snowlight.Game.Catalog
 
                 if (GiftReceiverSession != null) 
                 {
-                    foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                    {
-                        foreach (uint NewItem in NewItemData.Value)
-                        {
-                            GiftReceiverSession.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                        }
-                    }
-
-                    if (NewItems.Count > 0)
-                    {
-                        GiftReceiverSession.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-                    }
-
+                    GiftReceiverSession.NewItemsCache.SendNewItems(GiftReceiverSession);
                     GiftReceiverSession.SendData(InventoryRefreshComposer.Compose());
                 }
 

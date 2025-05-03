@@ -77,8 +77,6 @@ namespace Snowlight.Game.Misc
 
                 if (ValueData.ValueFurni.Count > 0)
                 {
-                    Dictionary<int, List<uint>> NotifyItems = new Dictionary<int, List<uint>>();
-
                     foreach (uint ItemId in ValueData.ValueFurni)
                     {
                         Item Item = ItemFactory.CreateItem(MySqlClient, ItemId, Session.CharacterId, string.Empty,
@@ -89,22 +87,12 @@ namespace Snowlight.Game.Misc
                             int NotifyTabId = Item.Definition.Type == ItemType.WallItem ? 2 : 1;
 
                             Session.InventoryCache.Add(Item);
-                            Session.NewItemsCache.MarkNewItem(MySqlClient, NotifyTabId, Item.Id);
-
-                            if (!NotifyItems.ContainsKey(NotifyTabId))
-                            {
-                                NotifyItems.Add(NotifyTabId, new List<uint>());
-                            }
-
-                            NotifyItems[NotifyTabId].Add(Item.Id);
+                            Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)NotifyTabId, Item.Id);
                         }
-                    }                   
-
-                    if (NotifyItems.Count > 0)
-                    {
-                        Session.SendData(InventoryRefreshComposer.Compose());
-                        Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NotifyItems)));
                     }
+
+                    Session.SendData(InventoryRefreshComposer.Compose());
+                    Session.NewItemsCache.SendNewItems(Session);
                 }
 
                 MarkVoucherUsed(Code, Session.CharacterId);

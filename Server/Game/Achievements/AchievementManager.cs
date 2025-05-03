@@ -13,6 +13,7 @@ using Snowlight.Communication.Incoming;
 using Snowlight.Util;
 using Snowlight.Game.Messenger;
 using Snowlight.Game.FriendStream;
+using Snowlight.Game.Misc;
 
 namespace Snowlight.Game.Achievements
 {
@@ -127,10 +128,7 @@ namespace Snowlight.Game.Achievements
 
                 int ProgressRemainder = NewProgress - TargetLevelData.Requirement;
 
-                /*
-                 * We don't need reset the user progress
-                 * NewProgress = 0;
-                 */
+                NewProgress = TargetLevelData.Requirement; // = 0; We don't need reset the user progress
 
                 BadgeDefinition BadgeData = RightsManager.GetBadgeDefinitionByCode(AchievementGroup + TargetLevel);
 
@@ -157,8 +155,10 @@ namespace Snowlight.Game.Achievements
 
                 Session.BadgeCache.UpdateAchievementBadge(MySqlClient, AchievementGroup, BadgeData, Session.AchievementCache);
 
+                Session.SendData(UserBadgeInventoryComposer.Compose(Session.BadgeCache.Badges, Session.BadgeCache.EquippedBadges));
+
                 InventoryBadge UserBadge = Session.BadgeCache.GetBadge(AchievementGroup + TargetLevel);
-                Session.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, UserBadge.Id);
                 Session.NewItemsCache.SendNewItems(Session);
 
                 Session.CharacterInfo.UpdateScore(MySqlClient, TargetLevelData.PointsReward);
@@ -202,36 +202,39 @@ namespace Snowlight.Game.Achievements
 
         public static void OfflineProgressUserAchievement(SqlDatabaseClient MySqlClient, uint UserId, string AchievementGroup, int ProgressAmount)
         {
-            DataRow Row = null;
-            if (!mAchievements.ContainsKey(AchievementGroup)) return;
+            if (!mAchievements.ContainsKey(AchievementGroup))
+            {
+                return;
+            }
 
             MySqlClient.SetParameter("uid", UserId);
             MySqlClient.SetParameter("gid", AchievementGroup);
-            Row = MySqlClient.ExecuteQueryRow("SELECT * FROM achievements_to_unlock WHERE user_id = @uid AND group_id = @gid LIMIT 1");
+            bool CreatNewRecord = (MySqlClient.ExecuteScalar("SELECT null FROM achievements_to_unlock WHERE user_id = @uid AND group_id = @gid LIMIT 1") == null);
 
-            if (Row != null)
-            {
-                MySqlClient.SetParameter("uid", UserId);
-                MySqlClient.SetParameter("gid", AchievementGroup);
-                MySqlClient.SetParameter("progressa", ProgressAmount);
-                MySqlClient.ExecuteQueryTable("UPDATE achievements_to_unlock SET progress = progress + @progressa WHERE user_id = @uid AND group_id = @gid");
-            }
-            else
+            if (CreatNewRecord)
             {
                 MySqlClient.SetParameter("uid", UserId);
                 MySqlClient.SetParameter("gid", AchievementGroup);
                 MySqlClient.SetParameter("progress", ProgressAmount);
                 MySqlClient.ExecuteQueryTable("INSERT INTO achievements_to_unlock (user_id,group_id,progress) VALUES (@uid, @gid, @progress)");
             }
+            else
+            {
+                MySqlClient.SetParameter("uid", UserId);
+                MySqlClient.SetParameter("gid", AchievementGroup);
+                MySqlClient.SetParameter("progressa", ProgressAmount);
+                MySqlClient.ExecuteQueryTable("UPDATE achievements_to_unlock SET progress = progress + @progressa WHERE user_id = @uid AND group_id = @gid");
+            }
         }
         public static void VerifyProgressUserAchievement(SqlDatabaseClient MySqlClient, Session Session) 
         {
-            MySqlClient.SetParameter("uid", Session.CharacterInfo.Id);
+            uint UserId = Session.CharacterId;
+
+            MySqlClient.SetParameter("uid", UserId);
             DataTable Table = MySqlClient.ExecuteQueryTable("SELECT * FROM achievements_to_unlock WHERE user_id = @uid");
 
             foreach (DataRow Row in Table.Rows)
             {
-                uint UserId = Session.CharacterInfo.Id;
                 string GroupId = (string)Row["group_id"];
                 int Progress = (int)Row["progress"];
                 ProgressUserAchievement(MySqlClient, Session, GroupId, Progress);

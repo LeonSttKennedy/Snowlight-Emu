@@ -13,6 +13,7 @@ using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Items;
 using Snowlight.Util;
 using Snowlight.Game.Rights;
+using Snowlight.Game.Misc;
 
 namespace Snowlight.Game.Rooms
 {
@@ -192,8 +193,6 @@ namespace Snowlight.Game.Rooms
                     #region Give Furniture
                     if (Poll.FurniReward.Count > 0)
                     {
-                        Dictionary<int, List<uint>> NotifyItems = new Dictionary<int, List<uint>>();
-
                         foreach (uint ItemId in Poll.FurniReward)
                         {
                             Item Item = ItemFactory.CreateItem(MySqlClient, ItemId, Session.CharacterId, string.Empty,
@@ -204,22 +203,12 @@ namespace Snowlight.Game.Rooms
                                 int NotifyTabId = Item.Definition.Type == ItemType.WallItem ? 2 : 1;
 
                                 Session.InventoryCache.Add(Item);
-                                Session.NewItemsCache.MarkNewItem(MySqlClient, NotifyTabId, Item.Id);
-
-                                if (!NotifyItems.ContainsKey(NotifyTabId))
-                                {
-                                    NotifyItems.Add(NotifyTabId, new List<uint>());
-                                }
-
-                                NotifyItems[NotifyTabId].Add(Item.Id);
+                                Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)NotifyTabId, Item.Id);
                             }
                         }
 
-                        if (NotifyItems.Count > 0)
-                        {
-                            Session.SendData(InventoryRefreshComposer.Compose());
-                            Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NotifyItems)));
-                        }
+                        Session.SendData(InventoryRefreshComposer.Compose());
+                        Session.NewItemsCache.SendNewItems(Session);
                     }
                     #endregion
 
@@ -249,7 +238,7 @@ namespace Snowlight.Game.Rooms
                             Session.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, Session.AchievementCache,"static");
 
                             InventoryBadge UserBadge = Session.BadgeCache.GetBadge(Poll.BadgeReward);
-                            Session.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                            Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, UserBadge.Id);
                             Session.NewItemsCache.SendNewItems(Session);
                         }
                     }

@@ -147,7 +147,6 @@ namespace Snowlight.Game.Catalog
             Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, -Offer.TotalPrice);
             Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
 
-            Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
             List<Item> GeneratedGenericItems = new List<Item>();
             GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, UserItem.Id,
                     Session.CharacterInfo.Id, Offer.ExtraData, Offer.ExtraData, 0));
@@ -158,27 +157,10 @@ namespace Snowlight.Game.Catalog
 
                 int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
 
-                if (!NewItems.ContainsKey(TabId))
-                {
-                    NewItems.Add(TabId, new List<uint>());
-                }
-
-                NewItems[TabId].Add(GeneratedItem.Id);
+                Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
             }
 
-            foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-            {
-                foreach (uint NewItem in NewItemData.Value)
-                {
-                    Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                }
-            }
-
-            if (NewItems.Count > 0)
-            {
-                Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-            }
-
+            Session.NewItemsCache.SendNewItems(Session);
             Session.SendData(InventoryRefreshComposer.Compose());
             Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(MarketplaceError.Sucess));
         }
@@ -257,7 +239,6 @@ namespace Snowlight.Game.Catalog
                 return;
             }
 
-            Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
             List<Item> GeneratedGenericItems = new List<Item>();
             GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, UserItem.Id,
                     Session.CharacterInfo.Id, Offer.ExtraData, Offer.ExtraData, 0));
@@ -268,27 +249,10 @@ namespace Snowlight.Game.Catalog
 
                 int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
 
-                if (!NewItems.ContainsKey(TabId))
-                {
-                    NewItems.Add(TabId, new List<uint>());
-                }
-
-                NewItems[TabId].Add(GeneratedItem.Id);
+                Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
             }
 
-            foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-            {
-                foreach (uint NewItem in NewItemData.Value)
-                {
-                    Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                }
-            }
-
-            if (NewItems.Count > 0)
-            {
-                Session.SendData(InventoryNewItemsComposer.Compose(new Dictionary<int, List<uint>>(NewItems)));
-            }
-
+            Session.NewItemsCache.SendNewItems(Session);
             Session.SendData(InventoryRefreshComposer.Compose());
 
             MySqlClient.SetParameter("offerid", OfferId);

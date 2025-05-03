@@ -16,6 +16,7 @@ using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
 using System.Web.UI;
+using Snowlight.Game.Misc;
 
 namespace Snowlight.Game.Catalog
 {
@@ -139,7 +140,6 @@ namespace Snowlight.Game.Catalog
                 {
                     ItemDefinition Def = ItemDefinitionManager.GetDefinition(GiftToDelivery.Definition.Id);
 
-                    Dictionary<int, List<uint>> NewItems = new Dictionary<int, List<uint>>();
                     List<Item> GeneratedGenericItems = new List<Item>();
 
                     for (int i = 0; i < GiftToDelivery.Amount; i++)
@@ -168,27 +168,10 @@ namespace Snowlight.Game.Catalog
 
                             int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
 
-                            if (!NewItems.ContainsKey(TabId))
-                            {
-                                NewItems.Add(TabId, new List<uint>());
-                            }
-
-                            NewItems[TabId].Add(GeneratedItem.Id);
+                            Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
                         }
 
-                        foreach (KeyValuePair<int, List<uint>> NewItemData in NewItems)
-                        {
-                            foreach (uint NewItem in NewItemData.Value)
-                            {
-                                Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemData.Key, NewItem);
-                            }
-                        }
-
-                        if (NewItems.Count > 0)
-                        {
-                            Session.NewItemsCache.SendNewItems(Session);
-                        }
-
+                        Session.NewItemsCache.SendNewItems(Session);
                         Session.SendData(InventoryRefreshComposer.Compose());
                     }
 

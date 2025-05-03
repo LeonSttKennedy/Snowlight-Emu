@@ -10,6 +10,7 @@ using Snowlight.Game.Rights;
 using Snowlight.Game.Sessions;
 using Snowlight.Game.Moderation;
 using Snowlight.Communication.Outgoing;
+using System.Web.UI.WebControls;
 
 namespace Snowlight.Game.Misc
 {
@@ -82,11 +83,12 @@ namespace Snowlight.Game.Misc
                     {
                         TargetSession.BadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, TargetSession.AchievementCache, "static");
 
-                        InventoryBadge UserBadge = Session.BadgeCache.GetBadge(BadgeCode);
-                        TargetSession.NewItemsCache.MarkNewItem(MySqlClient, 4, UserBadge.Id);
+                        TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
+
+                        InventoryBadge UserBadge = TargetSession.BadgeCache.GetBadge(BadgeCode);
+                        TargetSession.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, UserBadge.Id);
                         TargetSession.NewItemsCache.SendNewItems(TargetSession);
 
-                        TargetSession.SendData(UserBadgeInventoryComposer.Compose(TargetSession.BadgeCache.Badges, TargetSession.BadgeCache.EquippedBadges));
                         TargetSession.SendData(RoomChatComposer.Compose(TargetActor.Id, ExternalTexts.GetValue("command_dmbadge_targetuser_success"), 1, ChatType.Whisper));
 
                         Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_directbadge_success")));
