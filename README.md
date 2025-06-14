@@ -46,7 +46,7 @@ Pixels / Snowflakes / Hearts / Gift points / Shells ( Added Apart: Diamonds )
 - User change name
 - Subscription offers (can be configurated in database)
 - Groups
-- Club gift notification when login, buy a duck or  buy subscription in catalog
+- Club gift notification when arrive a new point
 - User can personalize gifts
 - Only users with Trade achievement and enable trade status can trading
 
@@ -95,7 +95,8 @@ Roller Skating, Ice Tag, Bunny Run, Puzzle box, Skate
 - Categories
 - Update friend status when logging in/out/entering rooms
 - Follow friend
-- Fully functional Event stream (enable or disable, like, events: achievement/friend made/room like/motto changed) (known issue: habbo head figure doesn't load)
+- Fully functional Event stream supporting to like on event of your friends and if enable can cast these events: achievements, friendship accepted, room likes and motto changes.<br>
+*Known issue about Event stream: habbo head figure doesn't load
 
 **Catalog** 
 
@@ -107,14 +108,14 @@ Roller Skating, Ice Tag, Bunny Run, Puzzle box, Skate
 - Club gifts system fully working with points delivery :)
 - Win badge when buy an item
 - Buy subscriptions
-- You can bought gifts personalized or defaults
+- You can bought gifts to your friends and can personalize it all or send a default instead
 - Voucher redeem (gives reward credits, extra currency and furnis)
 
 **Achievements**
 
 - Seasonal currency reward support added
 - Added offline unlock support
-- Achivement list that are working (correctly):<br>
+- Achivement list that added and can unlock:<br>
 ACH_MOTTO, ACH_AVATARTAGS, ACH_AVATARLOOKS, ACH_STUDENT, ACH_BASICCLUB, ACH_VIPCLUB, ACH_RESPECTEARNED, ACH_GIFTGIVER, ACH_GIFTRECEIVER, ACH_SPR, ACH_PETLOVER, ACH_PETRESPECTRECEIVER, ACH_PETRESPECTGIVER, ACH_ROOMENTRY, ACH_HAPPYHOUR, ACH_LOGIN, ACH_REGISTRATIONDURATION, ACH_ALLTIMEHOTELPRESENCE, ACH_NAME, ACH_PETLEVELUP, ACH_PETFEEDING, ACH_NOTESLEFT, ACH_NOTESRECEIVED, ACH_FIREWORKSCHARGER, ACH_ROOMDECOHOLEFURNICOUNT, ACH_RBTAGA, ACH_RBTAGC, ACH_SKATEBOARDJUMP, ACH_SKATEBOARDSLIDE, ACH_TAGA, ACH_TAGB, ACH_TAGC, ACH_RBBUNNYRUN, ACH_ROOMDECOFLOOR, ACH_ROOMDECOWALLPAPPER, ACH_ROOMDECOLANDSCAPE, ACH_ROOMDECOFURNICOUNT, ACH_ROOMDECOFURNITYPECOUNT, ACH_MUSICCOLLECTOR
 
 **Quests**
