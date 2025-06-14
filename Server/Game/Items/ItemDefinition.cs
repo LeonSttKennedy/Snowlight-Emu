@@ -56,8 +56,6 @@ namespace Snowlight.Game.Items
         private bool mAllowGift;
         private bool mAllowInventoryStack;
 
-        private string mAchievementCode;
-
         private string mPetStatussesInteraction;
         private List<int> mPetTypeInteractors;
 
@@ -256,14 +254,6 @@ namespace Snowlight.Game.Items
             }
         }
 
-        public string AchievementCode
-        {
-            get
-            {
-                return mAchievementCode;
-            }
-        }
-
         public string PetStatusses
         {
             get
@@ -306,8 +296,6 @@ namespace Snowlight.Game.Items
             mAllowGift = AllowGift;
             mAllowInventoryStack = AllowInventoryStack;
 
-            mAchievementCode = string.Empty;
-
             mPetStatussesInteraction = string.Empty;
             mPetTypeInteractors = null;
 
@@ -317,11 +305,6 @@ namespace Snowlight.Game.Items
             {
                 mAdjustableHeight.Add(float.Parse(splitedHeights[i], CultularUtils.NumberFormatInfo));
             }
-        }
-
-        public void SetAchievementCode(string AchievementCode)
-        {
-            mAchievementCode = AchievementCode;
         }
 
         public void SetPetStatussesInteraction(string Status)

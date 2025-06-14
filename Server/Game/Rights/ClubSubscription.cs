@@ -37,6 +37,7 @@ namespace Snowlight.Game.Rights
                 return mUserId; 
             }
         }
+
         public bool IsActive
         {
             get
@@ -172,7 +173,7 @@ namespace Snowlight.Game.Rights
             {
                 int Compare = DateTime.Compare(DateTime.Now, NextGiftPointDateTime);
 
-                return IsActive && Compare >= 0;
+                return Compare >= 0;
             }
         }
 
@@ -210,7 +211,7 @@ namespace Snowlight.Game.Rights
         #endregion
 
         public ClubSubscription(uint UserId, ClubSubscriptionLevel BaseLevel, double TimestampCreated, double TimestampExpired,
-            double TimestampLastGiftPoint, double HcTime, double VipTime, int GiftPoints, List<uint> OneTimeGiftRedeem)
+            double TimestampLastGiftPoint, double HcTime, double VipTime, int GiftPoints, string OneTimeGiftRedeem)
         {
             mUserId = UserId;
             mBaseLevel = BaseLevel;
@@ -220,7 +221,23 @@ namespace Snowlight.Game.Rights
             mHcTime = HcTime;
             mVipTime = VipTime;
             mGiftPoints = GiftPoints;
-            mOneTimeGiftsRedeem = OneTimeGiftRedeem;
+
+            string[] SplitedIds = OneTimeGiftRedeem.Split('|');
+
+            List<uint> GiftRedeemList = new List<uint>();
+
+            foreach (string StringIds in SplitedIds)
+            {
+                if (uint.TryParse(StringIds, out uint ItemId))
+                {
+                    if (!GiftRedeemList.Contains(ItemId))
+                    {
+                        GiftRedeemList.Add(ItemId);
+                    }
+                }
+            }
+
+            mOneTimeGiftsRedeem = GiftRedeemList;
 
             // If user has to win points give it to him
             AddGiftPoints(true);

@@ -1,8 +1,13 @@
-﻿using System;
+﻿using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Items;
+using Snowlight.Game.Misc;
+using Snowlight.Specialized;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
+using System.Web.Security;
 
 namespace Snowlight.Game.Rooms.Games
 {
@@ -20,7 +25,8 @@ namespace Snowlight.Game.Rooms.Games
         IceSkating = 2,
         BunnyRun = 3,
         BattleBanzai = 4,
-        Freeze = 5
+        Freeze = 5,
+        Football = 6
     }
 
     public enum TeamColors
@@ -37,8 +43,6 @@ namespace Snowlight.Game.Rooms.Games
         private RoomInstance mRoomInstance;
 
         private Dictionary<uint, DateTime> mRollerStrollerAchievement;
-
-        private Dictionary<uint, int> mSkateboardUserList;
 
         private Dictionary<uint, DateTime> mIceIceBabyAchievement;
         private Dictionary<uint, RoomActor> mIceTaggedUserList;
@@ -65,26 +69,6 @@ namespace Snowlight.Game.Rooms.Games
             set
             {
                 mRollerStrollerAchievement = value;
-            }
-        }
-        #endregion
-
-        #region Skateboard
-        /// <summary>
-        /// This used for obtain Skateboard achievements <br />
-        /// <br />
-        /// Storages uint User Id and int User body/head rotation
-        /// </summary>
-        public Dictionary<uint, int> SkateboardUserList
-        {
-            get
-            {
-                return mSkateboardUserList;
-            }
-
-            set
-            {
-                mSkateboardUserList = value;
             }
         }
         #endregion
@@ -183,8 +167,6 @@ namespace Snowlight.Game.Rooms.Games
             mRoomInstance = Instance;
 
             mRollerStrollerAchievement = new Dictionary<uint, DateTime>();
-
-            mSkateboardUserList = new Dictionary<uint, int>();
 
             mIceIceBabyAchievement = new Dictionary<uint, DateTime>();
             mIceTaggedUserList = new Dictionary<uint, RoomActor>();

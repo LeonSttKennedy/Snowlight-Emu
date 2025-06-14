@@ -169,10 +169,11 @@ namespace Snowlight.Game.Rooms
                                 QuestManager.ProgressUserQuest(Session, QuestType.FURNI_STACK);
                             }
 
-                            if (!string.IsNullOrEmpty(Item.Definition.AchievementCode))
+                            ItemAchievements Achievement = ItemDefinitionManager.GetAchievement(ActionToReward.Placing, Item.DefinitionId);
+                            if (Achievement != null)
                             {
                                 int BehaviorFurniCount = Instance.GetFloorItems().Where(I => I.Definition.Behavior.Equals(Item.Definition.Behavior)).Count();
-                                Session.CheckProgressAchievement(MySqlClient, Item.Definition.AchievementCode, BehaviorFurniCount);
+                                Session.CheckProgressAchievement(MySqlClient, Achievement.AchievementCode, BehaviorFurniCount);
                             }
                         }
                     }

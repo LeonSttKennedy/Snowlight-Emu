@@ -459,33 +459,12 @@ namespace Snowlight.Game.Sessions
                 // Subscription manager
                 MySqlClient.SetParameter("userid", CharacterId);
                 DataRow Row = MySqlClient.ExecuteQueryRow("SELECT * FROM user_subscriptions WHERE user_id = @userid");
-
-                ClubSubscription UserSubscription = new ClubSubscription(CharacterId, ClubSubscriptionLevel.None, 0, 0, 0, 0, 0, 0, new List<uint>() { });
-
-                if (Row != null)
-                {
-                    string[] SplitedIds = Row["one_time_gifts_redeem"].ToString().Split('|');
-
-                    List<uint> GiftRedeemList = new List<uint>();
-
-                    foreach (string StringIds in SplitedIds)
-                    {
-                        if (uint.TryParse(StringIds, out uint UserId))
-                        {
-                            if (!GiftRedeemList.Contains(UserId))
-                            {
-                                GiftRedeemList.Add(UserId);
-                            }
-                        }
-                    }
-
-                    UserSubscription = new ClubSubscription(CharacterId,
+                
+                mSubscriptionManager = Row != null ? new ClubSubscription(CharacterId,
                     (ClubSubscriptionLevel)int.Parse((Row["subscription_level"].ToString())), (double)Row["timestamp_created"],
-                    (double)Row["timestamp_expire"], (double)Row["timestamp_last_gift_point"],
-                    (double)Row["past_time_hc"], (double)Row["past_time_vip"], (int)Row["gift_points"], GiftRedeemList);
-                }
-
-                mSubscriptionManager = UserSubscription;
+                    (double)Row["timestamp_expire"], (double)Row["timestamp_last_gift_point"], (double)Row["past_time_hc"],
+                    (double)Row["past_time_vip"], (int)Row["gift_points"], Row["one_time_gifts_redeem"].ToString()) :
+                    new ClubSubscription(CharacterId, ClubSubscriptionLevel.None, 0, 0, 0, 0, 0, 0, string.Empty);
 
                 mAvatarEffectCache.CheckEffectExpiry(this);
 

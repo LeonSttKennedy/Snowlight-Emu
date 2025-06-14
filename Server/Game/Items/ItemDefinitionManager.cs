@@ -12,11 +12,13 @@ namespace Snowlight.Game.Items
     {
         private static Dictionary<uint, ItemDefinition> mDefinitions;
         private static List<ItemDefinition> mOldGiftDefinitionList;
+        private static Dictionary<ActionToReward, List<ItemAchievements>> mItemAchievements;
 
         public static void Initialize(SqlDatabaseClient MySqlClient)
         {
             mDefinitions = new Dictionary<uint, ItemDefinition>();
             mOldGiftDefinitionList = new List<ItemDefinition>();
+            mItemAchievements = new Dictionary<ActionToReward, List<ItemAchievements>>();
 
             int Count = 0;
             int Failed = 0;
@@ -79,17 +81,6 @@ namespace Snowlight.Game.Items
 
                 mDefinitions.Add(DefinitionId, Definition);
 
-                MySqlClient.SetParameter("defid", DefinitionId);
-                bool AchievementCodeExists = (MySqlClient.ExecuteScalar("SELECT achievement_code FROM item_achievements WHERE definition_id = @defid LIMIT 1") != null);
-
-                if(AchievementCodeExists)
-                {
-                    MySqlClient.SetParameter("defid", DefinitionId);
-                    string AchievementCode = MySqlClient.ExecuteScalar("SELECT achievement_code FROM item_achievements WHERE definition_id = @defid LIMIT 1").ToString();
-
-                    Definition.SetAchievementCode(AchievementCode);
-                }
-
                 MySqlClient.SetParameter("itembehavior", Behavior);
                 DataRow PetStatusRow = MySqlClient.ExecuteQueryRow("SELECT * FROM pet_interactions WHERE behavior = @itembehavior LIMIT 1");
 
@@ -115,15 +106,40 @@ namespace Snowlight.Game.Items
                     Definition.SetPetTypeInteractors(PetTypes);
                 }
 
-                Count++;             
-            }
-
-            foreach (ItemDefinition Definition in mDefinitions.Values)
-            {
                 if (Definition.Behavior == ItemBehavior.Gift && Definition.BehaviorData == 1)
                 {
                     mOldGiftDefinitionList.Add(Definition);
                 }
+
+                Count++;             
+            }
+
+            DataTable AchievementsRow = MySqlClient.ExecuteQueryTable("SELECT * FROM item_achievements");
+
+            foreach (DataRow Row in AchievementsRow.Rows)
+            {
+                ActionToReward Action = ActionToReward.None;
+
+                switch(Row["action"].ToString())
+                {
+                    case "buying":
+                        Action = ActionToReward.Buying;
+                        break;
+
+                    case "placing":
+                        Action = ActionToReward.Placing;
+                        break;
+                }
+
+                uint DefinitionId = (uint)Row["definition_id"];
+                string AchievementCode = (string)Row["achievement_code"];
+
+                if (!mItemAchievements.ContainsKey(Action))
+                {
+                    mItemAchievements.Add(Action, new List<ItemAchievements>() { });
+                }
+
+                mItemAchievements[Action].Add(new ItemAchievements(DefinitionId, AchievementCode));
             }
 
             Output.WriteLine("Loaded " + Count + " item definition(s)" + (Failed > 0 ? " (" + Failed + " skipped due to errors)" : "") + ".", OutputLevel.DebugInformation);
@@ -184,6 +200,22 @@ namespace Snowlight.Game.Items
                     if (ItemDefs.SpriteId == SpriteId)
                     {
                         return ItemDefs;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static ItemAchievements GetAchievement(ActionToReward Action, uint DefinitionId)
+        {
+            lock(mItemAchievements)
+            {
+                foreach(ItemAchievements ItemAchievements in mItemAchievements[Action])
+                {
+                    if(ItemAchievements.DefinitionId == DefinitionId)
+                    {
+                        return ItemAchievements;
                     }
                 }
             }

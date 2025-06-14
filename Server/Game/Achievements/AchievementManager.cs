@@ -226,6 +226,7 @@ namespace Snowlight.Game.Achievements
                 MySqlClient.ExecuteQueryTable("UPDATE achievements_to_unlock SET progress = progress + @progressa WHERE user_id = @uid AND group_id = @gid");
             }
         }
+
         public static void VerifyProgressUserAchievement(SqlDatabaseClient MySqlClient, Session Session) 
         {
             uint UserId = Session.CharacterId;

@@ -115,6 +115,7 @@ namespace Snowlight.Game.Items
                 return mOrderId;
             }
         }
+
         public string BadgeCode
         {
             get

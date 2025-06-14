@@ -291,6 +291,14 @@ namespace Snowlight.Game.Catalog
                                     int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
 
                                     Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
+
+                                    #region Delivery Achievement
+                                    ItemAchievements Achievement = ItemDefinitionManager.GetAchievement(ActionToReward.Buying, GeneratedItem.DefinitionId);
+                                    if (Achievement != null)
+                                    {
+                                        AchievementManager.ProgressUserAchievement(MySqlClient, Session, Achievement.AchievementCode, GeneratedGenericItems.Count);
+                                    }
+                                    #endregion
                                 }
 
                                 break;

@@ -60,6 +60,8 @@ namespace Snowlight.Game.Rooms
         private uint mFurniOnId;
         private bool mIsSitting;
 
+        private int mSkateboardRotation;
+
         private GameType mGameType;
         private TagStatus mTagStatus;
         private TeamColors mTeamColors;
@@ -638,6 +640,27 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public bool IsUserSkateboarding
+        {
+            get
+            {
+                return mSkateboardRotation > -1;
+            }
+        }
+
+        public int SkateboardRotation
+        {
+            get
+            {
+                return mSkateboardRotation;
+            }
+
+            set
+            {
+                mSkateboardRotation = value;
+            }
+        }
+
         public GameType PlayingGameType
         {
             get
@@ -695,6 +718,8 @@ namespace Snowlight.Game.Rooms
             mEnableMoonWalk = false;
             mMovementSyncRoot = new object();
             mIsSitting = false;
+
+            mSkateboardRotation = -1;
 
             mGameType = GameType.None;
             mTagStatus = TagStatus.None;

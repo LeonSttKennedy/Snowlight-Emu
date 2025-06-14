@@ -19,8 +19,8 @@ namespace Snowlight.Communication.Outgoing
                 Message.AppendInt32(Actor.Position.X);
                 Message.AppendInt32(Actor.Position.Y);
                 Message.AppendRawDouble(Actor.Position.Z);
-                Message.AppendInt32(Actor.HeadRotation);
-                Message.AppendInt32(Actor.BodyRotation);
+                Message.AppendInt32(Actor.IsUserSkateboarding ? Actor.SkateboardRotation : Actor.HeadRotation);
+                Message.AppendInt32(Actor.IsUserSkateboarding ? Actor.SkateboardRotation : Actor.BodyRotation);
                 Message.AppendRawString("/");
 
                 foreach (KeyValuePair<string, string> Status in Actor.UserStatusses)

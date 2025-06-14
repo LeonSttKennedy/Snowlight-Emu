@@ -30,46 +30,48 @@ namespace Snowlight.Game.Items
         StepSwitch = 23,
         Football = 24,
         FootballGate = 25,
-        Dice = 26,
-        HoloDice = 27,
-        SpinningBottle = 28,
-        HabboWheel = 29,
-        LoveShuffler = 30,
-        StickyNote = 31,
-        StickyPole = 32,
-        Scoreboard = 33,
-        Pet = 34,
-        Dispenser = 35,
-        Fireworks = 36,
-        MusicDisk = 37,
-        Rental = 38,
-        Gift = 39,
-        PuzzleBox = 40,
-        PetNest = 41,
-        BallToy = 42,
-        PetFood = 43,
-        PetWaterBowl = 44,
-        GameCounter = 45,
-        DuckHC = 46,
-        DuckVIP = 47,
-        Platform = 48,
-        WelcomeGift = 49,
-        RoomBackground = 50,
-        DragonToy = 51,
-        ChickenToy = 52,
-        FrogToy = 53,
-        MonkeyToy = 54,
-        BlackHole = 55,
-        TotemLeg = 56,
-        TotemHead = 57,
-        TotemPlanet = 58,
-        SpiderToy = 59,
-        RollerRink = 60,
-        SkateRail = 61,
-        TagPole = 62,
-        IceSkating = 63,
-        EggTagPole = 64,
-        BunnyRun = 65
+        FootballGoal = 26,
+        FootballScore = 27,
+        Dice = 28,
+        HoloDice = 29,
+        SpinningBottle = 30,
+        HabboWheel = 31,
+        LoveShuffler = 32,
+        StickyNote = 33,
+        StickyPole = 34,
+        Scoreboard = 35,
+        Pet = 36,
+        Dispenser = 37,
+        Fireworks = 38,
+        MusicDisk = 39,
+        Rental = 40,
+        Gift = 41,
+        PuzzleBox = 42,
+        PetNest = 43,
+        BallToy = 44,
+        PetFood = 45,
+        PetWaterBowl = 46,
+        GameCounter = 47,
+        DuckHC = 48,
+        DuckVIP = 49,
+        Platform = 50,
+        WelcomeGift = 51,
+        RoomBackground = 52,
+        DragonToy = 53,
+        ChickenToy = 54,
+        FrogToy = 55,
+        MonkeyToy = 56,
+        BlackHole = 57,
+        TotemLeg = 58,
+        TotemHead = 59,
+        TotemPlanet = 60,
+        SpiderToy = 61,
+        RollerRink = 62,
+        SkateRail = 63,
+        TagPole = 64,
+        IceSkating = 65,
+        EggTagPole = 66,
+        BunnyRun = 67
     }
 
     public static class ItemBehaviorUtil
@@ -141,6 +143,14 @@ namespace Snowlight.Game.Items
                 case "football_gate":
 
                     return ItemBehavior.FootballGate;
+
+                case "football_goal":
+
+                    return ItemBehavior.FootballGoal;
+
+                case "football_score":
+
+                    return ItemBehavior.FootballScore;
 
                 case "autoswitch":
 

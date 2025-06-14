@@ -57,3 +57,4 @@ D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug
 D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.csproj.Up2Date
 D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.exe
 D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.pdb
+D:\Arquivos\ESTUDO\ESTUDO\Snowlight-master\Snowlight-master\Server\obj\x86\Debug\Snowlight.exe.config

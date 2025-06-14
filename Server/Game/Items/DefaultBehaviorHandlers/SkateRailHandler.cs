@@ -1,21 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using System.Collections.Generic;
-
-using Snowlight.Storage;
-using Snowlight.Specialized;
-
+﻿using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Achievements;
 using Snowlight.Game.Bots;
+using Snowlight.Game.Characters;
 using Snowlight.Game.Misc;
+using Snowlight.Game.Pathfinding;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
-using Snowlight.Game.Characters;
-using Snowlight.Game.Pathfinding;
-using Snowlight.Game.Achievements;
-
-using Snowlight.Communication.Outgoing;
+using Snowlight.Specialized;
+using Snowlight.Storage;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
 
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
@@ -23,9 +20,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
     public static class SkateRailHandler
     {
         private static List<int> mAvatarEffects = new List<int>() { 71, 72 };
-        private static Dictionary<uint, List<Vector2>> mAffectedTiles = new Dictionary<uint, List<Vector2>>();
         private static List<string> mAchievementsToUnlock = new List<string>() { "ACH_SkateBoardJump", "ACH_SkateBoardSlide" };
-
+        
         public static void Register()
         {
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.SkateRail, new ItemEventHandler(HandleSkateRail));
@@ -33,106 +29,160 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
         private static bool HandleSkateRail(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
-            switch (Event)
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
-                case ItemEventType.UpdateTick:
+                switch (Event)
+                {
+                    case ItemEventType.WalkOnItem:
 
-                    List<Item> SkateRails = Instance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.SkateRail).ToList();
+                        if (Actor.IsBot)
+                        {
+                            break;
+                        }
 
-                    foreach (Item SkateRail in SkateRails)
-                    {
+                        Session TargetSession = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
+                        bool IsUserWhitSkateboard = mAvatarEffects.Contains(TargetSession.CurrentEffect);
+
+                        if (IsUserWhitSkateboard)
+                        {
+                            Item CurrentItem = Instance.GetItemsOnPosition(Actor.Position.GetVector2()).Where(I => I.Definition.Behavior == ItemBehavior.SkateRail).FirstOrDefault();
+                            Item NextItem = null;
+
+                            if (Actor.PositionToSet != null)
+                            {
+                                NextItem = Instance.GetItemsOnPosition(Actor.PositionToSet).Where(I => I.Definition.Behavior == ItemBehavior.SkateRail).FirstOrDefault();
+                            }
+
+                            if (NextItem != null)
+                            {
+                                if (CurrentItem != null)
+                                {
+                                    AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, mAchievementsToUnlock[1], 1);
+                                }
+                                else
+                                {
+                                    AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, mAchievementsToUnlock[0], 1);
+                                }
+                            }
+
+                            switch (NextItem.RoomRotation)
+                            {
+                                case 0:
+
+                                    switch (Actor.HeadRotation)
+                                    {
+                                        case 0:
+
+                                            Actor.SkateboardRotation = 6;
+
+                                            break;
+
+                                        case 4:
+
+                                            Actor.SkateboardRotation = 2;
+
+                                            break;
+                                    }
+
+                                    break;
+
+                                case 2:
+
+                                    switch (Actor.HeadRotation)
+                                    {
+                                        case 2:
+
+                                            Actor.SkateboardRotation = 0;
+
+                                            break;
+
+                                        case 6:
+
+                                            Actor.SkateboardRotation = 4;
+
+                                            break;
+                                    }
+
+                                    break;
+                            }
+
+                            Actor.UpdateNeeded = true;
+                        }
+
+                        break;
+
+                    case ItemEventType.WalkOffItem:
+
+                        if (Actor.IsBot)
+                        {
+                            break;
+                        }
+                        
+                        if (Actor.PositionToSet != null)
+                        {
+                            Item NextItem = Instance.GetItemsOnPosition(Actor.PositionToSet).Where(I => I.Definition.Behavior == ItemBehavior.SkateRail).FirstOrDefault();
+
+                            if (NextItem != null)
+                            {
+                                break;
+                            }
+                        }
+
+                        TargetSession = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
+                        IsUserWhitSkateboard = mAvatarEffects.Contains(TargetSession.CurrentEffect);
+
+                        if (IsUserWhitSkateboard)
+                        {
+                            Item CurrentItem = Instance.GetItemsOnPosition(Actor.Position.GetVector2()).Where(I => I.Definition.Behavior == ItemBehavior.SkateRail).FirstOrDefault();
+                            Item NextItem = null;
+
+                            if (Actor.PositionToSet != null)
+                            {
+                                NextItem = Instance.GetItemsOnPosition(Actor.PositionToSet).Where(I => I.Definition.Behavior == ItemBehavior.SkateRail).FirstOrDefault();
+                            }
+
+                            if (CurrentItem != null && NextItem == null)
+                            {
+                                AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, mAchievementsToUnlock[0], 1);
+                            }
+
+                            if (Actor.IsUserSkateboarding)
+                            {
+                                Actor.SkateboardRotation = -1;
+                            }
+
+                            Actor.UpdateNeeded = true;
+                        }
+
+                        break;
+
+                    case ItemEventType.Moved:
+                    case ItemEventType.Removing:
+
                         List<Vector2> AffectedTiles = Instance.CalculateAffectedTiles(Item, Item.RoomPosition.GetVector2(), Item.RoomRotation);
 
                         foreach (Vector2 Tile in AffectedTiles)
                         {
-                            if (!mAffectedTiles[Instance.Info.Id].Contains(Tile))
+                            List<RoomActor> ActorsOnTile = Instance.GetActorsOnPosition(Tile);
+
+                            if (ActorsOnTile.Count > 0)
                             {
-                                mAffectedTiles[Instance.Info.Id].Add(Tile);
-                            }
-                        }
-                    }
-
-                    foreach (RoomActor _Actor in Instance.Actors)
-                    {
-                        if (_Actor.Type == RoomActorType.UserCharacter)
-                        {
-                            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                            {
-                                Session TargetSession = SessionManager.GetSessionByCharacterId(_Actor.ReferenceId);
-
-                                uint UserId = TargetSession.CharacterId;
-
-                                if (mAvatarEffects.Contains(TargetSession.CurrentEffect))
+                                foreach (RoomActor mActor in ActorsOnTile)
                                 {
-                                    if (mAffectedTiles[Instance.Info.Id].Contains(_Actor.PositionToSet) ||
-                                        mAffectedTiles[Instance.Info.Id].Contains(_Actor.Position.GetVector2()))
+                                    if (mActor.IsUserSkateboarding)
                                     {
-                                        if (!Instance.GameManager.SkateboardUserList.ContainsKey(UserId))
-                                        {
-                                            AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, mAchievementsToUnlock[0], 1);
-                                            Instance.GameManager.SkateboardUserList.Add(UserId, 0);
-                                        }
+                                        mActor.SkateboardRotation = -1;
                                     }
-                                    else
-                                    {
-                                        if (Instance.GameManager.SkateboardUserList.ContainsKey(UserId))
-                                        {
-                                            AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, mAchievementsToUnlock[0], 1);
-                                            Instance.GameManager.SkateboardUserList.Remove(UserId);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (Instance.GameManager.SkateboardUserList.ContainsKey(UserId))
-                                    {
-                                        Instance.GameManager.SkateboardUserList.Remove(UserId);
-                                    }
-                                }
 
-                                bool IsUserSkateboarding = Instance.GameManager.SkateboardUserList.ContainsKey(UserId);
-
-                                if (IsUserSkateboarding && Item.Id == _Actor.FurniOnId && _Actor.IsMoving)
-                                {
-                                    AchievementManager.ProgressUserAchievement(MySqlClient, TargetSession, mAchievementsToUnlock[1], 1);
+                                    mActor.UpdateNeeded = true;
                                 }
                             }
                         }
-                    }
 
-                    Item.RequestUpdate(1);
-                    break;
-
-                case ItemEventType.Placed:
-                case ItemEventType.InstanceLoaded:
-
-                    if (!mAffectedTiles.ContainsKey(Instance.Info.Id))
-                    {
-                        mAffectedTiles.Add(Instance.Info.Id, new List<Vector2>());
-                    }
-
-                    mAffectedTiles[Instance.Info.Id].Clear();
-
-                    Item.RequestUpdate(1);
-                    break;
-
-                case ItemEventType.Moved:
-                case ItemEventType.Removing:
-
-                    mAffectedTiles[Instance.Info.Id].Clear();
-
-                    List<Item> RemaingSkateRail = Instance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.SkateRail).ToList();
-                    
-                    if(RemaingSkateRail.Count == 0)
-                    {
-                        if (mAffectedTiles.ContainsKey(Instance.Info.Id))
-                        {
-                            mAffectedTiles.Remove(Instance.Info.Id);
-                        }
-                    }
-
-                    Item.RequestUpdate(1);
-                    break;
+                        break;
+                }
             }
 
             return true;

@@ -17,7 +17,8 @@ namespace Snowlight.Game.Items
         UpdateTick = 4,
         InstanceLoaded = 5,
         WalkOnItem = 6,
-        WalkOffItem = 7
+        WalkOffItem = 7,
+        ItemInvoking = 8
     }
 
     public delegate bool ItemEventHandler(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData);
@@ -50,6 +51,7 @@ namespace Snowlight.Game.Items
 
             PetItemsHandler.Register();
             GameCounterHandler.Register();
+            GameScoreboardHandler.Register();
             PuzzleboxHandler.Register();
             WelcomeGiftHandler.Register();
             WiredHandler.Register();
@@ -58,6 +60,7 @@ namespace Snowlight.Game.Items
             SkateRailHandler.Register();
             IceSkatingHandler.Register();
             BunnyRunHandler.Register();
+            FootballHandler.Register();
         }
 
         public static void InvokeItemEventHandler(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData = 0)
