@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Snowlight.Storage;
-using Snowlight.Game.Achievements;
 using Snowlight.Game.Quests;
+using Snowlight.Game.Catalog;
 
-namespace Snowlight.Game.Catalog
+namespace Snowlight.Game.Misc
 {
     public static class DailyStuffWorker
     {

@@ -133,6 +133,7 @@ namespace Snowlight.Game.AvatarEffects
                     if (mQuantity < 1)
                     {
                         MySqlClient.ExecuteNonQuery("DELETE FROM avatar_effects WHERE id = @id LIMIT 1");
+                        Session.AvatarEffectCache.Remove(mId);
                     }
                     else
                     {

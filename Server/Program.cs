@@ -164,6 +164,7 @@ namespace Snowlight
 
                     // Room management and navigator
                     RoomManager.Initialize(MySqlClient);
+                    RoomVisitorWorker.Initialize();
                     RoomInfoLoader.Initialize();
                     RoomHandler.Initialize();
                     RoomItemHandler.Initialize();

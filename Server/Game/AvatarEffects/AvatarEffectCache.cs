@@ -6,6 +6,7 @@ using System.Data;
 using Snowlight.Storage;
 using Snowlight.Specialized;
 using Snowlight.Game.Sessions;
+using System.Linq;
 
 namespace Snowlight.Game.AvatarEffects
 {
@@ -119,7 +120,9 @@ namespace Snowlight.Game.AvatarEffects
         {
             lock (mSyncRoot)
             {
-                foreach (AvatarEffect Effect in mInner.Values)
+                List<AvatarEffect> ActivatedUserEffects = mInner.Values.Where(E => E.Activated).ToList();
+
+                foreach (AvatarEffect Effect in ActivatedUserEffects)
                 {
                     if (Effect.HasExpired)
                     {

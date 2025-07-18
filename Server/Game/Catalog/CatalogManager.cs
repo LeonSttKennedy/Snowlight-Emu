@@ -430,35 +430,27 @@ namespace Snowlight.Game.Catalog
 
         public static void MarketplaceBuyTickets(Session Session, ClientMessage Message)
         {
-            bool CreditsError = false;
-
             if (Session.CharacterInfo.MarketplaceTokens < 0)
             {
                 Session.CharacterInfo.MarketplaceTokens = 0;
             }
 
-            if (Session.CharacterInfo.CreditsBalance <= 0)
+            if (Session.CharacterInfo.CreditsBalance < ServerSettings.MarketplaceTokensPrice ||
+                Session.CharacterInfo.CreditsBalance <= 0)
             {
-                CreditsError = true;
-            }
-
-            if (CreditsError)
-            {
-                Session.SendData(CatalogPurchaseBalanceErrorComposer.Composer(CreditsError, false));
+                Session.SendData(CatalogPurchaseBalanceErrorComposer.Composer(true, false));
                 return;
             }
-            else
-            {
-                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                {
-                    Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, -ServerSettings.MarketplaceTokensPrice);
-                    Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
-                    Session.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, Session.HasRight("club_vip") ?
-                        ServerSettings.MarketplacePremiumTokens : ServerSettings.MarketplaceNormalTokens);
-                }
 
-                MarketplaceCanSell(Session, Message);
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, -ServerSettings.MarketplaceTokensPrice);
+                Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
+                Session.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, Session.HasRight("club_vip") ?
+                    ServerSettings.MarketplacePremiumTokens : ServerSettings.MarketplaceNormalTokens);
             }
+
+            MarketplaceCanSell(Session, Message);
         }
 
         public static void MarketplaceItemStats(Session Session, ClientMessage Message)
