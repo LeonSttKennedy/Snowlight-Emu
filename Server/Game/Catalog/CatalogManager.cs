@@ -246,7 +246,8 @@ namespace Snowlight.Game.Catalog
 
                     ItemRotationSettings RotationSettings = new ItemRotationSettings((uint)Row["id"],
                         (int)Row["page_id"], (int)Row["page_to_copy"], (int)Row["rotation_time"], Type,
-                        (double)Row["timestamp_last_rotation"], (int)Row["last_index"]);
+                        (double)Row["timestamp_last_rotation"], (int)Row["last_index"],
+                        (Row["disable_at_end_list"].ToString() == "1"));
 
                     if(!mRotationPages.ContainsKey(PageId))
                     {
@@ -274,6 +275,7 @@ namespace Snowlight.Game.Catalog
                         (Row["dummy_page"].ToString() == "1"), (Row["coming_soon"].ToString() == "1"), (string)Row["template"], PageStrings1, PageStrings2,
                         mCatalogItems.ContainsKey(Id) ? mCatalogItems[Id] : new List<CatalogItem>()));
 
+
                     CountLoaded++;
                 }
 
@@ -297,8 +299,10 @@ namespace Snowlight.Game.Catalog
                             break;
                     }
 
-                    mClubOffers.Add((uint)Row["id"], new CatalogClubOffer((uint)Row["id"], (string)Row["name"],
-                        (int)Row["cost_credits"], (int)Row["length_days"], OfferType));
+                    uint ClubOfferId = (uint)Row["id"];
+
+                    mClubOffers.Add(ClubOfferId, new CatalogClubOffer((uint)Row["id"], (string)Row["name"],
+                            (int)Row["cost_credits"], (int)Row["length_days"], OfferType));
                 }
 
                 ReloadMarketplaceData(MySqlClient);
@@ -412,20 +416,34 @@ namespace Snowlight.Game.Catalog
                 mCatalogItems[PageId].Clear();
             }
 
+            bool IsOutsideList = false;
+
             if (Settings.ExecuteRotation)
             {
                 Settings.LastIndex++;
+
                 if (Settings.LastIndex >= mCatalogItems[Settings.PageToCopy].Count)
                 {
+                    IsOutsideList = true;
                     Settings.LastIndex = 0;
                 }
 
-                Settings.UpdateInDatabase();
+                if (IsOutsideList && Settings.DisableAtEndList)
+                {
+                    Settings.DisableInDatabase();
+                    return;
+                }
+                else
+                {
+                    Settings.UpdateInDatabase();
+                }
             }
 
-            CatalogItem Item = mCatalogItems[Settings.PageToCopy][Settings.LastIndex];
-
-            mCatalogItems[PageId].Add(Item);
+            if (!(IsOutsideList && Settings.DisableAtEndList))
+            {
+                CatalogItem Item = mCatalogItems[Settings.PageToCopy][Settings.LastIndex];
+                mCatalogItems[PageId].Add(Item);
+            }
         }
 
         public static void MarketplaceBuyTickets(Session Session, ClientMessage Message)

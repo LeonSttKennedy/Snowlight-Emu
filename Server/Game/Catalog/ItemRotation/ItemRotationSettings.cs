@@ -24,6 +24,7 @@ namespace Snowlight.Game.Catalog
         private RotationType mType;
         private double mTimestampLastRotation;
         private int mLastIndex;
+        private bool mDisableAtEndList;
 
         public uint Id
         {
@@ -113,6 +114,19 @@ namespace Snowlight.Game.Catalog
             }
         }
 
+        public bool DisableAtEndList
+        {
+            get
+            {
+                return mDisableAtEndList;
+            }
+
+            set
+            {
+                mDisableAtEndList = value;
+            }
+        }
+
         public DateTime NextRotation
         {
             get
@@ -152,7 +166,7 @@ namespace Snowlight.Game.Catalog
         }
 
         public ItemRotationSettings(uint Id, int PageId, int PageToCopy, int WaitTime, RotationType Type,
-            double TimestampLastRotation, int LastIndex)
+            double TimestampLastRotation, int LastIndex, bool DisableAtEndList)
         {
             mId = Id;
             mPageId = PageId;
@@ -161,6 +175,7 @@ namespace Snowlight.Game.Catalog
             mType = Type;
             mTimestampLastRotation = TimestampLastRotation;
             mLastIndex = LastIndex;
+            mDisableAtEndList = DisableAtEndList;
         }
 
         public void UpdateInDatabase()
@@ -171,6 +186,19 @@ namespace Snowlight.Game.Catalog
                 MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
                 MySqlClient.SetParameter("lastindex", mLastIndex);
                 MySqlClient.ExecuteNonQuery("UPDATE catalog_items_rotation_settings SET timestamp_last_rotation = @timestamp, last_index = @lastindex WHERE page_id = @pageid LIMIT 1");
+            }
+        }
+
+        public void DisableInDatabase()
+        {
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                MySqlClient.SetParameter("id", mId);
+                MySqlClient.SetParameter("disabled", "0");
+                MySqlClient.ExecuteNonQuery("UPDATE catalog_items_rotation_settings SET timestamp_last_rotation = '0', last_index = '-1', enabled = @disabled WHERE id = @id LIMIT 1");
+
+                MySqlClient.SetParameter("pageid", mPageId);
+                MySqlClient.ExecuteNonQuery("UPDATE catalog SET enabled = '0' WHERE id = @pageid LIMIT 1");
             }
         }
     }

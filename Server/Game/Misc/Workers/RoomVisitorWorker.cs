@@ -45,7 +45,8 @@ namespace Snowlight.Game.Misc
                 {
                     using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                     {
-                        List<RoomInstance> CurrentInstanceList = RoomManager.RoomInstances.Values.ToList();
+                        // Only iterate by private rooms
+                        List<RoomInstance> CurrentInstanceList = RoomManager.RoomInstances.Values.Where(I => I.Info.Type.Equals(RoomType.Flat)).ToList();
 
                         foreach (RoomInstance RoomInstance in CurrentInstanceList)
                         {

@@ -54,6 +54,7 @@ namespace Snowlight.Game.Sessions
         private QuestCache mQuestCache;
         private FriendStreamEventsCache mFriendStreamCache;
         private MarketplaceFiltersCache mMarketplaceFilterCache;
+        private HolidayGiftsCache mHolidayGiftsCache;
 
         private uint mRoomId;
         private bool mRoomAuthed;
@@ -249,6 +250,15 @@ namespace Snowlight.Game.Sessions
                 return mMarketplaceFilterCache;
             }
         }
+
+        public HolidayGiftsCache HolidayGiftsCache
+        {
+            get
+            {
+                return mHolidayGiftsCache;
+            }
+        }
+
         public bool InRoom
         {
             get
@@ -444,6 +454,7 @@ namespace Snowlight.Game.Sessions
                 mNewItemsCache = new NewItemsCache(MySqlClient, CharacterId);
                 mAvatarEffectCache = new AvatarEffectCache(MySqlClient, CharacterId);
                 mQuestCache = new QuestCache(MySqlClient, CharacterId);
+                mHolidayGiftsCache = new HolidayGiftsCache(MySqlClient, CharacterId);
                 mFriendStreamCache = new FriendStreamEventsCache(MySqlClient, this);
                 mMarketplaceFilterCache = new MarketplaceFiltersCache();
 
@@ -574,6 +585,104 @@ namespace Snowlight.Game.Sessions
                         mNewItemsCache.SendNewItems(this);
 
                         SendData(UserBadgeInventoryComposer.Compose(mBadgeCache.Badges, mBadgeCache.EquippedBadges));
+                    }
+                }
+                #endregion
+
+                #region Holiday Gift Reward
+                if (HolidayGiftManager.HasGiftToday)
+                {
+                    int Year = DateTime.Now.Year;
+
+                    bool CanReceiveGift = !mHolidayGiftsCache.GiftsReceived.ContainsKey(Year) &&
+                        HolidayGiftManager.TodayGift.RequiredGiftsToUnlock.Count == 0 ||
+                        mHolidayGiftsCache.GiftsReceived.ContainsKey(Year) &&
+                        !mHolidayGiftsCache.GiftsReceived[Year].Contains(HolidayGiftManager.TodayGift.Id) &&
+                        HolidayGiftManager.TodayGift.RequiredGiftsToUnlock.Count == 0 ||
+                        mHolidayGiftsCache.GiftsReceived.ContainsKey(Year) &&
+                        !mHolidayGiftsCache.GiftsReceived[Year].Contains(HolidayGiftManager.TodayGift.Id) &&
+                        (HolidayGiftManager.TodayGift.RequiredGiftsToUnlock.Count > 0 &&
+                        Enumerable.SequenceEqual(HolidayGiftManager.TodayGift.RequiredGiftsToUnlock, mHolidayGiftsCache.GiftsReceived[Year]));
+
+                    if (CanReceiveGift)
+                    {
+                        #region Credits
+                        if (HolidayGiftManager.TodayGift.CreditsAmount > 0)
+                        {
+                            CharacterInfo.UpdateCreditsBalance(MySqlClient, HolidayGiftManager.TodayGift.CreditsAmount);
+                            SendData(CreditsBalanceComposer.Compose(HolidayGiftManager.TodayGift.CreditsAmount));
+                        }
+                        #endregion
+
+                        #region Activity Points
+                        if (HolidayGiftManager.TodayGift.ActivityPointsAmount > 0)
+                        {
+                            CharacterInfo.UpdateActivityPointsBalance(MySqlClient, HolidayGiftManager.TodayGift.ActivityPointsType,
+                                HolidayGiftManager.TodayGift.ActivityPointsAmount);
+
+                            if (HolidayGiftManager.TodayGift.ActivityPointsType == SeasonalCurrencyList.Pixels)
+                            {
+                                SendData(UpdatePixelsBalanceComposer.Compose(CharacterInfo.ActivityPoints[0], HolidayGiftManager.TodayGift.ActivityPointsAmount));
+                            }
+
+                            SendData(UserActivityPointsBalanceComposer.Compose(CharacterInfo.ActivityPoints));
+                        }
+                        #endregion
+
+                        #region Furniture
+                        if (HolidayGiftManager.TodayGift.DefinitionIds.Count > 0)
+                        {
+                            ItemDefinition GiftDef = ItemDefinitionManager.OldGiftDefinitions();
+                            string ED = "!" + HolidayGiftManager.TodayGift.GiftMessage + "|" + GiftDef.SpriteId + "|0|0";
+
+                            Item GiftItem = ItemFactory.CreateItem(MySqlClient, GiftDef.Id, CharacterId, ED, ED, 0);
+
+                            MySqlClient.SetParameter("itemid", GiftItem.Id);
+                            MySqlClient.SetParameter("baseids", string.Join("|", HolidayGiftManager.TodayGift.DefinitionIds));
+                            MySqlClient.SetParameter("amounts", string.Join("|", HolidayGiftManager.TodayGift.ItemsAmount));
+                            MySqlClient.SetParameter("flags", string.Empty);
+                            DataTable Table = MySqlClient.ExecuteQueryTable("INSERT INTO user_gifts(item_id, base_ids, amounts, extra_data) VALUES(@itemid, @baseids, @amounts, @flags)");
+
+                            InventoryCache.Add(GiftItem);
+                            NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Floor, GiftItem.Id);
+
+                            SendData(InventoryRefreshComposer.Compose());
+                            NewItemsCache.SendNewItems(this);
+                        }
+                        #endregion
+
+                        #region Badge
+                        if (!string.IsNullOrEmpty(HolidayGiftManager.TodayGift.BadgeCode))
+                        {
+                            BadgeDefinition BadgeToGive = RightsManager.GetBadgeDefinitionByCode(HolidayGiftManager.TodayGift.BadgeCode);
+                            if (BadgeToGive == null)
+                            {
+                                return;
+                            }
+
+                            if (!mBadgeCache.ContainsCode(HolidayGiftManager.TodayGift.BadgeCode))
+                            {
+                                mBadgeCache.UpdateAchievementBadge(MySqlClient, BadgeToGive.Code, BadgeToGive, mAchievementCache, "static");
+
+                                InventoryBadge UserBadge = mBadgeCache.GetBadge(HolidayGiftManager.TodayGift.BadgeCode);
+                                mNewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, UserBadge.Id);
+                                mNewItemsCache.SendNewItems(this);
+
+                                SendData(UserBadgeInventoryComposer.Compose(mBadgeCache.Badges, mBadgeCache.EquippedBadges));
+                            }
+                        }
+                        #endregion
+
+                        #region UserAlertMessage
+                        string UserMessage = HolidayGiftManager.TodayGift.UserAlertMessage;
+
+                        if (UserMessage.Length > 0)
+                        {
+                            NotificationMessageComposer.Compose(UserMessage);
+                        }
+                        #endregion
+
+                        mHolidayGiftsCache.AddGift(HolidayGiftManager.TodayGift.Id);
                     }
                 }
                 #endregion

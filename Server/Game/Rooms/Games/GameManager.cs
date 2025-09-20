@@ -49,6 +49,8 @@ namespace Snowlight.Game.Rooms.Games
 
         private Dictionary<uint, RoomActor> mBunnyRunTaggedUserList;
 
+        private Dictionary<uint, int> mUserBallDistance;
+
         private Dictionary<uint, RoomActor> mPlayingUsers;
 
         private bool mGameStarted;
@@ -131,6 +133,21 @@ namespace Snowlight.Game.Rooms.Games
         }
         #endregion
 
+        #region Football
+        public Dictionary<uint, int> UserFootBallDistance
+        {
+            get
+            {
+                return mUserBallDistance;
+            }
+
+            set
+            {
+                mUserBallDistance = value;
+            }
+        }
+        #endregion
+
         /// <summary>
         /// This used for holding Users are playing<br />
         /// <br />
@@ -172,6 +189,8 @@ namespace Snowlight.Game.Rooms.Games
             mIceTaggedUserList = new Dictionary<uint, RoomActor>();
 
             mBunnyRunTaggedUserList = new Dictionary<uint, RoomActor>();
+
+            mUserBallDistance = new Dictionary<uint, int>();
 
             mPlayingUsers = new Dictionary<uint, RoomActor>();
 

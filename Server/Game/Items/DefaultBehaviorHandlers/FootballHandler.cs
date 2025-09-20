@@ -32,7 +32,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
         private static bool HandleFootballBall(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
-            switch(Event)
+            switch (Event)
             {
                 case ItemEventType.Placed:
                 case ItemEventType.InstanceLoaded:
@@ -43,50 +43,93 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     break;
 
+                case ItemEventType.Interact:
+
+                    if (!Instance.GameManager.UserFootBallDistance.ContainsKey(Actor.ReferenceId))
+                    {
+                        Instance.GameManager.UserFootBallDistance.Add(Actor.ReferenceId, 0);
+                    }
+
+                    Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] = Distance.Calculate(Actor.Position.GetVector2(), Item.RoomPosition.GetVector2());
+
+                    break;
+
                 case ItemEventType.UpdateTick:
 
-                    switch(Item.DisplayFlags)
+                    int ItemFlags = int.Parse(Item.DisplayFlags);
+
+                    if (ItemFlags > 10)
                     {
-                        case "16":
-
-                            break;
-
-                        case "15":
-
-                            break;
-
-                        case "14":
-
-                            break;
-
-                        case "13":
-
-                            break;
-
-                        case "12":
-
-                            break;
-
-                        case "11":
-
-                            Item.Flags = "10";
-                            Item.DisplayFlags = Item.Flags;
-
-                            RoomManager.MarkWriteback(Item, true);
-
-                            Item.BroadcastStateUpdate(Instance);
-                            Instance.RegenerateRelativeHeightmap(true);
-
-                            break;
-
-                        case "10":
-
-                            break;
+                        ItemFlags--;
+                        Item.DisplayFlags = ItemFlags.ToString();
+                        Item.RequestUpdate(1);
                     }
 
                     break;
 
                 case ItemEventType.WalkOnItem:
+
+                    bool UserHasCachedDistance = Instance.GameManager.UserFootBallDistance.ContainsKey(Actor.ReferenceId) &&
+                        Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] > 0;
+
+                    int PlayerDistance = UserHasCachedDistance ? Instance.GameManager.UserFootBallDistance[Actor.ReferenceId]
+                        : Distance.Calculate(Actor.Position.GetVector2(), Item.RoomPosition.GetVector2());
+
+                    int KickPower = RandomGenerator.GetNext(1, PlayerDistance);
+
+                    Vector2 NewPoint = new Vector2(0, 0);
+
+                    switch (Actor.BodyRotation)
+                    {
+                        case 4:
+
+                            NewPoint = new Vector2(Item.RoomPosition.X, Item.RoomPosition.Y + KickPower);
+                            break;
+
+                        case 0:
+
+                            NewPoint = new Vector2(Item.RoomPosition.X, Item.RoomPosition.Y - KickPower);
+                            break;
+
+                        case 6:
+
+                            NewPoint = new Vector2(Item.RoomPosition.X - KickPower, Item.RoomPosition.Y);
+                            break;
+
+                        case 2:
+
+                            NewPoint = new Vector2(Item.RoomPosition.X + KickPower, Item.RoomPosition.Y);
+                            break;
+
+                    }
+
+                    if (Instance.IsValidStep(Item.RoomPosition.GetVector2(), NewPoint, true))
+                    {
+                        double Z = Instance.GetUserStepHeight(NewPoint);
+                        Vector3 TargetVector3 = new Vector3(NewPoint.X, NewPoint.Y, Z);
+
+                        Instance.BroadcastMessage(RollerEventComposer.Compose(Item.RoomPosition.GetVector2(), NewPoint, 0,
+                            new List<RollerEvents>() { new RollerEvents(Item.RoomPosition.Z,
+                                    Instance.GetUserStepHeight(NewPoint), 0, Item.Id) }));
+
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            Item.MoveToRoom(MySqlClient, Item.RoomId, TargetVector3, Item.RoomRotation);
+                        }
+
+                        int Minimum = 10 + (UserHasCachedDistance ? Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] : 0);
+                        int Maximum = 16;
+
+                        Item.DisplayFlags = RandomGenerator.GetNext(Minimum, Maximum).ToString();
+                        Item.BroadcastStateUpdate(Instance);
+
+                        Instance.RegenerateRelativeHeightmap(true);
+
+                        if (Instance.GameManager.UserFootBallDistance.ContainsKey(Actor.ReferenceId))
+                        {
+                            Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] = 0;
+                        }
+                    }
 
                     break;
             }

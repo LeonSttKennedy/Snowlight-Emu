@@ -218,6 +218,7 @@ namespace Snowlight
                     StatisticsSyncUtil.Initialize();
                     ShutdownCommandWorker.Initialize();
                     SubscriptionOfferManager.Initialize(MySqlClient);
+                    HolidayGiftManager.Initialize(MySqlClient);
 
                     // Polish
                     WarningSurpressors.Initialize();

@@ -245,6 +245,13 @@ namespace Snowlight.Game.Misc
                             goto End;
                         }
 
+                    case "holidaygifts":
+                        {
+                            ToSend = ExternalTexts.GetValue("command_update_holidaygifts");
+                            HolidayGiftManager.Initialize(MySqlClient);
+                            goto End;
+                        }
+
                     case "help":
                     default:
                         {
