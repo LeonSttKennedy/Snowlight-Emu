@@ -202,6 +202,7 @@ namespace Snowlight.Game.Catalog
                     {
                         CanSelect = true;
                     }
+
                     break;
                     
                 case false:
@@ -213,11 +214,13 @@ namespace Snowlight.Game.Catalog
                     {
                         CanSelect = true;
                     }
+
                     break;
                 
                 default:
 
                     CanSelect = false;
+
                     break;
             }
 

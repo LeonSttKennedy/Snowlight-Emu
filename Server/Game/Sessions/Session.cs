@@ -594,15 +594,19 @@ namespace Snowlight.Game.Sessions
                 {
                     int Year = DateTime.Now.Year;
 
-                    bool CanReceiveGift = !mHolidayGiftsCache.GiftsReceived.ContainsKey(Year) &&
-                        HolidayGiftManager.TodayGift.RequiredGiftsToUnlock.Count == 0 ||
-                        mHolidayGiftsCache.GiftsReceived.ContainsKey(Year) &&
-                        !mHolidayGiftsCache.GiftsReceived[Year].Contains(HolidayGiftManager.TodayGift.Id) &&
-                        HolidayGiftManager.TodayGift.RequiredGiftsToUnlock.Count == 0 ||
-                        mHolidayGiftsCache.GiftsReceived.ContainsKey(Year) &&
-                        !mHolidayGiftsCache.GiftsReceived[Year].Contains(HolidayGiftManager.TodayGift.Id) &&
-                        (HolidayGiftManager.TodayGift.RequiredGiftsToUnlock.Count > 0 &&
-                        Enumerable.SequenceEqual(HolidayGiftManager.TodayGift.RequiredGiftsToUnlock, mHolidayGiftsCache.GiftsReceived[Year]));
+                    bool HasYear = mHolidayGiftsCache.GiftsReceived.ContainsKey(Year);
+                    bool AlreadyReceived = HasYear && mHolidayGiftsCache.GiftsReceived[Year].Contains(HolidayGiftManager.TodayGift.Id);
+
+                    int RequirimentsCount = HolidayGiftManager.TodayGift.RequiredGiftsToUnlock.Count;
+                    bool HasRequiriments = RequirimentsCount > 0;
+                    bool NoRequiriments = RequirimentsCount == 0;
+
+                    bool RequirimentsMet = HasRequiriments &&
+                        Enumerable.SequenceEqual(HolidayGiftManager.TodayGift.RequiredGiftsToUnlock,
+                            mHolidayGiftsCache.GiftsReceived[Year]);
+
+                    bool CanReceiveGift = (!HasYear && NoRequiriments) ||
+                        (HasYear && !AlreadyReceived && (NoRequiriments || RequirimentsMet));
 
                     if (CanReceiveGift)
                     {

@@ -50,6 +50,11 @@ namespace Snowlight.Game.Misc
 
                         foreach (RoomInstance RoomInstance in CurrentInstanceList)
                         {
+                            if (RoomInstance.Unloaded)
+                            {
+                                continue;
+                            }
+
                             CharacterInfo OwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, RoomInstance.Info.OwnerId);
 
                             bool OwnerIsInRoom = RoomInstance.GetActorByReferenceId(OwnerInfo.Id) != null;
