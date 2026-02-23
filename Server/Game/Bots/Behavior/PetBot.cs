@@ -59,14 +59,42 @@ namespace Snowlight.Game.Bots.Behavior
         #region Interaction Items
         // Search for items on current room instance.
         // Find an item by current position or by item position on room
-
-        private Item GetItemPosition(ItemBehavior ItemInteraction)
+        private Item ItemSearch(int PetType, ItemBehavior ItemToInteract)
         {
-            List<Item> FloorItems = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior.Equals(ItemInteraction) && I.TemporaryInteractionReferenceIds.Count == 0).ToList();
+            Item ItemToReturn = null;
 
-            Item Item = FloorItems.FirstOrDefault();
+            List<Item> ItemList = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior.Equals(ItemToInteract) && I.Definition.PetTypeInteractors.Contains(PetType) && I.TemporaryInteractionReferenceIds.Count == 0).OrderBy(O => O.Definition.PetTypeInteractors.Count).Reverse().ToList();
 
-            return Item;
+            ItemToReturn = ItemList != null && ItemList.Count > 0 ? ItemList[RandomGenerator.GetNext(0, ItemList.Count - 1)] : null;
+
+            // If the primary search fails we will expand the item search with less specific conditions
+            if (ItemToReturn == null || ItemList.Count == 0 || (ItemToReturn == null && ItemList.Count == 0))
+            {
+                ItemList = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior.Equals(ItemToInteract) && I.Definition.PetTypeInteractors.Count == 0 && I.TemporaryInteractionReferenceIds.Count == 0).ToList();
+
+                if (ItemList.Count > 0)
+                {
+                    int Random = RandomGenerator.GetNext(0, ItemList.Count - 1);
+
+                    return ItemList[Random]; // If the room has a requisited item but this item isn't configured we will choose it randomly       
+                }
+            }
+
+            foreach (Item Item in ItemList)
+            {
+                if (ItemList.Count == 1)
+                {
+                    break;
+                }
+
+                if (Item.Definition.PetTypeInteractors.Count < ItemToReturn.Definition.PetTypeInteractors.Count &&
+                    Item.Definition.PetTypeInteractors.Contains(PetType))
+                {
+                    ItemToReturn = Item;
+                }
+            }
+
+            return ItemToReturn;
         }
 
         public Item GetItemByPosition(Vector2 Position, ItemBehavior Behavior)
@@ -87,70 +115,20 @@ namespace Snowlight.Game.Bots.Behavior
         }
         #endregion
 
-        #region Nest
-        // Search for nest in current room instance by pet type :)
-
-        private Item GetNestPosition(int PetType)
-        {
-            List<Item> Nests = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior.Equals(ItemBehavior.PetNest)).OrderBy(O => O.Definition.BehaviorData).Reverse().ToList();
-            
-            Item Item = null;
-
-            foreach (Item Items in Nests)
-            {
-                if (Items.Definition.BehaviorData == PetType && Items.TemporaryInteractionReferenceIds.Count > 0 ||
-                    Items.Definition.BehaviorData == 2 && Items.TemporaryInteractionReferenceIds.Count > 0 ||
-                    Items.Definition.BehaviorData == -1 && Items.TemporaryInteractionReferenceIds.Count > 0)
-                {
-                    continue;
-                }
-
-                if (Items.Definition.BehaviorData == PetType && Items.TemporaryInteractionReferenceIds.Count == 0 ||
-                    Items.Definition.BehaviorData == 2 && Items.TemporaryInteractionReferenceIds.Count == 0 ||
-                    Items.Definition.BehaviorData == -1 && Items.TemporaryInteractionReferenceIds.Count == 0)
-                {
-                    Item = Items;
-                    break;
-                }
-            }
-
-            return Item;
-        }
-        #endregion
-
         #region Pet Toys
-        // This need to be proper implemented
-        // Returns the Item to search in room instance by pet type
-        // Diferent pet types needs diferents toys
-
-        private ItemBehavior GetInteractionItemByType(int PetType)
+        private ItemBehavior RandonToyByPetType(int PetType)
         {
-            switch(PetType)
+            switch (PetType)
             {
                 default:
 
-                    return ItemBehavior.BallToy;
+                    return ItemBehavior.PetBall;
 
                 case 8:
-
-                    return RandomGenerator.GetNext(0, 3) == 0 ? ItemBehavior.BallToy : ItemBehavior.SpiderToy;
-
-                case 10:
-
-                    return ItemBehavior.ChickenToy;
-
-                case 11:
-
-                    return ItemBehavior.FrogToy;
-
                 case 12:
-
-                    return RandomGenerator.GetNext(0, 3) == 0 ? ItemBehavior.BallToy : ItemBehavior.DragonToy;
-
                 case 14:
 
-                    return RandomGenerator.GetNext(0, 3) == 0 ? ItemBehavior.BallToy : ItemBehavior.MonkeyToy;
-
+                    return RandomGenerator.GetNext(0, 3) == 0 ? ItemBehavior.PetBall : ItemBehavior.PetToy;
             }
         }
         #endregion
@@ -424,7 +402,7 @@ namespace Snowlight.Game.Bots.Behavior
 
                             mSelfActor.UpdateNeeded = true;
 
-                            Item Nest = GetNestPosition(mSelfBot.PetData.Type);
+                            Item Nest = ItemSearch(mSelfBot.PetData.Type, ItemBehavior.PetNest);
 
                             if (Nest != null)
                             {
@@ -444,7 +422,7 @@ namespace Snowlight.Game.Bots.Behavior
 
                             mSelfActor.UpdateNeeded = true;
 
-                            Item WaterBowl = GetItemPosition(ItemBehavior.PetWaterBowl);
+                            Item WaterBowl = ItemSearch(mSelfBot.PetData.Type, ItemBehavior.PetWaterBowl);
 
                             if (WaterBowl != null && WaterBowl.TemporaryInteractionReferenceIds.Count.Equals(0))
                             {
@@ -464,7 +442,7 @@ namespace Snowlight.Game.Bots.Behavior
 
                             mSelfActor.UpdateNeeded = true;
 
-                            Item Food = GetItemPosition(ItemBehavior.PetFood);
+                            Item Food = ItemSearch(mSelfBot.PetData.Type, ItemBehavior.PetFood);
 
                             if (Food != null)
                             {
@@ -484,7 +462,7 @@ namespace Snowlight.Game.Bots.Behavior
 
                             mSelfActor.UpdateNeeded = true;
 
-                            Item Toy = GetItemPosition(GetInteractionItemByType(mSelfBot.PetData.Type));
+                            Item Toy = ItemSearch(mSelfBot.PetData.Type, RandonToyByPetType(mSelfBot.PetData.Type));
 
                             if (Toy != null && Toy.TemporaryInteractionReferenceIds.Count.Equals(0))
                             {
@@ -782,7 +760,7 @@ namespace Snowlight.Game.Bots.Behavior
                                 ExpAdd = RandomGenerator.GetNext(1, 10);
                             }
 
-                            Trick = new PetTricks("rll", true, ItemBehavior.DragonToy);
+                            Trick = new PetTricks("rll", true, ItemBehavior.PetToy);
 
                             ChangeActionToPerformingTrick(Trick);
                             break;
@@ -796,7 +774,7 @@ namespace Snowlight.Game.Bots.Behavior
                                 ExpAdd = RandomGenerator.GetNext(1, 10);
                             }
 
-                            Trick = new PetTricks("hg", true, ItemBehavior.DragonToy);
+                            Trick = new PetTricks("hg", true, ItemBehavior.PetToy);
 
                             ChangeActionToPerformingTrick(Trick);
                             break;
@@ -824,7 +802,7 @@ namespace Snowlight.Game.Bots.Behavior
                                 ExpAdd = RandomGenerator.GetNext(1, 10);
                             }
 
-                            Trick = new PetTricks("rng", true, ItemBehavior.DragonToy);
+                            Trick = new PetTricks("rng", true, ItemBehavior.PetToy);
 
                             ChangeActionToPerformingTrick(Trick);
                             break;
@@ -852,7 +830,7 @@ namespace Snowlight.Game.Bots.Behavior
                                 ExpAdd = RandomGenerator.GetNext(1, 10);
                             }
 
-                            Trick = new PetTricks("swg", true, ItemBehavior.DragonToy);
+                            Trick = new PetTricks("swg", true, ItemBehavior.PetToy);
 
                             ChangeActionToPerformingTrick(Trick);
                             break;
@@ -1048,7 +1026,7 @@ namespace Snowlight.Game.Bots.Behavior
                                     if (RandomGenerator.GetNext(0, 4) == 0)
                                     {
                                         if (mSelfBot.PetData.Type == 12 ||
-                                            GetInteractionItemByType(mSelfBot.PetData.Type) == ItemBehavior.BallToy &&
+                                            RandonToyByPetType(mSelfBot.PetData.Type) == ItemBehavior.PetBall &&
                                             RandomGenerator.GetNext(0, 4) == 3)
                                         {
                                             goto case 7;
@@ -1190,9 +1168,9 @@ namespace Snowlight.Game.Bots.Behavior
                 case PetBotAction.PerformingTrick:
                     
                     ItemBehavior TrickBehavior = mTrick != null && mTrick.NeedsToy ? mTrick.ToyBehavior :
-                        GetInteractionItemByType(mSelfBot.PetData.Type);
+                        RandonToyByPetType(mSelfBot.PetData.Type);
 
-                    Item TrickInteractionItem = GetItemPosition(TrickBehavior);
+                    Item TrickInteractionItem = ItemSearch(mSelfBot.PetData.Type, TrickBehavior);
 
                     if(TrickInteractionItem != null && TrickInteractionItem.TemporaryInteractionReferenceIds.Count > 0
                         && TrickInteractionItem.TemporaryInteractionReferenceIds[0] != mSelfActor.Id)
@@ -1278,7 +1256,7 @@ namespace Snowlight.Game.Bots.Behavior
                 #region Sleeping
                 case PetBotAction.Sleeping:
 
-                    Item Nest = GetNestPosition(mSelfBot.PetData.Type);
+                    Item Nest = ItemSearch(mSelfBot.PetData.Type, ItemBehavior.PetNest);
 
                     if (mActionData == 0)
                     {
@@ -1350,7 +1328,7 @@ namespace Snowlight.Game.Bots.Behavior
                 #region Drinking
                 case PetBotAction.Drinking:
 
-                    Item WaterBowl = GetItemPosition(ItemBehavior.PetWaterBowl);
+                    Item WaterBowl = ItemSearch(mSelfBot.PetData.Type, ItemBehavior.PetWaterBowl);
 
                     if (WaterBowl != null && WaterBowl.TemporaryInteractionReferenceIds.Count > 0
                             && WaterBowl.TemporaryInteractionReferenceIds[0] != mSelfActor.Id)
@@ -1416,7 +1394,7 @@ namespace Snowlight.Game.Bots.Behavior
                         ChangeActionToIdle();
                     }
 
-                    Item Food = GetItemPosition(ItemBehavior.PetFood);
+                    Item Food = ItemSearch(mSelfBot.PetData.Type, ItemBehavior.PetFood);
 
                     if (Food != null && Food.TemporaryInteractionReferenceIds.Count > 0
                             && Food.TemporaryInteractionReferenceIds[0] != mSelfActor.Id)
@@ -1449,7 +1427,8 @@ namespace Snowlight.Game.Bots.Behavior
                                 InteractionFood.TemporaryInteractionReferenceIds.Add(0, mSelfActor.Id);
                             }
 
-                            string Action = mSelfBot.PetData.Type == 8 ? "shk" : "eat";
+                            string Action = InteractionFood.Definition.PetStatusses.Length > 0 ? InteractionFood.Definition.PetStatusses : "eat";
+
                             mSelfActor.HeadRotation = InteractionFood.RoomRotation;
                             mSelfActor.BodyRotation = InteractionFood.RoomRotation;
 
@@ -1511,8 +1490,8 @@ namespace Snowlight.Game.Bots.Behavior
                 #region Playing
                 case PetBotAction.Playing:
 
-                    ItemBehavior Behavior = GetInteractionItemByType(mSelfBot.PetData.Type);
-                    Item InteractionItem = GetItemPosition(Behavior);
+                    ItemBehavior PetToy = RandonToyByPetType(mSelfBot.PetData.Type);
+                    Item InteractionItem = ItemSearch(mSelfBot.PetData.Type, PetToy);
 
                     if (InteractionItem != null && InteractionItem.TemporaryInteractionReferenceIds.Count > 0
                             && InteractionItem.TemporaryInteractionReferenceIds[0] != mSelfActor.Id)
@@ -1536,15 +1515,15 @@ namespace Snowlight.Game.Bots.Behavior
                         mSelfActor.SetStatus("gst", "plf");
                         mSelfActor.UpdateNeeded = true;
 
-                        Item Interaction = GetItemByPosition(mSelfActor.Position.GetVector2(), Behavior);
+                        Item Interaction = GetItemByPosition(mSelfActor.Position.GetVector2(), PetToy);
                         if (Interaction != null && mSelfActor.Position.GetVector2().Equals(Interaction.RoomPosition.GetVector2()))
                         {
-                            int RotToAdd = 2;
-
-                            if(Interaction.Definition.Behavior == ItemBehavior.SpiderToy)
+                            if(!Interaction.TemporaryInteractionReferenceIds.ContainsKey(0))
                             {
-                                RotToAdd = Interaction.RoomRotation == 6 ? -4 : 0;
+                                Interaction.TemporaryInteractionReferenceIds.Add(0, mSelfActor.Id);
                             }
+
+                            int RotToAdd = 2;
 
                             bool NeedsRotation = mSelfActor.HeadRotation != Interaction.RoomRotation + RotToAdd &&
                                 mSelfActor.BodyRotation != Interaction.RoomRotation + RotToAdd;
@@ -1560,16 +1539,16 @@ namespace Snowlight.Game.Bots.Behavior
                             mSelfActor.SetStatus(Interaction.Definition.PetStatusses, Math.Round(mSelfActor.Position.Z, 1).ToString().Replace(',', '.'));
                             mSelfActor.UpdateNeeded = true;
 
-                            Interaction.RequestUpdate(1);
-
                             mActionData--;
                         }
 
-                        if (mActionData == 0)
+                        if (mActionData <= 1)
                         {
+                            Interaction.TemporaryInteractionReferenceIds.Remove(0);
                             Interaction.RequestUpdate(1);
 
                             mSelfActor.ClearStatusses();
+                            mSelfActor.UpdateNeeded = true;
                             ChangeActionToIdle();
                         }
                     }

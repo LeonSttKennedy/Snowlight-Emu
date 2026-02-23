@@ -255,6 +255,7 @@ namespace Snowlight
             MySqlClient.SetParameter("version", PrettyVersion);
             MySqlClient.ExecuteNonQuery("UPDATE server_statistics SET server_status = @status, active_connections = '0', rooms_loaded = '0', server_ver = @version LIMIT 1");
         }
+
         public static void HandleFatalError(string Message)
         {
             Output.WriteLine(Message, OutputLevel.CriticalError);

@@ -246,9 +246,8 @@ namespace Snowlight.Game.Items
                 return (mBehavior != ItemBehavior.Bed &&
                     mBehavior != ItemBehavior.Dice && mBehavior != ItemBehavior.HoloDice &&
                     mBehavior != ItemBehavior.LoveShuffler && mBehavior != ItemBehavior.HabboWheel &&
-                    mBehavior != ItemBehavior.StaticItem && mBehavior != ItemBehavior.BallToy &&
+                    mBehavior != ItemBehavior.StaticItem && mBehavior != ItemBehavior.PetToy &&
                     mBehavior != ItemBehavior.PetNest && mBehavior != ItemBehavior.PetFood &&
-                    mBehavior != ItemBehavior.MonkeyToy && mBehavior != ItemBehavior.SpiderToy &&
                     BehaviorData > 1) ||
                     (mBehavior == ItemBehavior.PetNest && BehaviorData == 2);
             }
@@ -267,7 +266,12 @@ namespace Snowlight.Game.Items
             get
             {
                 List<int> Copy = new List<int>();
-                Copy.AddRange(mPetTypeInteractors);
+                
+                if (mPetTypeInteractors != null)
+                {
+                    Copy.AddRange(mPetTypeInteractors);
+                }
+
                 return Copy.AsReadOnly();
             }
         }

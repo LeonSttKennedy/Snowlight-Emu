@@ -82,14 +82,6 @@ namespace Snowlight.Game.Items
 
                 mDefinitions.Add(DefinitionId, Definition);
 
-                MySqlClient.SetParameter("itembehavior", Behavior);
-                DataRow PetStatusRow = MySqlClient.ExecuteQueryRow("SELECT * FROM pet_interactions WHERE behavior = @itembehavior LIMIT 1");
-
-                if(PetStatusRow != null)
-                {
-                    Definition.SetPetStatussesInteraction(PetStatusRow["trick"].ToString());
-                }
-
                 MySqlClient.SetParameter("definitionid", DefinitionId);
                 DataRow PetTypeInteractorRow = MySqlClient.ExecuteQueryRow("SELECT * FROM pet_item_configs WHERE definition_id = @definitionid LIMIT 1");
 
@@ -105,6 +97,7 @@ namespace Snowlight.Game.Items
                     }
 
                     Definition.SetPetTypeInteractors(PetTypes);
+                    Definition.SetPetStatussesInteraction(PetTypeInteractorRow["trick"].ToString());
                 }
 
                 if (Definition.Behavior == ItemBehavior.Gift && Definition.BehaviorData == 1)

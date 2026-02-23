@@ -48,30 +48,26 @@ namespace Snowlight.Game.Items
         Gift = 41,
         PuzzleBox = 42,
         PetNest = 43,
-        BallToy = 44,
-        PetFood = 45,
-        PetWaterBowl = 46,
-        GameCounter = 47,
-        DuckHC = 48,
-        DuckVIP = 49,
-        Platform = 50,
-        WelcomeGift = 51,
-        RoomBackground = 52,
-        DragonToy = 53,
-        ChickenToy = 54,
-        FrogToy = 55,
-        MonkeyToy = 56,
-        BlackHole = 57,
-        TotemLeg = 58,
-        TotemHead = 59,
-        TotemPlanet = 60,
-        SpiderToy = 61,
-        RollerRink = 62,
-        SkateRail = 63,
-        TagPole = 64,
-        IceSkating = 65,
-        EggTagPole = 66,
-        BunnyRun = 67
+        PetToy = 44,
+        PetBall = 45,
+        PetFood = 46,
+        PetWaterBowl = 47,
+        GameCounter = 48,
+        DuckHC = 49,
+        DuckVIP = 50,
+        Platform = 51,
+        WelcomeGift = 52,
+        RoomBackground = 53,
+        BlackHole = 54,
+        TotemLeg = 55,
+        TotemHead = 56,
+        TotemPlanet = 57,
+        RollerRink = 58,
+        SkateRail = 59,
+        TagPole = 60,
+        IceSkating = 61,
+        EggTagPole = 62,
+        BunnyRun = 63
     }
 
     public static class ItemBehaviorUtil
@@ -276,29 +272,13 @@ namespace Snowlight.Game.Items
 
                     return ItemBehavior.PetNest;
 
-                case "ball_toy":
+                case "pettoy":
 
-                    return ItemBehavior.BallToy;
+                    return ItemBehavior.PetToy;
 
-                case "chicken_toy":
+                case "petball":
 
-                    return ItemBehavior.ChickenToy;
-
-                case "frog_toy":
-
-                    return ItemBehavior.FrogToy;
-
-                case "monkey_toy":
-
-                    return ItemBehavior.MonkeyToy;
-
-                case "dragon_toy":
-
-                    return ItemBehavior.DragonToy;
-
-                case "spider_toy":
-
-                    return ItemBehavior.SpiderToy;
+                    return ItemBehavior.PetBall;
 
                 case "petfood":
 

@@ -754,7 +754,8 @@ namespace Snowlight.Game.Sessions
             }
             catch (Exception e)
             {
-                Output.WriteLine("[SND] Socket is null!\n\n" + e.StackTrace, OutputLevel.CriticalError);
+                Program.HandleFatalError("[SND] Socket is null!\n\n" + e.StackTrace);
+                return;
             }
             /*
              * TODO: catch all exceptions => Stop()

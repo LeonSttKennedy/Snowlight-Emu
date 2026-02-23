@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using Snowlight.Util;
@@ -6,12 +7,12 @@ using Snowlight.Storage;
 using Snowlight.Game.Bots;
 using Snowlight.Game.Rooms;
 using Snowlight.Specialized;
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Achievements;
 using Snowlight.Game.Quests;
-using Snowlight.Communication.Outgoing;
-using System.Linq;
+using Snowlight.Game.Sessions;
 using Snowlight.Game.Characters;
+using Snowlight.Game.Achievements;
+using Snowlight.Communication.Outgoing;
+
 
 namespace Snowlight.Game.Pets
 {
@@ -19,6 +20,7 @@ namespace Snowlight.Game.Pets
     {
         public static readonly List<int> PET_EXP_LEVELS = new List<int>() { 100, 200, 400, 600, 900, 1300, 1800, 2400, 3100,
             3900, 4800, 5800, 6900, 8100, 9400, 10800, 12300, 14000, 15800, 17700 };
+
         public static readonly List<int> PET_ENERGY_LEVELS = new List<int>() { 120, 140, 160, 180, 200, 220, 240, 260, 280,
             300, 320, 340, 360, 380, 400, 420, 440, 460, 480, 500 };
 
@@ -34,6 +36,8 @@ namespace Snowlight.Game.Pets
         private double mTimestamp;
         private int mExperience;
         private int mEnergy;
+        private double mHunger;
+        private double mThirst;
         private int mHappiness;
         private int mScore;
         private uint mVirtualId;
@@ -200,6 +204,48 @@ namespace Snowlight.Game.Pets
             }
         }
 
+        public double Hunger
+        {
+            get
+            {
+                return mHunger;
+            }
+
+            set
+            {
+                mHunger = value;
+            }
+        }
+
+        public bool IsHunger
+        {
+            get
+            {
+                return mHunger > 50;
+            }
+        }
+
+        public double Thirst
+        {
+            get
+            {
+                return mThirst;
+            }
+
+            set
+            {
+                mThirst = value;
+            }
+        }
+
+        public bool IsThirst
+        {
+            get
+            {
+                return mThirst > 50;
+            }
+        }
+
         public int Energy
         {
             get
@@ -223,6 +269,14 @@ namespace Snowlight.Game.Pets
             }
         }
 
+        public bool IsEnegyLess
+        {
+            get
+            {
+                return mEnergy <= 10;
+            }
+        }
+
         public int Happiness
         {
             get
@@ -243,6 +297,30 @@ namespace Snowlight.Game.Pets
                 {
                     mHappiness = HappinessLimit;
                 }
+            }
+        }
+
+        public bool IsSad
+        {
+            get
+            {
+                return mHappiness <= 10;
+            }
+        }
+
+        public bool IsHappy
+        {
+            get
+            {
+                return mHappiness >= 90;
+            }
+        }
+
+        public bool IsPlayful
+        {
+            get
+            {
+                return IsHappy && ((mEnergy * 100) / EnergyLimit) >= 75;
             }
         }
 
@@ -299,7 +377,7 @@ namespace Snowlight.Game.Pets
         }
 
         public Pet(uint Id, string Name, int PetType, int Race, string Color, uint UserId, uint RoomId, Vector3 RoomPosition,
-            double Timestamp, int Experience, int Energy, int Happiness, int Score)
+            double Timestamp, int Experience, int Energy, double Hunger, double Thirst, int Happiness, int Score)
         {
             mId = Id;
             mName = Name;
@@ -312,6 +390,8 @@ namespace Snowlight.Game.Pets
             mTimestamp = Timestamp;
             mExperience = Experience;
             mEnergy = Energy;
+            mHunger = Hunger;
+            mThirst = Thirst;
             mHappiness = Happiness;
             mScore = Score;
         }
@@ -328,6 +408,7 @@ namespace Snowlight.Game.Pets
             mRoomPosition = RoomPosition;
             mRoomRotation = RoomRotation;
         }
+
         public void OnRespect(SqlDatabaseClient MySqlClient, RoomInstance Instance)
         {
             mScore++;
@@ -341,6 +422,7 @@ namespace Snowlight.Game.Pets
 
             AddExperience(MySqlClient, Instance, 10);
         }
+
         public void AddExperience(SqlDatabaseClient MySqlClient, RoomInstance Instance, int Amount)
         {
             int CurrentExperienceTarget = ExperienceTarget;
@@ -381,6 +463,54 @@ namespace Snowlight.Game.Pets
             }
 
             Instance.BroadcastMessage(PetAddExperiencePointsComposer.Compose(this, Amount));
+            RoomManager.MarkWriteback(this);
+        }
+
+        public void AddHunger()
+        {
+            if (mHunger < 87.5)
+            {
+                mHunger += 12.5;
+            }
+
+            RoomManager.MarkWriteback(this);
+        }
+
+        public void LoseHunger(double Decrement)
+        {
+            if ((mHunger - Decrement) < 0)
+            {
+                mHunger = 0;
+            }
+            else
+            {
+                mHunger -= Decrement;
+            }
+
+            RoomManager.MarkWriteback(this);
+        }
+
+        public void AddThirst()
+        {
+            if (mThirst < 87.5)
+            {
+                mThirst += 12.5;
+            }
+
+            RoomManager.MarkWriteback(this);
+        }
+
+        public void LoseThirst(double Decrement)
+        {
+            if ((mThirst - Decrement) < 0)
+            {
+                mThirst = 0;
+            }
+            else
+            {
+                mThirst -= Decrement;
+            }
+
             RoomManager.MarkWriteback(this);
         }
 
@@ -481,9 +611,11 @@ namespace Snowlight.Game.Pets
             MySqlClient.SetParameter("roomrot", mRoomRotation);
             MySqlClient.SetParameter("exp", mExperience);
             MySqlClient.SetParameter("energy", mEnergy);
+            MySqlClient.SetParameter("hunger", mHunger);
+            MySqlClient.SetParameter("thirst", mThirst);
             MySqlClient.SetParameter("happy", mHappiness);
             MySqlClient.SetParameter("score", mScore);
-            MySqlClient.ExecuteNonQuery("UPDATE user_pets SET room_id = @roomid, room_pos = @roompos, room_rot = @roomrot, experience = @exp, energy = @energy, happiness = @happy, score = @score WHERE id = @id LIMIT 1");
+            MySqlClient.ExecuteNonQuery("UPDATE user_pets SET room_id = @roomid, room_pos = @roompos, room_rot = @roomrot, experience = @exp, energy = @energy, hunger = @hunger, thirst = @thirst, happiness = @happy, score = @score WHERE id = @id LIMIT 1");
         }
     }
 }
