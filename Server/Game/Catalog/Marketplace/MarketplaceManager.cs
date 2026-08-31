@@ -162,7 +162,7 @@ namespace Snowlight.Game.Catalog
 
             Session.NewItemsCache.SendNewItems(Session);
             Session.SendData(InventoryRefreshComposer.Compose());
-            Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(MarketplaceError.Sucess));
+            Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(MarketplaceError.Success));
         }
 
         public static void SellItem(Session Session, uint ItemID, int ItemType, int SellingPrice)

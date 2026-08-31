@@ -59,7 +59,7 @@ namespace Snowlight.Game.Misc
 
                             bool OwnerIsInRoom = RoomInstance.GetActorByReferenceId(OwnerInfo.Id) != null;
 
-                            int UserCount = RoomInstance.Info.CurrentUsers;
+                            int UserCount = RoomInstance.HumanActorCount;
 
                             if (OwnerIsInRoom)
                             {

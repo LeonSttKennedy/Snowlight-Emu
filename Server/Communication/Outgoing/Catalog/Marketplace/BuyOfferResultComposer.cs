@@ -7,7 +7,7 @@ namespace Snowlight.Communication.Outgoing
 {
     public enum MarketplaceError
     {
-        Sucess = 1,
+        Success = 1,
         AllSoldOut = 2,
         UpdateItem = 3,
         NoCredits = 4
