@@ -32,42 +32,44 @@ namespace Snowlight.Game.Items
         FootballGate = 25,
         FootballGoal = 26,
         FootballScore = 27,
-        Dice = 28,
-        HoloDice = 29,
-        SpinningBottle = 30,
-        HabboWheel = 31,
-        LoveShuffler = 32,
-        StickyNote = 33,
-        StickyPole = 34,
-        Scoreboard = 35,
-        Pet = 36,
-        Dispenser = 37,
-        Fireworks = 38,
-        MusicDisk = 39,
-        Rental = 40,
-        Gift = 41,
-        PuzzleBox = 42,
-        PetNest = 43,
-        PetToy = 44,
-        PetBall = 45,
-        PetFood = 46,
-        PetWaterBowl = 47,
-        GameCounter = 48,
-        DuckHC = 49,
-        DuckVIP = 50,
-        Platform = 51,
-        WelcomeGift = 52,
-        RoomBackground = 53,
-        BlackHole = 54,
-        TotemLeg = 55,
-        TotemHead = 56,
-        TotemPlanet = 57,
-        RollerRink = 58,
-        SkateRail = 59,
-        TagPole = 60,
-        IceSkating = 61,
-        EggTagPole = 62,
-        BunnyRun = 63
+        IcePuck = 28,
+        Beachball = 29,
+        Dice = 30,
+        HoloDice = 31,
+        SpinningBottle = 32,
+        HabboWheel = 33,
+        LoveShuffler = 34,
+        StickyNote = 35,
+        StickyPole = 36,
+        Scoreboard = 37,
+        Pet = 38,
+        Dispenser = 39,
+        Fireworks = 40,
+        MusicDisk = 41,
+        Rental = 42,
+        Gift = 43,
+        PuzzleBox = 44,
+        PetNest = 45,
+        PetToy = 46,
+        PetBall = 47,
+        PetFood = 48,
+        PetWaterBowl = 49,
+        GameCounter = 50,
+        DuckHC = 51,
+        DuckVIP = 52,
+        Platform = 53,
+        WelcomeGift = 54,
+        RoomBackground = 55,
+        BlackHole = 56,
+        TotemLeg = 57,
+        TotemHead = 58,
+        TotemPlanet = 59,
+        RollerRink = 60,
+        SkateRail = 61,
+        TagPole = 62,
+        IceSkating = 63,
+        EggTagPole = 64,
+        BunnyRun = 65
     }
 
     public static class ItemBehaviorUtil
@@ -147,6 +149,14 @@ namespace Snowlight.Game.Items
                 case "football_score":
 
                     return ItemBehavior.FootballScore;
+
+                case "ice_puck":
+
+                    return ItemBehavior.IcePuck;
+
+                case "beach_ball":
+
+                    return ItemBehavior.Beachball;
 
                 case "autoswitch":
 

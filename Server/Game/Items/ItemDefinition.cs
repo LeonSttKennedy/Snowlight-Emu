@@ -248,6 +248,7 @@ namespace Snowlight.Game.Items
                     mBehavior != ItemBehavior.LoveShuffler && mBehavior != ItemBehavior.HabboWheel &&
                     mBehavior != ItemBehavior.StaticItem && mBehavior != ItemBehavior.PetToy &&
                     mBehavior != ItemBehavior.PetNest && mBehavior != ItemBehavior.PetFood &&
+                    mBehavior != ItemBehavior.FootballGoal &&
                     BehaviorData > 1) ||
                     (mBehavior == ItemBehavior.PetNest && BehaviorData == 2);
             }

@@ -107,6 +107,14 @@ namespace Snowlight.Game.Misc
             Queue.AppendStringWithBreak(Params[5]);
             Queue.AppendInt32(QueueInt4);
             Session.SendData(Queue);*/
+
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            { 
+                uint.TryParse(Params[1], out var result);
+
+                Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, result);
+                Session.NewItemsCache.SendNewItems(Session);
+            }
         }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Rooms;
-using Snowlight.Specialized;
 using Snowlight.Storage;
 using Snowlight.Game.Misc;
+using Snowlight.Game.Rooms;
+using Snowlight.Specialized;
+using Snowlight.Game.Sessions;
 using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
@@ -55,7 +55,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                             NewState = CurrentState + 30;
 
-                            if (CurrentState < 0 || CurrentState >= 660)
+                            if (CurrentState < 0 || CurrentState >= 720)
                             {
                                 NewState = 0;
                             }

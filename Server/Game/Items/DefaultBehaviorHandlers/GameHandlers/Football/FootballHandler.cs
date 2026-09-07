@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
-
-using Snowlight.Util;
-using Snowlight.Storage;
+﻿using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Achievements;
+using Snowlight.Game.Characters;
 using Snowlight.Game.Misc;
+using Snowlight.Game.Quests;
 using Snowlight.Game.Rooms;
+using Snowlight.Game.Sessions;
 using Snowlight.Specialized;
-using Snowlight.Communication.Outgoing;
+using Snowlight.Storage;
+using Snowlight.Util;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
@@ -14,22 +19,16 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
     {
         public static void Register()
         {
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.IcePuck, new ItemEventHandler(HandleFootballBall));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Football, new ItemEventHandler(HandleFootballBall));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.Beachball, new ItemEventHandler(HandleFootballBall));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FootballGate, new ItemEventHandler(HandleFootballGate));
         }
 
         private static bool HandleFootballBall(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
-                case ItemEventType.Placed:
-                case ItemEventType.InstanceLoaded:
-
-                    break;
-
-                case ItemEventType.Removing:
-
-                    break;
-
                 case ItemEventType.Interact:
 
                     if (!Instance.GameManager.UserFootBallDistance.ContainsKey(Actor.ReferenceId))
@@ -123,10 +122,10 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     {
                         Vector2 targetPos = new Vector2(currentPos.X + dX, currentPos.Y + dY);
 
-                        if (Instance.IsValidStep(currentPos, targetPos, false))
+                        if (Instance.IsValidStep(currentPos, targetPos, true))
                         {
                             currentPos = targetPos;
-                            
+
                             BallEvents.Add(new RollerEvents(Item.RoomPosition.Z, Instance.GetUserStepHeight(currentPos), 0, Item.Id));
                         }
                         else
@@ -134,8 +133,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                             Vector2 testX = new Vector2(currentPos.X + dX, currentPos.Y);
                             Vector2 testY = new Vector2(currentPos.X, currentPos.Y + dY);
 
-                            bool hitX = !Instance.IsValidStep(currentPos, testX, false);
-                            bool hitY = !Instance.IsValidStep(currentPos, testY, false);
+                            bool hitX = !Instance.IsValidStep(currentPos, testX, true);
+                            bool hitY = !Instance.IsValidStep(currentPos, testY, true);
 
                             if (hitX && hitY)
                             {
@@ -158,7 +157,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                             Vector2 bouncePos = new Vector2(currentPos.X + dX, currentPos.Y + dY);
 
-                            if (Instance.IsValidStep(currentPos, bouncePos, false))
+                            if (Instance.IsValidStep(currentPos, bouncePos, true))
                             {
                                 currentPos = bouncePos;
 
@@ -194,6 +193,245 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         if (Instance.GameManager.UserFootBallDistance.ContainsKey(Actor.ReferenceId))
                         {
                             Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] = 0;
+                        }
+
+                        List<Item> ItemsOnBallPosition = Instance.GetItemsOnPosition(currentPos).Where(I => I.Definition.Behavior.Equals(ItemBehavior.FootballGoal)).ToList();
+
+                        if (ItemsOnBallPosition.Count > 0)
+                        {
+                            Item FootballGoal = ItemsOnBallPosition.FirstOrDefault();
+
+                            switch (Item.Definition.Behavior)
+                            {
+
+                                case ItemBehavior.Football:
+
+                                    HandleFootballGoal(Actor, FootballGoal, Instance, ItemEventType.ItemInvoking, RequestData);
+                                    break;
+
+                                case ItemBehavior.IcePuck:
+
+                                    HandleIcePuckGoal(Actor, FootballGoal, Instance, ItemEventType.ItemInvoking, RequestData);
+                                    break;
+                            }
+                        }
+                    }
+
+                    break;
+            }
+
+            return true;
+        }
+
+        private static bool HandleFootballGate(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        {
+            switch (Event)
+            {
+                case ItemEventType.Placed:
+                case ItemEventType.InstanceLoaded:
+
+                    Instance.GameManager.RegisterFootballGate(Item);
+
+                    break;
+
+                case ItemEventType.Removing:
+
+                    Instance.GameManager.UnRegisterFootballGate(Item);
+
+                    break;
+
+                case ItemEventType.WalkOnItem:
+
+                    GameManager FootballManager = Instance.GameManager;
+
+                    TeamColors ItemGameColor = FootballManager.GateColor(GameType.Football, Item);
+
+                    if (FootballManager.GetUserTeam(Actor) == TeamColors.None)
+                    {
+                        FootballManager.AddUserToTeam(GameType.Football, ItemGameColor, Actor);
+                    }
+                    else
+                    {
+                        TeamColors AlterGameColor = FootballManager.GetUserTeam(Actor) == ItemGameColor ?
+                            TeamColors.None : ItemGameColor;
+
+                        FootballManager.RemoveOrAlterUserTeam(GameType.Football, AlterGameColor, Actor);
+                    }
+
+                    if (!string.IsNullOrEmpty(Item.Flags))
+                    {
+                        string[] ItemExtraData = Item.Flags.Split(',');
+
+                        if (ItemExtraData.Length > 1)
+                        {
+                            if (!Actor.IsBot)
+                            {
+                                Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
+                                int GenderInt = Session.CharacterInfo.Gender == CharacterGender.Male ? 0 : 1;
+                                string GenderString = Session.CharacterInfo.Gender == CharacterGender.Male ? "m" : "f";
+
+                                if (ItemExtraData[GenderInt].Contains("."))
+                                {
+                                    string NewFigure = string.Empty;
+
+                                    if (!Instance.GameManager.UserClothesHolder.ContainsKey(Session.CharacterId))
+                                    {
+                                        Instance.GameManager.UserClothesHolder.Add(Session.CharacterId, Session.CharacterInfo.Figure);
+
+                                        string[] ItemClothes = ItemExtraData[GenderInt].Split('.');
+                                        List<string> UserClothes = Session.CharacterInfo.Figure.Split('.').ToList();
+
+                                        for (int i = UserClothes.Count - 1; i >= 0; i--)
+                                        {
+                                            string UserClothePiece = UserClothes[i];
+
+                                            if (string.IsNullOrEmpty(UserClothePiece) || UserClothePiece.Length < 1) // Ignores any empty string texts
+                                            {
+                                                continue;
+                                            }
+
+                                            if (UserClothePiece.StartsWith("hd") ||
+                                                UserClothePiece.StartsWith("hr")) // Ignores any hair styles or head string texts
+                                            {
+                                                continue;
+                                            }
+
+                                            string ClothePieceCategory = UserClothePiece.Substring(0, 2);
+                                            string MatchingClothePiece = ItemClothes.FirstOrDefault(x => x.StartsWith(ClothePieceCategory));
+
+                                            if (MatchingClothePiece != null)
+                                            {
+                                                UserClothes[i] = MatchingClothePiece;
+                                            }
+                                            else
+                                            {
+                                                UserClothes.RemoveAt(i);
+                                            }
+                                        }
+
+                                        NewFigure = string.Join(".", UserClothes);
+                                    }
+                                    else
+                                    {
+                                        NewFigure = Instance.GameManager.UserClothesHolder[Session.CharacterId];
+                                        Instance.GameManager.UserClothesHolder.Remove(Session.CharacterId);
+                                    }
+
+                                    Session.CharacterInfo.UpdateFigure(GenderString, NewFigure);
+                                    Session.SendInfoUpdate();
+                                }
+                            }
+                        }
+                    }
+
+                    break;
+            }
+
+            return true;
+        }
+
+        private static bool HandleFootballGoal(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        {
+            switch (Event)
+            {
+                case ItemEventType.ItemInvoking:
+
+                    TeamColors GoalColor = Instance.GameManager.GameColorByInt(Item.Definition.BehaviorData);
+
+                    List<Item> GeneralItemsOnRoom = Instance.GetFloorItems().ToList();
+
+                    List<Item> GameCounters = GeneralItemsOnRoom.Where(I => I.Definition.Behavior.Equals(ItemBehavior.GameCounter)).ToList();
+                    int GameCounterItemsOnRoomCount = GameCounters.Count();
+
+                    if (GameCounterItemsOnRoomCount > 0)
+                    {
+                        Item GameCounter = GameCounters.FirstOrDefault();
+
+                        if (GameCounter != null && GameCounter.TimmerRunning)
+                        {
+                            TeamColors ActorTeam = Instance.GameManager.GetUserTeam(Actor);
+                            TeamColors OpponentTeam = Instance.GameManager.GetOpponentColor(GameType.Football, ActorTeam);
+
+                            bool IsOpponentGoal = Instance.GameManager.GetUserTeam(Actor) != GoalColor;
+                            TeamColors GoalScorerColor = IsOpponentGoal ? ActorTeam : OpponentTeam;
+
+                            List<Item> GameScoreboardList = GeneralItemsOnRoom.Where(I => I.Definition.Behavior.Equals(ItemBehavior.FootballScore)).ToList();
+
+                            foreach (Item Scoreboard in GameScoreboardList)
+                            {
+                                TeamColors ScoreboardColor = Instance.GameManager.GameColorByInt(Scoreboard.Definition.BehaviorData);
+
+                                if (GoalScorerColor == ScoreboardColor)
+                                {
+                                    ItemEventDispatcher.InvokeItemEventHandler(Actor, Scoreboard, Instance, ItemEventType.ItemInvoking, 2);
+                                }
+                            }
+
+                            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                            {
+                                Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
+                                uint RoomOwnerId = Instance.Info.OwnerId;
+                                CharacterInfo OwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, RoomOwnerId);
+
+                                if (Session.CharacterId != OwnerInfo.Id)
+                                {
+                                    if (OwnerInfo.HasLinkedSession)
+                                    {
+                                        Session OwnerSession = SessionManager.GetSessionByCharacterId(RoomOwnerId);
+
+                                        AchievementManager.ProgressUserAchievement(MySqlClient, OwnerSession, "ACH_FootballGoalScoredInRoom", 1);
+                                    }
+                                    else
+                                    {
+                                        AchievementManager.OfflineProgressUserAchievement(MySqlClient, RoomOwnerId, "ACH_FootballGoalScoredInRoom", 1);
+                                    }
+                                }
+
+                                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_FootballGoalScored", 1);
+                            }
+                        }
+                    }
+
+                    break;
+            }
+
+            return true;
+        }
+
+        private static bool HandleIcePuckGoal(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
+        {
+            switch (Event)
+            {
+                case ItemEventType.ItemInvoking:
+
+                    TeamColors GoalColor = Instance.GameManager.GameColorByInt(Item.Definition.BehaviorData);
+
+                    List<Item> GeneralItemsOnRoom = Instance.GetFloorItems().ToList();
+
+                    List<Item> GameCounters = GeneralItemsOnRoom.Where(I => I.Definition.Behavior.Equals(ItemBehavior.GameCounter)).ToList();
+                    int GameCounterItemsOnRoomCount = GameCounters.Count();
+
+                    if (GameCounterItemsOnRoomCount > 0)
+                    {
+                        Item GameCounter = GameCounters.FirstOrDefault();
+
+                        if (GameCounter != null && GameCounter.TimmerRunning)
+                        {
+                            TeamColors OpponentTeam = Instance.GameManager.GetOpponentColor(GameType.IceHockey, GoalColor);
+
+                            List<Item> GameScoreboardList = GeneralItemsOnRoom.Where(I => I.Definition.Behavior.Equals(ItemBehavior.FootballScore)).ToList();
+
+                            foreach (Item Scoreboard in GameScoreboardList)
+                            {
+                                TeamColors ScoreboardColor = Instance.GameManager.GameColorByInt(Scoreboard.Definition.BehaviorData);
+
+                                if (OpponentTeam == ScoreboardColor)
+                                {
+                                    ItemEventDispatcher.InvokeItemEventHandler(Actor, Scoreboard, Instance, ItemEventType.ItemInvoking, 2);
+                                }
+                            }
                         }
                     }
 

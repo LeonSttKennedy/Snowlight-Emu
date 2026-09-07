@@ -13,7 +13,6 @@ using Snowlight.Game.Rights;
 using Snowlight.Game.Catalog;
 using Snowlight.Game.Sessions;
 using Snowlight.Game.Characters;
-using Snowlight.Game.Rooms.Games;
 using Snowlight.Game.Achievements;
 using Snowlight.Communication.Outgoing;
 

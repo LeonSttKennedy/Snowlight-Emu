@@ -13,14 +13,15 @@ using Snowlight.Game.Bots;
 using Snowlight.Game.Items;
 using Snowlight.Specialized;
 using Snowlight.Game.Rights;
+using Snowlight.Game.Quests;
 using Snowlight.Game.Catalog;
 using Snowlight.Communication;
 using Snowlight.Game.Sessions;
+using Snowlight.Game.Characters;
 using Snowlight.Game.Achievements;
-using Snowlight.Game.Quests;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Communication.Incoming;
-using Snowlight.Game.Characters;
+
 
 namespace Snowlight.Game.Rooms
 {
@@ -1010,6 +1011,7 @@ namespace Snowlight.Game.Rooms
 
             Instance.RegenerateRelativeHeightmap();
         }
+
         private static void SetFootballGateData(Session Session, ClientMessage Message)
         {
             uint ItemId = Message.PopWiredUInt32();
@@ -1025,6 +1027,7 @@ namespace Snowlight.Game.Rooms
                 if (RoomItem != null)
                 {
                     string[] ItemExtraData = RoomItem.Flags.Split(',');
+
                     switch (CharGender.ToUpper())
                     {
                         case "M":

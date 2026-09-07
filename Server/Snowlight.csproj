@@ -305,11 +305,11 @@
     <Compile Include="Game\Achievements\AchievementCache.cs" />
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
     <Compile Include="Game\Achievements\AchievementManager.cs" />
-    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameScoreboardHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Defaults\GameScoreboardHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Football\FootballHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\BunnyRun\BunnyRunHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\IceSkating\IceSkatingHandler.cs" />
-    <Compile Include="Game\Items\DefaultBehaviorHandlers\SkateRailHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Skate\SkateRailHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\RollerRink\RollerRinkHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\TotemHandler.cs" />
     <Compile Include="Game\Items\ItemAchievements.cs" />
@@ -317,7 +317,7 @@
     <Compile Include="Game\Misc\HolidayGifts\HolidayGiftManager.cs" />
     <Compile Include="Game\Misc\Caches\HolidayGiftsCache.cs" />
     <Compile Include="Game\Misc\Workers\RoomVisitorWorker.cs" />
-    <Compile Include="Game\Rooms\Games\GameManager.cs" />
+    <Compile Include="Game\Rooms\GamesManager\Main.cs" />
     <Compile Include="Game\Misc\AntiMutant.cs" />
     <Compile Include="Game\Misc\Caches\MarketplaceFiltersCache.cs" />
     <Compile Include="Game\Misc\Chat\Commands\Normal\BuyTokensCommand .cs" />
@@ -374,10 +374,10 @@
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GateHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GenericHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\JukeboxHandler.cs" />
-    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameCounterHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Defaults\GameCounterHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\PetItemsHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\RandomizerHandler.cs" />
-    <Compile Include="Game\Items\DefaultBehaviorHandlers\PuzzleboxHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\PuzzleBox\PuzzleboxHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\RollerHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\TeleporterHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\TimedFurnitureHandler.cs" />
@@ -465,6 +465,7 @@
     <Compile Include="Game\Pets\PetTricks.cs" />
     <Compile Include="Game\Pets\PetCommands.cs" />
     <Compile Include="Game\Rights\InventoryBadge.cs" />
+    <Compile Include="Game\Rooms\GamesManager\Football.cs" />
     <Compile Include="Game\Rooms\Polls\RoomPollQuestions .cs" />
     <Compile Include="Game\Rooms\Polls\RoomPoll.cs" />
     <Compile Include="Game\Rooms\Polls\RoomPollManager.cs" />

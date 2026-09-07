@@ -908,6 +908,13 @@ namespace Snowlight.Game.Characters
             MySqlClient.ExecuteNonQuery("UPDATE characters SET gender = @gender, figure = @figure WHERE id = @userid LIMIT 1");
         }
 
+        public void UpdateFigure(string NewGender, string NewFigure)
+        {
+            mGender = (NewGender == "m" ? CharacterGender.Male : CharacterGender.Female);
+            mFigure = NewFigure;
+        }
+
+
         public void UpdateMotto(SqlDatabaseClient MySqlClient, string NewMotto)
         {
             mMotto = NewMotto;

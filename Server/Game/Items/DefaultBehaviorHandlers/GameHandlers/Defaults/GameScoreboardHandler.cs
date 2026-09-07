@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 
 using Snowlight.Storage;
 using Snowlight.Specialized;
@@ -16,10 +17,7 @@ using Snowlight.Game.Pathfinding;
 using Snowlight.Game.Achievements;
 
 using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Rooms.Games;
 using Snowlight.Util;
-using System.Diagnostics.Eventing.Reader;
-
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 {
@@ -84,8 +82,12 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         Val = (Val == -1 ? 0 : -1);
                     }
 
-                    Item.DisplayFlags = Val.ToString();
+                    Item.Flags = Val.ToString();
+                    Item.DisplayFlags = Item.Flags;
+
+                    RoomManager.MarkWriteback(Item, true);
                     Item.BroadcastStateUpdate(Instance);
+
                     break;
             }
 

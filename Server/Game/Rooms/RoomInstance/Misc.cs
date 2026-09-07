@@ -10,7 +10,6 @@ using Snowlight.Game.Sessions;
 using Snowlight.Communication;
 using Snowlight.Game.Characters;
 using Snowlight.Game.Items.Wired;
-using Snowlight.Game.Rooms.Games;
 using Snowlight.Game.Rooms.Events;
 using Snowlight.Game.Rooms.Trading;
 using Snowlight.Communication.Outgoing;
