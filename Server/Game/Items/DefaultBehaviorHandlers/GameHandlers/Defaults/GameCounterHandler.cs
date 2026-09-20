@@ -19,8 +19,21 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
         private static bool HandleGameCounter(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
+            GameManager GamesManager = Instance.GameManager;
+            GameType GameItem = (GameType)Item.Definition.BehaviorData;
+
             switch (Event)
             {
+                case ItemEventType.Placed:
+                case ItemEventType.InstanceLoaded:
+
+                    if(!GamesManager.GameStarted.ContainsKey(GameItem))
+                    {
+                        GamesManager.GameStarted.Add(GameItem, false);
+                    }
+
+                    break;
+
                 case ItemEventType.Interact:
 
                     int CurrentState;
@@ -36,17 +49,17 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     switch(RequestData)
                     {
                         case 0: // Interaction called by Wired
-                            
-                            Item.TimmerRunning = !Item.TimmerRunning;
-                            Item.RequestUpdate(0);
-                            
-                            break;
-
                         case 1: // Interaction called by User
 
                             Item.TimmerRunning = !Item.TimmerRunning;
                             Item.RequestUpdate(0);
-                            
+
+                            if (!GamesManager.GameStarted[GameItem])
+                            {
+                                GamesManager.GameStarted[GameItem] = Item.TimmerRunning;
+                                GamesManager.StartGame(GameItem);
+                            }
+
                             break;
 
                         case 2: // Add Time
@@ -79,6 +92,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     int.TryParse(Item.Flags, out int CurrentTime);
 
+                    GamesManager.HandleCicleGameActors(GameItem, Item);
+
                     if (Item.TimmerRunning)
                     {
                         if (CurrentTime > 0)
@@ -90,6 +105,20 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         {
                             CurrentTime = 0;
                             Item.TimmerRunning = false;
+
+                            if (GamesManager.GameStarted[GameItem])
+                            {
+                                GamesManager.StopGame(GameItem);
+                                GamesManager.GameStarted[GameItem] = Item.TimmerRunning;
+                                Item.RequestUpdate(1);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (GamesManager.GameStarted[GameItem])
+                        {
+                            GamesManager.GameStarted[GameItem] = Item.TimmerRunning;
                         }
                     }
 

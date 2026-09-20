@@ -1,14 +1,19 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Achievements;
+using Snowlight.Game.Characters;
+using Snowlight.Game.Items;
+using Snowlight.Game.Misc;
+using Snowlight.Game.Quests;
+using Snowlight.Game.Sessions;
+using Snowlight.Specialized;
+using Snowlight.Storage;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Security;
-using System.Collections.Generic;
-
-using Snowlight.Game.Misc;
-using Snowlight.Game.Items;
-using Snowlight.Specialized;
-using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Rooms
 {
@@ -53,7 +58,7 @@ namespace Snowlight.Game.Rooms
 
         private Dictionary<uint, RoomActor> mPlayingUsers;
 
-        private bool mGameStarted;
+        private Dictionary<GameType, bool> mGameStarted;
 
         #region Roller Rink
         /// <summary>
@@ -151,16 +156,16 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public bool GameStarted
+        public Dictionary<GameType, bool> GameStarted
         {
-            get 
-            { 
+            get
+            {
                 return mGameStarted;
             }
 
-            set 
+            set
             {
-                mGameStarted = value; 
+                mGameStarted = value;
             }
         }
 
@@ -168,21 +173,40 @@ namespace Snowlight.Game.Rooms
         {
             mRoomInstance = Instance;
 
+            #region Roller Skating
             mRollerStrollerAchievement = new Dictionary<uint, DateTime>();
+            #endregion
 
+            #region Ice Skating
             mIceIceBabyAchievement = new Dictionary<uint, DateTime>();
             mIceTaggedUserList = new Dictionary<uint, RoomActor>();
+            #endregion
 
+            #region Bunny Run
             mBunnyRunTaggedUserList = new Dictionary<uint, RoomActor>();
+            #endregion
 
+            #region Battle Banzai
+            #endregion
+
+            #region Freeze
+            mFreezeActorLives = new Dictionary<RoomActor, int>();
+            mFreezeActorShieldTime = new Dictionary<RoomActor, int>();
+            mFreezeActorFreezedTime = new Dictionary<RoomActor, int>();
+            mFreezeActorCooldownSnowballTime = new Dictionary<RoomActor, int>();
+            mFreezeActorPowerUp = new Dictionary<RoomActor, FreezePowerUp>();
+            mFreezeActorSnowballsPowerUpCount = new Dictionary<RoomActor, int>();
+            #endregion
+
+            #region Football
             mFootballGateTeam = new Dictionary<Item, TeamColors>();
-            mFootballActorTeam = new Dictionary<TeamColors, List<RoomActor>>();
             mUserClothesHolder = new Dictionary<uint, string>();
             mUserBallDistance = new Dictionary<uint, int>();
+            #endregion
 
             mPlayingUsers = new Dictionary<uint, RoomActor>();
 
-            mGameStarted = false;
+            mGameStarted = new Dictionary<GameType, bool>();
         }
 
         public TeamColors GateColor(GameType GameGate, Item Item)
@@ -194,7 +218,7 @@ namespace Snowlight.Game.Rooms
                 case GameType.BattleBanzai:
                 case GameType.Freeze:
 
-                    // Needs to be implemented
+                    Colors = (TeamColors)Item.Definition.BehaviorData;
 
                     break;
 
@@ -207,75 +231,33 @@ namespace Snowlight.Game.Rooms
             return Colors;
         }
 
-        public void AddUserToTeam(GameType Type, TeamColors Color, RoomActor Actor)
+        public int GameTeamPlayerCount(GameType Game, TeamColors Color)
         {
-            switch (Type)
+            int Count = 0;
+
+            List<RoomActor> Actors = mRoomInstance.Actors.Where(A => A.PlayingGameType == Game && A.PlayerTeamColor == Color).ToList();
+
+            if (Actors != null)
             {
-                case GameType.Football:
-
-                    if (!mFootballActorTeam.ContainsKey(Color))
-                    {
-                        mFootballActorTeam.Add(Color, new List<RoomActor>());
-                    }
-
-                    if (!mFootballActorTeam[Color].Contains(Actor))
-                    {
-                        mFootballActorTeam[Color].Add(Actor);
-                    }
-
-                    break;
-
+                Count = Actors.Count;
             }
+
+            return Count;
         }
 
-        public void RemoveOrAlterUserTeam(GameType Type, TeamColors NewColor, RoomActor Actor)
+        public void RemoveTeamColor(GameType Game, TeamColors Color)
         {
-            bool Remove = NewColor == TeamColors.None;
+            List<RoomActor> Actors = mRoomInstance.Actors.Where(A => A.PlayingGameType == Game && A.PlayerTeamColor == Color).ToList();
 
-            switch (Type)
+            int ClearEffect = 0;
+
+            foreach (RoomActor Actor in Actors)
             {
-                case GameType.Football:
+                Actor.PlayingGameType = GameType.None;
+                Actor.PlayerTeamColor = TeamColors.None;
 
-                    if (!Remove)
-                    {
-                        if (!mFootballActorTeam.ContainsKey(NewColor))
-                        {
-                            mFootballActorTeam.Add(NewColor, new List<RoomActor>());
-                        }
-                        else
-                        {
-                            mFootballActorTeam[NewColor].Add(Actor);
-                        }
-                    }
-
-                    foreach (KeyValuePair<TeamColors, List<RoomActor>> KeyValuePair in mFootballActorTeam)
-                    {
-                        if (KeyValuePair.Value.Contains(Actor) &&
-                            (KeyValuePair.Key != NewColor || Remove))
-                        {
-                            KeyValuePair.Value.Remove(Actor);
-                            break;
-                        }
-                    }
-
-                    break;
+                Actor.ApplyEffect(ClearEffect, true);
             }
-        }
-
-        public TeamColors GetUserTeam(RoomActor Actor)
-        {
-            TeamColors ActorTeam = TeamColors.None;
-
-            foreach (KeyValuePair<TeamColors, List<RoomActor>> KeyValuePair in mFootballActorTeam)
-            {
-                if (KeyValuePair.Value.Contains(Actor))
-                {
-                    ActorTeam = KeyValuePair.Key;
-                    break;
-                }
-            }
-            
-            return ActorTeam;
         }
 
         public TeamColors GetOpponentColor(GameType Game, TeamColors Color)
@@ -312,6 +294,247 @@ namespace Snowlight.Game.Rooms
         public TeamColors GameColorByInt(int Number)
         {
             return (TeamColors)Number;
+        }
+
+        public void HandleCicleGameActors(GameType Game, Item Counter)
+        {
+            List<RoomActor> PlayingActors = mRoomInstance.Actors.Where(A => A.PlayingGameType == Game).ToList();
+
+            switch (Game)
+            {
+                case GameType.Freeze:
+
+                    foreach(TeamColors Colors in Enum.GetValues(typeof(TeamColors)))
+                    {
+                        if (Colors == TeamColors.None)
+                        {
+                            continue;
+                        }
+
+                        foreach (RoomActor Actor in PlayingActors.Where(C => C.PlayerTeamColor == Colors))
+                        {
+                            if (mFreezeActorFreezedTime.ContainsKey(Actor))
+                            {
+                                if (mFreezeActorFreezedTime[Actor] > 0)
+                                {
+                                    if (Counter.TimmerRunning)
+                                    {
+                                        mFreezeActorFreezedTime[Actor]--;
+                                    }
+                                    else
+                                    {
+                                        mFreezeActorFreezedTime[Actor] = 0;
+                                    }
+                                }
+
+                                if (mFreezeActorFreezedTime[Actor] == 0)
+                                {
+                                    int ApplyEffect = 39 + (int)Colors;
+                                    Actor.ApplyEffect(ApplyEffect, true);
+
+                                    Actor.UnblockWalking();
+
+                                    mFreezeActorFreezedTime.Remove(Actor);
+                                }
+                            }
+
+                            if (mFreezeActorShieldTime.ContainsKey(Actor))
+                            {
+                                if (mFreezeActorShieldTime[Actor] > 0)
+                                {
+                                    if (Counter.TimmerRunning)
+                                    {
+                                        mFreezeActorShieldTime[Actor]--;
+                                    }
+                                    else
+                                    {
+                                        mFreezeActorShieldTime[Actor] = 0;
+                                    }
+                                }
+
+                                if (mFreezeActorShieldTime[Actor] == 0)
+                                {
+                                    int ApplyEffect = 39 + (int)Colors;
+                                    Actor.ApplyEffect(ApplyEffect, true);
+
+                                    mFreezeActorShieldTime.Remove(Actor);
+                                }
+                            }
+
+                            if (mFreezeActorCooldownSnowballTime.ContainsKey(Actor))
+                            {
+                                if (mFreezeActorCooldownSnowballTime[Actor] > 0)
+                                {
+                                    if (Counter.TimmerRunning)
+                                    {
+                                        mFreezeActorCooldownSnowballTime[Actor]--;
+                                    }
+                                    else
+                                    {
+                                        mFreezeActorCooldownSnowballTime[Actor] = 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    break;
+            }
+        }
+
+        public void StartGame(GameType Game)
+        {
+            List<RoomActor> PlayingActors = mRoomInstance.Actors.Where(A => A.PlayingGameType == Game).ToList();
+
+            switch (Game)
+            {
+                case GameType.Freeze:
+
+                    List<Item> FreezeItems = new List<Item>();
+
+                    List<Item> FreezeTileItems = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.FreezeTile).ToList();
+                    List<Item> FreezeBlockItems = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.FreezeBlock).ToList();
+
+                    FreezeItems.AddRange(FreezeTileItems);
+                    FreezeItems.AddRange(FreezeBlockItems);
+
+                    foreach (Item Item in FreezeItems)
+                    {
+                        ItemEventDispatcher.InvokeItemEventHandler(null, Item, mRoomInstance, ItemEventType.InstanceLoaded);
+                    }
+
+                    ChangeFreezeScoreState(0);
+
+                    foreach (RoomActor Actor in PlayingActors)
+                    {
+                        if (!mFreezeActorLives.ContainsKey(Actor))
+                        {
+                            mFreezeActorLives.Add(Actor, 0);
+                        }
+
+                        mFreezeActorLives[Actor] = 3;
+
+                        Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
+                        if (Session != null)
+                        {
+                            Session.SendData(GameLivesComposer.Compose(Actor.Id, mFreezeActorLives[Actor]));
+
+                            QuestManager.ProgressUserQuest(Session, QuestType.FREEZE_PLAY);
+                        }
+                        
+
+                        if (!mFreezeActorCooldownSnowballTime.ContainsKey(Actor))
+                        {
+                            mFreezeActorCooldownSnowballTime.Add(Actor, 0);
+                        }
+
+                        ChangeFreezeScoreState(40, Actor.PlayerTeamColor);
+                    }
+
+                    break;
+            }
+        }
+
+        public void StopGame(GameType Game)
+        {
+            List<RoomActor> PlayingActors = mRoomInstance.Actors.Where(A => A.PlayingGameType == Game).ToList();
+
+            switch (Game)
+            {
+                case GameType.Freeze:
+
+                    List<Item> FreezeTileItems = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.FreezeTile).ToList();
+
+                    foreach (Item Item in FreezeTileItems)
+                    {
+                        ItemEventDispatcher.InvokeItemEventHandler(null, Item, mRoomInstance, ItemEventType.InstanceLoaded);
+                    }
+
+                    List<Item> ScoreboardItems = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.FreezeScore).ToList();
+
+                    int WinnerPoints = 0;
+                    TeamColors Winner = TeamColors.None;
+
+                    foreach (Item Item in ScoreboardItems)
+                    {
+                        int.TryParse(Item.DisplayFlags, out int TeamPoints);
+
+                        if (TeamPoints > WinnerPoints)
+                        {
+                            WinnerPoints = TeamPoints;
+                            Winner = (TeamColors)Item.Definition.BehaviorData;
+                        }
+                    }
+
+                    foreach (RoomActor Actor in PlayingActors)
+                    {
+                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                        {
+                            CharacterInfo ActorInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, Actor.ReferenceId);
+
+                            if (ActorInfo.HasLinkedSession)
+                            {
+                                Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
+                                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_FreezePlayer", 1);
+
+                                if (Actor.PlayerTeamColor == Winner)
+                                {
+                                    Actor.Wave();
+
+                                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_FreezeWinner", 1);
+
+                                    QuestManager.ProgressUserQuest(Session, QuestType.FREEZE_WINNER);
+                                }
+                            }
+                        }
+                        
+
+                        if (mFreezeActorFreezedTime.ContainsKey(Actor) ||
+                            mFreezeActorShieldTime.ContainsKey(Actor))
+                        {
+                            int ApplyEffect = 39 + (int)Actor.PlayerTeamColor;
+                            Actor.ApplyEffect(ApplyEffect, true);
+
+                            if (mFreezeActorFreezedTime.ContainsKey(Actor) &&
+                                mFreezeActorFreezedTime[Actor] > 0)
+                            {
+                                Actor.UnblockWalking();
+                            }
+                        }
+
+                        UnregisterFreezeActor(Actor);
+                    }
+
+                    break;
+            }
+        }
+
+        public void ForceStopGame(GameType Game)
+        {
+            List<RoomActor> PlayingActors = mRoomInstance.Actors.Where(A => A.PlayingGameType != Game).ToList();
+
+            switch (Game)
+            {
+                case GameType.Freeze:
+
+                    bool OnlyRemainingATeam = PlayingActors.Select(T => T.PlayerTeamColor).Distinct().Count() == 1;
+
+                    if (OnlyRemainingATeam)
+                    {
+                        Item GameCounter = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.GameCounter && (GameType)I.Definition.BehaviorData == Game).FirstOrDefault();
+                        
+                        if(GameCounter != null)
+                        {
+                            GameCounter.TimmerRunning = false;
+                        }
+                        
+                        StopGame(Game);
+                    }
+
+                    break;
+            }
         }
     }
 }

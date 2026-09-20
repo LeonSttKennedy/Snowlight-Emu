@@ -217,6 +217,7 @@ namespace Snowlight.Communication
         public const uint WIRED_FURNI_TRIGGER = 650;
         public const uint WIRED_FURNI_ACTION = 651;
         public const uint WIRED_FURNI_CONDITION = 652;
+        public const uint FREEZE_GAME_LIVES = 701;
         public const uint QUEST_LIST = 800;
         public const uint QUEST_COMPLETED = 801;
         public const uint QUEST_STARTED = 802;

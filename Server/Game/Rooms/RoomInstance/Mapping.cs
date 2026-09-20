@@ -186,8 +186,25 @@ namespace Snowlight.Game.Rooms
                             break;
 
                         case ItemBehavior.Gate:
+                        case ItemBehavior.BanzaiPyramid:
+                        case ItemBehavior.FreezeGeysir:
+                        case ItemBehavior.BanzaiGate:
+                        case ItemBehavior.FreezeGate:
+                        case ItemBehavior.FreezeBlock:
 
-                            MovementNode = Item.Flags == "1" ? UserMovementNode.Walkable : UserMovementNode.Blocked;
+                            bool Operator = Item.Flags == "1";
+
+                            switch (Item.Definition.Behavior)
+                            {
+                                case ItemBehavior.BanzaiGate:
+                                case ItemBehavior.FreezeGate:
+                                case ItemBehavior.FreezeBlock:
+
+                                    Operator = !Item.LockTileSquare;
+                                    break;
+                            }
+
+                            MovementNode = Operator ? UserMovementNode.Walkable : UserMovementNode.Blocked;
                             break;
 
                         case ItemBehavior.AvatarEffectGenerator:

@@ -267,6 +267,7 @@
     <Compile Include="Communication\Outgoing\Rooms\TradeFinalizingComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\TradeInitiatedComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\TradeOffersComposer.cs" />
+    <Compile Include="Communication\Outgoing\User\GameLivesComposer.cs" />
     <Compile Include="Communication\Outgoing\User\SendNewUsernameComposer.cs" />
     <Compile Include="Communication\Outgoing\User\CheckUsernameResultComposer.cs" />
     <Compile Include="Communication\Outgoing\User\ChangeUsernameResultComposer.cs" />
@@ -305,9 +306,10 @@
     <Compile Include="Game\Achievements\AchievementCache.cs" />
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
     <Compile Include="Game\Achievements\AchievementManager.cs" />
-    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Defaults\GameScoreboardHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Banzai\BanzaiHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Football\FootballHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\BunnyRun\BunnyRunHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Freeze\FreezeHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\IceSkating\IceSkatingHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Skate\SkateRailHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\RollerRink\RollerRinkHandler.cs" />
@@ -317,6 +319,8 @@
     <Compile Include="Game\Misc\HolidayGifts\HolidayGiftManager.cs" />
     <Compile Include="Game\Misc\Caches\HolidayGiftsCache.cs" />
     <Compile Include="Game\Misc\Workers\RoomVisitorWorker.cs" />
+    <Compile Include="Game\Rooms\GamesManager\Banzai.cs" />
+    <Compile Include="Game\Rooms\GamesManager\Freeze.cs" />
     <Compile Include="Game\Rooms\GamesManager\Main.cs" />
     <Compile Include="Game\Misc\AntiMutant.cs" />
     <Compile Include="Game\Misc\Caches\MarketplaceFiltersCache.cs" />

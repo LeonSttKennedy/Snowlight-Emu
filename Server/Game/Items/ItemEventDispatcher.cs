@@ -51,7 +51,6 @@ namespace Snowlight.Game.Items
 
             PetItemsHandler.Register();
             GameCounterHandler.Register();
-            GameScoreboardHandler.Register();
             PuzzleboxHandler.Register();
             WelcomeGiftHandler.Register();
             WiredHandler.Register();
@@ -61,6 +60,8 @@ namespace Snowlight.Game.Items
             IceSkatingHandler.Register();
             BunnyRunHandler.Register();
             FootballHandler.Register();
+            BanzaiHandler.Register();
+            FreezeHandler.Register();
         }
 
         public static void InvokeItemEventHandler(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData = 0)

@@ -11,7 +11,6 @@ namespace Snowlight.Game.Rooms
     public partial class GameManager
     {
         private Dictionary<Item, TeamColors> mFootballGateTeam;
-        private Dictionary<TeamColors, List<RoomActor>> mFootballActorTeam;
         private Dictionary<uint, string> mUserClothesHolder;
         private Dictionary<uint, int> mUserBallDistance;
 
@@ -25,19 +24,6 @@ namespace Snowlight.Game.Rooms
             set
             {
                 mFootballGateTeam = value;
-            }
-        }
-
-        public Dictionary<TeamColors, List<RoomActor>> FootballActorTeam
-        {
-            get
-            {
-                return mFootballActorTeam;
-            }
-
-            set
-            {
-                mFootballActorTeam = value;
             }
         }
 

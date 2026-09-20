@@ -69,7 +69,15 @@ namespace Snowlight.Game.Items
         TagPole = 62,
         IceSkating = 63,
         EggTagPole = 64,
-        BunnyRun = 65
+        BunnyRun = 65,
+        BanzaiGate = 66,
+        BanzaiPyramid = 67,
+        FreezeGate = 68,
+        FreezeGeysir = 69,
+        FreezeTile = 70,
+        FreezeBlock = 71,
+        FreezeScore = 72,
+        FreezeExitTile = 73
     }
 
     public static class ItemBehaviorUtil
@@ -157,6 +165,38 @@ namespace Snowlight.Game.Items
                 case "beach_ball":
 
                     return ItemBehavior.Beachball;
+
+                case "banzai_gate":
+
+                    return ItemBehavior.BanzaiGate;
+
+                case "banzai_pyramid":
+
+                    return ItemBehavior.BanzaiPyramid;
+
+                case "freeze_gate":
+
+                    return ItemBehavior.FreezeGate;
+
+                case "freeze_geysir":
+
+                    return ItemBehavior.FreezeGeysir;
+
+                case "freeze_tile":
+
+                    return ItemBehavior.FreezeTile;
+
+                case "freeze_block":
+
+                    return ItemBehavior.FreezeBlock;
+
+                case "freeze_scoreboard":
+
+                    return ItemBehavior.FreezeScore;
+
+                case "freeze_exit":
+
+                    return ItemBehavior.FreezeExitTile;
 
                 case "autoswitch":
 

@@ -35,6 +35,7 @@ namespace Snowlight.Game.Items
         private double mExpireTimestamp;
 
         private bool mTimmerRunning;
+        private bool mLockTileSquare;
         private WiredData mWiredData;
 
         public uint Id
@@ -320,6 +321,19 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public bool LockTileSquare
+        {
+            get
+            {
+                return mLockTileSquare;
+            }
+
+            set
+            {
+                mLockTileSquare = value;
+            }
+        }
+
         public WiredData WiredData
         {
             get
@@ -354,6 +368,7 @@ namespace Snowlight.Game.Items
             mExpireTimestamp = ExpireTimestamp;
 
             mTimmerRunning = false;
+            mLockTileSquare = false;
 
             if (WiredManager != null && (mCachedDefinition.Behavior == ItemBehavior.WiredCondition || mCachedDefinition.Behavior == ItemBehavior.WiredTrigger || mCachedDefinition.Behavior == ItemBehavior.WiredEffect))
             {

@@ -9,6 +9,7 @@ namespace Snowlight.Game.Quests
 {
     public enum QuestType
     {
+        NONE = -1,
         FURNI_MOVE = 0,
         FURNI_ROTATE = 1,
         FURNI_PLACE = 2,
@@ -34,7 +35,19 @@ namespace Snowlight.Game.Quests
         PET_TO_OTHER_ROOM = 22,
         PETS_IN_ROOM = 23,
         SCRATCH_A_PET = 24,
-        FIND_A_PET_TYPE = 25
+        FIND_A_PET_TYPE = 25,
+        FREEZE_JOIN = 26,
+        FREEZE_PLAY = 27,
+        FREEZE_THROW_BOMB = 28,
+        FREEZE_WINNER = 29,
+        FREEZE_SNOWBALL_HIT = 30,
+        FREEZE_POWERUPPER = 31,
+        FREEZE_EXTRA_LIFE = 32,
+        FREEZE_SHIELD = 33,
+        FREEZE_XBOMB = 34,
+        FREEZE_MEGA_BOMB = 35,
+        FREEZE_MORE_BOMBS = 36,
+        FREEZE_BIGGER_BOMB = 37
     }
 
     public class Quest
@@ -49,6 +62,7 @@ namespace Snowlight.Game.Quests
         private SeasonalCurrencyList mSeasonalCurrency;
         private int mReward;
         private string mDataBit;
+        private string mAchievement;
 
         public uint Id
         {
@@ -221,6 +235,14 @@ namespace Snowlight.Game.Quests
             }
         }
 
+        public string Achievement
+        {
+            get
+            {
+                return mAchievement;
+            }
+        }
+
         public Quest(uint Id, string Category, int Number, QuestType GoalType, uint GoalData, ItemBehavior GoalDataBehavior,
             string Name, SeasonalCurrencyList SeasonalCurrency, int Reward, string DataBit)
         {
@@ -234,6 +256,7 @@ namespace Snowlight.Game.Quests
             mSeasonalCurrency = SeasonalCurrency;
             mReward = Reward;
             mDataBit = DataBit;
+            mAchievement = string.Empty;
         }
 
         public bool IsCompleted(int UserProgress)
@@ -250,6 +273,11 @@ namespace Snowlight.Game.Quests
 
                     return (UserProgress >= 1);
             }
+        }
+
+        public void SetAchievement(string AchievementCode)
+        {
+            mAchievement = AchievementCode;
         }
     }
 }

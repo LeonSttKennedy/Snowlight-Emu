@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Snowlight.Communication;
+using Snowlight.Communication.Incoming;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Achievements;
+using Snowlight.Game.Catalog;
+using Snowlight.Game.Items;
+using Snowlight.Game.Sessions;
+using Snowlight.Storage;
+using Snowlight.Util;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Collections.Generic;
-
-using Snowlight.Storage;
-using Snowlight.Game.Sessions;
-using Snowlight.Communication;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Communication.Incoming;
-using Snowlight.Util;
-using Snowlight.Game.Items;
-using Snowlight.Game.Catalog;
 
 namespace Snowlight.Game.Quests
 {
@@ -61,10 +61,20 @@ namespace Snowlight.Game.Quests
 
                 foreach (DataRow Row in Table.Rows)
                 {
-                    mQuests.Add((uint)Row["id"], new Quest((uint)Row["id"], (string)Row["category"], (int)Row["series_number"],
+                    Quest Quest = new Quest((uint)Row["id"], (string)Row["category"], (int)Row["series_number"],
                         (QuestType)((int)Row["goal_type"]), (uint)Row["goal_data"], (ItemBehavior)(uint)Row["goal_data_behavior"],
                         (string)Row["name"], SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()),
-                        (int)Row["reward"], (string)Row["data_bit"]));
+                        (int)Row["reward"], (string)Row["data_bit"]);
+
+                    mQuests.Add(Quest.Id, Quest);
+
+                    MySqlClient.SetParameter("category", Quest.Category);
+                    string Achievement = (string)MySqlClient.ExecuteScalar("SELECT achievement_code FROM quests_achievements WHERE category = @category");
+
+                    if(Achievement != null)
+                    {
+                        Quest.SetAchievement(Achievement);
+                    }
                 }
 
                 MySqlClient.SetParameter("enabled", "1");
@@ -182,11 +192,17 @@ namespace Snowlight.Game.Quests
                 
                 if (PassQuest)
                 {
+                    if (UserQuest.Achievement != string.Empty)
+                    {
+                        AchievementManager.ProgressUserAchievement(MySqlClient, Session, UserQuest.Achievement, 1);
+                    }
+
                     Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, UserQuest.SeasonalCurrency, UserQuest.Reward);
                     if(UserQuest.SeasonalCurrency == SeasonalCurrencyList.Pixels)
                     {
                         Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0], UserQuest.Reward));
                     }
+
                     Session.SendData(UserActivityPointsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints));
 
                     Quest NextQuest = GetNextQuestInSeries(UserQuest.Category, UserQuest.Number + 1);
