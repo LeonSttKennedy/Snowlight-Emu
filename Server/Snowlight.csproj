@@ -319,6 +319,7 @@
     <Compile Include="Game\Misc\HolidayGifts\HolidayGiftManager.cs" />
     <Compile Include="Game\Misc\Caches\HolidayGiftsCache.cs" />
     <Compile Include="Game\Misc\Workers\RoomVisitorWorker.cs" />
+    <Compile Include="Game\Quests\QuestTypeUtil.cs" />
     <Compile Include="Game\Rooms\GamesManager\Banzai.cs" />
     <Compile Include="Game\Rooms\GamesManager\Freeze.cs" />
     <Compile Include="Game\Rooms\GamesManager\Main.cs" />

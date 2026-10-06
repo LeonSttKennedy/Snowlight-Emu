@@ -72,12 +72,17 @@ namespace Snowlight.Game.Items
         BunnyRun = 65,
         BanzaiGate = 66,
         BanzaiPyramid = 67,
-        FreezeGate = 68,
-        FreezeGeysir = 69,
-        FreezeTile = 70,
-        FreezeBlock = 71,
-        FreezeScore = 72,
-        FreezeExitTile = 73
+        BanzaiSphere = 68,
+        BanzaiTile = 69,
+        BanzaiPuck = 70,
+        BanzaiTeleporter = 71,
+        BanzaiScore = 72,
+        FreezeGate = 73,
+        FreezeGeysir = 74,
+        FreezeTile = 75,
+        FreezeBlock = 76,
+        FreezeScore = 77,
+        FreezeExitTile = 78
     }
 
     public static class ItemBehaviorUtil
@@ -173,6 +178,26 @@ namespace Snowlight.Game.Items
                 case "banzai_pyramid":
 
                     return ItemBehavior.BanzaiPyramid;
+
+                case "banzai_sphere":
+
+                    return ItemBehavior.BanzaiSphere;
+
+                case "banzai_tile":
+
+                    return ItemBehavior.BanzaiTile;
+
+                case "banzai_puck":
+
+                    return ItemBehavior.BanzaiPuck;
+
+                case "banzai_teleporter":
+
+                    return ItemBehavior.BanzaiTeleporter;
+
+                case "banzai_scoreboard":
+
+                    return ItemBehavior.BanzaiScore;
 
                 case "freeze_gate":
 

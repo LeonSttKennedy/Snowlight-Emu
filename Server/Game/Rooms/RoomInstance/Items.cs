@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Snowlight.Communication.Outgoing;
+using Snowlight.Config;
+using Snowlight.Game.Advertisements;
+using Snowlight.Game.Items;
+using Snowlight.Game.Pathfinding;
+using Snowlight.Game.Sessions;
+using Snowlight.Specialized;
+using Snowlight.Util;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
-using Snowlight.Specialized;
-using Snowlight.Game.Items;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Sessions;
-using Snowlight.Config;
-using Snowlight.Util;
-using Snowlight.Game.Advertisements;
+using System.Linq;
 
 namespace Snowlight.Game.Rooms
 {
@@ -145,6 +146,20 @@ namespace Snowlight.Game.Rooms
             }
 
             mItemLimitCache[Behavior]--;
+        }
+
+        public bool CanMoveItem(Vector2 To)
+        {
+            if (!IsValidPosition(To) ||
+                mTileStates[To.X, To.Y] == TileState.Blocked ||
+                mStackingBehaviors[To.X, To.Y] == ItemStackingBehavior.Terminator ||
+                mStackingBehaviors[To.X, To.Y] == ItemStackingBehavior.InitiateAndTerminate)
+
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public double GetItemPlacementHeight(Item Item, List<Vector2> AffectedTiles, bool RotateOnly)
@@ -327,7 +342,7 @@ namespace Snowlight.Game.Rooms
                         {
                             Vector2 _Vector = new Vector2(Position.X + x, Position.Y + y);
 
-                            if (!Tiles.Contains(Vector))
+                            if (!Tiles.Contains(_Vector))
                             {
                                 Tiles.Add(_Vector);
                             }
@@ -349,9 +364,9 @@ namespace Snowlight.Game.Rooms
                         {
                             Vector2 _Vector = new Vector2(Position.X + x, Position.Y + y);
 
-                            if (!Tiles.Contains(Vector))
+                            if (!Tiles.Contains(_Vector))
                             {
-                                Tiles.Add(Vector);
+                                Tiles.Add(_Vector);
                             }
                         }
                     }
@@ -360,6 +375,7 @@ namespace Snowlight.Game.Rooms
 
             return Tiles;
         }
+
         public List<Vector2> CalculateAffectedTiles(StaticObject Object, Vector2 Position, int Rotation)
         {
             List<Vector2> Tiles = new List<Vector2>();
@@ -410,7 +426,7 @@ namespace Snowlight.Game.Rooms
                         {
                             Vector2 _Vector = new Vector2(Position.X + x, Position.Y + y);
 
-                            if (!Tiles.Contains(Vector))
+                            if (!Tiles.Contains(_Vector))
                             {
                                 Tiles.Add(_Vector);
                             }
@@ -432,9 +448,9 @@ namespace Snowlight.Game.Rooms
                         {
                             Vector2 _Vector = new Vector2(Position.X + x, Position.Y + y);
 
-                            if (!Tiles.Contains(Vector))
+                            if (!Tiles.Contains(_Vector))
                             {
-                                Tiles.Add(Vector);
+                                Tiles.Add(_Vector);
                             }
                         }
                     }

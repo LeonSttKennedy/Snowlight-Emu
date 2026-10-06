@@ -12,7 +12,6 @@ namespace Snowlight.Game.Rooms
     {
         private Dictionary<Item, TeamColors> mFootballGateTeam;
         private Dictionary<uint, string> mUserClothesHolder;
-        private Dictionary<uint, int> mUserBallDistance;
 
         public Dictionary<Item, TeamColors> FootballGateTeam
         {
@@ -38,19 +37,6 @@ namespace Snowlight.Game.Rooms
             set
             {
                 mUserClothesHolder = value; 
-            }
-        }
-
-        public Dictionary<uint, int> UserFootBallDistance
-        {
-            get
-            {
-                return mUserBallDistance;
-            }
-
-            set
-            {
-                mUserBallDistance = value;
             }
         }
 

@@ -30,20 +30,9 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
         {
             switch (Event)
             {
-                case ItemEventType.Interact:
-
-                    if (!Instance.GameManager.UserFootBallDistance.ContainsKey(Actor.ReferenceId))
-                    {
-                        Instance.GameManager.UserFootBallDistance.Add(Actor.ReferenceId, 0);
-                    }
-
-                    Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] = Distance.Calculate(Actor.Position.GetVector2(), Item.RoomPosition.GetVector2());
-
-                    break;
-
                 case ItemEventType.UpdateTick:
 
-                    int ItemFlags = int.Parse(Item.DisplayFlags);
+                    int.TryParse(Item.DisplayFlags, out int ItemFlags);
 
                     if (ItemFlags > 10)
                     {
@@ -58,61 +47,58 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     List<RollerEvents> BallEvents = new List<RollerEvents>();
 
-                    bool UserHasCachedDistance = Instance.GameManager.UserFootBallDistance.ContainsKey(Actor.ReferenceId) &&
-                        Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] > 0;
+                    int PlayerDistance = Distance.Calculate(Actor.FromPosition, Item.RoomPosition.GetVector2());
+                    
+                    int Random = RandomGenerator.GetNext(0, 2);
+                    int KickPower = RandomGenerator.GetNext(1, PlayerDistance + (Random == 0 ? 1 : 0));
 
-                    int PlayerDistance = UserHasCachedDistance ? Instance.GameManager.UserFootBallDistance[Actor.ReferenceId]
-                        : Distance.Calculate(Actor.Position.GetVector2(), Item.RoomPosition.GetVector2());
-
-                    int KickPower = RandomGenerator.GetNext(1, PlayerDistance + 1);
-
-                    int dX = 0;
-                    int dY = 0;
+                    int TempX = 0;
+                    int TempY = 0;
 
                     switch (Actor.BodyRotation)
                     {
                         case 4:
 
-                            dY = 1;
+                            TempY = 1;
                             break;
 
                         case 0:
 
-                            dY = -1;
+                            TempY = -1;
                             break;
 
                         case 6:
 
-                            dX = -1;
+                            TempX = -1;
                             break;
 
                         case 2:
 
-                            dX = 1;
+                            TempX = 1;
                             break;
 
                         case 3:
 
-                            dX = 1;
-                            dY = 1;
+                            TempX = 1;
+                            TempY = 1;
                             break;
 
                         case 1:
 
-                            dX = 1;
-                            dY = -1;
+                            TempX = 1;
+                            TempY = -1;
                             break;
 
                         case 7:
 
-                            dX = -1;
-                            dY = -1;
+                            TempX = -1;
+                            TempY = -1;
                             break;
 
                         case 5:
 
-                            dX = -1;
-                            dY = 1;
+                            TempX = -1;
+                            TempY = 1;
                             break;
 
                     }
@@ -121,46 +107,46 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     for (int i = 0; i < KickPower; i++)
                     {
-                        Vector2 targetPos = new Vector2(UpdatedPos.X + dX, UpdatedPos.Y + dY);
+                        Vector2 BouncePosition = new Vector2(UpdatedPos.X + TempX, UpdatedPos.Y + TempY);
 
-                        if (Instance.IsValidStep(UpdatedPos, targetPos, true))
+                        if (Instance.CanMoveItem(BouncePosition))
                         {
-                            UpdatedPos = targetPos;
+                            UpdatedPos = BouncePosition;
 
                             BallEvents.Add(new RollerEvents(Item.RoomPosition.Z, Instance.GetUserStepHeight(UpdatedPos), 0, Item.Id));
                         }
                         else
                         {
-                            Vector2 testX = new Vector2(UpdatedPos.X + dX, UpdatedPos.Y);
-                            Vector2 testY = new Vector2(UpdatedPos.X, UpdatedPos.Y + dY);
+                            Vector2 TestX = new Vector2(UpdatedPos.X + TempX, UpdatedPos.Y);
+                            Vector2 TestY = new Vector2(UpdatedPos.X, UpdatedPos.Y + TempY);
 
-                            bool hitX = !Instance.IsValidStep(UpdatedPos, testX, true);
-                            bool hitY = !Instance.IsValidStep(UpdatedPos, testY, true);
+                            bool CanMoveX = !Instance.CanMoveItem(TestX);
+                            bool CanMoveY = !Instance.CanMoveItem(TestY);
 
-                            if (hitX && hitY)
+                            if (CanMoveX && CanMoveY)
                             {
-                                dX = -dX;
-                                dY = -dY;
+                                TempX = -TempX;
+                                TempY = -TempY;
                             }
-                            else if (hitX)
+                            else if (CanMoveX)
                             {
-                                dX = -dX;
+                                TempX = -TempX;
                             }
-                            else if (hitY)
+                            else if (CanMoveY)
                             {
-                                dY = -dY;
+                                TempY = -TempY;
                             }
                             else
                             {
-                                dX = -dX;
-                                dY = -dY;
+                                TempX = -TempX;
+                                TempY = -TempY;
                             }
 
-                            Vector2 bouncePos = new Vector2(UpdatedPos.X + dX, UpdatedPos.Y + dY);
+                            BouncePosition = new Vector2(UpdatedPos.X + TempX, UpdatedPos.Y + TempY);
 
-                            if (Instance.IsValidStep(UpdatedPos, bouncePos, true))
+                            if (Instance.CanMoveItem(BouncePosition))
                             {
-                                UpdatedPos = bouncePos;
+                                UpdatedPos = BouncePosition;
 
                                 BallEvents.Add(new RollerEvents(Item.RoomPosition.Z, Instance.GetUserStepHeight(UpdatedPos), 0, Item.Id));
                             }
@@ -183,18 +169,16 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                             Item.MoveToRoom(MySqlClient, Item.RoomId, TargetVector3, Item.RoomRotation);
                         }
 
-                        int Minimum = 10 + (UserHasCachedDistance ? Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] : 0);
-                        int Maximum = 16 + (UserHasCachedDistance ? Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] : 0);
+                        int Minimum = 10;
+                        int Maximum = 16;
 
-                        Item.DisplayFlags = RandomGenerator.GetNext(Minimum, Maximum).ToString();
+                        int RandomMaximum = RandomGenerator.GetNext(Minimum + 1, Maximum);
+
+                        Item.Flags = RandomGenerator.GetNext(Minimum, RandomMaximum).ToString();
+                        Item.DisplayFlags = Item.Flags;
                         Item.BroadcastStateUpdate(Instance);
 
                         Instance.RegenerateRelativeHeightmap(true);
-
-                        if (Instance.GameManager.UserFootBallDistance.ContainsKey(Actor.ReferenceId))
-                        {
-                            Instance.GameManager.UserFootBallDistance[Actor.ReferenceId] = 0;
-                        }
 
                         List<Item> ItemsOnBallPosition = Instance.GetItemsOnPosition(UpdatedPos).Where(I => I.Definition.Behavior.Equals(ItemBehavior.FootballGoal)).ToList();
 
@@ -212,6 +196,11 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                 case ItemBehavior.IcePuck:
 
                                     HandleIcePuckGoal(Actor, FootballGoal, Instance, ItemEventType.ItemInvoking, RequestData);
+                                    break;
+
+                                case ItemBehavior.Beachball:
+
+
                                     break;
                             }
                         }

@@ -34,6 +34,15 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     break;
 
+                case ItemEventType.Removing:
+
+                    Item.TimmerRunning = false;
+                    GamesManager.GameStarted[GameItem] = Item.TimmerRunning;
+
+                    Item.RequestUpdate(0);
+
+                    break;
+
                 case ItemEventType.Interact:
 
                     int CurrentState;
@@ -53,12 +62,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                             Item.TimmerRunning = !Item.TimmerRunning;
                             Item.RequestUpdate(0);
-
-                            if (!GamesManager.GameStarted[GameItem])
-                            {
-                                GamesManager.GameStarted[GameItem] = Item.TimmerRunning;
-                                GamesManager.StartGame(GameItem);
-                            }
 
                             break;
 
@@ -92,12 +95,21 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     int.TryParse(Item.Flags, out int CurrentTime);
 
-                    GamesManager.HandleCicleGameActors(GameItem, Item);
+                    if (GameItem == GameType.Freeze)
+                    {
+                        GamesManager.CicleFreezeGameActors(Item.TimmerRunning);
+                    }
 
                     if (Item.TimmerRunning)
                     {
                         if (CurrentTime > 0)
                         {
+                            if (!GamesManager.GameStarted[GameItem])
+                            {
+                                GamesManager.GameStarted[GameItem] = Item.TimmerRunning;
+                                GamesManager.StartGame(GameItem);
+                            }
+
                             CurrentTime--;
                             Item.RequestUpdate(2);
                         }

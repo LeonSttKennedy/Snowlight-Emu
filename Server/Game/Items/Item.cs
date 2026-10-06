@@ -36,6 +36,7 @@ namespace Snowlight.Game.Items
 
         private bool mTimmerRunning;
         private bool mLockTileSquare;
+        private int mInteractHelper;
         private WiredData mWiredData;
 
         public uint Id
@@ -334,6 +335,19 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public int InteractHelper
+        {
+            get
+            {
+                return mInteractHelper;
+            }
+
+            set
+            {  
+                mInteractHelper = value;
+            }
+        }
+
         public WiredData WiredData
         {
             get
@@ -366,9 +380,10 @@ namespace Snowlight.Game.Items
             mSoundManagerId = SoundManagerId;
             mSoundManagerOrder = SoundManagerOrder;
             mExpireTimestamp = ExpireTimestamp;
-
+            
             mTimmerRunning = false;
             mLockTileSquare = false;
+            mInteractHelper = 0;
 
             if (WiredManager != null && (mCachedDefinition.Behavior == ItemBehavior.WiredCondition || mCachedDefinition.Behavior == ItemBehavior.WiredTrigger || mCachedDefinition.Behavior == ItemBehavior.WiredEffect))
             {

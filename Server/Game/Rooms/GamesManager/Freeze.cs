@@ -40,6 +40,7 @@ namespace Snowlight.Game.Rooms
 
     public partial class GameManager
     {
+        private Dictionary<uint, Item> mExitTileItems;
         private Dictionary<RoomActor, int> mFreezeActorLives;
         private Dictionary<RoomActor, int> mFreezeActorShieldTime;
         private Dictionary<RoomActor, int> mFreezeActorFreezedTime;
@@ -52,6 +53,27 @@ namespace Snowlight.Game.Rooms
             get
             {
                 return mGameStarted.ContainsKey(GameType.Freeze) ? mGameStarted[GameType.Freeze] : false;
+            }
+        }
+
+        public bool EnabledFreezeHeartPowerUp
+        {
+            get
+            {
+                return mExitTileItems.Count > 0;
+            }
+        }
+
+        public Dictionary<uint, Item> ExitTiles
+        {
+            get
+            {
+                return mExitTileItems;
+            }
+
+            set
+            {
+                mExitTileItems = value;
             }
         }
 
@@ -154,6 +176,7 @@ namespace Snowlight.Game.Rooms
                     Result = FreezeFirePower.OrangeBall;
                     break;
 
+
                 case FreezePowerUp.BlueArrow:
                 case FreezePowerUp.GreenArrow:
                 case FreezePowerUp.Snowballs:
@@ -227,7 +250,7 @@ namespace Snowlight.Game.Rooms
 
                 case 5:
 
-                    Result = FreezePowerUp.Heart;
+                    Result = EnabledFreezeHeartPowerUp ? FreezePowerUp.Heart : FreezePowerUp.None;
                     break;
 
                 case 6:
@@ -255,19 +278,33 @@ namespace Snowlight.Game.Rooms
                     if (!mFreezeActorPowerUp.ContainsKey(Actor))
                     {
                         mFreezeActorPowerUp.Add(Actor, PowerUp);
-                        break;
                     }
 
-                    if (mFreezeActorSnowballsPowerUpCount.ContainsKey(Actor) &&
+                    #region Snowballs power up control
+                    if (PowerUp == FreezePowerUp.Snowballs)
+                    {
+                        if (!mFreezeActorSnowballsPowerUpCount.ContainsKey(Actor))
+                        {
+                            mFreezeActorSnowballsPowerUpCount.Add(Actor, 0);
+                        }
+
+                        mFreezeActorSnowballsPowerUpCount[Actor] += 1;
+                    }
+
+                    bool RemoveSnowballsCount = mFreezeActorSnowballsPowerUpCount.ContainsKey(Actor) &&
                         mFreezeActorSnowballsPowerUpCount[Actor] > 0 &&
                         mFreezeActorPowerUp[Actor] == FreezePowerUp.Snowballs &&
-                        PowerUp != FreezePowerUp.Snowballs)
+                        PowerUp != FreezePowerUp.Snowballs;
+
+                    if (RemoveSnowballsCount)
                     {
                         mFreezeActorSnowballsPowerUpCount.Remove(Actor);
                     }
+                    #endregion
 
                     mFreezeActorPowerUp[Actor] = PowerUp;
 
+                    #region Quest
                     switch (PowerUp)
                     {
                         case FreezePowerUp.BlueArrow:
@@ -276,13 +313,6 @@ namespace Snowlight.Game.Rooms
                             break;
 
                         case FreezePowerUp.Snowballs:
-
-                            if (!mFreezeActorSnowballsPowerUpCount.ContainsKey(Actor))
-                            {
-                                mFreezeActorSnowballsPowerUpCount.Add(Actor, 0);
-                            }
-
-                            mFreezeActorSnowballsPowerUpCount[Actor] += 1;
 
                             QuestType = QuestType.FREEZE_MORE_BOMBS;
                             break;
@@ -297,6 +327,7 @@ namespace Snowlight.Game.Rooms
                             QuestType = QuestType.FREEZE_MEGA_BOMB;
                             break;
                     }
+                    #endregion
 
                     break;
 
@@ -314,7 +345,7 @@ namespace Snowlight.Game.Rooms
                         ChangeFreezeScoreState(10, Actor.PlayerTeamColor);
                     }
 
-                    if (Session != null)
+                    if (Session != null && EnabledFreezeHeartPowerUp)
                     {
                         Session.SendData(GameLivesComposer.Compose(Actor.Id, mFreezeActorLives[Actor]));
                     }
@@ -346,6 +377,7 @@ namespace Snowlight.Game.Rooms
                 if (ActorInfo.HasLinkedSession)
                 {
                     AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_FreezePowerUp", 1);
+                    QuestManager.ProgressUserQuest(Session, QuestType.FREEZE_POWERUPPER);
                 }
             }
 
@@ -353,10 +385,84 @@ namespace Snowlight.Game.Rooms
             {
                 QuestManager.ProgressUserQuest(Session, QuestType);
             }
+        }
 
-            if (Session != null)
+        public void CicleFreezeGameActors(bool TimmerRunning)
+        {
+            List<RoomActor> PlayingActors = mRoomInstance.Actors.Where(A => A.PlayingGameType == GameType.Freeze).ToList();
+
+            foreach (TeamColors Colors in Enum.GetValues(typeof(TeamColors)))
             {
-                QuestManager.ProgressUserQuest(Session, QuestType.FREEZE_POWERUPPER);
+                if (Colors == TeamColors.None)
+                {
+                    continue;
+                }
+
+                foreach (RoomActor Actor in PlayingActors.Where(C => C.PlayerTeamColor == Colors))
+                {
+                    if (mFreezeActorFreezedTime.ContainsKey(Actor))
+                    {
+                        if (mFreezeActorFreezedTime[Actor] > 0)
+                        {
+                            if (TimmerRunning)
+                            {
+                                mFreezeActorFreezedTime[Actor]--;
+                            }
+                            else
+                            {
+                                mFreezeActorFreezedTime[Actor] = 0;
+                            }
+                        }
+
+                        if (mFreezeActorFreezedTime[Actor] == 0)
+                        {
+                            int ApplyEffect = 39 + (int)Colors;
+                            Actor.ApplyEffect(ApplyEffect, true);
+
+                            Actor.UnblockWalking();
+
+                            mFreezeActorFreezedTime.Remove(Actor);
+                        }
+                    }
+
+                    if (mFreezeActorShieldTime.ContainsKey(Actor))
+                    {
+                        if (mFreezeActorShieldTime[Actor] > 0)
+                        {
+                            if (TimmerRunning)
+                            {
+                                mFreezeActorShieldTime[Actor]--;
+                            }
+                            else
+                            {
+                                mFreezeActorShieldTime[Actor] = 0;
+                            }
+                        }
+
+                        if (mFreezeActorShieldTime[Actor] == 0)
+                        {
+                            int ApplyEffect = 39 + (int)Colors;
+                            Actor.ApplyEffect(ApplyEffect, true);
+
+                            mFreezeActorShieldTime.Remove(Actor);
+                        }
+                    }
+
+                    if (mFreezeActorCooldownSnowballTime.ContainsKey(Actor))
+                    {
+                        if (mFreezeActorCooldownSnowballTime[Actor] > 0)
+                        {
+                            if (TimmerRunning)
+                            {
+                                mFreezeActorCooldownSnowballTime[Actor]--;
+                            }
+                            else
+                            {
+                                mFreezeActorCooldownSnowballTime[Actor] = 0;
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -473,11 +579,32 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public void ResetFreezeTileState()
+        {
+            List<Item> FreezeTileItems = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.FreezeTile).ToList();
+
+            foreach (Item Item in FreezeTileItems)
+            {
+                ItemEventDispatcher.InvokeItemEventHandler(null, Item, mRoomInstance, ItemEventType.InstanceLoaded);
+            }
+        }
+
+        public void ResetFreezeBlockState()
+        {
+            List<Item> FreezeBlockItems = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.FreezeBlock).ToList();
+
+            foreach (Item Item in FreezeBlockItems)
+            {
+                ItemEventDispatcher.InvokeItemEventHandler(null, Item, mRoomInstance, ItemEventType.InstanceLoaded);
+            }
+        }
+
         public void HandleActorToFreeze(RoomActor Actor)
         {
             bool HasShield = mFreezeActorShieldTime.ContainsKey(Actor) ? mFreezeActorShieldTime[Actor] > 0 : false;
+            bool AlreadyFreezed = mFreezeActorFreezedTime.ContainsKey(Actor);
 
-            if (Actor.IsBot || HasShield || Actor.PlayerTeamColor == TeamColors.None)
+            if (Actor.IsBot || HasShield || AlreadyFreezed || Actor.PlayerTeamColor == TeamColors.None)
             {
                 return;
             }
@@ -489,14 +616,14 @@ namespace Snowlight.Game.Rooms
 
             mFreezeActorFreezedTime[Actor] = 10;
 
-            if (mFreezeActorLives.ContainsKey(Actor))
+            if (EnabledFreezeHeartPowerUp && mFreezeActorLives.ContainsKey(Actor))
             {
                 mFreezeActorLives[Actor]--;
             }
 
             if (mFreezeActorLives[Actor] <= 0)
             {
-                Item ExitTile = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.FreezeExitTile).FirstOrDefault();
+                Item ExitTile = mExitTileItems.Values.ToList().FirstOrDefault();
 
                 if (ExitTile != null)
                 {
@@ -529,6 +656,8 @@ namespace Snowlight.Game.Rooms
                         Session AchievementSession = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
 
                         AchievementManager.ProgressUserAchievement(MySqlClient, AchievementSession, "ACH_FreezePlayer", 1);
+
+                        QuestManager.ProgressUserQuest(AchievementSession, QuestType.FREEZE_PLAY);
                     }
                 }
 
@@ -539,12 +668,15 @@ namespace Snowlight.Game.Rooms
             Actor.BlockWalking();
             Actor.ApplyEffect(12);
 
-            ChangeFreezeScoreState(-10, Actor.PlayerTeamColor);
-
-            Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
-            if (Session != null)
+            if (EnabledFreezeHeartPowerUp)
             {
-                Session.SendData(GameLivesComposer.Compose(Actor.Id, mFreezeActorLives[Actor]));
+                ChangeFreezeScoreState(-10, Actor.PlayerTeamColor);
+
+                Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+                if (Session != null)
+                {
+                    Session.SendData(GameLivesComposer.Compose(Actor.Id, mFreezeActorLives[Actor]));
+                }
             }
         }
     }

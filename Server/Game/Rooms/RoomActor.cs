@@ -29,6 +29,7 @@ namespace Snowlight.Game.Rooms
         private object mReferenceObject;
         private RoomActorType mType;
         private Vector3 mPosition;
+        private Vector2 mFromPosition;
         private int mBodyRotation;
         private int mHeadRotation;
         private bool mUpdateNeeded;
@@ -191,6 +192,19 @@ namespace Snowlight.Game.Rooms
             set
             {
                 mPosition = value;
+            }
+        }
+
+        public Vector2 FromPosition
+        {
+            get
+            {
+                return mFromPosition;
+            }
+
+            set
+            {
+                mFromPosition = value;
             }
         }
 
@@ -422,7 +436,7 @@ namespace Snowlight.Game.Rooms
             {
                 lock (mStatusses)
                 {
-                    Dictionary<string, string> Copy = new Dictionary<string,string>();
+                    Dictionary<string, string> Copy = new Dictionary<string, string>();
 
                     foreach (KeyValuePair<string, string> Status in mStatusses)
                     {
@@ -707,6 +721,7 @@ namespace Snowlight.Game.Rooms
             mReferenceId = ReferenceId;
             mReferenceObject = ReferenceObject;
             mPosition = Position;
+            mFromPosition = Position.GetVector2();
             mBodyRotation = Rotation;
             mHeadRotation = Rotation;
             mUpdateNeeded = true;
@@ -835,7 +850,7 @@ namespace Snowlight.Game.Rooms
             {
                 ToPosition = mInstance.GetRedirectedTarget(ToPosition);
             }
-
+            
             if ((ToPosition.X == Position.X && ToPosition.Y == Position.Y) || mForcedLeave ||
                 (!IgnoreCanInitiate && !mInstance.CanInitiateMoveToPosition(ToPosition)) ||
                 (mWalkingBlocked && !OverrideClipping))
@@ -864,55 +879,6 @@ namespace Snowlight.Game.Rooms
                 mPathfinder.MoveTo(ToPosition);
             }
         }
-
-        /* Unused method
-        public void MoveToPos(Vector2 ToPosition, bool teleport, bool IgnoreCanInitiate = false, bool IgnoreRedirections = false, bool DisableClipping = false)
-        {
-            Unidle();
-
-            if ((ToPosition.X == Position.X && ToPosition.Y == Position.Y) || mForcedLeave ||
-                (!IgnoreCanInitiate && !mInstance.CanInitiateMoveToPosition(ToPosition)) ||
-                (mWalkingBlocked && !DisableClipping))
-            {
-                return;
-            }
-
-            lock (mMovementSyncRoot)
-            {
-                mMoveToAndInteract = 0;
-
-                if (mPositionToSet != null)
-                {
-                    mPosition.X = mPositionToSet.X;
-                    mPosition.Y = mPositionToSet.Y;
-                    mPosition.Z = mInstance.GetUserStepHeight(new Vector2(mPosition.X, mPosition.Y));
-
-                    mPositionToSet = null;
-                }
-
-                mLeaveStepsTaken = 0;
-                mIsLeavingRoom = false;
-
-                StopMoving();
-                Position.X = ToPosition.X;
-                Position.Y = ToPosition.Y;
-                UpdateNeeded = true;
-                if (teleport)
-                {
-                    foreach (Item Item in mInstance.GetFloorItems())
-                    {
-                        if (Item.Definition.SpriteId == 5000)
-                        {
-                            if (this.mPositionToSet.X == Item.RoomPosition.X && this.mPositionToSet.Y == Item.RoomPosition.Y)
-                            {
-                                ItemEventDispatcher.InvokeItemEventHandler(this, Item, mInstance, ItemEventType.Interact, this.MoveToAndInteractData);
-                            }
-                        }
-                    }
-                }
-
-            }
-        }*/
 
         public Vector2 GetNextStep()
         {

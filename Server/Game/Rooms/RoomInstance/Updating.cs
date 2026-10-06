@@ -124,7 +124,7 @@ namespace Snowlight.Game.Rooms
                     bool LastStep = !Actor.IsMoving;
 
                     // Check that the next step is valid and allowed
-                    if (NextStep != null && ((!Actor.ClippingEnabled && IsValidPosition(NextStep)) || 
+                    if (NextStep != null && ((!Actor.ClippingEnabled && IsValidPosition(NextStep)) ||
                         (!Actor.TeleportEnabled && IsValidPosition(NextStep)) ||
                         IsValidStep(Actor.Position.GetVector2(), NextStep, LastStep, Actor.OverrideClipping, NewUserGrid)))
                     {
@@ -159,7 +159,7 @@ namespace Snowlight.Game.Rooms
                         uint WiredId = mWiredManager.GetRegisteredWalkItem(mFurniMap[NextStep.X, NextStep.Y]);
 
                         Item Wired = GetItem(WiredId);
-                        
+
                         if (Wired != null && Wired.Definition.Behavior == ItemBehavior.WiredTrigger)
                         {
                             if (WiredTypesUtil.TriggerFromInt(Wired.Definition.BehaviorData) == WiredTriggerTypes.walks_on_furni && Actor.FurniOnId != mFurniMap[NextStep.X, NextStep.Y])
@@ -222,11 +222,14 @@ namespace Snowlight.Game.Rooms
                     NewUserGrid[Actor.Position.X, Actor.Position.Y].Add(Actor);
 
                     Actor.FurniOnId = mFurniMap[Actor.Position.X, Actor.Position.Y];
+
+                    // Storage from position to interact with items
+                    Actor.FromPosition = new Vector2(Actor.Position.X, Actor.Position.Y);
                 }
 
                 // Platform user updating
                 double FloorHeight = GetUserStepHeight(Actor.Position.GetVector2());
-                if(!Actor.IsMoving && Actor.Position.Z != FloorHeight)
+                if (!Actor.IsMoving && Actor.Position.Z != FloorHeight)
                 {
                     Actor.Position.Z = FloorHeight;
                     Actor.UpdateNeeded = true;

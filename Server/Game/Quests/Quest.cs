@@ -7,49 +7,6 @@ using System.Text;
 
 namespace Snowlight.Game.Quests
 {
-    public enum QuestType
-    {
-        NONE = -1,
-        FURNI_MOVE = 0,
-        FURNI_ROTATE = 1,
-        FURNI_PLACE = 2,
-        FURNI_PICK = 3,
-        FURNI_SWITCH = 4,
-        FURNI_STACK = 5,
-        FURNI_DECORATION_FLOOR = 6,
-        FURNI_DECORATION_WALL = 7,
-        SOCIAL_VISIT = 8,
-        SOCIAL_CHAT = 9,
-        SOCIAL_FRIEND = 10,
-        SOCIAL_RESPECT = 11,
-        SOCIAL_DANCE = 12,
-        SOCIAL_WAVE = 13,
-        PROFILE_CHANGE_LOOK = 14,
-        PROFILE_CHANGE_MOTTO = 15,
-        PROFILE_BADGE = 16,
-        EXPLORE_FIND_SPECIFIC_ITEM = 17,
-        EXPLORE_FIND_ITEM_BEHAVIOR = 18,
-        GIVE_FOOD_TO_PET = 19,
-        GIVE_WATER_TO_PET = 20,
-        LEVEL_UP_A_PET = 21,
-        PET_TO_OTHER_ROOM = 22,
-        PETS_IN_ROOM = 23,
-        SCRATCH_A_PET = 24,
-        FIND_A_PET_TYPE = 25,
-        FREEZE_JOIN = 26,
-        FREEZE_PLAY = 27,
-        FREEZE_THROW_BOMB = 28,
-        FREEZE_WINNER = 29,
-        FREEZE_SNOWBALL_HIT = 30,
-        FREEZE_POWERUPPER = 31,
-        FREEZE_EXTRA_LIFE = 32,
-        FREEZE_SHIELD = 33,
-        FREEZE_XBOMB = 34,
-        FREEZE_MEGA_BOMB = 35,
-        FREEZE_MORE_BOMBS = 36,
-        FREEZE_BIGGER_BOMB = 37
-    }
-
     public class Quest
     {
         private uint mId;
@@ -57,7 +14,8 @@ namespace Snowlight.Game.Quests
         private int mSeriesNumber;
         private QuestType mGoalType;
         private uint mGoalData;
-        private ItemBehavior mGoalDataBehavior;
+        private ItemBehavior mGoalBehavior;
+        private int mGoalDataHelper;
         private string mName;
         private SeasonalCurrencyList mSeasonalCurrency;
         private int mReward;
@@ -104,11 +62,19 @@ namespace Snowlight.Game.Quests
             }
         }
 
-        public ItemBehavior GoalDataBehavior
+        public ItemBehavior GoalBehavior
         {
             get
             {
-                return mGoalDataBehavior;
+                return mGoalBehavior;
+            }
+        }
+
+        public int GoalDataHelper
+        {
+            get
+            {
+                return mGoalDataHelper;
             }
         }
 
@@ -243,15 +209,16 @@ namespace Snowlight.Game.Quests
             }
         }
 
-        public Quest(uint Id, string Category, int Number, QuestType GoalType, uint GoalData, ItemBehavior GoalDataBehavior,
-            string Name, SeasonalCurrencyList SeasonalCurrency, int Reward, string DataBit)
+        public Quest(uint Id, string Category, int Number, QuestType GoalType, uint GoalData, ItemBehavior GoalBehavior,
+            int GoalDataHelper, string Name, SeasonalCurrencyList SeasonalCurrency, int Reward, string DataBit)
         {
             mId = Id;
             mCategory = Category;
             mSeriesNumber = Number;
             mGoalType = GoalType;
             mGoalData = GoalData;
-            mGoalDataBehavior = GoalDataBehavior;
+            mGoalBehavior = GoalBehavior;
+            mGoalDataHelper = GoalDataHelper;
             mName = Name;
             mSeasonalCurrency = SeasonalCurrency;
             mReward = Reward;
@@ -261,18 +228,7 @@ namespace Snowlight.Game.Quests
 
         public bool IsCompleted(int UserProgress)
         {
-            switch (mGoalType)
-            {
-                default:
-
-                    return (UserProgress >= mGoalData);
-
-                case QuestType.EXPLORE_FIND_SPECIFIC_ITEM:
-                case QuestType.EXPLORE_FIND_ITEM_BEHAVIOR:
-                case QuestType.FIND_A_PET_TYPE:
-
-                    return (UserProgress >= 1);
-            }
+            return (UserProgress >= mGoalData);
         }
 
         public void SetAchievement(string AchievementCode)

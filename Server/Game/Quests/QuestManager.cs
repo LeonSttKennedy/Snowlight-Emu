@@ -62,7 +62,8 @@ namespace Snowlight.Game.Quests
                 foreach (DataRow Row in Table.Rows)
                 {
                     Quest Quest = new Quest((uint)Row["id"], (string)Row["category"], (int)Row["series_number"],
-                        (QuestType)((int)Row["goal_type"]), (uint)Row["goal_data"], (ItemBehavior)(uint)Row["goal_data_behavior"],
+                        QuestTypeUtil.FromString((string)Row["goal_type"]), (uint)Row["goal_data"],
+                        ItemBehaviorUtil.FromString((string)Row["goal_behavior"]), (int)Row["goal_data_helper"],
                         (string)Row["name"], SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()),
                         (int)Row["reward"], (string)Row["data_bit"]);
 
@@ -153,7 +154,7 @@ namespace Snowlight.Game.Quests
             {
                 default:
 
-                    NewProgress++;
+                    NewProgress += Math.Max(1, (int)EventData);
 
                     if (NewProgress >= UserQuest.GoalData)
                     {
@@ -163,26 +164,26 @@ namespace Snowlight.Game.Quests
                     break;
 
                 case QuestType.EXPLORE_FIND_ITEM_BEHAVIOR:
-
-                    if (EventData != (int)UserQuest.GoalDataBehavior)
-                    {
-                        return;
-                    }
-
-                    NewProgress = (int)UserQuest.GoalDataBehavior;
-                    PassQuest = true;
-                    break;
-
                 case QuestType.EXPLORE_FIND_SPECIFIC_ITEM:
                 case QuestType.FIND_A_PET_TYPE:
+                case QuestType.BANZAI_LOCK_TILES:
 
-                    if (EventData != UserQuest.GoalData)
+                    uint GoalData = QuestType == QuestType.EXPLORE_FIND_ITEM_BEHAVIOR ?
+                        (uint)UserQuest.GoalBehavior : (uint)UserQuest.GoalDataHelper;
+
+                    if (EventData != GoalData)
                     {
                         return;
                     }
 
-                    NewProgress = (int)UserQuest.GoalData;
-                    PassQuest = true;
+                    NewProgress++;
+
+                    if (NewProgress >= UserQuest.GoalData)
+                    {
+                        NewProgress = (int)UserQuest.GoalData;
+                        PassQuest = true;
+                    }
+
                     break;
             }
 

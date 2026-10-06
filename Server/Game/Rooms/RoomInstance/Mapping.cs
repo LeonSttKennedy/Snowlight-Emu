@@ -1,10 +1,10 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-
-using Snowlight.Specialized;
+﻿using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Items;
-using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Misc;
+using Snowlight.Specialized;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Snowlight.Game.Rooms
 {
@@ -22,6 +22,7 @@ namespace Snowlight.Game.Rooms
         private TileState[,] mTileStates;
         private List<RoomActor>[,] mUserGrid;
         private UserMovementNode[,] mUserMovementNodes;
+        private ItemStackingBehavior[,] mStackingBehaviors;
         private uint[,] mFurniMap;
 
         public string RelativeHeightmap
@@ -93,7 +94,7 @@ namespace Snowlight.Game.Rooms
                 ActorBlockGrid = mUserGrid;
             }
 
-            if(!IsValidPosition(To))
+            if (!IsValidPosition(To))
             {
                 return false;
             }
@@ -135,6 +136,7 @@ namespace Snowlight.Game.Rooms
                 mStackHeight = new double[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mStackTopItemHeight = new double[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mUserMovementNodes = new UserMovementNode[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
+                mStackingBehaviors = new ItemStackingBehavior[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mTileEffects = new RoomTileEffect[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mTileTriggers = new RoomTriggers[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
                 mRedirectGrid = new Vector2[mCachedModel.Heightmap.SizeX, mCachedModel.Heightmap.SizeY];
@@ -186,19 +188,19 @@ namespace Snowlight.Game.Rooms
                             break;
 
                         case ItemBehavior.Gate:
-                        case ItemBehavior.BanzaiPyramid:
-                        case ItemBehavior.FreezeGeysir:
                         case ItemBehavior.BanzaiGate:
-                        case ItemBehavior.FreezeGate:
+                        case ItemBehavior.BanzaiPyramid:
                         case ItemBehavior.FreezeBlock:
+                        case ItemBehavior.FreezeGate:
+                        case ItemBehavior.FreezeGeysir:
 
                             bool Operator = Item.Flags == "1";
 
                             switch (Item.Definition.Behavior)
                             {
                                 case ItemBehavior.BanzaiGate:
-                                case ItemBehavior.FreezeGate:
                                 case ItemBehavior.FreezeBlock:
+                                case ItemBehavior.FreezeGate:
 
                                     Operator = !Item.LockTileSquare;
                                     break;
@@ -237,6 +239,7 @@ namespace Snowlight.Game.Rooms
                             mUserMovementNodes[Tile.X, Tile.Y] = MovementNode;
                             mTileEffects[Tile.X, Tile.Y] = Effect;
                             mFurniMap[Tile.X, Tile.Y] = Item.Id;
+                            mStackingBehaviors[Tile.X, Tile.Y] = Item.Definition.StackingBehavior;
 
                             if (Item.Definition.Behavior == ItemBehavior.Bed)
                             {

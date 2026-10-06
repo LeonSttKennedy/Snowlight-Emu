@@ -20,11 +20,11 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
         public static void Register()
         {
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FreezeGate, new ItemEventHandler(HandleFreezeGate));
-            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FreezeGeysir, new ItemEventHandler(HandleFreezeGeysir));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FreezeTile, new ItemEventHandler(HandleFreezeTile));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FreezeBlock, new ItemEventHandler(HandleFreezeBlock));
-            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FreezeExitTile, new ItemEventHandler(HandleFreezeExitTile));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FreezeGeysir, new ItemEventHandler(HandleFreezeGeysir));
             ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FreezeScore, new ItemEventHandler(HandleFreezeScoreboard));
+            ItemEventDispatcher.RegisterEventHandler(ItemBehavior.FreezeExitTile, new ItemEventHandler(HandleFreezeExitTile));
         }
 
         private static bool HandleFreezeGate(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
@@ -45,6 +45,11 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                 case ItemEventType.UpdateTick:
 
                     Item.LockTileSquare = FreezeManager.FreezeStarted;
+
+                    if (Item.LockTileSquare)
+                    {
+                        FreezeManager.CheckIfHasStuckActors(Item);
+                    }
 
                     int.TryParse(Item.Flags, out int CurrentState);
 
@@ -80,10 +85,12 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     {
                         int TeamColorPlayerCount = FreezeManager.GameTeamPlayerCount(GameType.Freeze, GateColor);
 
-                        bool MatchActorGameStatus = Actor.PlayingGameType == GameType.Freeze;
-                        bool MatchActorTeamStatus = Actor.PlayerTeamColor == GateColor;
+                        bool IsPlayingFreeze = Actor.PlayingGameType == GameType.Freeze;
+                        bool IsSameTeam = Actor.PlayerTeamColor == GateColor;
 
-                        if (MatchActorGameStatus && MatchActorTeamStatus)
+                        bool ShouldClear = IsPlayingFreeze && IsSameTeam;
+
+                        if (ShouldClear)
                         {
                             Actor.PlayingGameType = GameType.None;
                             Actor.PlayerTeamColor = TeamColors.None;
@@ -105,7 +112,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                         int ApplyEffect = 39 + (int)GateColor;
 
-                        TeamColors AlterGameColor = MatchActorTeamStatus ? TeamColors.None : GateColor;
+                        TeamColors AlterGameColor = ShouldClear ? TeamColors.None : GateColor;
 
                         int AlterOrClearEffect = AlterGameColor == TeamColors.None ? ClearEffect : ApplyEffect;
 
@@ -146,16 +153,12 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         goto case ItemEventType.InstanceLoaded;
                     }
 
-                    if (Item.Flags == string.Empty)
-                    {
-                        Item.Flags = "0";
-                    }
-
-                    int.TryParse(Item.Flags, out int CurrentState);
-
                     int Random = RandomGenerator.GetNext(0, 30);
+
                     if (Random == 15)
                     {
+                        int.TryParse(Item.Flags, out int CurrentState);
+
                         Item.Flags = (CurrentState == 0 ? 1 : 0).ToString();
                         Item.DisplayFlags = Item.Flags;
 
@@ -239,12 +242,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                     if (ThrowInfo.HasLinkedSession)
                                     {
                                         AchievementManager.ProgressUserAchievement(MySqlClient, ThrowSnowball, "ACH_EsA", 1);
+                                        QuestManager.ProgressUserQuest(ThrowSnowball, QuestType.FREEZE_SNOWBALL_HIT);
                                     }
-                                }
-
-                                if (ThrowSnowball != null)
-                                {
-                                    QuestManager.ProgressUserQuest(ThrowSnowball, QuestType.FREEZE_SNOWBALL_HIT);
                                 }
                             }
                         }
@@ -260,18 +259,18 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                 case ItemEventType.Interact:
 
-                    bool UserIsPlaying = Actor.PlayerTeamColor != TeamColors.None;
+                    bool ActorIsPlaying = Actor.PlayingGameType == GameType.Freeze && Actor.PlayerTeamColor != TeamColors.None;
 
-                    bool UserFreezed = FreezeManager.FreezeActorFreezedTime.ContainsKey(Actor) 
+                    bool ActorFreezed = FreezeManager.FreezeActorFreezedTime.ContainsKey(Actor) 
                         && FreezeManager.FreezeActorFreezedTime[Actor] > 0;
 
-                    bool UserCooldownSnowballActive = FreezeManager.FreezeActorCooldownSnowballTime.ContainsKey(Actor)
+                    bool ActorCooldownSnowballActive = FreezeManager.FreezeActorCooldownSnowballTime.ContainsKey(Actor)
                         && FreezeManager.FreezeActorCooldownSnowballTime[Actor] > 0;
 
                     if (!FreezeManager.FreezeStarted ||
-                        !UserIsPlaying ||
-                        UserFreezed ||
-                        UserCooldownSnowballActive)
+                        !ActorIsPlaying ||
+                        ActorFreezed ||
+                        ActorCooldownSnowballActive)
                     {
                         break;
                     }
@@ -378,6 +377,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     Item.LockTileSquare = true;
                     Instance.RegenerateRelativeHeightmap(true);
 
+                    FreezeManager.CheckIfHasStuckActors(Item);
+
                     break;
 
                 case ItemEventType.UpdateTick:
@@ -385,10 +386,24 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     if (!FreezeManager.FreezeStarted)
                     {
                         int.TryParse(Item.Flags, out int CurrentFlags);
+                        string Flags = Item.Flags;
 
-                        Item.Flags = (CurrentFlags + 10000).ToString();
-                        Item.DisplayFlags = Item.Flags;
-                        Item.BroadcastStateUpdate(Instance);
+                        FreezePowerUp FreezePowerUp = CurrentFlags < 10000 ? ((FreezePowerUp)(CurrentFlags / 1000) - 1) : FreezePowerUp.None;
+
+                        if (FreezePowerUp > FreezePowerUp.None)
+                        {
+                            Flags = (CurrentFlags + 10000).ToString();
+                        }
+
+                        int.TryParse(Flags, out int NewState);
+
+                        if (CurrentFlags != NewState)
+                        {
+                            Item.Flags = Flags;
+                            Item.DisplayFlags = Item.Flags;
+                            Item.BroadcastStateUpdate(Instance);
+                        }
+
                         break;
                     }
 
@@ -417,6 +432,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                             RoomActor PickUpActor = Actors.FirstOrDefault();
 
                             FreezeManager.PickUpPowerUp(PickUpActor, FreezePowerUp);
+
                             Item.Flags = (CurrentFlags + 10000).ToString();
                             Item.DisplayFlags = Item.Flags;
                             Item.BroadcastStateUpdate(Instance);
@@ -449,7 +465,21 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     Item.DisplayFlags = Item.Flags;
                     Item.BroadcastStateUpdate(Instance);
 
+                    if (!FreezeManager.ExitTiles.ContainsKey(Item.Id))
+                    {
+                        FreezeManager.ExitTiles.Add(Item.Id, Item);
+                    }
+
                     Item.RequestUpdate(1);
+                    break;
+
+                case ItemEventType.Removing:
+
+                    if (FreezeManager.ExitTiles.ContainsKey(Item.Id))
+                    {
+                        FreezeManager.ExitTiles.Remove(Item.Id);
+                    }
+
                     break;
 
                 case ItemEventType.UpdateTick:

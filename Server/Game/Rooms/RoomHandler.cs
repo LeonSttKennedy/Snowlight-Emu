@@ -1532,13 +1532,9 @@ namespace Snowlight.Game.Rooms
             
             QuestManager.ProgressUserQuest(Session, QuestType.EXPLORE_FIND_SPECIFIC_ITEM, Item.DefinitionId);
 
-            QuestType Type = Item.Definition.Behavior == ItemBehavior.Switchable ?
-                QuestType.FURNI_SWITCH : QuestType.EXPLORE_FIND_ITEM_BEHAVIOR;
+            QuestManager.ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM_BEHAVIOR, (uint)Item.Definition.Behavior);
 
-            uint Data = Item.Definition.Behavior == ItemBehavior.Switchable ?
-                0 : (uint)Item.Definition.Behavior;
-
-            QuestManager.ProgressUserQuest(Session, Type, Data);
+            QuestManager.ProgressUserQuest(Session, QuestType.FURNI_SWITCH);
         }
 
         private static void AddToStaffPicked(Session Session, ClientMessage Message)
