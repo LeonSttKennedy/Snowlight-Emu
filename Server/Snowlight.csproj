@@ -74,6 +74,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -314,10 +315,12 @@
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\Skate\SkateRailHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\GameHandlers\RollerRink\RollerRinkHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\TotemHandler.cs" />
+    <Compile Include="Game\Items\DefaultBehaviorHandlers\WaterPatchHandler .cs" />
     <Compile Include="Game\Items\ItemAchievements.cs" />
     <Compile Include="Game\Misc\HolidayGifts\HolidayGift.cs" />
     <Compile Include="Game\Misc\HolidayGifts\HolidayGiftManager.cs" />
     <Compile Include="Game\Misc\Caches\HolidayGiftsCache.cs" />
+    <Compile Include="Game\Misc\Items\WaterBorderHelper.cs" />
     <Compile Include="Game\Misc\Workers\RoomVisitorWorker.cs" />
     <Compile Include="Game\Quests\QuestTypeUtil.cs" />
     <Compile Include="Game\Rooms\GamesManager\Banzai.cs" />
@@ -542,6 +545,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ByteUtil.cs" />
+    <Compile Include="Util\ConversionUtil.cs" />
     <Compile Include="Util\CultularUtils.cs" />
     <Compile Include="Util\ExternalTexts.cs" />
     <Compile Include="Util\SeasonalCurrency.cs" />

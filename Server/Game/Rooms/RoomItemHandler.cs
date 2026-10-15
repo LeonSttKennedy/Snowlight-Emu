@@ -638,6 +638,7 @@ namespace Snowlight.Game.Rooms
             if (Instance.Info.OwnerId != Session.CharacterId)
             {
                 QuestManager.ProgressUserQuest(Session, QuestType.PET_TO_OTHER_ROOM, 1);
+
                 if (Instance.PetActorCount > 1)
                 {
                     QuestManager.ProgressUserQuest(Session, QuestType.PETS_IN_ROOM, (uint)Instance.PetActorCount);
@@ -661,7 +662,7 @@ namespace Snowlight.Game.Rooms
             }
 
             Pet PetData = ((Bot)Actor.ReferenceObject).PetData;
-            if (PetData == null) 
+            if (PetData == null)
             {
                 return;
             }
@@ -669,7 +670,7 @@ namespace Snowlight.Game.Rooms
             Session.SendData(PetInfoComposer.Compose(PetData));
             Session.SendData(PetTrainingPanelComposer.Compose(PetData));
 
-            QuestManager.ProgressUserQuest(Session, QuestType.FIND_A_PET_TYPE, (uint)PetData.Type);
+            QuestManager.ProgressUserQuest(Session, QuestType.FIND_A_PET_TYPE, (uint)PetData.Type, (uint)PetData.Race);
         }
 
         private static void TakePet(Session Session, ClientMessage Message)

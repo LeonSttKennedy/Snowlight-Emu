@@ -402,6 +402,7 @@ namespace Snowlight.Game.Catalog
 
             return null;
         }
+
         public static void UpdateItemIndex(int PageId)
         {
             ItemRotationSettings Settings = mRotationPages[PageId];

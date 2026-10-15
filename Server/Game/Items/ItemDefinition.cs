@@ -55,6 +55,7 @@ namespace Snowlight.Game.Items
         private bool mAllowSell;
         private bool mAllowGift;
         private bool mAllowInventoryStack;
+        private bool mShowUseButton;
 
         private string mPetStatussesInteraction;
         private List<int> mPetTypeInteractors;
@@ -243,15 +244,7 @@ namespace Snowlight.Game.Items
         {
             get
             {
-                return (mBehavior != ItemBehavior.Bed &&
-                    mBehavior != ItemBehavior.Dice && mBehavior != ItemBehavior.HoloDice &&
-                    mBehavior != ItemBehavior.LoveShuffler && mBehavior != ItemBehavior.HabboWheel &&
-                    mBehavior != ItemBehavior.StaticItem && mBehavior != ItemBehavior.PetToy &&
-                    mBehavior != ItemBehavior.PetNest && mBehavior != ItemBehavior.PetFood &&
-                    mBehavior != ItemBehavior.FootballGoal && mBehavior != ItemBehavior.BanzaiGate &&
-                    mBehavior != ItemBehavior.FreezeGate && mBehavior != ItemBehavior.FreezeExitTile &&
-                    BehaviorData > 1) ||
-                    (mBehavior == ItemBehavior.PetNest && BehaviorData == 2);
+                return mShowUseButton;
             }
         }
 
@@ -280,7 +273,7 @@ namespace Snowlight.Game.Items
 
         public ItemDefinition(uint Id, uint SpriteId, string Name, string PublicName, ItemType Type, ItemBehavior Behavior, int BehaviorData,
             ItemStackingBehavior StackingBehavior, ItemWalkableMode Walkable, int RoomLimit, int SizeX, int SizeY, float Height, string AdjustableHeight,
-            bool AllowRecycle, bool AllowTrade, bool AllowSell, bool AllowGift, bool AllowInventoryStack)
+            bool AllowRecycle, bool AllowTrade, bool AllowSell, bool AllowGift, bool AllowInventoryStack, bool ShowUseButton)
         {
             mId = Id;
             mSpriteId = SpriteId;
@@ -301,6 +294,7 @@ namespace Snowlight.Game.Items
             mAllowSell = AllowSell;
             mAllowGift = AllowGift;
             mAllowInventoryStack = AllowInventoryStack;
+            mShowUseButton = ShowUseButton;
 
             mPetStatussesInteraction = string.Empty;
             mPetTypeInteractors = null;

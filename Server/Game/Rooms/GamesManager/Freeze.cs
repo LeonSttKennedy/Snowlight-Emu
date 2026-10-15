@@ -155,6 +155,28 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public void RegisterFreezeActor(RoomActor Actor)
+        {
+            if (!mFreezeActorLives.ContainsKey(Actor))
+            {
+                mFreezeActorLives.Add(Actor, 0);
+            }
+
+            mFreezeActorLives[Actor] = 3;
+
+            if (!mFreezeActorCooldownSnowballTime.ContainsKey(Actor))
+            {
+                mFreezeActorCooldownSnowballTime.Add(Actor, 0);
+            }
+
+            if (!mFreezeActorPowerUp.ContainsKey(Actor))
+            {
+                mFreezeActorPowerUp.Add(Actor, FreezePowerUp.None);
+            }
+
+            mFreezeActorPowerUp[Actor] = FreezePowerUp.None;
+        }
+
         public void UnregisterFreezeActor(RoomActor Actor)
         {
             mFreezeActorFreezedTime.Remove(Actor);
@@ -377,8 +399,14 @@ namespace Snowlight.Game.Rooms
                 if (ActorInfo.HasLinkedSession)
                 {
                     AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_FreezePowerUp", 1);
-                    QuestManager.ProgressUserQuest(Session, QuestType.FREEZE_POWERUPPER);
                 }
+            }
+
+            bool GeneralPowerUpperQuest = QuestManager.ProgressUserQuest(Session, QuestType.FREEZE_POWERUPPER);
+
+            if (GeneralPowerUpperQuest)
+            { 
+                QuestType = QuestType.NONE; 
             }
 
             if (QuestType != QuestType.NONE)
@@ -599,14 +627,14 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public void HandleActorToFreeze(RoomActor Actor)
+        public bool HandleActorToFreeze(RoomActor Actor)
         {
             bool HasShield = mFreezeActorShieldTime.ContainsKey(Actor) ? mFreezeActorShieldTime[Actor] > 0 : false;
             bool AlreadyFreezed = mFreezeActorFreezedTime.ContainsKey(Actor);
 
             if (Actor.IsBot || HasShield || AlreadyFreezed || Actor.PlayerTeamColor == TeamColors.None)
             {
-                return;
+                return false;
             }
 
             if (!mFreezeActorFreezedTime.ContainsKey(Actor))
@@ -662,7 +690,7 @@ namespace Snowlight.Game.Rooms
                 }
 
                 ForceStopGame(GameType.Freeze);
-                return;
+                return true;
             }
 
             Actor.BlockWalking();
@@ -678,6 +706,8 @@ namespace Snowlight.Game.Rooms
                     Session.SendData(GameLivesComposer.Compose(Actor.Id, mFreezeActorLives[Actor]));
                 }
             }
+
+            return true;
         }
     }
 }

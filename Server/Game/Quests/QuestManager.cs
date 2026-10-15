@@ -62,20 +62,12 @@ namespace Snowlight.Game.Quests
                 foreach (DataRow Row in Table.Rows)
                 {
                     Quest Quest = new Quest((uint)Row["id"], (string)Row["category"], (int)Row["series_number"],
-                        QuestTypeUtil.FromString((string)Row["goal_type"]), (uint)Row["goal_data"],
-                        ItemBehaviorUtil.FromString((string)Row["goal_behavior"]), (int)Row["goal_data_helper"],
+                        (int)Row["goal"], QuestTypeUtil.FromString((string)Row["goal_type"]), (string)Row["goal_data"],
+                        (string)Row["goal_data_helper"], ItemBehaviorUtil.FromString((string)Row["goal_behavior"]),
                         (string)Row["name"], SeasonalCurrency.FromStringToEnum(Row["seasonal_currency"].ToString()),
-                        (int)Row["reward"], (string)Row["data_bit"]);
+                        (int)Row["reward"], (string)Row["data_bit"], (string)Row["achievement_code"]);
 
                     mQuests.Add(Quest.Id, Quest);
-
-                    MySqlClient.SetParameter("category", Quest.Category);
-                    string Achievement = (string)MySqlClient.ExecuteScalar("SELECT achievement_code FROM quests_achievements WHERE category = @category");
-
-                    if(Achievement != null)
-                    {
-                        Quest.SetAchievement(Achievement);
-                    }
                 }
 
                 MySqlClient.SetParameter("enabled", "1");
@@ -132,18 +124,18 @@ namespace Snowlight.Game.Quests
             return i;
         }
 
-        public static void ProgressUserQuest(Session Session, QuestType QuestType, uint EventData = 0)
+        public static bool ProgressUserQuest(Session Session, QuestType QuestType, uint EventData = 0, uint EventDataHelper = 0)
         {
             if (Session.QuestCache.CurrentQuestId <= 0)
             {
-                return;
+                return false;
             }
 
             Quest UserQuest = GetQuest(Session.QuestCache.CurrentQuestId);
 
             if (UserQuest == null || UserQuest.GoalType != QuestType)
             {
-                return;
+                return false;
             }
 
             int CurrentProgress = Session.QuestCache.GetQuestProgress(UserQuest.Id);
@@ -156,31 +148,53 @@ namespace Snowlight.Game.Quests
 
                     NewProgress += Math.Max(1, (int)EventData);
 
-                    if (NewProgress >= UserQuest.GoalData)
+                    if (NewProgress >= UserQuest.Goal)
                     {
+                        NewProgress = UserQuest.Goal;
                         PassQuest = true;
                     }
 
                     break;
 
-                case QuestType.EXPLORE_FIND_ITEM_BEHAVIOR:
-                case QuestType.EXPLORE_FIND_SPECIFIC_ITEM:
-                case QuestType.FIND_A_PET_TYPE:
+                case QuestType.WALK_ON_SPECIFIC_FURNI:
+                case QuestType.FURNI_SPECIFIC_SWITCH:
+                case QuestType.FIND_FURNI_BEHAVIOR:
+                case QuestType.FIND_SPECIFIC_FURNI:
+                case QuestType.FIND_SPECIFIC_DRINK:
                 case QuestType.BANZAI_LOCK_TILES:
+                case QuestType.ACTIVATE_EFFECT:
+                case QuestType.FIND_A_PET_TYPE:
 
-                    uint GoalData = QuestType == QuestType.EXPLORE_FIND_ITEM_BEHAVIOR ?
-                        (uint)UserQuest.GoalBehavior : (uint)UserQuest.GoalDataHelper;
-
-                    if (EventData != GoalData)
+                    bool IsInvalidGoal = false;
+                    
+                    switch (QuestType)
                     {
-                        return;
+                        default:
+
+                            IsInvalidGoal = !UserQuest.IsGoalItem(EventData);
+                            break;
+
+                        case QuestType.FIND_FURNI_BEHAVIOR:
+
+                            IsInvalidGoal = EventData != (uint)UserQuest.GoalBehavior;
+                            break;
+
+                        case QuestType.FIND_A_PET_TYPE:
+
+                            IsInvalidGoal = !UserQuest.IsGoalItem(EventData) && !UserQuest.IsGoalHelper(EventDataHelper);
+                            break;
+                    }
+
+                    if (IsInvalidGoal)
+                    {
+                        return false;
                     }
 
                     NewProgress++;
 
-                    if (NewProgress >= UserQuest.GoalData)
+                    if (NewProgress >= UserQuest.Goal)
                     {
-                        NewProgress = (int)UserQuest.GoalData;
+                        NewProgress = UserQuest.Goal;
                         PassQuest = true;
                     }
 
@@ -190,7 +204,7 @@ namespace Snowlight.Game.Quests
             using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
             {
                 Session.QuestCache.AddOrUpdateData(MySqlClient, UserQuest.Id, NewProgress, !PassQuest);
-                
+
                 if (PassQuest)
                 {
                     if (UserQuest.Achievement != string.Empty)
@@ -199,7 +213,7 @@ namespace Snowlight.Game.Quests
                     }
 
                     Session.CharacterInfo.UpdateActivityPointsBalance(MySqlClient, UserQuest.SeasonalCurrency, UserQuest.Reward);
-                    if(UserQuest.SeasonalCurrency == SeasonalCurrencyList.Pixels)
+                    if (UserQuest.SeasonalCurrency == SeasonalCurrencyList.Pixels)
                     {
                         Session.SendData(UpdatePixelsBalanceComposer.Compose(Session.CharacterInfo.ActivityPoints[0], UserQuest.Reward));
                     }
@@ -232,7 +246,10 @@ namespace Snowlight.Game.Quests
                 Session.MessengerFriendCache.BroadcastToFriends(MessengerFriendEventComposer.Compose(Session.CharacterId,
                     MessengerFriendEventType.QuestCompleted, UserQuest.Category + "." + UserQuest.QuestName));
             }
+
+            return true;
         }
+        
 
         public static Quest GetNextQuestInSeries(string Category, int Number)
         {

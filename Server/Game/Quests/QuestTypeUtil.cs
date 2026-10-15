@@ -9,6 +9,8 @@ namespace Snowlight.Game.Quests
     public enum QuestType
     {
         NONE = 0,
+
+        // Interact with items
         FURNI_MOVE = 1,
         FURNI_ROTATE = 2,
         FURNI_PLACE = 3,
@@ -17,42 +19,65 @@ namespace Snowlight.Game.Quests
         FURNI_STACK = 6,
         FURNI_DECORATION_FLOOR = 7,
         FURNI_DECORATION_WALL = 8,
-        SOCIAL_VISIT = 9,
-        SOCIAL_CHAT = 10,
-        SOCIAL_FRIEND = 11,
-        SOCIAL_RESPECT = 12,
-        SOCIAL_DANCE = 13,
-        SOCIAL_WAVE = 14,
-        PROFILE_CHANGE_LOOK = 15,
-        PROFILE_CHANGE_MOTTO = 16,
-        PROFILE_BADGE = 17,
-        EXPLORE_FIND_SPECIFIC_ITEM = 18,
-        EXPLORE_FIND_ITEM_BEHAVIOR = 19,
-        GIVE_FOOD_TO_PET = 20,
-        GIVE_WATER_TO_PET = 21,
-        LEVEL_UP_A_PET = 22,
-        PET_TO_OTHER_ROOM = 23,
-        PETS_IN_ROOM = 24,
-        SCRATCH_A_PET = 25,
-        FIND_A_PET_TYPE = 26,
-        FREEZE_JOIN = 27,
-        FREEZE_PLAY = 28,
-        FREEZE_THROW_BOMB = 29,
-        FREEZE_WINNER = 30,
-        FREEZE_SNOWBALL_HIT = 31,
-        FREEZE_POWERUPPER = 32,
-        FREEZE_EXTRA_LIFE = 33,
-        FREEZE_SHIELD = 34,
-        FREEZE_XBOMB = 35,
-        FREEZE_MEGA_BOMB = 36,
-        FREEZE_MORE_BOMBS = 37,
-        FREEZE_BIGGER_BOMB = 38,
-        BANZAI_JOIN = 39,
-        BANZAI_PLAY = 40,
-        BANZAI_WINNER = 41,
-        BANZAI_PUSH_PUCK = 42,
-        BANZAI_LOCK_TILE = 43,
-        BANZAI_LOCK_TILES = 44
+        FURNI_SPECIFIC_SWITCH = 9,
+        FIND_SPECIFIC_FURNI = 10,
+        FIND_FURNI_BEHAVIOR = 11,
+
+        // User walk on
+        WALK_ON_SPECIFIC_FURNI = 12,
+
+        // Find specific drink on dispenser machines
+        FIND_SPECIFIC_DRINK = 13,
+
+        // Interact with other users
+        SOCIAL_VISIT = 14,
+        SOCIAL_CHAT = 15,
+        SOCIAL_FRIEND = 16,
+        SOCIAL_RESPECT = 17,
+        SOCIAL_DANCE = 18,
+        SOCIAL_WAVE = 19,
+
+        // Change user profile
+        PROFILE_CHANGE_LOOK = 20,
+        PROFILE_CHANGE_MOTTO = 21,
+        PROFILE_BADGE = 22,
+
+        // Avatar effect
+        ACTIVATE_EFFECT = 23,
+
+        // Pet goals
+        GIVE_FOOD_TO_PET = 24,
+        GIVE_WATER_TO_PET = 25,
+        LEVEL_UP_A_PET = 26,
+        PET_TO_OTHER_ROOM = 27,
+        PETS_IN_ROOM = 28,
+        SCRATCH_A_PET = 29,
+        FIND_A_PET_TYPE = 30,
+
+        // Beachball game
+        BEACHBALL_GOAL = 31,
+
+        // Freeze game
+        FREEZE_JOIN = 32,
+        FREEZE_PLAY = 33,
+        FREEZE_THROW_BOMB = 34,
+        FREEZE_WINNER = 35,
+        FREEZE_SNOWBALL_HIT = 36,
+        FREEZE_POWERUPPER = 37,
+        FREEZE_EXTRA_LIFE = 38,
+        FREEZE_SHIELD = 39,
+        FREEZE_XBOMB = 40,
+        FREEZE_MEGA_BOMB = 41,
+        FREEZE_MORE_BOMBS = 42,
+        FREEZE_BIGGER_BOMB = 43,
+        
+        // Banzai Game
+        BANZAI_JOIN = 44,
+        BANZAI_PLAY = 45,
+        BANZAI_WINNER = 46,
+        BANZAI_PUSH_PUCK = 47,
+        BANZAI_LOCK_TILE = 48,
+        BANZAI_LOCK_TILES = 49
     }
 
     public static class QuestTypeUtil
@@ -78,6 +103,10 @@ namespace Snowlight.Game.Quests
                     return QuestType.FURNI_PICK;
 
                 case "switch_item":
+
+                    return QuestType.FURNI_SWITCH;
+
+                case "switch_specific_item":
 
                     return QuestType.FURNI_SWITCH;
 
@@ -129,13 +158,13 @@ namespace Snowlight.Game.Quests
 
                     return QuestType.PROFILE_BADGE;
 
-                case "explore_find_specific_item"
+                case "find_specific_item"
                 :
-                    return QuestType.EXPLORE_FIND_SPECIFIC_ITEM;
+                    return QuestType.FIND_SPECIFIC_FURNI;
 
-                case "explore_find_item_behavior":
+                case "find_item_behavior":
 
-                    return QuestType.EXPLORE_FIND_ITEM_BEHAVIOR;
+                    return QuestType.FIND_FURNI_BEHAVIOR;
 
                 case "give_food_to_pet":
 
@@ -164,6 +193,14 @@ namespace Snowlight.Game.Quests
                 case "find_a_pet_type":
 
                     return QuestType.FIND_A_PET_TYPE;
+
+                case "find_a_pet_race":
+
+                    return QuestType.FIND_A_PET_TYPE;
+
+                case "find_specific_drink":
+
+                    return QuestType.FIND_SPECIFIC_DRINK;
 
                 case "freeze_join":
 
@@ -236,6 +273,18 @@ namespace Snowlight.Game.Quests
                 case "banzai_lock_tiles":
 
                     return QuestType.BANZAI_LOCK_TILES;
+
+                case "beachball_goal":
+
+                    return QuestType.BEACHBALL_GOAL;
+
+                case "activate_effect":
+
+                    return QuestType.ACTIVATE_EFFECT;
+
+                case "walk_on_specific_item":
+
+                    return QuestType.WALK_ON_SPECIFIC_FURNI;
 
                 default:
 

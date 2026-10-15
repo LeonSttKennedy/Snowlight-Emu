@@ -265,6 +265,8 @@ namespace Snowlight.Game.Handlers
                 return;
             }
 
+            QuestManager.ProgressUserQuest(Session, QuestType.ACTIVATE_EFFECT, (uint)Effect.SpriteId);
+
             Effect.Activate();
             Session.SendData(UserEffectActivatedComposer.Compose(Effect));
         }

@@ -99,18 +99,22 @@ namespace Snowlight.Game.Rooms
                 return false;
             }
 
-            double HeightDiff = GetUserStepHeight(From) - GetUserStepHeight(To);
-
             if (EnableClipping)
             {
                 return true;
             }
 
-            if (mTileStates[To.X, To.Y] == TileState.Blocked || 
+            if (mTileStates[From.X, From.Y] == TileState.Blocked || 
                 ((!Info.DisableRoomBlocking || EndOfPath) && ActorBlockGrid[From.X, From.Y] != null) ||
-                mUserMovementNodes[To.X, To.Y] == UserMovementNode.Blocked ||
-                (mUserMovementNodes[To.X, To.Y] == UserMovementNode.WalkableEndOfRoute && !EndOfPath) ||
-                HeightDiff > 1.5 || (Info.Type == RoomType.Public && HeightDiff < -1.5))
+                mUserMovementNodes[From.X, From.Y] == UserMovementNode.Blocked ||
+                (mUserMovementNodes[To.X, To.Y] == UserMovementNode.WalkableEndOfRoute && !EndOfPath))
+            {
+                return false;
+            }
+
+            double HeightDiff = GetUserStepHeight(From) - GetUserStepHeight(To);
+
+            if (HeightDiff > 1.5 || (Info.Type == RoomType.Public && HeightDiff < -1.5))
             {
                 return false;
             }
@@ -210,9 +214,10 @@ namespace Snowlight.Game.Rooms
                             break;
 
                         case ItemBehavior.AvatarEffectGenerator:
+                        case ItemBehavior.WaterPatch:
 
                             Effect = new RoomTileEffect(RoomTileEffectType.Effect, 0, Item.RoomPosition.GetVector2(), 0,
-                                Item.Definition.BehaviorData, Item.DefinitionId);
+                                Item.Definition.BehaviorData, Item.DefinitionId, Item.Definition.Behavior);
                             break;
 
                         case ItemBehavior.StickyPole:

@@ -1,8 +1,8 @@
 ﻿using System;
-using Snowlight.Game.Sessions;
+
+using Snowlight.Game.Misc;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Pathfinding;
-using Snowlight.Game.Misc;
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 {

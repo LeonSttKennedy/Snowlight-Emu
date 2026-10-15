@@ -1,4 +1,5 @@
-﻿using Snowlight.Game.Items;
+﻿using Microsoft.VisualBasic;
+using Snowlight.Game.Items;
 using Snowlight.Util;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,10 @@ namespace Snowlight.Game.Quests
         private string mCategory;
         private int mSeriesNumber;
         private QuestType mGoalType;
-        private uint mGoalData;
+        private int mGoal;
+        private List<uint> mGoalData;
+        private List<uint> mGoalDataHelper;
         private ItemBehavior mGoalBehavior;
-        private int mGoalDataHelper;
         private string mName;
         private SeasonalCurrencyList mSeasonalCurrency;
         private int mReward;
@@ -54,11 +56,27 @@ namespace Snowlight.Game.Quests
             }
         }
 
-        public uint GoalData
+        public int Goal
+        {
+            get
+            {
+                return mGoal;
+            }
+        }
+
+        public List<uint> GoalData
         {
             get
             {
                 return mGoalData;
+            }
+        }
+
+        public List<uint> GoalDataHelper
+        {
+            get
+            {
+                return mGoalDataHelper;
             }
         }
 
@@ -67,14 +85,6 @@ namespace Snowlight.Game.Quests
             get
             {
                 return mGoalBehavior;
-            }
-        }
-
-        public int GoalDataHelper
-        {
-            get
-            {
-                return mGoalDataHelper;
             }
         }
 
@@ -161,8 +171,8 @@ namespace Snowlight.Game.Quests
                         return "PET_EAT";
 
                     default:
-                    case QuestType.EXPLORE_FIND_SPECIFIC_ITEM:
-                    case QuestType.EXPLORE_FIND_ITEM_BEHAVIOR:
+                    case QuestType.FIND_SPECIFIC_FURNI:
+                    case QuestType.FIND_FURNI_BEHAVIOR:
 
                         return "FIND_STUFF";
                 }
@@ -209,31 +219,69 @@ namespace Snowlight.Game.Quests
             }
         }
 
-        public Quest(uint Id, string Category, int Number, QuestType GoalType, uint GoalData, ItemBehavior GoalBehavior,
-            int GoalDataHelper, string Name, SeasonalCurrencyList SeasonalCurrency, int Reward, string DataBit)
+        public Quest(uint Id, string Category, int Number, int Goal, QuestType GoalType, string GoalData,
+            string GoalDataHelper, ItemBehavior GoalBehavior, string Name, SeasonalCurrencyList SeasonalCurrency,
+            int Reward, string DataBit, string Achievement)
         {
             mId = Id;
             mCategory = Category;
             mSeriesNumber = Number;
+            mGoal = Goal;
             mGoalType = GoalType;
-            mGoalData = GoalData;
+            mGoalData = new List<uint>();
+            mGoalDataHelper = new List<uint>();
             mGoalBehavior = GoalBehavior;
-            mGoalDataHelper = GoalDataHelper;
             mName = Name;
             mSeasonalCurrency = SeasonalCurrency;
             mReward = Reward;
             mDataBit = DataBit;
-            mAchievement = string.Empty;
+            mAchievement = Achievement;
+
+
+            string[] GoalDataIds = GoalData.Split(',');
+
+            foreach (string StringId in GoalDataIds)
+            {
+                if (StringId != string.Empty)
+                {
+                    uint.TryParse(StringId, out uint GoalId);
+
+                    if (!mGoalData.Contains(GoalId))
+                    {
+                        mGoalData.Add(GoalId);
+                    }
+                }
+            }
+
+            string[] GoalDataHelperIds = GoalDataHelper.Split(',');
+
+            foreach (string StringId in GoalDataHelperIds)
+            {
+                if (StringId != string.Empty)
+                {
+                    uint.TryParse(StringId, out uint GoalHelperId);
+
+                    if (!mGoalDataHelper.Contains(GoalHelperId))
+                    {
+                        mGoalDataHelper.Add(GoalHelperId);
+                    }
+                }
+            }
         }
 
         public bool IsCompleted(int UserProgress)
         {
-            return (UserProgress >= mGoalData);
+            return (UserProgress >= mGoal);
         }
 
-        public void SetAchievement(string AchievementCode)
+        public bool IsGoalItem(uint GoalId)
         {
-            mAchievement = AchievementCode;
+            return mGoalData.Contains(GoalId);
+        }
+
+        public bool IsGoalHelper(uint GoalId)
+        {
+            return mGoalDataHelper.Contains(GoalId);
         }
     }
 }

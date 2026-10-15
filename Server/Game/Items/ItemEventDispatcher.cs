@@ -62,6 +62,7 @@ namespace Snowlight.Game.Items
             FootballHandler.Register();
             BanzaiHandler.Register();
             FreezeHandler.Register();
+            WaterPatchHandler.Register();
         }
 
         public static void InvokeItemEventHandler(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Type, int RequestData = 0)

@@ -306,13 +306,6 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            /*if (Info.ClubRoom && !Session.HasRight("club_regular"))
-            {
-                Session.SendData(RoomJoinErrorComposer.Compose(RoomJoinErrorCode.RoomJoinFailedQueueString, "c"));
-                Session.SendData(RoomKickedComposer.Compose());
-                return;
-            }*/
-
             // Check if the user has been banned from this room
             if (Instance.IsUserBanned(Session.CharacterId))
             {
@@ -726,7 +719,10 @@ namespace Snowlight.Game.Rooms
 
             Actor.Dance(DanceId);
 
-            QuestManager.ProgressUserQuest(Session, QuestType.SOCIAL_DANCE);
+            if (DanceId > 0)
+            {
+                QuestManager.ProgressUserQuest(Session, QuestType.SOCIAL_DANCE);
+            }
         }
 
         private static void GetUserBadges(Session Session, ClientMessage Message)
@@ -1519,7 +1515,19 @@ namespace Snowlight.Game.Rooms
 
             Item Item = Instance.GetItem(Message.PopWiredUInt32());
 
-            if (Item == null || Item.Definition.Behavior == ItemBehavior.StaticItem)
+            if (Item == null)
+            {
+                return;
+            }
+
+            bool SpecificFurni = QuestManager.ProgressUserQuest(Session, QuestType.FIND_SPECIFIC_FURNI, Item.DefinitionId);
+
+            if (!SpecificFurni)
+            {
+                QuestManager.ProgressUserQuest(Session, QuestType.FIND_FURNI_BEHAVIOR, (uint)Item.Definition.Behavior);
+            }
+
+            if (Item.Definition.Behavior == ItemBehavior.StaticItem)
             {
                 return;
             }
@@ -1529,12 +1537,16 @@ namespace Snowlight.Game.Rooms
             RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
 
             ItemEventDispatcher.InvokeItemEventHandler(Actor, Item, Instance, ItemEventType.Interact, RequestData);
-            
-            QuestManager.ProgressUserQuest(Session, QuestType.EXPLORE_FIND_SPECIFIC_ITEM, Item.DefinitionId);
 
-            QuestManager.ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM_BEHAVIOR, (uint)Item.Definition.Behavior);
+            if (Item.Definition.Behavior == ItemBehavior.Switchable)
+            {
+                bool GeneralSwitchQuest = QuestManager.ProgressUserQuest(Session, QuestType.FURNI_SWITCH);
 
-            QuestManager.ProgressUserQuest(Session, QuestType.FURNI_SWITCH);
+                if (!GeneralSwitchQuest)
+                {
+                    QuestManager.ProgressUserQuest(Session, QuestType.FURNI_SPECIFIC_SWITCH, Item.DefinitionId);
+                }
+            }
         }
 
         private static void AddToStaffPicked(Session Session, ClientMessage Message)

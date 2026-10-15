@@ -78,7 +78,8 @@ namespace Snowlight.Game.Items
                     WMode, (int)Row["room_limit"], (int)Row["size_x"], (int)Row["size_y"], (float)Row["height"],
                     (string)Row["height_adjustable"], (Row["allow_recycling"].ToString() == "1"),
                     (Row["allow_trading"].ToString() == "1"), (Row["allow_selling"].ToString() == "1"),
-                    (Row["allow_gifting"].ToString() == "1"), (Row["allow_inventory_stacking"].ToString() == "1"));
+                    (Row["allow_gifting"].ToString() == "1"), (Row["allow_inventory_stacking"].ToString() == "1"),
+                    (Row["show_use_button"].ToString() == "1"));
 
                 mDefinitions.Add(DefinitionId, Definition);
 

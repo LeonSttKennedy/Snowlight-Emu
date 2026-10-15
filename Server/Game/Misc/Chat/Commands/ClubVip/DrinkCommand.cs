@@ -57,7 +57,7 @@ namespace Snowlight.Game.Misc
 
                     if (DrinkId > 0 && DrinkId <= 66)
                     {
-                        Actor.CarryItem(DrinkId, true);
+                        Actor.CarryItem(DrinkId, true, true);
                     }
                     else
                     {

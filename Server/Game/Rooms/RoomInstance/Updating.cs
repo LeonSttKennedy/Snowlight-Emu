@@ -211,6 +211,18 @@ namespace Snowlight.Game.Rooms
 
                         NewUserGrid[NextStep.X, NextStep.Y].Add(Actor);
                     }
+
+                    uint PreviousFurni = mFurniMap[Actor.FromPosition.X, Actor.FromPosition.Y];
+                    uint CurrentFurni = mFurniMap[Actor.Position.X, Actor.Position.Y];
+                    uint FutureFurni = mFurniMap[NextStep.X, NextStep.Y];
+
+                    bool CanIncrementQuest = PreviousFurni != FutureFurni && CurrentFurni != FutureFurni;
+
+                    // Progress user walk on item quest when walk on different furni
+                    if (CanIncrementQuest)
+                    {
+                        ProgressWalkOnItemQuest(Actor);
+                    }
                 }
                 else
                 {
@@ -315,6 +327,21 @@ namespace Snowlight.Game.Rooms
             }
         }
         
+        public void ProgressWalkOnItemQuest(RoomActor Actor)
+        {
+            Session SessionObject = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
+
+            if (SessionObject != null)
+            {
+                Item Item = GetItem(Actor.FurniOnId);
+
+                if (Item != null) 
+                {
+                    QuestManager.ProgressUserQuest(SessionObject, QuestType.WALK_ON_SPECIFIC_FURNI, Item.DefinitionId);
+                }
+            }
+        }
+
         public void ExecuteTriggers(RoomActor Actor)
         {
             Vector2 Redirect = mRedirectGrid[Actor.Position.X, Actor.Position.Y];
@@ -540,22 +567,6 @@ namespace Snowlight.Game.Rooms
 
                 Actor.ApplyEffect(ClearEffect, true, true);
             }
-
-            if (Actor.Type == RoomActorType.UserCharacter && (Effect.QuestData > 0 || Effect.QuestBehavior > ItemBehavior.None))
-            {
-                Session SessionObject = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
-
-                if (SessionObject != null)
-                {
-                    QuestType Type = Effect.QuestBehavior > ItemBehavior.None ?
-                        QuestType.EXPLORE_FIND_ITEM_BEHAVIOR : QuestType.EXPLORE_FIND_SPECIFIC_ITEM;
-
-                    uint Data = Effect.QuestBehavior > ItemBehavior.None ?
-                        (uint)Effect.QuestBehavior : Effect.QuestData;
-
-                    QuestManager.ProgressUserQuest(SessionObject, Type, Data);
-                }
-            } 
         }
     }
 }

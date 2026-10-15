@@ -50,11 +50,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     Item.LockTileSquare = BanzaiManager.BanzaiStarted;
 
-                    if (Item.LockTileSquare)
-                    {
-                        BanzaiManager.CheckIfHasStuckActors(Item);
-                    }
-
                     int.TryParse(Item.Flags, out int CurrentState);
 
                     int NewState = BanzaiManager.GameTeamPlayerCount(GameType.BattleBanzai, GateColor);
@@ -170,7 +165,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         Instance.RegenerateRelativeHeightmap(true);
                     }
 
-                    Item.RequestUpdate(1);
+                    Item.RequestUpdate(2);
                     break;
             }
 
@@ -197,14 +192,14 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     if (!BanzaiManager.BanzaiStarted)
                     {
+                        if (!BanzaiManager.BanzaiHelpStateHolder.ContainsKey(Item.Id))
+                        {
+                            BanzaiManager.BanzaiHelpBlinkCount.Add(Item.Id, 10);
+                            BanzaiManager.BanzaiHelpStateHolder.Add(Item.Id, Item.Flags);
+                        }
+
                         if (Item.InteractHelper == 3)
                         {
-                            if (!BanzaiManager.BanzaiHelpStateHolder.ContainsKey(Item.Id))
-                            {
-                                BanzaiManager.BanzaiHelpBlinkCount.Add(Item.Id, 10);
-                                BanzaiManager.BanzaiHelpStateHolder.Add(Item.Id, Item.Flags);
-                            }
-
                             string OldFlags = BanzaiManager.BanzaiHelpStateHolder[Item.Id].ToString();
 
                             int.TryParse(OldFlags, out int OldState);
@@ -217,14 +212,14 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                 Item.Flags = OddEven ? "0" : OldFlags;
                                 Item.DisplayFlags = Item.Flags;
                                 Item.BroadcastStateUpdate(Instance);
-
-                                BanzaiManager.BanzaiHelpBlinkCount[Item.Id]--;
-
-                                if (BanzaiManager.BanzaiHelpBlinkCount[Item.Id] == 0)
-                                {
-                                    BanzaiManager.UpdateBanzaiTileState(BanzaiTileStatus.PowerOff);
-                                }
                             }
+                        }
+
+                        BanzaiManager.BanzaiHelpBlinkCount[Item.Id]--;
+
+                        if (BanzaiManager.BanzaiHelpBlinkCount[Item.Id] == 0)
+                        {
+                            BanzaiManager.UpdateBanzaiTileState(BanzaiTileStatus.PowerOff);
                         }
                     }
 
@@ -668,6 +663,16 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
         {
             switch (Event)
             {
+                case ItemEventType.Placed:
+
+                    Item.Flags = "0";
+                    Item.DisplayFlags = Item.Flags;
+
+                    RoomManager.MarkWriteback(Item, true);
+                    Item.BroadcastStateUpdate(Instance);
+                    break;
+
+
                 case ItemEventType.ItemInvoking:
 
                     int.TryParse(Item.Flags, out int CurrentValue);

@@ -66,7 +66,7 @@ namespace Snowlight.Game.Misc
             if (Distance.Calculate(Actor.Position.GetVector2(), TargetActor.Position.GetVector2()) < 3)
             {
                 Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_giveitem_success"), 0, ChatType.Whisper));
-                TargetActor.CarryItem(Actor.CarryItemId, true);
+                TargetActor.CarryItem(Actor.CarryItemId, true, true);
                 Actor.CarryItem(0, true);
                 return;
             }

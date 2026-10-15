@@ -46,11 +46,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                     Item.LockTileSquare = FreezeManager.FreezeStarted;
 
-                    if (Item.LockTileSquare)
-                    {
-                        FreezeManager.CheckIfHasStuckActors(Item);
-                    }
-
                     int.TryParse(Item.Flags, out int CurrentState);
 
                     int NewState = FreezeManager.GameTeamPlayerCount(GameType.Freeze, GateColor);
@@ -168,7 +163,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         Instance.RegenerateRelativeHeightmap(true);
                     }
 
-                    Item.RequestUpdate(1);
+                    Item.RequestUpdate(2);
                     break;
             }
 
@@ -218,31 +213,34 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         {
                             RoomActor ActorToHit = Actors.FirstOrDefault();
 
-                            FreezeManager.HandleActorToFreeze(ActorToHit);
+                            bool FreezedActor = FreezeManager.HandleActorToFreeze(ActorToHit);
 
-                            bool DifferentActors = ActorToHit != null && 
-                                Item.TemporaryInteractionReferenceIds.ContainsKey(0) &&
-                                Item.TemporaryInteractionReferenceIds[0] != ActorToHit.ReferenceId;
-
-                            RoomActor Interactor = Item.TemporaryInteractionReferenceIds.ContainsKey(0) ?
-                                Instance.GetActorByReferenceId(Item.TemporaryInteractionReferenceIds[0]) : null;
-
-                            bool DifferentTeams = Interactor != null && Interactor.PlayerTeamColor != ActorToHit.PlayerTeamColor;
-
-                            bool DoFreezeAchievements = DifferentActors && DifferentTeams;
-
-                            if (DoFreezeAchievements)
+                            if (FreezedActor)
                             {
-                                Session ThrowSnowball = SessionManager.GetSessionByCharacterId(Interactor.ReferenceId);
+                                bool DifferentActors = ActorToHit != null &&
+                                    Item.TemporaryInteractionReferenceIds.ContainsKey(0) &&
+                                    Item.TemporaryInteractionReferenceIds[0] != ActorToHit.ReferenceId;
 
-                                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                                RoomActor Interactor = Item.TemporaryInteractionReferenceIds.ContainsKey(0) ?
+                                    Instance.GetActorByReferenceId(Item.TemporaryInteractionReferenceIds[0]) : null;
+
+                                bool DifferentTeams = Interactor != null && Interactor.PlayerTeamColor != ActorToHit.PlayerTeamColor;
+
+                                bool DoFreezeAchievements = DifferentActors && DifferentTeams;
+
+                                if (DoFreezeAchievements)
                                 {
-                                    CharacterInfo ThrowInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, Interactor.ReferenceId);
+                                    Session ThrowSnowball = SessionManager.GetSessionByCharacterId(Interactor.ReferenceId);
 
-                                    if (ThrowInfo.HasLinkedSession)
+                                    using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                                     {
-                                        AchievementManager.ProgressUserAchievement(MySqlClient, ThrowSnowball, "ACH_EsA", 1);
-                                        QuestManager.ProgressUserQuest(ThrowSnowball, QuestType.FREEZE_SNOWBALL_HIT);
+                                        CharacterInfo ThrowInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, Interactor.ReferenceId);
+
+                                        if (ThrowInfo.HasLinkedSession)
+                                        {
+                                            AchievementManager.ProgressUserAchievement(MySqlClient, ThrowSnowball, "ACH_EsA", 1);
+                                            QuestManager.ProgressUserQuest(ThrowSnowball, QuestType.FREEZE_SNOWBALL_HIT);
+                                        }
                                     }
                                 }
                             }
@@ -377,8 +375,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     Item.LockTileSquare = true;
                     Instance.RegenerateRelativeHeightmap(true);
 
-                    FreezeManager.CheckIfHasStuckActors(Item);
-
                     break;
 
                 case ItemEventType.UpdateTick:
@@ -506,6 +502,15 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
         {
             switch (Event)
             {
+                case ItemEventType.Placed:
+
+                    Item.Flags = "0";
+                    Item.DisplayFlags = Item.Flags;
+
+                    RoomManager.MarkWriteback(Item, true);
+                    Item.BroadcastStateUpdate(Instance);
+                    break;
+
                 case ItemEventType.ItemInvoking:
 
                     int.TryParse(Item.Flags, out int CurrentValue);

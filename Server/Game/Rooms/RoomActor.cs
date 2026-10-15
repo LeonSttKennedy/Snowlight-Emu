@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Snowlight.Storage;
-using Snowlight.Game.Misc;
-using Snowlight.Game.Bots;
-using Snowlight.Game.Pets;
-using Snowlight.Game.Items;
-using Snowlight.Specialized;
-using Snowlight.Communication;
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Moderation;
-using Snowlight.Game.Characters;
-using Snowlight.Game.Pathfinding;
+﻿using Snowlight.Communication;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Bots;
+using Snowlight.Game.Characters;
+using Snowlight.Game.Items;
+using Snowlight.Game.Misc;
+using Snowlight.Game.Moderation;
+using Snowlight.Game.Pathfinding;
+using Snowlight.Game.Pets;
+using Snowlight.Game.Quests;
+using Snowlight.Game.Sessions;
+using Snowlight.Specialized;
+using Snowlight.Storage;
+using System;
+using System.Collections.Generic;
 
 namespace Snowlight.Game.Rooms
 {
@@ -964,7 +964,7 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public void CarryItem(int ItemId, bool Broadcast = true)
+        public void CarryItem(int ItemId, bool Broadcast = true, bool Forced = false)
         {
             Unidle();
 
@@ -978,6 +978,16 @@ namespace Snowlight.Game.Rooms
             if (Broadcast)
             {
                 mInstance.BroadcastMessage(RoomUserCarryComposer.Compose(mId, ItemId));
+
+                if (!Forced)
+                {
+                    Session Session = SessionManager.GetSessionByCharacterId(ReferenceId);
+
+                    if (Session != null)
+                    {
+                        QuestManager.ProgressUserQuest(Session, QuestType.FIND_SPECIFIC_DRINK, (uint)ItemId);
+                    }
+                }
             }
         }
 

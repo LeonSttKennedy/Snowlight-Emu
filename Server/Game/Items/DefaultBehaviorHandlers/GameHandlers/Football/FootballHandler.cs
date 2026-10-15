@@ -11,6 +11,7 @@ using Snowlight.Game.Sessions;
 using Snowlight.Game.Characters;
 using Snowlight.Game.Achievements;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Quests;
 
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
@@ -28,6 +29,8 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
         private static bool HandleFootballBall(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
+            GameManager FootballManager = Instance.GameManager;
+
             switch (Event)
             {
                 case ItemEventType.UpdateTick:
@@ -180,30 +183,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                         Instance.RegenerateRelativeHeightmap(true);
 
-                        List<Item> ItemsOnBallPosition = Instance.GetItemsOnPosition(UpdatedPos).Where(I => I.Definition.Behavior.Equals(ItemBehavior.FootballGoal)).ToList();
-
-                        if (ItemsOnBallPosition.Count > 0)
-                        {
-                            Item FootballGoal = ItemsOnBallPosition.FirstOrDefault();
-
-                            switch (Item.Definition.Behavior)
-                            {
-                                case ItemBehavior.Football:
-
-                                    HandleFootballGoal(Actor, FootballGoal, Instance, ItemEventType.ItemInvoking, RequestData);
-                                    break;
-
-                                case ItemBehavior.IcePuck:
-
-                                    HandleIcePuckGoal(Actor, FootballGoal, Instance, ItemEventType.ItemInvoking, RequestData);
-                                    break;
-
-                                case ItemBehavior.Beachball:
-
-
-                                    break;
-                            }
-                        }
+                        FootballManager.HandleFootballGoal(Actor, UpdatedPos, Item.Definition.Behavior);
                     }
 
                     break;
@@ -311,107 +291,19 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
             return true;
         }
 
-        private static bool HandleFootballGoal(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
-        {
-            GameManager GamesManager = Instance.GameManager;
-
-            switch (Event)
-            {
-                case ItemEventType.ItemInvoking:
-
-                    if (GamesManager.GameStarted.ContainsKey(GameType.Football) 
-                        && GamesManager.GameStarted[GameType.Football])
-                    {
-                        List<Item> GeneralItemsOnRoom = Instance.GetFloorItems().ToList();
-
-                        TeamColors GoalColor = GamesManager.GameColorByInt(Item.Definition.BehaviorData);
-                        TeamColors OpponentTeam = GamesManager.GetOpponentColor(GameType.Football, Actor.PlayerTeamColor);
-
-                        bool IsOpponentGoal = Actor.PlayerTeamColor != GoalColor;
-                        TeamColors GoalScorerColor = IsOpponentGoal ? Actor.PlayerTeamColor : OpponentTeam;
-
-                        List<Item> GameScoreboardList = GeneralItemsOnRoom.Where(I => I.Definition.Behavior.Equals(ItemBehavior.FootballScore)).ToList();
-
-                        foreach (Item Scoreboard in GameScoreboardList)
-                        {
-                            TeamColors ScoreboardColor = GamesManager.GameColorByInt(Scoreboard.Definition.BehaviorData);
-
-                            if (GoalScorerColor == ScoreboardColor)
-                            {
-                                ItemEventDispatcher.InvokeItemEventHandler(Actor, Scoreboard, Instance, ItemEventType.ItemInvoking, 2);
-                            }
-                        }
-
-                        using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-                        {
-                            Session Session = SessionManager.GetSessionByCharacterId(Actor.ReferenceId);
-
-                            uint RoomOwnerId = Instance.Info.OwnerId;
-                            CharacterInfo OwnerInfo = CharacterInfoLoader.GetCharacterInfo(MySqlClient, RoomOwnerId);
-
-                            if (Session.CharacterId != OwnerInfo.Id)
-                            {
-                                if (OwnerInfo.HasLinkedSession)
-                                {
-                                    Session OwnerSession = SessionManager.GetSessionByCharacterId(RoomOwnerId);
-
-                                    AchievementManager.ProgressUserAchievement(MySqlClient, OwnerSession, "ACH_FootballGoalScoredInRoom", 1);
-                                }
-                                else
-                                {
-                                    AchievementManager.OfflineProgressUserAchievement(MySqlClient, RoomOwnerId, "ACH_FootballGoalScoredInRoom", 1);
-                                }
-                            }
-
-                            AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_FootballGoalScored", 1);
-                        }
-                    }
-
-                    break;
-            }
-
-            return true;
-        }
-
-        private static bool HandleIcePuckGoal(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
-        {
-            GameManager GamesManager = Instance.GameManager;
-
-            switch (Event)
-            {
-                case ItemEventType.ItemInvoking:
-
-                    if (GamesManager.GameStarted.ContainsKey(GameType.Football)
-                        && GamesManager.GameStarted[GameType.Football])
-                    {
-                        List<Item> GeneralItemsOnRoom = Instance.GetFloorItems().ToList();
-
-                        TeamColors GoalColor = Instance.GameManager.GameColorByInt(Item.Definition.BehaviorData);
-                        TeamColors OpponentTeam = Instance.GameManager.GetOpponentColor(GameType.IceHockey, GoalColor);
-
-                        List<Item> GameScoreboardList = GeneralItemsOnRoom.Where(I => I.Definition.Behavior.Equals(ItemBehavior.FootballScore)).ToList();
-
-                        foreach (Item Scoreboard in GameScoreboardList)
-                        {
-                            TeamColors ScoreboardColor = Instance.GameManager.GameColorByInt(Scoreboard.Definition.BehaviorData);
-
-                            if (OpponentTeam == ScoreboardColor)
-                            {
-                                ItemEventDispatcher.InvokeItemEventHandler(Actor, Scoreboard, Instance, ItemEventType.ItemInvoking, 2);
-                            }
-                        }
-                    }
-                    
-                    break;
-            }
-
-            return true;
-        }
-
         private static bool HandleFootballScoreboard(RoomActor Actor, Item Item, RoomInstance Instance, ItemEventType Event, int RequestData)
         {
             switch (Event)
             {
+                case ItemEventType.Placed:
+
+                    Item.Flags = "0";
+                    Item.DisplayFlags = Item.Flags;
+
+                    RoomManager.MarkWriteback(Item, true);
+                    Item.BroadcastStateUpdate(Instance);
+                    break;
+
                 case ItemEventType.Interact:
                 case ItemEventType.ItemInvoking:
 
@@ -450,10 +342,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         {
                             Val = 0;
                         }
-                    }
-                    else
-                    {
-                        Val = (Val == -1 ? 0 : -1);
                     }
 
                     Item.Flags = Val.ToString();

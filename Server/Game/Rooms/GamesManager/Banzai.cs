@@ -102,7 +102,7 @@ namespace Snowlight.Game.Rooms
         {
             List<Item> BanzaiTileItems = mRoomInstance.GetFloorItems().Where(I => I.Definition.Behavior == ItemBehavior.BanzaiTile).ToList();
 
-            foreach(Item Item in BanzaiTileItems)
+            foreach (Item Item in BanzaiTileItems)
             {
                 Vector3 Position = Item.RoomPosition;
 
@@ -194,7 +194,9 @@ namespace Snowlight.Game.Rooms
         /// </summary>
         public void UpdateBanzaiTileState(RoomActor Actor, Vector2 RoomPosition)
         {
-            if (!BanzaiStarted)
+            bool ActorIsPlaying = Actor.PlayingGameType == GameType.BattleBanzai && Actor.PlayerTeamColor != TeamColors.None;
+
+            if (!BanzaiStarted || !ActorIsPlaying)
             {
                 return;
             }
@@ -280,8 +282,13 @@ namespace Snowlight.Game.Rooms
                         if (Session != null)
                         {
                             AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_BattleBallTilesLocked", InsideConnectedTiles.Count);
-                            QuestManager.ProgressUserQuest(Session, QuestType.BANZAI_LOCK_TILE, (uint)InsideConnectedTiles.Count);
-                            QuestManager.ProgressUserQuest(Session, QuestType.BANZAI_LOCK_TILES, (uint)InsideConnectedTiles.Count);
+                            
+                            bool LockTile = QuestManager.ProgressUserQuest(Session, QuestType.BANZAI_LOCK_TILE, (uint)InsideConnectedTiles.Count);
+
+                            if (!LockTile)
+                            {
+                                QuestManager.ProgressUserQuest(Session, QuestType.BANZAI_LOCK_TILES, (uint)InsideConnectedTiles.Count);
+                            }
                         }
                     }
 

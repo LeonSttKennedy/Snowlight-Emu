@@ -26,7 +26,7 @@ namespace Snowlight.Communication.Outgoing
                 {
                     int UserProgress = Session.QuestCache.GetQuestProgress(Quest.Id);
 
-                    if (Session.QuestCache.CurrentQuestId != Quest.Id && UserProgress >= Quest.GoalData)
+                    if (Session.QuestCache.CurrentQuestId != Quest.Id && UserProgress >= Quest.Goal)
                     {
                         UserQuestGoals[Quest.Category] = Quest.Number + 1;
                     }
@@ -104,7 +104,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendInt32(Quest == null ? 0 : Quest.Reward);
             Message.AppendStringWithBreak(Quest == null ? string.Empty : Quest.QuestName);
             Message.AppendInt32(UserProgress); // Current progress
-            Message.AppendUInt32(Quest == null ? 0 : Quest.GoalData); // Target progress
+            Message.AppendInt32(Quest == null ? 0 : Quest.Goal); // Target progress
             Message.AppendInt32(DailyQuestTime); // "Next quest available countdown" in seconds
         }
     }

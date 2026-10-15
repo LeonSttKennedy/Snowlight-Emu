@@ -61,28 +61,29 @@ namespace Snowlight.Game.Items
         WelcomeGift = 54,
         RoomBackground = 55,
         BlackHole = 56,
-        TotemLeg = 57,
-        TotemHead = 58,
-        TotemPlanet = 59,
-        RollerRink = 60,
-        SkateRail = 61,
-        TagPole = 62,
-        IceSkating = 63,
-        EggTagPole = 64,
-        BunnyRun = 65,
-        BanzaiGate = 66,
-        BanzaiPyramid = 67,
-        BanzaiSphere = 68,
-        BanzaiTile = 69,
-        BanzaiPuck = 70,
-        BanzaiTeleporter = 71,
-        BanzaiScore = 72,
-        FreezeGate = 73,
-        FreezeGeysir = 74,
-        FreezeTile = 75,
-        FreezeBlock = 76,
-        FreezeScore = 77,
-        FreezeExitTile = 78
+        WaterPatch = 57,
+        TotemLeg = 58,
+        TotemHead = 59,
+        TotemPlanet = 60,
+        RollerRink = 61,
+        SkateRail = 62,
+        TagPole = 63,
+        IceSkating = 64,
+        EggTagPole = 65,
+        BunnyRun = 66,
+        BanzaiGate = 67,
+        BanzaiPyramid = 68,
+        BanzaiSphere = 69,
+        BanzaiTile = 70,
+        BanzaiPuck = 71,
+        BanzaiTeleporter = 72,
+        BanzaiScore = 73,
+        FreezeGate = 74,
+        FreezeGeysir = 75,
+        FreezeTile = 76,
+        FreezeBlock = 77,
+        FreezeScore = 79,
+        FreezeExitTile = 80
     }
 
     public static class ItemBehaviorUtil
@@ -382,6 +383,10 @@ namespace Snowlight.Game.Items
                 case "hole":
 
                     return ItemBehavior.BlackHole;
+
+                case "water_patch":
+
+                    return ItemBehavior.WaterPatch;
 
                 case "poster":
 
