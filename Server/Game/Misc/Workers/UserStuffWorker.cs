@@ -246,56 +246,59 @@ namespace Snowlight.Game.Misc
             {
                 RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
 
-                switch (Actor.PlayingGameType)
+                if (Actor != null)
                 {
-                    case GameType.RollerSkating:
+                    switch (Actor.PlayingGameType)
+                    {
+                        case GameType.RollerSkating:
 
-                        if (Instance.GameManager.RollerStrollerAchievement.ContainsKey(Session.CharacterId))
-                        {
-                            DateTime UserDateTime = Instance.GameManager.RollerStrollerAchievement[Session.CharacterId];
-                            TimeSpan RollerStrollerIncrease = DateTime.Now - UserDateTime;
-
-                            if (RollerStrollerIncrease.Minutes > 0)
+                            if (Instance.GameManager.RollerStrollerAchievement.ContainsKey(Session.CharacterId))
                             {
-                                int TotalMinutes = RollerStrollerIncrease.Minutes > 1 ? RollerStrollerIncrease.Minutes : 1;
+                                DateTime UserDateTime = Instance.GameManager.RollerStrollerAchievement[Session.CharacterId];
+                                TimeSpan RollerStrollerIncrease = DateTime.Now - UserDateTime;
 
-                                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_RbTagC", TotalMinutes);
-                                Instance.GameManager.RollerStrollerAchievement[Session.CharacterId] = DateTime.Now;
+                                if (RollerStrollerIncrease.Minutes > 0)
+                                {
+                                    int TotalMinutes = RollerStrollerIncrease.Minutes > 1 ? RollerStrollerIncrease.Minutes : 1;
+
+                                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_RbTagC", TotalMinutes);
+                                    Instance.GameManager.RollerStrollerAchievement[Session.CharacterId] = DateTime.Now;
+                                }
                             }
-                        }
 
-                        break;
+                            break;
 
-                    case GameType.IceSkating:
+                        case GameType.IceSkating:
 
-                        if (Instance.GameManager.IceIceBabyAchievement.ContainsKey(Session.CharacterId))
-                        {
-                            DateTime UserDateTime = Instance.GameManager.IceIceBabyAchievement[Session.CharacterId];
-                            TimeSpan IceIceBabyIncrease = DateTime.Now - UserDateTime;
-
-                            if (IceIceBabyIncrease.Minutes > 0)
+                            if (Instance.GameManager.IceIceBabyAchievement.ContainsKey(Session.CharacterId))
                             {
-                                int TotalMinutes = IceIceBabyIncrease.Minutes > 1 ? IceIceBabyIncrease.Minutes : 1;
+                                DateTime UserDateTime = Instance.GameManager.IceIceBabyAchievement[Session.CharacterId];
+                                TimeSpan IceIceBabyIncrease = DateTime.Now - UserDateTime;
 
-                                AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_TagC", TotalMinutes);
-                                Instance.GameManager.IceIceBabyAchievement[Session.CharacterId] = DateTime.Now;
+                                if (IceIceBabyIncrease.Minutes > 0)
+                                {
+                                    int TotalMinutes = IceIceBabyIncrease.Minutes > 1 ? IceIceBabyIncrease.Minutes : 1;
+
+                                    AchievementManager.ProgressUserAchievement(MySqlClient, Session, "ACH_TagC", TotalMinutes);
+                                    Instance.GameManager.IceIceBabyAchievement[Session.CharacterId] = DateTime.Now;
+                                }
                             }
-                        }
 
-                        break;
+                            break;
 
-                    case GameType.None:
+                        case GameType.None:
 
-                        if (Instance.GameManager.RollerStrollerAchievement.ContainsKey(Session.CharacterId))
-                        {
-                            Instance.GameManager.RollerStrollerAchievement.Remove(Session.CharacterId);
-                        }
-                        else if (Instance.GameManager.IceIceBabyAchievement.ContainsKey(Session.CharacterId))
-                        {
-                            Instance.GameManager.IceIceBabyAchievement.Remove(Session.CharacterId);
-                        }
+                            if (Instance.GameManager.RollerStrollerAchievement.ContainsKey(Session.CharacterId))
+                            {
+                                Instance.GameManager.RollerStrollerAchievement.Remove(Session.CharacterId);
+                            }
+                            else if (Instance.GameManager.IceIceBabyAchievement.ContainsKey(Session.CharacterId))
+                            {
+                                Instance.GameManager.IceIceBabyAchievement.Remove(Session.CharacterId);
+                            }
 
-                        break;
+                            break;
+                    }
                 }
             }
         }

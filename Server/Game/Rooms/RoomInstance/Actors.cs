@@ -27,6 +27,7 @@ namespace Snowlight.Game.Rooms
         private object mActorIdGeneratorSyncLock;
         private bool mActorCountSyncNeeded;
         private int mCachedNavigatorUserCount;
+        private int mCachedSpectatorUserCount;
         private List<uint> mUsersWithRights;
         private Dictionary<uint, double> mBannedUsers;
         private int mPetCount;
@@ -39,7 +40,7 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public int HumanActorCount
+        public int AllHumanActorCount
         {
             get
             {
@@ -55,6 +56,55 @@ namespace Snowlight.Game.Rooms
                         }
 
                         c++;
+                    }
+                }
+
+                return c;
+            }
+        }
+
+        public int HumanActorCount
+        {
+            get
+            {
+                int c = 0;
+
+                lock (mActors)
+                {
+                    foreach (RoomActor Actor in mActors.Values)
+                    {
+                        if (Actor.IsBot || Actor.IsSpectator)
+                        {
+                            continue;
+                        }
+
+                        c++;
+                    }
+                }
+
+                return c;
+            }
+        }
+
+        public int HumanSpectatorActorCount
+        {
+            get
+            {
+                int c = 0;
+
+                lock (mActors)
+                {
+                    foreach (RoomActor Actor in mActors.Values)
+                    {
+                        if (Actor.IsBot)
+                        {
+                            continue;
+                        }
+
+                        if (Actor.IsSpectator)
+                        {
+                            c++;
+                        }
                     }
                 }
 
@@ -106,6 +156,14 @@ namespace Snowlight.Game.Rooms
             get
             {
                 return mCachedNavigatorUserCount;
+            }
+        }
+
+        public int CachedSpectatorUserCount
+        {
+            get
+            {
+                return mCachedSpectatorUserCount;
             }
         }
 
@@ -212,31 +270,37 @@ namespace Snowlight.Game.Rooms
                 return false;
             }
 
+            NewActor.IsSpectator = Session.SpectatorQueue && Session.SpectatorQueueRoomId == RoomId;
+
             AddActorToRoom(NewActor);
 
             if (TargetTeleporter != null)
             {
                 TargetTeleporter.BroadcastStateUpdate(this);
             }
-
-            if (mInfo.Type != RoomType.Public && CheckUserRights(Session, true))
+            
+            if (!NewActor.IsSpectator)
             {
-                NewActor.SetStatus("flatctrl", "useradmin");
-                Session.SendData(RoomOwnerRightsComposer.Compose());
-                Session.SendData(RoomRightsComposer.Compose());
-            }
-            else if (mInfo.Type != RoomType.Public && CheckUserRights(Session))
-            {
-                NewActor.SetStatus("flatctrl");
-                Session.SendData(RoomRightsComposer.Compose());
+                if (mInfo.Type != RoomType.Public && CheckUserRights(Session, true))
+                {
+                    NewActor.SetStatus("flatctrl", "useradmin");
+                    Session.SendData(RoomOwnerRightsComposer.Compose());
+                    Session.SendData(RoomRightsComposer.Compose());
+                }
+                else if (mInfo.Type != RoomType.Public && CheckUserRights(Session))
+                {
+                    NewActor.SetStatus("flatctrl");
+                    Session.SendData(RoomRightsComposer.Compose());
+                }
+
+                if (Session.CurrentEffect > 0)
+                {
+                    NewActor.ApplyEffect(Session.CurrentEffect);
+                }
+
+                NewActor.UpdateNeeded = true;
             }
 
-            if (Session.CurrentEffect > 0)
-            {
-                NewActor.ApplyEffect(Session.CurrentEffect);
-            }
-
-            NewActor.UpdateNeeded = true;
             return true;
         }
 
@@ -251,6 +315,8 @@ namespace Snowlight.Game.Rooms
 
                 mActors.Add(Actor.Id, Actor);
                 BroadcastMessage(RoomUserObjectListComposer.Compose(mActors.Values.ToList()));
+                
+                DoActorCountSync(false);
                 MarkActorCountSyncNeeded();
 
                 foreach (RoomActor _Actor in mActors.Values)
@@ -268,7 +334,8 @@ namespace Snowlight.Game.Rooms
                     }
                 }
 
-                if (Actor.Type == RoomActorType.UserCharacter)
+                if (Actor.Type == RoomActorType.UserCharacter &&
+                    !Actor.IsSpectator)
                 {
                     WiredManager.HandleEnterRoom(Actor);
                 }
@@ -277,19 +344,25 @@ namespace Snowlight.Game.Rooms
             }
         }
 
-        public void DoActorCountSync()
+        public void DoActorCountSync(bool DatabaseSynchronize = true)
         {
             int NewActorCount = HumanActorCount;
+            int NewSpectatorCount = HumanSpectatorActorCount;
 
-            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            if (DatabaseSynchronize)
             {
-                MySqlClient.SetParameter("id", RoomId);
-                MySqlClient.SetParameter("usercount", NewActorCount);
-                MySqlClient.ExecuteNonQuery("UPDATE rooms SET current_users = @usercount WHERE id = @id LIMIT 1");
+                using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+                {
+                    MySqlClient.SetParameter("id", RoomId);
+                    MySqlClient.SetParameter("usercount", NewActorCount);
+                    MySqlClient.ExecuteNonQuery("UPDATE rooms SET current_users = @usercount WHERE id = @id LIMIT 1");
+                }
+
+                mActorCountSyncNeeded = false;
             }
 
             mCachedNavigatorUserCount = NewActorCount;
-            mActorCountSyncNeeded = false;
+            mCachedSpectatorUserCount = NewSpectatorCount;
         }
 
         public void MarkActorCountSyncNeeded()
@@ -511,6 +584,8 @@ namespace Snowlight.Game.Rooms
                         if (Success)
                         {
                             BroadcastMessage(RoomUserRemovedComposer.Compose(_ActorId));
+
+                            DoActorCountSync(false);
                             MarkActorCountSyncNeeded();
                         }
                     }

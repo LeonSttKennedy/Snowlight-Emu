@@ -116,6 +116,11 @@ namespace Snowlight.Game.Rooms
             {
                 foreach (RoomActor Actor in mActors.Values)
                 {
+                    if (Actor.IsSpectator)
+                    {
+                        continue;
+                    }
+
                     ActorObjects.Add(Actor);
 
                     if (Actor.DanceId > 0)

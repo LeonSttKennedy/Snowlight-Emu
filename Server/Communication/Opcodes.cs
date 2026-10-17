@@ -86,9 +86,10 @@ namespace Snowlight.Communication
         public const uint ROOM_USER_BADGES = 228;
         public const uint USER_BADGE_INVENTORY = 229;
         public const uint ROLLER_EVENT = 230;
+        public const uint YOU_ARE_SPECTATOR = 254;
         public const uint SESSION_PARAMS = 257;
         public const uint PRIVATE_ROOM_ADS = 258;
-        public const uint PUBLIC_ROOM_QUEUE = 259;
+        public const uint ROOM_USER_QUEUE = 259;
         public const uint MESSENGER_ERROR_EVENT = 260;
         public const uint MESSENGER_IM_ERROR = 261;
         public const uint USER_INFO_UPDATE = 266;
@@ -303,7 +304,7 @@ namespace Snowlight.Communication
         public const uint SESSION_PONG = 196;
         public const uint MODERATION_ALERT_ROOM = 200;
         public const uint INIT_CRYPTO = 206;
-        public const uint CHANGE_QUEUE_POSITION = 211;
+        public const uint CHANGE_ROOM_QUEUE = 211;
         public const uint ROOM_GET_CAMPAIGNS = 215;
         public const uint GET_MUSIC_DATA = 221;
         public const uint MESSENGER_PENDING_REQUESTS = 233;

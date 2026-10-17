@@ -59,6 +59,7 @@ namespace Snowlight.Game.Rooms
         private int mAntiSpamTicks;
         private uint mFurniOnId;
         private bool mIsSitting;
+        private bool mIsSpectator;
 
         private int mSkateboardRotation;
 
@@ -710,6 +711,19 @@ namespace Snowlight.Game.Rooms
             set
             {
                 mTeamColors = value;
+            }
+        }
+
+        public bool IsSpectator
+        {
+            get
+            {
+                return mIsSpectator;
+            }
+
+            set
+            { 
+                mIsSpectator = value; 
             }
         }
 

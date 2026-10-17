@@ -143,7 +143,7 @@ namespace Snowlight.Game.Rooms
                                 continue;
                             }
                         }
-                        else if (Instance.HumanActorCount == 0)
+                        else if (Instance.AllHumanActorCount == 0)
                         {
                             if (Instance.MarkedAsEmpty >= 10)
                             {
@@ -162,6 +162,7 @@ namespace Snowlight.Game.Rooms
                         }
 
                         Instance.PerformUpdate();
+                        Instance.QueueUpdate();
                     }
 
                     lock (mRoomInstances)

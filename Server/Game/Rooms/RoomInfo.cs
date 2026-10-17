@@ -36,6 +36,9 @@ namespace Snowlight.Game.Rooms
         private RoomIcon mIcon;
         private int mCategoryId;
         private int mMaxUsers;
+        private bool mEnableQueue;
+        private int mMaxSpectators;
+        private bool mClubOnly;
         private string mSwfs;
         private double mCacheAge;
         private int mScore;
@@ -187,11 +190,74 @@ namespace Snowlight.Game.Rooms
             }
         }
 
+        public int CurrentSpectators
+        {
+            get
+            {
+                RoomInstance Instance = RoomManager.GetInstanceByRoomId(mId);
+
+                if (Instance != null)
+                {
+                    return Instance.CachedSpectatorUserCount;
+                }
+
+                return 0;
+            }
+        }
+
         public int MaxUsers
         {
             get
             {
                 return mMaxUsers;
+            }
+        }
+
+        public bool EnabledQueue
+        {
+            get
+            {
+                return mEnableQueue;
+            }
+        }
+
+        public int MaxVisitorQueue
+        {
+            get
+            {
+                return mMaxUsers * 2;
+            }
+        }
+
+        public bool EnabledSpectatorQueue
+        {
+            get
+            {
+                return mMaxSpectators > 0;
+            }
+        }
+
+        public int MaxSpectators
+        {
+            get
+            {
+                return mMaxSpectators;
+            }
+        }
+
+        public int MaxSpectatorsQueue
+        {
+            get
+            {
+                return mMaxSpectators * 2;
+            }
+        }
+
+        public bool ClubOnly
+        {
+            get
+            {
+                return mClubOnly;
             }
         }
 
@@ -335,10 +401,10 @@ namespace Snowlight.Game.Rooms
         }
 
         public RoomInfo(uint Id, RoomType Type, uint OwnerId, string Name, string Description, List<string> Tags,
-            RoomAccessType AccessType, string Password, RoomIcon Icon, int CategoryId, int MaxUsers, string Swfs,
-            int Score, string ModelName, bool AllowPets, bool AllowPetEating, bool DisableBlocking, bool HideWalls,
-            string PubInternalName, int PubInternalId, int WallThickness, int FloorThickness,
-            Dictionary<string, string> Decorations, string BadgeCode)
+            RoomAccessType AccessType, string Password, RoomIcon Icon, int CategoryId, int MaxUsers, bool EnableQueue,
+            int MaxSpectators, bool ClubOnly, string Swfs, int Score, string ModelName, bool AllowPets, bool AllowPetEating,
+            bool DisableBlocking, bool HideWalls, string PubInternalName, int PubInternalId, int WallThickness,
+            int FloorThickness, Dictionary<string, string> Decorations, string BadgeCode)
         {
             mId = Id;
             mType = Type;
@@ -351,6 +417,9 @@ namespace Snowlight.Game.Rooms
             mIcon = Icon;
             mCategoryId = CategoryId;
             mMaxUsers = MaxUsers;
+            mEnableQueue = EnableQueue;
+            mMaxSpectators = MaxSpectators;
+            mClubOnly = ClubOnly;
             mSwfs = Swfs;
             mCacheAge = UnixTimestamp.GetCurrent();
             mScore = Score;

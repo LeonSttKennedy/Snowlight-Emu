@@ -166,7 +166,8 @@ namespace Snowlight.Game.Rooms
 
             return new RoomInfo((uint)Row["id"], (Row["type"].ToString() == "public" ? RoomType.Public : RoomType.Flat),
                 (uint)Row["owner_id"], (string)Row["name"], (string)Row["description"], Tags, AccessType, (string)Row["password"],
-                Icon, (int)Row["category"], (int)Row["max_users"], (string)Row["swfs"], (int)Row["score"], (string)Row["model"],
+                Icon, (int)Row["category"], (int)Row["max_users"], (Row["enable_queue"].ToString() == "1"), (int)Row["max_spectators"],
+                (Row["club_only"].ToString() == "1"), (string)Row["swfs"], (int)Row["score"], (string)Row["model"],
                 (Row["allow_pets"].ToString() == "1"), (Row["allow_pet_eating"].ToString() == "1"),
                 (Row["disable_blocking"].ToString() == "1"), (Row["hide_walls"].ToString() == "1"),
                 (string)Row["pub_internal_name"], (int)Row["pub_internal_id"], (int)Row["thickness_wall"],

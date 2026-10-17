@@ -232,6 +232,7 @@ namespace Snowlight.Game.Misc
             Register("teleport", new TeleportCommand());
             Register("coords", new CoordsCommand());
             Register("update", new UpdateCommand());
+            Register("spectator", new SpectatorCommand());
             Register("directbadge", new DirectBadgeCommand());
             Register("massbadge", new MassBadgeCommand());
             Register("directgive", new DirectGiveCommand());

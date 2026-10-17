@@ -69,6 +69,9 @@ namespace Snowlight.Game.Sessions
 
         private int mCurrentEffect;
 
+        private bool mSpectatorQueue;
+        private uint mSpectatorQueueRoomId;
+
         public uint Id
         {
             get
@@ -271,7 +274,7 @@ namespace Snowlight.Game.Sessions
         {
             get
             {
-                return ((mRoomJoined && mRoomAuthed) ? mRoomId : 0);
+                return ((mRoomJoined && mRoomAuthed) ? mRoomId : AbsoluteRoomId);
             }
         }
 
@@ -378,6 +381,7 @@ namespace Snowlight.Game.Sessions
                 mTriggerTeleporterId = value;
             }
         }
+
         public int CurrentEffect
         {
             get
@@ -388,6 +392,32 @@ namespace Snowlight.Game.Sessions
             set
             {
                 mCurrentEffect = value;
+            }
+        }
+
+        public bool SpectatorQueue
+        {
+            get
+            {
+                return mSpectatorQueue;
+            }
+
+            set
+            {
+                mSpectatorQueue = value;
+            }
+        }
+
+        public uint SpectatorQueueRoomId
+        {
+            get
+            {
+                return mSpectatorQueueRoomId;
+            }
+
+            set
+            {
+                mSpectatorQueueRoomId = value;
             }
         }
 

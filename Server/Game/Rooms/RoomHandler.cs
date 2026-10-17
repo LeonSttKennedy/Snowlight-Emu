@@ -43,6 +43,7 @@ namespace Snowlight.Game.Rooms
             DataRouter.RegisterHandler(OpcodesIn.ROOM_GET_INFO, new ProcessRequestCallback(GetRoomInfo));
             DataRouter.RegisterHandler(OpcodesIn.ROOM_ANSWER_DOORBELL, new ProcessRequestCallback(AnswerDoorbell));
             DataRouter.RegisterHandler(OpcodesIn.ROOM_CONTINUE_LOAD, new ProcessRequestCallback(ContinueLoadingAfterDoorbell));
+            DataRouter.RegisterHandler(OpcodesIn.CHANGE_ROOM_QUEUE, new ProcessRequestCallback(UserChangeRoomQueue));
 
             // Room options etc
             DataRouter.RegisterHandler(OpcodesIn.ROOM_EXIT, new ProcessRequestCallback(UserExit));
@@ -257,7 +258,7 @@ namespace Snowlight.Game.Rooms
             PrepareRoom(Session, RoomId, Password);
         }
 
-        public static void PrepareRoom(Session Session, uint RoomId, string Password = "", bool BypassAuthentication = false)
+        public static void PrepareRoom(Session Session, uint RoomId, string Password = "", bool BypassAuthentication = false, bool BypassQueue = false)
         {
             // Remove user from any previous room
             RoomManager.RemoveUserFromRoom(Session, false);
@@ -298,14 +299,6 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
-            // Check if the room capacity has been reached
-            if (Info.CurrentUsers >= Info.MaxUsers && !Session.HasRight("enter_full_rooms"))
-            {
-                Session.SendData(RoomJoinErrorComposer.Compose(RoomJoinErrorCode.RoomFull));
-                Session.SendData(RoomKickedComposer.Compose());
-                return;
-            }
-
             // Check if the user has been banned from this room
             if (Instance.IsUserBanned(Session.CharacterId))
             {
@@ -314,8 +307,41 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
+            if (Info.ClubOnly && !Session.HasRight("club_regular"))
+            {
+                Instance.Queue.SendQueueError(Session, "c");
+                return;
+            }
+
+            // Check if the room capacity has been reached
+            bool QueueEnabled = (Info.EnabledQueue || Info.EnabledSpectatorQueue);
+
+            if (Info.CurrentUsers >= Info.MaxUsers && !QueueEnabled && !Session.HasRight("enter_full_rooms"))
+            {
+                Session.SendData(RoomJoinErrorComposer.Compose(RoomJoinErrorCode.RoomFull));
+                Session.SendData(RoomKickedComposer.Compose());
+                return;
+            }
+
             // Mark room as loading and check for initial authorization
             Session.AbsoluteRoomId = Info.Id;
+
+            bool QueueBypass = Session.HasRight("ignore_room_queue") || BypassQueue;
+
+            if (Info.CurrentUsers >= Info.MaxUsers && QueueEnabled && !QueueBypass)
+            {
+                QueueType Type = QueueType.Visitor;
+
+                if (!Info.EnabledQueue && Info.EnabledSpectatorQueue)
+                {
+                    Type = QueueType.Spectator;
+                }
+
+                Instance.Queue.AddUserToQueue(Session, Type);
+                Instance.Queue.SendQueue(Session, Type);
+                return;
+            }
+            
             Session.RoomAuthed = (BypassAuthentication || Info.OwnerId == Session.CharacterId ||
                 Session.HasRight("enter_locked_rooms"));
             Session.RoomJoined = false;
@@ -357,6 +383,27 @@ namespace Snowlight.Game.Rooms
                 }
             }
 
+            // Set room id for admin spectator command
+            if (Session.SpectatorQueue &&
+                (Session.SpectatorQueueRoomId == 0 ||
+                Session.SpectatorQueue.ToString().Length == 0))
+            {
+                Session.SpectatorQueueRoomId = RoomId;
+            }
+
+            // If loading room id is different from user queue cache room id, we will clear any cache
+            if (RoomId != Session.SpectatorQueueRoomId)
+            {
+                Session.SpectatorQueue = false;
+                Session.SpectatorQueueRoomId = 0;
+            }
+
+            // If user is spectator send it to client side
+            if (Session.SpectatorQueue)
+            {
+                Session.SendData(RoomUserSpectatorComposer.Compose());
+            }
+
             // If all these stages have been passed, mark auth as OK and continue loading
             Session.RoomAuthed = true;
             EnterRoom(Session, Instance);
@@ -383,6 +430,20 @@ namespace Snowlight.Game.Rooms
 
                 Session.SendData(RoomRatingInfoComposer.Compose((Session.RatedRoomsCache.HasRatedRoom(Instance.RoomId) || Instance.CheckUserRights(Session, true)) ? Instance.Info.Score : -1));
                 Session.SendData(RoomEventInfoComposer.Compose(Instance.Event));
+            }
+        }
+
+        private static void UserChangeRoomQueue(Session Session, ClientMessage Message)
+        {
+            int QueueId = Message.PopWiredInt32();
+
+            RoomInstance Instance = RoomManager.GetInstanceByRoomId(Session.AbsoluteRoomId);
+
+            if (Instance != null)
+            {
+                QueueType NewType = (QueueType)QueueId;
+                
+                Instance.Queue.ChangeUserQueue(Session, NewType);
             }
         }
 
@@ -497,7 +558,7 @@ namespace Snowlight.Game.Rooms
             {
                 return;
             }
-            
+
             Instance.SendObjects(Session);
 
             if (!Instance.AddUserToRoom(Session))
@@ -633,6 +694,13 @@ namespace Snowlight.Game.Rooms
                 return;
             }
 
+            bool RemoveUserFromQueue = Instance.Queue.RemoveUserFromQueue(Session);
+
+            if (RemoveUserFromQueue)
+            {
+                Session.SendData(RoomKickedComposer.Compose());
+            }
+
             RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
 
             if (Actor == null)
@@ -653,7 +721,7 @@ namespace Snowlight.Game.Rooms
 
             RoomActor Actor = Instance.GetActorByReferenceId(Session.CharacterId);
 
-            if (Actor == null)
+            if (Actor == null || Actor.IsSpectator)
             {
                 return;
             }

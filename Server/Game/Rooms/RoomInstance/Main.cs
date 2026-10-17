@@ -106,6 +106,7 @@ namespace Snowlight.Game.Rooms
                 return Tags;
             }
         }
+
         public bool DisableDiagonal
         {
             get 
@@ -141,9 +142,11 @@ namespace Snowlight.Game.Rooms
             mMusicController = new RoomMusicController();
             mTemporaryStickieRights = new Dictionary<uint, uint>();
             mTradeManager = new TradeManager();
+
             mRoomTriggers = new List<RoomTriggers>();
             mGameManager = new GameManager(this);
             mWiredManager = new WiredManager(this);
+            mRoomQueue = new RoomQueue(this);
 
             mDiagonalEnabled = true;
 
@@ -301,6 +304,7 @@ namespace Snowlight.Game.Rooms
 
             return new RoomInstance(InstanceId, Info, Model);
         }
+
         public void Unload()
         {
             if (mUnloaded)

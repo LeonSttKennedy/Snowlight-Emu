@@ -5,6 +5,7 @@ using Snowlight.Game.Rooms;
 using Snowlight.Game.Characters;
 using Snowlight.Game.Bots;
 using Snowlight.Game.Groups;
+using System.Linq;
 
 namespace Snowlight.Communication.Outgoing
 {
@@ -13,10 +14,18 @@ namespace Snowlight.Communication.Outgoing
         public static ServerMessage Compose(List<RoomActor> Actors)
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.ROOM_USER_LIST);
-            Message.AppendInt32(Actors.Count);
+
+            int ActorCount = Actors.Count - Actors.Where(S => S.IsSpectator).ToList().Count;
+
+            Message.AppendInt32(ActorCount);
 
             foreach (RoomActor Actor in Actors)
             {
+                if (Actor.IsSpectator)
+                {
+                    continue;
+                }
+
                 bool IsBot = (Actor.Type == RoomActorType.AiBot);
                 Bot BotData = (IsBot ? (Bot)Actor.ReferenceObject : null);
                 bool IsPet = (BotData != null && BotData.IsPet);

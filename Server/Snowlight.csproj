@@ -253,9 +253,11 @@
     <Compile Include="Communication\Outgoing\Rooms\RoomUserRemovedComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomUserRespectedComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomUserSleepComposer.cs" />
+    <Compile Include="Communication\Outgoing\Rooms\RoomUserQueueComposer .cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomUserStatusListComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomUserTagsComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomUserTypingComposer.cs" />
+    <Compile Include="Communication\Outgoing\Rooms\RoomUserSpectatorComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomUserWaveComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomWallItemMovedComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomWallItemPlacedComposer.cs" />
@@ -317,6 +319,7 @@
     <Compile Include="Game\Items\DefaultBehaviorHandlers\TotemHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\WaterPatchHandler .cs" />
     <Compile Include="Game\Items\ItemAchievements.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\HotelAdmin\SpectatorCommand.cs" />
     <Compile Include="Game\Misc\HolidayGifts\HolidayGift.cs" />
     <Compile Include="Game\Misc\HolidayGifts\HolidayGiftManager.cs" />
     <Compile Include="Game\Misc\Caches\HolidayGiftsCache.cs" />
@@ -477,6 +480,8 @@
     <Compile Include="Game\Rooms\Polls\RoomPollQuestions .cs" />
     <Compile Include="Game\Rooms\Polls\RoomPoll.cs" />
     <Compile Include="Game\Rooms\Polls\RoomPollManager.cs" />
+    <Compile Include="Game\Rooms\RoomInstance\Queue.cs" />
+    <Compile Include="Game\Rooms\RoomQueue.cs" />
     <Compile Include="Game\Rooms\RoomTriggers.cs" />
     <Compile Include="Game\Sessions\SingleSignOnAuthenticator.cs" />
     <Compile Include="Game\Misc\Vouchers\VoucherManager.cs" />
