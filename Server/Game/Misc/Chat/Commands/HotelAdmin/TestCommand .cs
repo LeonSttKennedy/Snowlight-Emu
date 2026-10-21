@@ -15,6 +15,7 @@ using Snowlight.Communication;
 using Snowlight.Game.Advertisements;
 using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Items;
+using System.Numerics;
 
 namespace Snowlight.Game.Misc
 {
@@ -68,14 +69,6 @@ namespace Snowlight.Game.Misc
             IDK.AppendStringWithBreak(Params[4]);   // Pet Color Code
             Session.SendData(IDK);*/
 
-            /*int.TryParse(Params[1], out int ID);
-
-            ServerMessage IDK = new ServerMessage(912);
-            IDK.AppendInt32(62);
-            IDK.AppendStringWithBreak("Room 62");
-            IDK.AppendInt32(ID);
-            Session.SendData(IDK);*/
-
             /* GROUP JOIN ERROR
              * 0 = group user limit reached
              * 1 = limit of groups per user reached
@@ -87,34 +80,14 @@ namespace Snowlight.Game.Misc
             N.AppendInt32(Id);
             Session.SendData(N);*/
 
-            /*
-            * I don't know what these request needs
-            * Maybe needs to be called when loading a public room?
-            
-            ServerMessage YouAreSpectator = new ServerMessage(254);
-            Session.SendData(YouAreSpectator);
-
-            int.TryParse(Params[1], out int QueueInt1);
-            int.TryParse(Params[3], out int QueueInt2);
-            int.TryParse(Params[4], out int QueueInt3);
-            int.TryParse(Params[6], out int QueueInt4);
-
-            ServerMessage Queue = new ServerMessage(259);
-            Queue.AppendInt32(QueueInt1);
-            Queue.AppendStringWithBreak(Params[2]);
-            Queue.AppendInt32(QueueInt2);
-            Queue.AppendInt32(QueueInt3);
-            Queue.AppendStringWithBreak(Params[5]);
-            Queue.AppendInt32(QueueInt4);
-            Session.SendData(Queue);*/
-
-            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
-            { 
+            /*using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
                 uint.TryParse(Params[1], out var result);
 
                 Session.NewItemsCache.MarkNewItem(MySqlClient, NewItemsCategory.Badges, result);
-                Session.NewItemsCache.SendNewItems(Session);
-            }
+
+                Session.NewItemsCache.SendNewItems(Session);                
+            }*/
         }
     }
 }

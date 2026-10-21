@@ -821,9 +821,9 @@ namespace Snowlight.Game.Rooms
                     return;
                 }
 
-                GiftItem.RemovePermanently(MySqlClient);
                 Instance.TakeItem(GiftItem.Id);
                 Instance.RegenerateRelativeHeightmap();
+                GiftItem.RemovePermanently(MySqlClient, true);
 
                 string[] RowItemIds = ((string)Row["base_ids"]).Split('|');
                 string[] RowAmounts = ((string)Row["amounts"]).Split('|');
@@ -845,142 +845,16 @@ namespace Snowlight.Game.Rooms
 
                         case ItemBehavior.DuckHC:
                         case ItemBehavior.DuckVIP:
+                        case ItemBehavior.ClubSubscription:
 
-                            string BasicAchievement = "ACH_BasicClub";
-                            string VipAchievement = "ACH_VipClub";
-
-                            double Length = 86400 * BaseItem.BehaviorData;
-
-                            ClubSubscriptionLevel Level = BaseItem.Behavior == ItemBehavior.DuckVIP ?
-                                ClubSubscriptionLevel.VipClub : BaseItem.Behavior == ItemBehavior.DuckHC ?
-                                ClubSubscriptionLevel.BasicClub : ClubSubscriptionLevel.None;
-
-                            if (Session.SubscriptionManager.IsActive &&
-                                Session.SubscriptionManager.SubscriptionLevel == ClubSubscriptionLevel.VipClub)
-                            {
-                                Level = ClubSubscriptionLevel.VipClub;
-                            }
-
-                            // Extend membership
-                            Session.SubscriptionManager.AddOrExtend((int)Level, Length);
-
-                            // Check if we need to manually award basic/vip badges
-                            bool NeedsBasicUnlock = !Session.BadgeCache.ContainsCodeWith(BasicAchievement)
-                                && Level >= ClubSubscriptionLevel.BasicClub;
-
-                            bool NeedsVipUnlock = !Session.BadgeCache.ContainsCodeWith(VipAchievement)
-                                && Level == ClubSubscriptionLevel.VipClub;
-
-                            // Reload the badge cache (reactivating any disabled subscription badges)
-                            Session.BadgeCache.ReloadCache(MySqlClient, Session.AchievementCache);
-
-                            // Virtually unlock the basic achievement without reward if needed
-                            if (NeedsBasicUnlock)
-                            {
-                                Achievement Achievement = AchievementManager.GetAchievement(BasicAchievement);
-
-                                if (Achievement != null)
-                                {
-                                    UserAchievement UserAchievement = Session.AchievementCache.GetAchievementData(
-                                        BasicAchievement);
-
-                                    if (UserAchievement != null)
-                                    {
-                                        Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
-                                            0, 0, 0));
-                                    }
-                                }
-                            }
-
-                            // Virtually unlock the VIP achievement without reward if needed
-                            if (NeedsVipUnlock)
-                            {
-                                Achievement Achievement = AchievementManager.GetAchievement(VipAchievement);
-
-                                if (Achievement != null)
-                                {
-                                    UserAchievement UserAchievement = Session.AchievementCache.GetAchievementData(
-                                        VipAchievement);
-
-                                    if (UserAchievement != null)
-                                    {
-                                        Session.SendData(AchievementUnlockedComposer.Compose(Achievement, UserAchievement.Level,
-                                           0, 0, 0));
-                                    }
-                                }
-                            }
-
-                            // Disable any VIP badges if they still aren't valid
-                            if (Session.SubscriptionManager.SubscriptionLevel < ClubSubscriptionLevel.VipClub)
-                            {
-                                Session.BadgeCache.DisableSubscriptionBadge(VipAchievement);
-                            }
-
-                            // Synchronize equipped badges if the user has unlocked anything
-                            if (NeedsVipUnlock || NeedsBasicUnlock)
-                            {
-                                if (Instance != null)
-                                {
-                                    Instance.BroadcastMessage(RoomUserBadgesComposer.Compose(Session.CharacterId,
-                                        Session.BadgeCache.EquippedBadges));
-                                }
-                            }
-
-                            Session.SubscriptionManager.UpdateUserBadge();
-
-                            // Clear catalog cache for user (in case of changes)
-                            CatalogManager.ClearCacheGroup(Session.CharacterId);
-
-                            // Send new data to client
-                            Session.SendData(FuseRightsListComposer.Compose(Session));
-                            Session.SendData(SubscriptionStatusComposer.Compose(Session.SubscriptionManager, true));
-
-                            if (Session.SubscriptionManager.GiftPoints > 0)
-                            {
-                                Session.SendData(ClubGiftReadyComposer.Compose(Session.SubscriptionManager.GiftPoints));
-                            }
-
+                            CatalogPurchaseHandler.UnlockClub(MySqlClient, Session, BaseItem, Instance);
                             break;
                     }
 
-                    List<Item> GeneratedGenericItems = new List<Item>();
-                    for (int a = 0; a < Amount; a++)
-                    {
-                        GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, BaseItem.Id,
-                            Session.CharacterInfo.Id, (string)Row["extra_data"], (string)Row["extra_data"], ExpireTimestamp));
-                    }
-
-                    switch (BaseItem.Behavior)
-                    {
-                        case ItemBehavior.Teleporter:
-
-                            Item LinkedItem = ItemFactory.CreateItem(MySqlClient, BaseItem.Id,
-                                Session.CharacterInfo.Id, GeneratedGenericItems[0].Id.ToString(), string.Empty,
-                                ExpireTimestamp);
-
-                            GeneratedGenericItems[0].Flags = LinkedItem.Id.ToString();
-                            GeneratedGenericItems[0].SynchronizeDatabase(MySqlClient, true);
-
-                            GeneratedGenericItems.Add(LinkedItem);
-                            break;
-                    }
-
-                    foreach (Item GeneratedItem in GeneratedGenericItems)
-                    {
-                        Session.InventoryCache.Add(GeneratedItem);
-
-                        int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
-
-                        Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
-                    }
-
-                    Session.NewItemsCache.SendNewItems(Session);
+                    ItemFactory.GenerateUserItems(MySqlClient, Session, BaseItem, (string)Row["extra_data"], ExpireTimestamp, true, Amount);
                 }
                 
                 Session.SendData(InventoryRefreshComposer.Compose());
-
-                MySqlClient.SetParameter("itemid", GiftItem.Id);
-                MySqlClient.ExecuteNonQuery("DELETE FROM user_gifts WHERE item_id = @itemid LIMIT 1");
             }
         }
 

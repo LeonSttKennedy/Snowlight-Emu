@@ -232,6 +232,7 @@
     <Compile Include="Communication\Outgoing\Rooms\RoomJoinErrorComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomKickedComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomMutedComposer.cs" />
+    <Compile Include="Communication\Outgoing\User\NotificationEventComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomOpenFlatComposer.cs" />
     <Compile Include="Communication\Outgoing\Pets\PetUpdateComposer.cs" />
     <Compile Include="Communication\Outgoing\Rooms\RoomRatingInfoComposer.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="Game\Items\DefaultBehaviorHandlers\TotemHandler.cs" />
     <Compile Include="Game\Items\DefaultBehaviorHandlers\WaterPatchHandler .cs" />
     <Compile Include="Game\Items\ItemAchievements.cs" />
+    <Compile Include="Game\Items\ItemFactory.cs" />
     <Compile Include="Game\Misc\Chat\Commands\HotelAdmin\SpectatorCommand.cs" />
     <Compile Include="Game\Misc\HolidayGifts\HolidayGift.cs" />
     <Compile Include="Game\Misc\HolidayGifts\HolidayGiftManager.cs" />
@@ -400,7 +402,6 @@
     <Compile Include="Game\Items\ItemDefinition.cs" />
     <Compile Include="Game\Items\ItemDefinitionManager.cs" />
     <Compile Include="Game\Items\ItemEventDispatcher.cs" />
-    <Compile Include="Game\Items\ItemFactory.cs" />
     <Compile Include="Game\Items\StaticObject.cs" />
     <Compile Include="Game\Items\Wired\WiredData.cs" />
     <Compile Include="Game\Items\Wired\WiredManager.cs" />

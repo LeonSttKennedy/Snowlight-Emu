@@ -1,4 +1,5 @@
 ﻿using Snowlight.Game.Items;
+using Snowlight.Game.Rooms;
 using Snowlight.Storage;
 using Snowlight.Util;
 using System;
@@ -11,13 +12,11 @@ namespace Snowlight.Game.Catalog
 {
     public class MarketplaceOffers
     {
-        private uint mId;
+        private uint mOfferId;
         private uint mUserId;
-        private uint mDefinitionId;
+        private Item mItem;
         private int mOfferState;
         private int mItemType;
-        private uint mSprite;
-        private string mExtraData;
         private int mAskingPrice;
         private int mTotalPrice;
         private double mTimestamp;
@@ -29,9 +28,10 @@ namespace Snowlight.Game.Catalog
         {
             get 
             {
-                return mId;
+                return mOfferId;
             }
         }
+
         public uint UserId
         {
             get
@@ -39,13 +39,23 @@ namespace Snowlight.Game.Catalog
                 return mUserId;
             }
         }
+
+        public Item Item
+        {
+            get
+            {
+                return mItem;
+            }
+        }
+
         public uint DefinitionId
         {
             get
             {
-                return mDefinitionId;
+                return Definition.Id;
             }
         }
+
         public int State
         {
             get
@@ -53,6 +63,7 @@ namespace Snowlight.Game.Catalog
                 return mOfferState;
             }
         }
+
         public int ItemType
         {
             get
@@ -60,18 +71,20 @@ namespace Snowlight.Game.Catalog
                 return mItemType;
             }
         }
+
         public uint Sprite
         {
             get
             {
-                return mSprite;
+                return Definition.SpriteId;
             }
         }
+
         public string ExtraData
         {
             get
             {
-                return mExtraData;
+                return mItem.Flags;
             }
         }
         public int AskingPrice
@@ -81,6 +94,7 @@ namespace Snowlight.Game.Catalog
                 return mAskingPrice;
             }
         }
+
         public int TotalPrice
         {
             get
@@ -88,6 +102,7 @@ namespace Snowlight.Game.Catalog
                 return mTotalPrice;
             }
         }
+
         public double Timestamp
         {
             get
@@ -95,6 +110,7 @@ namespace Snowlight.Game.Catalog
                 return mTimestamp;
             }
         }
+
         public int LimitedNumber
         {
             get
@@ -102,6 +118,7 @@ namespace Snowlight.Game.Catalog
                 return mLimitedNumber;
             }
         }
+
         public int LimitedStack
         {
             get
@@ -114,7 +131,7 @@ namespace Snowlight.Game.Catalog
         {
             get
             {
-                return ItemDefinitionManager.GetDefinition(mDefinitionId);
+                return mItem.Definition;
             }
         }
 
@@ -139,14 +156,20 @@ namespace Snowlight.Game.Catalog
             }
         }
 
-        public MarketplaceOffers(uint OfferID, uint UserID, uint ItemID, int State, uint Sprite, string ExtraData, int AskingPrice, int TotalPrice, int ItemType, double Timestamp, int LimitedNumber, int LimitedStack)
+        public MarketplaceOffers(uint OfferID, uint UserID, uint ItemID, int State, int AskingPrice, int TotalPrice, int ItemType, double Timestamp, int LimitedNumber, int LimitedStack)
         {
-            mId = OfferID;
+            mOfferId = OfferID;
             mUserId = UserID;
-            mDefinitionId = ItemID;
+
+            using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
+            {
+                MySqlClient.SetParameter("id", ItemID);
+                DataRow ItemRow = MySqlClient.ExecuteQueryRow("SELECT * FROM items WHERE id = @id LIMIT 1");
+
+                mItem = ItemFactory.CreateFromDatabaseRow(ItemRow);
+            }
+
             mOfferState = State;
-            mSprite = Sprite;
-            mExtraData = ExtraData;
             mItemType = ItemType;
             mTimestamp = Timestamp;
             mAskingPrice = AskingPrice;
@@ -162,11 +185,11 @@ namespace Snowlight.Game.Catalog
                 default:
                 case 1:
 
-                    return mSprite;
+                    return Sprite;
 
                 case 2:
 
-                    return mExtraData != string.Empty ? uint.Parse(mExtraData) : mSprite;
+                    return ExtraData != string.Empty ? uint.Parse(ExtraData) : Sprite;
             }
         }
 
@@ -177,12 +200,12 @@ namespace Snowlight.Game.Catalog
             {
                 default:
                 case 1:
-                    Count = CatalogManager.MarketplaceOffers.Count(c => c.Value.State == 1 && c.Value.Sprite == mSprite);
+                    Count = CatalogManager.MarketplaceOffers.Count(c => c.Value.State == 1 && c.Value.Sprite == Sprite);
                     return Count;
 
                 case 2:
 
-                    Count = CatalogManager.MarketplaceOffers.Count(c => c.Value.State == 1 && c.Value.Sprite == mSprite && c.Value.ExtraData == mExtraData);
+                    Count = CatalogManager.MarketplaceOffers.Count(c => c.Value.State == 1 && c.Value.Sprite == Sprite && c.Value.ExtraData == ExtraData);
                     return Count;
             }
         }
@@ -196,9 +219,9 @@ namespace Snowlight.Game.Catalog
                 default:
                 case 1:
                     {
-                        if (CatalogManager.MarketplaceAvarages.ContainsKey(mSprite))
+                        if (CatalogManager.MarketplaceAvarages.ContainsKey(Sprite))
                         {
-                            foreach (MarketplaceAvarage Item in CatalogManager.MarketplaceAvarages[mSprite])
+                            foreach (MarketplaceAvarage Item in CatalogManager.MarketplaceAvarages[Sprite])
                             {
                                 TimeSpan SoldTime = DateTime.Now - Item.SoldTimeStamp;
 
@@ -214,13 +237,13 @@ namespace Snowlight.Game.Catalog
 
                 case 2:
                     {
-                        if (CatalogManager.MarketplaceAvarages.ContainsKey(mSprite))
+                        if (CatalogManager.MarketplaceAvarages.ContainsKey(Sprite))
                         {
-                            foreach (MarketplaceAvarage Item in CatalogManager.MarketplaceAvarages[mSprite])
+                            foreach (MarketplaceAvarage Item in CatalogManager.MarketplaceAvarages[Sprite])
                             {
                                 TimeSpan SoldTime = DateTime.Now - Item.SoldTimeStamp;
 
-                                if (Item.ExtraData == mExtraData && SoldTime.TotalDays <= 1)
+                                if (Item.ExtraData == ExtraData && SoldTime.TotalDays <= 1)
                                 {
                                     TotalSolds += 1;
                                 }
@@ -244,7 +267,7 @@ namespace Snowlight.Game.Catalog
             if (Compare() && mOfferState != 2)
             {
                 mOfferState = 3;
-                MySqlClient.SetParameter("offerid", mId);
+                MySqlClient.SetParameter("offerid", mOfferId);
                 MySqlClient.SetParameter("state", mOfferState);
                 MySqlClient.ExecuteNonQuery("UPDATE catalog_marketplace_offers SET state = @state WHERE offer_id = @offerid LIMIT 1");
             }

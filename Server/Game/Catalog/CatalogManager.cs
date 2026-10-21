@@ -270,10 +270,10 @@ namespace Snowlight.Game.Catalog
 
                     int Id = (int)Row["id"];
 
-                    mPages.Add(Id, new CatalogPage((int)Row["id"], (int)Row["parent_id"], (string)Row["title"],
-                        (int)Row["icon"], (int)Row["color"], (string)Row["required_right"], (Row["visible"].ToString() == "1"),
-                        (Row["dummy_page"].ToString() == "1"), (Row["coming_soon"].ToString() == "1"), (string)Row["template"], PageStrings1, PageStrings2,
-                        mCatalogItems.ContainsKey(Id) ? mCatalogItems[Id] : new List<CatalogItem>()));
+                    mPages.Add(Id, new CatalogPage((int)Row["id"], (int)Row["parent_id"], (string)Row["title"], (int)Row["icon"],
+                        (int)Row["color"], (string)Row["required_right"], (Row["visible"].ToString() == "1"),
+                        (Row["dummy_page"].ToString() == "1"), (Row["coming_soon"].ToString() == "1"), (string)Row["template"],
+                        PageStrings1, PageStrings2, mCatalogItems.ContainsKey(Id) ? mCatalogItems[Id] : new List<CatalogItem>()));
 
 
                     CountLoaded++;
@@ -326,10 +326,9 @@ namespace Snowlight.Game.Catalog
             foreach (DataRow Row in MarketplaceOffers.Rows)
             {
                 MarketplaceOffers Offer = new MarketplaceOffers((uint)Row["offer_id"], (uint)Row["user_id"],
-                    (uint)Row["item_id"], int.Parse(Row["state"].ToString()), (uint)Row["sprite_id"],
-                    (string)Row["extra_data"],(int)Row["asking_price"], (int)Row["total_price"],
-                    int.Parse(Row["item_type"].ToString()),(double)Row["timestamp"], (int)Row["limited_number"],
-                    (int)Row["limited_stack"]);
+                    (uint)Row["item_id"], int.Parse(Row["state"].ToString()), (int)Row["asking_price"],
+                    (int)Row["total_price"], int.Parse(Row["item_type"].ToString()),(double)Row["timestamp"],
+                    (int)Row["limited_number"], (int)Row["limited_stack"]);
 
                 Offer.CheckForExpiracy(MySqlClient);
 

@@ -230,6 +230,7 @@ namespace Snowlight.Communication
         public const uint FRIEND_BAR_RESULT = 831;
         public const uint INVENTORY_NEW_ITEM = 832;
         public const uint MESSENGER_FRIEND_EVENT = 833;
+        public const uint ROOM_NOTIFICATION_EVENT = 912;
         public const uint ACHIEVEMENTS_PROGRESS_UPDATE = 913;
         public const uint ROOM_USER_GROUPS_LIST = 915;
         public const uint GET_STREAM_EVENT = 950;

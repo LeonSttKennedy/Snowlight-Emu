@@ -26,6 +26,11 @@ namespace Snowlight.Game.Items
 
                     foreach (KeyValuePair<uint, Item> Item in mInner)
                     {
+                        if (Item.Value.MarketplaceListed)
+                        {
+                            continue;
+                        }
+
                         Copy.Add(Item.Key, Item.Value);
                     }
 
@@ -172,6 +177,11 @@ namespace Snowlight.Game.Items
 
                 foreach (KeyValuePair<uint, Item> Item in mInner)
                 {
+                    if (Item.Value.MarketplaceListed)
+                    {
+                        continue;
+                    }
+
                     if (Item.Value.Definition.Type == ItemType.FloorItem)
                     {
                         Copy.Add(Item.Key, Item.Value);
@@ -192,6 +202,11 @@ namespace Snowlight.Game.Items
                 {
                     if (Item.Value.Definition.Type == ItemType.WallItem)
                     {
+                        if (Item.Value.MarketplaceListed)
+                        {
+                            continue;
+                        }
+
                         Copy.Add(Item.Key, Item.Value);
                     }
                 }

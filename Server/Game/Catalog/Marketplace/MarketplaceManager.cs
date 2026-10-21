@@ -96,7 +96,7 @@ namespace Snowlight.Game.Catalog
                 return;
             }
 
-            if(Offer.State != 1 || Offer.Timestamp <= FormatTimestamp())
+            if (Offer.State != 1 || Offer.Timestamp <= FormatTimestamp())
             {
                 if (CatalogManager.MarketplaceOffers.Values.Where(O => O.State == 1 && O.DefinitionId == Offer.DefinitionId).Count() > 0)
                 {
@@ -105,10 +105,10 @@ namespace Snowlight.Game.Catalog
                 }
                 else
                 {
-                    SerializeOffers(Session, UserCache.MinPrice, UserCache.MaxPrice, UserCache.SearchQuery, UserCache.FilterMode);
-
                     Session.SendData(CatalogMarketplaceBuyOfferResultComposer.Compose(MarketplaceError.AllSoldOut));
                 }
+
+                SerializeOffers(Session, UserCache.MinPrice, UserCache.MaxPrice, UserCache.SearchQuery, UserCache.FilterMode);
 
                 return;
             }
@@ -147,18 +147,11 @@ namespace Snowlight.Game.Catalog
             Session.CharacterInfo.UpdateCreditsBalance(MySqlClient, -Offer.TotalPrice);
             Session.SendData(CreditsBalanceComposer.Compose(Session.CharacterInfo.CreditsBalance));
 
-            List<Item> GeneratedGenericItems = new List<Item>();
-            GeneratedGenericItems.Add(ItemFactory.CreateItem(MySqlClient, UserItem.Id,
-                    Session.CharacterInfo.Id, Offer.ExtraData, Offer.ExtraData, 0));
+            Offer.Item.UpdateMarketplaceStatus(MySqlClient, Session.CharacterId, false);
+            Session.InventoryCache.Add(Offer.Item);
 
-            foreach (Item GeneratedItem in GeneratedGenericItems)
-            {
-                Session.InventoryCache.Add(GeneratedItem);
-
-                int TabId = GeneratedItem.Definition.Type == ItemType.FloorItem ? 1 : 2;
-
-                Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, GeneratedItem.Id);
-            }
+            int TabId = Offer.Item.Definition.Type == ItemType.FloorItem ? 1 : 2;
+            Session.NewItemsCache.MarkNewItem(MySqlClient, (NewItemsCategory)TabId, Offer.Item.Id);
 
             Session.NewItemsCache.SendNewItems(Session);
             Session.SendData(InventoryRefreshComposer.Compose());
@@ -183,22 +176,19 @@ namespace Snowlight.Game.Catalog
 
                     using (SqlDatabaseClient MySqlClient = SqlDatabaseManager.GetClient())
                     {
-                        MySqlClient.SetParameter("def_id", UserItem.DefinitionId);
+                        MySqlClient.SetParameter("item_id", UserItem.Id);
                         MySqlClient.SetParameter("user_id", Session.CharacterInfo.Id);
                         MySqlClient.SetParameter("price", SellingPrice);
                         MySqlClient.SetParameter("total_price", TotalPrice);
-                        MySqlClient.SetParameter("public_name", UserItem.Definition.Name);
-                        MySqlClient.SetParameter("sprite_id", UserItem.Definition.SpriteId);
                         MySqlClient.SetParameter("item_type", ItemType);
                         MySqlClient.SetParameter("timestamp", UnixTimestamp.GetCurrent());
-                        MySqlClient.SetParameter("extra_data", UserItem.Flags);
-                        string RawId = MySqlClient.ExecuteScalar("INSERT INTO catalog_marketplace_offers (item_id, user_id, asking_price, total_price, public_name, sprite_id, item_type, timestamp, extra_data) VALUES (@def_id, @user_id, @price, @total_price, @public_name, @sprite_id, @item_type, @timestamp, @extra_data); SELECT LAST_INSERT_ID();").ToString();
+                        string RawId = MySqlClient.ExecuteScalar("INSERT INTO catalog_marketplace_offers (item_id, user_id, asking_price, total_price, item_type, timestamp) VALUES (@item_id, @user_id, @price, @total_price, @item_type, @timestamp); SELECT LAST_INSERT_ID();").ToString();
 
                         uint.TryParse(RawId, out uint Id);
                         if (Id > 0)
                         {
                             ErrorCode = MarketplaceSellOk.SellOK;
-                            UserItem.RemovePermanently(MySqlClient);
+                            UserItem.UpdateMarketplaceStatus(MySqlClient, Session.CharacterId, true);
                             Session.CharacterInfo.UpdateMarketplaceTokens(MySqlClient, -1);
                             Session.InventoryCache.RemoveItem(ItemID);
                             Session.SendData(InventoryRefreshComposer.Compose());

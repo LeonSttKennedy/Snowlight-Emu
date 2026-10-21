@@ -1,15 +1,14 @@
-﻿using System;
-using System.Data;
-
-using Snowlight.Storage;
+﻿using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Achievements;
+using Snowlight.Game.Items.Wired;
 using Snowlight.Game.Misc;
 using Snowlight.Game.Rooms;
-using Snowlight.Specialized;
-using System.Collections.Generic;
-using Snowlight.Game.Items.Wired;
-using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Sessions;
-using Snowlight.Game.Achievements;
+using Snowlight.Specialized;
+using Snowlight.Storage;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Snowlight.Game.Items
 {
@@ -33,6 +32,8 @@ namespace Snowlight.Game.Items
         private uint mSoundManagerId;
         private int mSoundManagerOrder;
         private double mExpireTimestamp;
+
+        private bool mMarketplaceListed;
 
         private bool mTimmerRunning;
         private bool mLockTileSquare;
@@ -348,6 +349,14 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public bool MarketplaceListed
+        {
+            get
+            {
+                return mMarketplaceListed;
+            }
+        }
+
         public WiredData WiredData
         {
             get
@@ -362,7 +371,7 @@ namespace Snowlight.Game.Items
 
         public Item(uint Id, uint DefinitionId, uint UserId, uint RoomId, Vector3 RoomPos, string RoomWallPos, int Rotation,
             string Flags, string DisplayFlags, bool Untradable, uint SoundManagerId, int SoundManagerOrder, double ExpireTimestamp,
-            WiredManager WiredManager)
+            bool MarketplaceListed, WiredManager WiredManager)
         {
             mId = Id;
             mDefinitionId = DefinitionId;
@@ -380,7 +389,9 @@ namespace Snowlight.Game.Items
             mSoundManagerId = SoundManagerId;
             mSoundManagerOrder = SoundManagerOrder;
             mExpireTimestamp = ExpireTimestamp;
-            
+
+            mMarketplaceListed = MarketplaceListed;
+
             mTimmerRunning = false;
             mLockTileSquare = false;
             mInteractHelper = 0;
@@ -426,7 +437,7 @@ namespace Snowlight.Game.Items
             mUpdateTicks = Ticks;
         }
 
-        public void MoveToUserInventory(SqlDatabaseClient MySqlClient, uint UserId)
+        public void MoveToUserInventory(SqlDatabaseClient MySqlClient, uint UserId, bool UpdateMarketplaceStatus = false, bool MarketplaceStatus = false)
         {
             mUserId = UserId;
             mRoomId = 0;
@@ -435,6 +446,11 @@ namespace Snowlight.Game.Items
             mRoomRot = 0;
             mSoundManagerId = 0;
             mSoundManagerOrder = 0;
+
+            if (UpdateMarketplaceStatus)
+            {
+                mMarketplaceListed = MarketplaceStatus;
+            }
 
             if (MySqlClient != null)
             {
@@ -477,6 +493,11 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public void UpdateMarketplaceStatus(SqlDatabaseClient MySqlClient, uint UserId, bool MarketplaceStatus)
+        {
+            MoveToUserInventory(MySqlClient, UserId, true, MarketplaceStatus);
+        }
+
         public void SynchronizeDatabase(SqlDatabaseClient MySqlClient, bool FlagsOnly = false)
         {
             MySqlClient.SetParameter("id", mId);
@@ -496,7 +517,8 @@ namespace Snowlight.Game.Items
                 MySqlClient.SetParameter("roomrot", mRoomRot);
                 MySqlClient.SetParameter("soundmgrid", mSoundManagerId);
                 MySqlClient.SetParameter("soundmgrorder", mSoundManagerOrder);
-                MySqlClient.ExecuteNonQuery("UPDATE items SET user_id = @userid, room_id = @roomid, room_pos = @roompos, room_wall_pos = @roomwallpos, room_rot = @roomrot, flags = @flags, flags_display = @flagsd, soundmanager_id = @soundmgrid, soundmanager_order = @soundmgrorder WHERE id = @id LIMIT 1");
+                MySqlClient.SetParameter("marketplacelisted", mMarketplaceListed ? "1" : "0");
+                MySqlClient.ExecuteNonQuery("UPDATE items SET user_id = @userid, room_id = @roomid, room_pos = @roompos, room_wall_pos = @roomwallpos, room_rot = @roomrot, flags = @flags, flags_display = @flagsd, soundmanager_id = @soundmgrid, soundmanager_order = @soundmgrorder, marketplace_listed = @marketplacelisted WHERE id = @id LIMIT 1");
             }
         }
 
@@ -519,10 +541,16 @@ namespace Snowlight.Game.Items
             }
         }
 
-        public void RemovePermanently(SqlDatabaseClient MySqlClient)
+        public void RemovePermanently(SqlDatabaseClient MySqlClient, bool IsGift = false)
         {
             MySqlClient.SetParameter("id", mId);
-            MySqlClient.ExecuteNonQuery("DELETE FROM items WHERE id = @id LIMIT 1");       
+            MySqlClient.ExecuteNonQuery("DELETE FROM items WHERE id = @id LIMIT 1");
+
+            if (IsGift)
+            {
+                MySqlClient.SetParameter("itemid", mId);
+                MySqlClient.ExecuteNonQuery("DELETE FROM user_gifts WHERE item_id = @itemid LIMIT 1");
+            }
         }
     }
 }

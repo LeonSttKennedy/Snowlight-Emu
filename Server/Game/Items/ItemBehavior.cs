@@ -57,33 +57,34 @@ namespace Snowlight.Game.Items
         GameCounter = 50,
         DuckHC = 51,
         DuckVIP = 52,
-        Platform = 53,
-        WelcomeGift = 54,
-        RoomBackground = 55,
-        BlackHole = 56,
-        WaterPatch = 57,
-        TotemLeg = 58,
-        TotemHead = 59,
-        TotemPlanet = 60,
-        RollerRink = 61,
-        SkateRail = 62,
-        TagPole = 63,
-        IceSkating = 64,
-        EggTagPole = 65,
-        BunnyRun = 66,
-        BanzaiGate = 67,
-        BanzaiPyramid = 68,
-        BanzaiSphere = 69,
-        BanzaiTile = 70,
-        BanzaiPuck = 71,
-        BanzaiTeleporter = 72,
-        BanzaiScore = 73,
-        FreezeGate = 74,
-        FreezeGeysir = 75,
-        FreezeTile = 76,
-        FreezeBlock = 77,
-        FreezeScore = 79,
-        FreezeExitTile = 80
+        ClubSubscription = 53,
+        Platform = 54,
+        WelcomeGift = 55,
+        RoomBackground = 56,
+        BlackHole = 57,
+        WaterPatch = 58,
+        TotemLeg = 59,
+        TotemHead = 60,
+        TotemPlanet = 61,
+        RollerRink = 62,
+        SkateRail = 63,
+        TagPole = 64,
+        IceSkating = 65,
+        EggTagPole = 66,
+        BunnyRun = 67,
+        BanzaiGate = 68,
+        BanzaiPyramid = 69,
+        BanzaiSphere = 70,
+        BanzaiTile = 71,
+        BanzaiPuck = 72,
+        BanzaiTeleporter = 73,
+        BanzaiScore = 74,
+        FreezeGate = 75,
+        FreezeGeysir = 76,
+        FreezeTile = 77,
+        FreezeBlock = 78,
+        FreezeScore = 80,
+        FreezeExitTile = 81
     }
 
     public static class ItemBehaviorUtil
@@ -371,6 +372,10 @@ namespace Snowlight.Game.Items
                 case "duckvip":
 
                     return ItemBehavior.DuckVIP;
+
+                case "clubsubscription":
+
+                    return ItemBehavior.ClubSubscription;
 
                 case "welcome_gift":
 

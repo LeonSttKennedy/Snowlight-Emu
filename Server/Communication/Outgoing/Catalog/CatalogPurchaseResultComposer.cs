@@ -9,6 +9,13 @@ namespace Snowlight.Communication.Outgoing
 {
     public static class CatalogPurchaseResultComposer
     {
+        public static ServerMessage Compose()
+        {
+            ServerMessage Message = new ServerMessage(OpcodesOut.CATALOG_PURCHASE_RESULT);
+            Message.AppendUInt32(0);
+            return Message;
+        }
+
         public static ServerMessage Compose(CatalogItem Item)
         {
             ServerMessage Message = new ServerMessage(OpcodesOut.CATALOG_PURCHASE_RESULT);

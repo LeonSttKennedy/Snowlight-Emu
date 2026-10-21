@@ -196,7 +196,7 @@ namespace Snowlight.Game.Rooms
 
                     if (ItemName.Equals("hububar"))
                     {
-                        Item Hububar = new Item(Id, 175, 0, Info.Id, RoomPosition, string.Empty, RoomRotation, string.Empty, string.Empty, false, 0, 0, 0, null);
+                        Item Hububar = new Item(Id, 175, 0, Info.Id, RoomPosition, string.Empty, RoomRotation, string.Empty, string.Empty, false, 0, 0, 0, false, null);
                         mItems.Add(Id, Hububar);
                     }
                     else
