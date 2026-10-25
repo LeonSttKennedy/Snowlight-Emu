@@ -10,7 +10,6 @@ using Snowlight.Game.Rights;
 using Snowlight.Game.Sessions;
 using Snowlight.Game.Moderation;
 using Snowlight.Communication.Outgoing;
-using System.Web.UI.WebControls;
 
 namespace Snowlight.Game.Misc
 {
@@ -18,17 +17,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            {
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return "<username> <code>"; }
+            get
+            {
+                return "<username> <code>";
+            }
         }
 
         public string Description
         {
-            get { return "Gives to a single user an badge."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_directbadge_description");
+            }
         }
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {

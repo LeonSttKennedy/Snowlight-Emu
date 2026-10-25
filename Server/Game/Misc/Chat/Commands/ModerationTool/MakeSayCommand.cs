@@ -7,9 +7,9 @@ using Snowlight.Util;
 using Snowlight.Storage;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
+using Snowlight.Game.Characters;
 using Snowlight.Game.Moderation;
 using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Characters;
 
 namespace Snowlight.Game.Misc
 {
@@ -17,17 +17,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "moderation_tool"; }
+            get
+            {
+                return "moderation_tool";
+            }
         }
 
         public string Parameters
         {
-            get { return "<username> <message>"; }
+            get
+            {
+                return "<username> <message>";
+            }
         }
 
         public string Description
         {
-            get { return "Makes another user says a message."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_make_say_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

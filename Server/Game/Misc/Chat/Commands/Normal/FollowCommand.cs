@@ -14,17 +14,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Parameters
         {
-            get { return "<username>"; }
+            get
+            {
+                return "<username>";
+            }
         }
 
         public string Description
         {
-            get { return "Allows you to goes to in specificied room that user in."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_follow_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

@@ -14,17 +14,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "club_vip"; }
+            get
+            {
+                return "club_vip";
+            }
         }
 
         public string Parameters
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Description
         {
-            get { return "Send a hotel alert for your event."; }
+            get
+            { 
+                return ExternalTexts.GetValue("command_eventalert_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

@@ -16,17 +16,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            {
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return "<username>"; }
+            get
+            {
+                return "<username>";
+            }
         }
 
         public string Description
         {
-            get { return "Kicks a user from hotel."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_superkick_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

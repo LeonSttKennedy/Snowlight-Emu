@@ -914,7 +914,6 @@ namespace Snowlight.Game.Characters
             mFigure = NewFigure;
         }
 
-
         public void UpdateMotto(SqlDatabaseClient MySqlClient, string NewMotto)
         {
             mMotto = NewMotto;

@@ -16,17 +16,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "moderation_tool"; }
+            get
+            {
+                return "moderation_tool";
+            }
         }
 
         public string Parameters
         {
-            get { return "<link> <message>"; }
+            get
+            {
+                return "<link> <message>";
+            }
         }
 
         public string Description
         {
-            get { return "Sends an alert to all users in current room with link."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_ral_fixed_text");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

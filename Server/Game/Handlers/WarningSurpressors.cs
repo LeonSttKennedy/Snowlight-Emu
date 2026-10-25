@@ -1,11 +1,12 @@
-﻿using System;
-
-using Snowlight.Game.Sessions;
-using Snowlight.Communication;
+﻿using Snowlight.Communication;
 using Snowlight.Communication.Incoming;
-using Snowlight.Game.Advertisements;
-using Snowlight.Game.Rooms;
 using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Advertisements;
+using Snowlight.Game.Navigation;
+using Snowlight.Game.Rooms;
+using Snowlight.Game.Sessions;
+using System;
+using System.Runtime.Remoting.Messaging;
 
 namespace Snowlight.Game.Handlers
 {
@@ -13,6 +14,10 @@ namespace Snowlight.Game.Handlers
     {
         public static void Initialize()
         {
+            // com.sulake.habbo.communication.messages.outgoing.room.publicroom.ChangeRoomMessageComposer;
+            // something to do with arrows in public rooms, sends back one ID.
+            DataRouter.RegisterHandler(111, new ProcessRequestCallback(SurpressingHandler));
+
             // com.sulake.habbo.communication.messages.outgoing.tracking.LatencyPingReportMessageComposer;
             // something to do with latency..
             DataRouter.RegisterHandler(316, new ProcessRequestCallback(SurpressingHandler));

@@ -19,25 +19,39 @@ namespace Snowlight.Game.Misc
     class InfobusCommand : IChatCommand
     {
         private string mInfobusPoolQuestion;
+
         public string InfobusPoolQuestion
         {
-            get { return mInfobusPoolQuestion; }
+            get
+            {
+                return mInfobusPoolQuestion;
+            }
         }
 
         public string PermissionRequired
         {
-            get { return "moderation_tool"; }
+            get
+            {
+                return "moderation_tool";
+            }
         }
 
         public string Parameters
         {
-            get { return "<help>"; }
+            get
+            {
+                return "<help>";
+            }
         }
 
         public string Description
         {
-            get { return "Infobus command."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_infobus_description");
+            }
         }
+
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {
             if(Params.Length == 1)
@@ -124,7 +138,9 @@ namespace Snowlight.Game.Misc
                             {
                                 InfobusManager.InfobusPoolOptions.Clear();
                             }
+
                             mInfobusPoolQuestion = null;
+
                             Session.SendData(RoomChatComposer.Compose(Actor.Id, ExternalTexts.GetValue("command_infobus_reset"), 0, ChatType.Whisper));
                             return;
                         }
@@ -134,6 +150,7 @@ namespace Snowlight.Game.Misc
                             RoomInfo InfobusRoom = RoomInfoLoader.GetRoomInfo(17);
                             string Question = InfobusPoolQuestion != null ? InfobusPoolQuestion : ExternalTexts.GetValue("command_infobus_question_empty");
                             string Options = InfobusManager.InfobusPoolOptions.Count > 0 ? string.Join(", ", InfobusManager.InfobusPoolOptions) : ExternalTexts.GetValue("command_infobus_options_empty");
+                            
                             Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_infobus_status", new string[] { InfobusRoom.CurrentUsers.ToString(), Question, Options, ServerSettings.InfobusStatus.ToString() })));
                             return;
                         }

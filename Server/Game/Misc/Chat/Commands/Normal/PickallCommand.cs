@@ -14,17 +14,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Parameters
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Description
         {
-            get { return "Picks up all furniture from your room."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_pickall_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

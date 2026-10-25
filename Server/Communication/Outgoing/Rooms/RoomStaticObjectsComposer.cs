@@ -17,6 +17,11 @@ namespace Snowlight.Communication.Outgoing
 
             foreach (StaticObject Object in Objects)
             {
+                if (Object.InvisibleObject)
+                {
+                    continue;
+                }
+
                 Message.AppendBoolean(Object.FirstIlustration);             // Lock orientation
                 Message.AppendStringWithBreak("SNW");                       // Object Name
                 Message.AppendStringWithBreak(Object.Name);                 // Object Type

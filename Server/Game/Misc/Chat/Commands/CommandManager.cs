@@ -49,7 +49,10 @@ namespace Snowlight.Game.Misc
                     {
                         foreach (var StaffList in mUsefulCommands.Values.Where(o => o.PermissionRequired == "hotel_admin").ToList())
                         {
-                            List.Append("\n:" + GetCommandString(StaffList) + " " + StaffList.Parameters + " - " + StaffList.Description);
+                            bool HasParams = StaffList.Parameters != string.Empty && StaffList.Parameters.Length > 0;
+                            string Params = HasParams ? " " + StaffList.Parameters : string.Empty;
+
+                            List.Append("\n:" + GetCommandString(StaffList) + Params + " - " + StaffList.Description);
                         }
                     }
 
@@ -57,7 +60,10 @@ namespace Snowlight.Game.Misc
                     {
                         foreach (var StaffList in mUsefulCommands.Values.Where(o => o.PermissionRequired == "moderation_tool").ToList())
                         {
-                            List.Append("\n:" + GetCommandString(StaffList) + " " + StaffList.Parameters + " - " + StaffList.Description);
+                            bool HasParams = StaffList.Parameters != string.Empty && StaffList.Parameters.Length > 0;
+                            string Params = HasParams ? " " + StaffList.Parameters : string.Empty;
+
+                            List.Append("\n:" + GetCommandString(StaffList) + Params + " - " + StaffList.Description);
                         }
                     }
 
@@ -65,7 +71,10 @@ namespace Snowlight.Game.Misc
                     {
                         foreach (var StaffList in mUsefulCommands.Values.Where(o => o.PermissionRequired == "mute").ToList())
                         {
-                            List.Append("\n:" + GetCommandString(StaffList) + " " + StaffList.Parameters + " - " + StaffList.Description);
+                            bool HasParams = StaffList.Parameters != string.Empty && StaffList.Parameters.Length > 0;
+                            string Params = HasParams ? " " + StaffList.Parameters : string.Empty;
+
+                            List.Append("\n:" + GetCommandString(StaffList) + Params + " - " + StaffList.Description);
                         }
                     }
                     List.Append("\n\n");
@@ -76,7 +85,10 @@ namespace Snowlight.Game.Misc
                     List.Append(ExternalTexts.GetValue("command_vip_user_list") + "\n");
                     foreach (var VipList in mUsefulCommands.Values.Where(o => o.PermissionRequired == "club_vip").ToList())
                     {
-                        List.Append("\n:" + GetCommandString(VipList) + " " + VipList.Parameters + " - " + VipList.Description);
+                        bool HasParams = VipList.Parameters != string.Empty && VipList.Parameters.Length > 0;
+                        string Params = HasParams ? " " + VipList.Parameters : string.Empty;
+
+                        List.Append("\n:" + GetCommandString(VipList) + Params + " - " + VipList.Description);
                     }
 
                     List.Append("\n\n");
@@ -85,27 +97,26 @@ namespace Snowlight.Game.Misc
                 if (Session.HasRight("club_regular"))
                 {
                     List.Append(ExternalTexts.GetValue("command_club_user_list") + "\n");
-                    List.Append(string.Concat(new object[] { 
-                        "\n:furni - Show all furnitures on current room.",
-                        "\n:chooser - Show all users on current room."
-                    }));
 
                     foreach (var HcList in mUsefulCommands.Values.Where(o => o.PermissionRequired == "club_regular").ToList())
                     {
-                        List.Append("\n:" + GetCommandString(HcList) + " " + HcList.Parameters + " - " + HcList.Description);
+                        bool HasParams = HcList.Parameters != string.Empty && HcList.Parameters.Length > 0;
+                        string Params = HasParams ? " " + HcList.Parameters : string.Empty;
+
+                        List.Append("\n:" + GetCommandString(HcList) + Params + " - " + HcList.Description);
                     }
 
                     List.Append("\n\n");
                 }
 
-                List.Append(string.Concat(new object[] { 
-                    ExternalTexts.GetValue("command_regular_user_list") + "\n",
-                    "\n:commands - Shows which commands are available to you."
-                }));
+                List.Append(ExternalTexts.GetValue("command_regular_user_list") + "\n");
 
                 foreach (var RegularList in mUsefulCommands.Values.Where(o => o.PermissionRequired == string.Empty).ToList())
                 {
-                    List.Append("\n:" + GetCommandString(RegularList) + " " + RegularList.Parameters + " - " + RegularList.Description);
+                    bool HasParams = RegularList.Parameters != string.Empty && RegularList.Parameters.Length > 0;
+                    string Params = HasParams ? " " + RegularList.Parameters : string.Empty;
+
+                    List.Append("\n:" + GetCommandString(RegularList) + Params + " - " + RegularList.Description);
                 }
 
                 if (Session.HasRight("hotel_admin") || Session.HasRight("moderation_tool") || Session.HasRight("mute") || Session.HasRight("club_vip"))
@@ -166,6 +177,7 @@ namespace Snowlight.Game.Misc
         }
         private static void RegisterNormal()
         {
+            Register("commands", new CommandsCommand());
             Register("about", new AboutCommand());
             
             if (ServerSettings.MarketplaceTokensBuyEnabled)
@@ -182,6 +194,8 @@ namespace Snowlight.Game.Misc
 
         private static void RegisterClub()
         {
+            Register("furni", new FurniCommand());
+            Register("chooser", new ChooserCommand());
             Register("afk", new AfkCommand());
             Register("sit", new SitCommand());
             Register("status", new StatusCommand());
@@ -195,6 +209,7 @@ namespace Snowlight.Game.Misc
             Register("enable", new EnableCommand());
             Register("eventalert", new EventAlertCommand());
             Register("flagme", new FlagmeCommand());
+            Register("faceless", new FacelessCommand());
             Register("give", new GiveCommand());
             Register("mimic", new MimicCommand());
             Register("moonwalk", new MoonWalkCommand());

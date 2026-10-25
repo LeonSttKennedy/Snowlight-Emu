@@ -23,6 +23,7 @@ using Snowlight.Communication.Incoming;
 using Snowlight.Game.Rights;
 using Snowlight.Game.Groups;
 using Snowlight.Game.FriendStream;
+using Snowlight.Game.Handlers;
 
 namespace Snowlight.Game.Rooms
 {
@@ -236,7 +237,10 @@ namespace Snowlight.Game.Rooms
             uint RoomId = Message.PopWiredUInt32();
             RoomInfo Info = RoomInfoLoader.GetRoomInfo(RoomId);
 
-            if (Info == null) return;
+            if (Info == null)
+            {
+                return;
+            }
 
             Session.SendData(PublicRoomDataComposer.Compose(Info.Id, Info.SWFs));
         }

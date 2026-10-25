@@ -3,10 +3,10 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 
+using Snowlight.Util;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication.Outgoing;
-using Snowlight.Util;
 
 namespace Snowlight.Game.Misc
 {
@@ -14,17 +14,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "club_vip"; }
+            get
+            { 
+                return "club_vip";
+            }
         }
 
         public string Parameters
         {
-            get { return "<username>"; }
+            get
+            { 
+                return "<username>";
+            }
         }
 
         public string Description
         {
-            get { return "Gives your hand item to a another habbo."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_giveitem_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

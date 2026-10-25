@@ -3,10 +3,10 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 
+using Snowlight.Util;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication.Outgoing;
-using Snowlight.Util;
 
 namespace Snowlight.Game.Misc
 {
@@ -14,17 +14,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            { 
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return ""; }
+            get
+            { 
+                return "";
+            }
         }
 
         public string Description
         {
-            get { return "Walk wherever you want."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_clipping_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

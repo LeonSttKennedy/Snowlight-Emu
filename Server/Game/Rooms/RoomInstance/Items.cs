@@ -376,10 +376,12 @@ namespace Snowlight.Game.Rooms
             return Tiles;
         }
 
-        public List<Vector2> CalculateAffectedTiles(StaticObject Object, Vector2 Position, int Rotation)
+        public List<Vector2> CalculateAffectedTiles(StaticObject Object, Vector2 Position, int Rotation, bool Inverted = false)
         {
             List<Vector2> Tiles = new List<Vector2>();
             Tiles.Add(Position);
+
+            int Direction = Inverted ? -1 : 1;
 
             if (Object.SizeY > 0)
             {
@@ -387,11 +389,11 @@ namespace Snowlight.Game.Rooms
                 {
                     for (int y = 1; y < Object.SizeY; y++)
                     {
-                        Tiles.Add(new Vector2(Position.X, Position.Y + y));
+                        Tiles.Add(new Vector2(Position.X, Position.Y + y * Direction));
 
                         for (int x = 1; x < Object.SizeX; x++)
                         {
-                            Tiles.Add(new Vector2(Position.X + x, Position.Y + y));
+                            Tiles.Add(new Vector2(Position.X + x * Direction, Position.Y + y * Direction));
                         }
                     }
                 }
@@ -399,11 +401,11 @@ namespace Snowlight.Game.Rooms
                 {
                     for (int x = 1; x < Object.SizeY; x++)
                     {
-                        Tiles.Add(new Vector2(Position.X + x, Position.Y));
+                        Tiles.Add(new Vector2(Position.X + x * Direction, Position.Y));
 
                         for (int y = 1; y < Object.SizeX; y++)
                         {
-                            Tiles.Add(new Vector2(Position.X + x, Position.Y + y));
+                            Tiles.Add(new Vector2(Position.X + x * Direction, Position.Y + y * Direction));
                         }
                     }
                 }
@@ -415,7 +417,7 @@ namespace Snowlight.Game.Rooms
                 {
                     for (int x = 1; x < Object.SizeX; x++)
                     {
-                        Vector2 Vector = new Vector2(Position.X + x, Position.Y);
+                        Vector2 Vector = new Vector2(Position.X + x * Direction, Position.Y);
 
                         if (!Tiles.Contains(Vector))
                         {
@@ -424,7 +426,7 @@ namespace Snowlight.Game.Rooms
 
                         for (int y = 1; y < Object.SizeY; y++)
                         {
-                            Vector2 _Vector = new Vector2(Position.X + x, Position.Y + y);
+                            Vector2 _Vector = new Vector2(Position.X + x * Direction, Position.Y + y * Direction);
 
                             if (!Tiles.Contains(_Vector))
                             {
@@ -437,7 +439,7 @@ namespace Snowlight.Game.Rooms
                 {
                     for (int y = 1; y < Object.SizeX; y++)
                     {
-                        Vector2 Vector = new Vector2(Position.X, Position.Y + y);
+                        Vector2 Vector = new Vector2(Position.X, Position.Y + y * Direction);
 
                         if (!Tiles.Contains(Vector))
                         {
@@ -446,7 +448,7 @@ namespace Snowlight.Game.Rooms
 
                         for (int x = 1; x < Object.SizeY; x++)
                         {
-                            Vector2 _Vector = new Vector2(Position.X + x, Position.Y + y);
+                            Vector2 _Vector = new Vector2(Position.X + x * Direction, Position.Y + y * Direction);
 
                             if (!Tiles.Contains(_Vector))
                             {
@@ -459,6 +461,7 @@ namespace Snowlight.Game.Rooms
 
             return Tiles;
         }
+
         public string SetWallItem(Session Session, string[] Data, Item Item)
         {
             bool AlreadyContained = mItems.ContainsKey(Item.Id);

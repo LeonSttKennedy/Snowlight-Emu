@@ -16,17 +16,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "mute"; }
+            get
+            {
+                return "mute";
+            }
         }
 
         public string Parameters
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Description
         {
-            get { return "Unmutes the current room."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_roomunmute_description");
+            }
         }
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {

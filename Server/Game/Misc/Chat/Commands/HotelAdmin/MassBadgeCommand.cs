@@ -17,17 +17,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            { 
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return "<method> <badge code>"; }
+            get
+            {
+                return "<method> <badge code>";
+            }
         }
 
         public string Description
         {
-            get { return "Gives to all users an badge."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_massbadge_description");
+            }
         }
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {

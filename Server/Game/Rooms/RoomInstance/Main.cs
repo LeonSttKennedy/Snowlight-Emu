@@ -196,14 +196,15 @@ namespace Snowlight.Game.Rooms
 
                     if (ItemName.Equals("hububar"))
                     {
-                        Item Hububar = new Item(Id, 175, 0, Info.Id, RoomPosition, string.Empty, RoomRotation, string.Empty, string.Empty, false, 0, 0, 0, false, null);
-                        mItems.Add(Id, Hububar);
+                        Item Hububar = new Item(uint.MinValue + 1, 175, 0, Info.Id, RoomPosition, string.Empty, RoomRotation, string.Empty, string.Empty, false, 0, 0, 0, false, null);
+                        mItems.Add(uint.MinValue + 1, Hububar);
                     }
                     else
                     {
                         mStaticObjects.Add(new StaticObject(Id, ItemName, RoomPosition, (int)Row["size_x"], (int)Row["size_y"],
                           RoomRotation, (float)Row["height"], (Row["walkable"].ToString() == "1"),
-                          (Row["is_seat"].ToString() == "1")));
+                          (Row["is_seat"].ToString() == "1"), (Row["inverted_affected_tiles"].ToString() == "1"),
+                          (Row["invisible_object"].ToString() == "1")));
                     }
                 }
 

@@ -8,8 +8,8 @@ using Snowlight.Util;
 using Snowlight.Storage;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
-using Snowlight.Communication.Outgoing;
 using Snowlight.Game.Characters;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Misc
 {
@@ -17,17 +17,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "club_vip"; }
+            get
+            { 
+                return "club_vip";
+            }
         }
 
         public string Parameters
         {
-            get { return "<username>"; }
+            get
+            { 
+                return "<username>";
+            }
         }
 
         public string Description
         {
-            get { return "Allows you to copy the look from another user."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_mimic_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

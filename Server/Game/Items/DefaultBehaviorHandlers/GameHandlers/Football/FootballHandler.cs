@@ -242,35 +242,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                                         string[] ItemClothes = ItemExtraData[GenderInt].Split('.');
                                         List<string> UserClothes = Session.CharacterInfo.Figure.Split('.').ToList();
 
-                                        for (int i = UserClothes.Count - 1; i >= 0; i--)
-                                        {
-                                            string UserClothePiece = UserClothes[i];
-
-                                            if (string.IsNullOrEmpty(UserClothePiece) || UserClothePiece.Length < 1) // Ignores any empty string texts
-                                            {
-                                                continue;
-                                            }
-
-                                            if (UserClothePiece.StartsWith("hd") ||
-                                                UserClothePiece.StartsWith("hr")) // Ignores any hair styles or head string texts
-                                            {
-                                                continue;
-                                            }
-
-                                            string ClothePieceCategory = UserClothePiece.Substring(0, 2);
-                                            string MatchingClothePiece = ItemClothes.FirstOrDefault(x => x.StartsWith(ClothePieceCategory));
-
-                                            if (MatchingClothePiece != null)
-                                            {
-                                                UserClothes[i] = MatchingClothePiece;
-                                            }
-                                            else
-                                            {
-                                                UserClothes.RemoveAt(i);
-                                            }
-                                        }
-
-                                        NewFigure = string.Join(".", UserClothes);
+                                        NewFigure = UserFigureHelper.ReplaceLookParts(ItemClothes, UserClothes);
                                     }
                                     else
                                     {

@@ -16,17 +16,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "club_vip"; }
+            get
+            {
+                return "club_vip";
+            }
         }
 
         public string Parameters
         {
-            get { return "<yes>"; }
+            get
+            {
+                return "<yes>";
+            }
         }
 
         public string Description 
         {
-            get { return "Turns all exchange items in your hand back into coins."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_redeemcoins_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

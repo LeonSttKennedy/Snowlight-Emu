@@ -273,7 +273,7 @@ namespace Snowlight.Game.Rooms
                     double TotalItemStackHeightOld = mCachedModel.Heightmap.FloorHeight[Object.Position.X, Object.Position.Y] + Object.Height;
                     double TotalItemStackHeight = Object.Position.Z + Object.Height;
 
-                    List<Vector2> AffectedTiles = CalculateAffectedTiles(Object, Object.Position.GetVector2(), Object.Rotation);
+                    List<Vector2> AffectedTiles = CalculateAffectedTiles(Object, Object.Position.GetVector2(), Object.Rotation, Object.InvertedAffectedTiles);
                     UserMovementNode MovimentNode = UserMovementNode.Blocked;
                     
                     if (Object.Walkable)

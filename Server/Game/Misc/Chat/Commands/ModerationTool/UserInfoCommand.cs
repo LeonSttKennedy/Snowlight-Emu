@@ -1,14 +1,11 @@
-﻿using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Characters;
+﻿using System.Collections.Generic;
+
+using Snowlight.Util;
+using Snowlight.Storage;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
-using Snowlight.Storage;
-using Snowlight.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Snowlight.Game.Characters;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Misc
 {
@@ -16,17 +13,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "moderation_tool";  }
+            get
+            {
+                return "moderation_tool";
+            }
         }
 
         public string Parameters
         {
-            get { return "<username>";  }
+            get
+            {
+                return "<username>";
+            }
         }
 
         public string Description
         {
-            get { return "View another users profile information.";  }
+            get
+            {
+                return ExternalTexts.GetValue("command_userinfo_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

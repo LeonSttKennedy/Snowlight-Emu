@@ -1,11 +1,7 @@
-﻿using Snowlight.Communication.Outgoing;
+﻿using Snowlight.Util;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
-using Snowlight.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Misc
 {
@@ -13,17 +9,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            {
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Description
         {
-            get { return "Teleport to wherever you want within in a room."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_teleport_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

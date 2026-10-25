@@ -5,11 +5,11 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using Snowlight.Util;
 using Snowlight.Storage;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
 using Snowlight.Communication.Outgoing;
-using Microsoft.VisualBasic.Devices;
 
 
 namespace Snowlight.Game.Misc
@@ -61,17 +61,26 @@ namespace Snowlight.Game.Misc
 
         public string PermissionRequired
         {
-            get { return "club_regular"; }
+            get
+            {
+                return "club_regular"; 
+            }
         }
 
         public string Parameters
         { 
-            get { return ""; }
+            get
+            {
+                return ""; 
+            }
         }
 
         public string Description
         {
-            get { return "Shows to you the stats from the server."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_status_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
@@ -101,21 +110,7 @@ namespace Snowlight.Game.Misc
                             Math.Round(GetTotalMemoryInBytes() / 1024d / 1024d / 1024d, 2).ToString(), GetOsName().ToString()
                         };
 
-            Session.SendData(NotificationMessageComposer.Compose(string.Concat(new object[]
-            {
-                            "[SERVER]",
-                            "\nUptime: " + Args[0] + " day(s), " + Args[1] + " hour(s), " + Args[2] + " minute(s) and " + Args[3] + " second(s)",
-                            "\nThere are " + Args[4]  + " user(s) online",
-                            "\nThere are " + Args[5] + " room(s) loaded",
-                            "\nDaily player peak: " + Args[6],
-                            "\nAll time player peak: " + Args[7],
-                            "\n\n",
-                            "[SYSTEM]",
-                            "\nCPU architecture: " + Args[8],
-                            "\nCPU cores: "+ Args[9],
-                            "\nMemory usage: " + Args[10] + " MB",
-                            "\nOS: " + Args[11]
-            })));
+            Session.SendData(NotificationMessageComposer.Compose(ExternalTexts.GetValue("command_status_text", Args)));
         }
     }
 }

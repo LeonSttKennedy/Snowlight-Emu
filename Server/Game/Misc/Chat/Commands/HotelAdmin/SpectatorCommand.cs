@@ -1,12 +1,7 @@
-﻿using Snowlight.Communication.Outgoing;
+﻿using Snowlight.Util;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
-using Snowlight.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Misc
 {
@@ -14,17 +9,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            {
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return "<help>"; }
+            get
+            {
+                return "<help>";
+            }
         }
 
         public string Description
         {
-            get { return "Enable spectator mode to next room you enter."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_spectator_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

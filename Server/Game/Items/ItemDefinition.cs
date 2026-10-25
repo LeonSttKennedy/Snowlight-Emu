@@ -41,6 +41,7 @@ namespace Snowlight.Game.Items
         private ItemType mType;
         private ItemBehavior mBehavior;
         private int mBehaviorData;
+        private string mClotheSwitch;
         private ItemStackingBehavior mStackingBehavior;
         private ItemWalkableMode mWalkable;
         private int mRoomLimit;
@@ -143,6 +144,14 @@ namespace Snowlight.Game.Items
             get
             {
                 return mBehaviorData;
+            }
+        }
+
+        public string ClotheSwitch
+        {
+            get
+            {
+                return mClotheSwitch;
             }
         }
 
@@ -271,9 +280,10 @@ namespace Snowlight.Game.Items
             }
         }
 
-        public ItemDefinition(uint Id, uint SpriteId, string Name, string PublicName, ItemType Type, ItemBehavior Behavior, int BehaviorData,
-            ItemStackingBehavior StackingBehavior, ItemWalkableMode Walkable, int RoomLimit, int SizeX, int SizeY, float Height, string AdjustableHeight,
-            bool AllowRecycle, bool AllowTrade, bool AllowSell, bool AllowGift, bool AllowInventoryStack, bool ShowUseButton)
+        public ItemDefinition(uint Id, uint SpriteId, string Name, string PublicName, ItemType Type, ItemBehavior Behavior,
+            int BehaviorData, string ClotheSwitch, ItemStackingBehavior StackingBehavior, ItemWalkableMode Walkable,
+            int RoomLimit, int SizeX, int SizeY, float Height, string AdjustableHeight, bool AllowRecycle, bool AllowTrade,
+            bool AllowSell, bool AllowGift, bool AllowInventoryStack, bool ShowUseButton)
         {
             mId = Id;
             mSpriteId = SpriteId;
@@ -282,6 +292,7 @@ namespace Snowlight.Game.Items
             mType = Type;
             mBehavior = Behavior;
             mBehaviorData = BehaviorData;
+            mClotheSwitch = ClotheSwitch;
             mStackingBehavior = StackingBehavior;
             mWalkable = Walkable;
             mRoomLimit = RoomLimit;

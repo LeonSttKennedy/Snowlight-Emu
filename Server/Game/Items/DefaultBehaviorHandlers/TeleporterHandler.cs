@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Snowlight.Game.Characters;
+using Snowlight.Game.Misc;
+using Snowlight.Game.Rooms;
+using Snowlight.Game.Sessions;
+using Snowlight.Specialized;
+using Snowlight.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Snowlight.Game.Sessions;
-using Snowlight.Game.Rooms;
-using Snowlight.Game.Misc;
-using Snowlight.Storage;
-using Snowlight.Specialized;
 
 namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 {
@@ -201,9 +202,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                             if (Instance.IsValidStep(OutgoingUser.Position.GetVector2(), Item.SquareInFront, true))
                             {
-                                OutgoingUser.OverrideClipping = !OutgoingUser.OverrideClipping;
                                 OutgoingUser.MoveTo(Item.SquareInFront, true, true, true);
-                                OutgoingUser.OverrideClipping = !OutgoingUser.OverrideClipping;
                             }
 
                             Item.TemporaryInteractionReferenceIds.Remove(1);
@@ -227,12 +226,26 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
 
                             if (Instance.CanInitiateMoveToPosition(Item.SquareInFront))
                             {
-                                IncomingUser.OverrideClipping = !IncomingUser.OverrideClipping;
                                 IncomingUser.MoveTo(Item.SquareInFront);
-                                IncomingUser.OverrideClipping = !IncomingUser.OverrideClipping;
                             }
 
                             Item.RequestUpdate(3);
+
+                            if (Item.Definition.ClotheSwitch != string.Empty)
+                            {
+                                Session IncomingSession = SessionManager.GetSessionByCharacterId(IncomingUser.ReferenceId);
+
+                                if (IncomingSession != null)
+                                {
+                                    string GenderString = IncomingSession.CharacterInfo.Gender == CharacterGender.Male ? "m" : "f";
+                                    List<string> UserClothes = IncomingSession.CharacterInfo.Figure.Split('.').ToList();
+
+                                    string NewFigure = UserFigureHelper.AddLookPiecePart(Item.Definition.ClotheSwitch, UserClothes);
+
+                                    IncomingSession.CharacterInfo.UpdateFigure(GenderString, NewFigure);
+                                    IncomingSession.SendInfoUpdate();
+                                }
+                            }
                         }
                     }
 

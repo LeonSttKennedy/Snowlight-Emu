@@ -6,15 +6,9 @@ using System.Collections.Generic;
 
 using Snowlight.Util;
 using Snowlight.Storage;
-using Snowlight.Game.Pets;
 using Snowlight.Game.Rooms;
-using Snowlight.Game.Catalog;
-using Snowlight.Game.Rights;
 using Snowlight.Game.Sessions;
-using Snowlight.Communication;
-using Snowlight.Game.Advertisements;
 using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Items;
 
 namespace Snowlight.Game.Misc
 {
@@ -22,17 +16,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Parameters
         {
-            get { return "<help>"; }
+            get
+            {
+                return "<help>";
+            }
         }
 
         public string Description
         {
-            get { return "Buy multiple marketplace tokens at once."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_buytokens_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

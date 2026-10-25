@@ -15,6 +15,8 @@ namespace Snowlight.Game.Items
         private float mHeight;
         private bool mWalkable;
         private bool mIsSeat;
+        private bool mInvertedAffectedTiles;
+        private bool mInvisibleObject;
 
         public uint Id
         {
@@ -82,6 +84,22 @@ namespace Snowlight.Game.Items
             }
         }
 
+        public bool InvertedAffectedTiles
+        {
+            get
+            {
+                return mInvertedAffectedTiles;
+            }
+        }
+
+        public bool InvisibleObject
+        {
+            get
+            {
+                return mInvisibleObject;
+            }
+        }
+
         public bool FirstIlustration
         {
             get
@@ -90,7 +108,8 @@ namespace Snowlight.Game.Items
             }
         }
 
-        public StaticObject(uint Id, string Name, Vector3 Position, int SizeX, int SizeY, int Rotation, float Height, bool Walkable, bool IsSeat)
+        public StaticObject(uint Id, string Name, Vector3 Position, int SizeX, int SizeY, int Rotation, float Height, bool Walkable, bool IsSeat,
+            bool InvertedAffectedTiles, bool InvisibleObject)
         {
             mId = Id;
             mName = Name;
@@ -101,6 +120,8 @@ namespace Snowlight.Game.Items
             mHeight = Height;
             mWalkable = Walkable;
             mIsSeat = IsSeat;
+            mInvertedAffectedTiles = InvertedAffectedTiles;
+            mInvisibleObject = InvisibleObject;
         }
     }
 }

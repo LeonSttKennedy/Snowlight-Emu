@@ -16,17 +16,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "club_vip"; }
+            get
+            {
+                return "club_vip";
+            }
         }
 
         public string Parameters
         {
-            get { return "<tab> <yes>"; }
+            get
+            {
+                return "<tab> <yes>";
+            }
         }
 
         public string Description
         {
-            get { return "Emptys an tab from your inventory."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_empty_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

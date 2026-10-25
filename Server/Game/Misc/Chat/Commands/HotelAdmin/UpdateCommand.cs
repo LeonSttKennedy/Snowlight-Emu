@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Collections.Generic;
 
 using Snowlight.Util;
 using Snowlight.Storage;
@@ -12,10 +9,10 @@ using Snowlight.Game.Rooms;
 using Snowlight.Game.Catalog;
 using Snowlight.Game.Sessions;
 using Snowlight.Game.Navigation;
+using Snowlight.Game.Moderation;
 using Snowlight.Game.Achievements;
 using Snowlight.Game.Advertisements;
 using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Moderation;
 
 namespace Snowlight.Game.Misc
 {
@@ -23,17 +20,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            {
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return "<variable>"; }
+            get
+            {
+                return "<variable>";
+            }
         }
 
         public string Description
         {
-            get { return "Reloads a specific part of the hotel."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_update_description");
+            }
         }
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {

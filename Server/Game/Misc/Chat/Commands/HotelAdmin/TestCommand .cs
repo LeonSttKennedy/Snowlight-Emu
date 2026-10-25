@@ -1,21 +1,21 @@
-﻿using System;
+﻿using Snowlight.Communication;
+using Snowlight.Communication.Outgoing;
+using Snowlight.Game.Advertisements;
+using Snowlight.Game.Catalog;
+using Snowlight.Game.Items;
+using Snowlight.Game.Pets;
+using Snowlight.Game.Rights;
+using Snowlight.Game.Rooms;
+using Snowlight.Game.Sessions;
+using Snowlight.Storage;
+using Snowlight.Util;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Collections.Generic;
-
-using Snowlight.Util;
-using Snowlight.Storage;
-using Snowlight.Game.Pets;
-using Snowlight.Game.Rooms;
-using Snowlight.Game.Catalog;
-using Snowlight.Game.Rights;
-using Snowlight.Game.Sessions;
-using Snowlight.Communication;
-using Snowlight.Game.Advertisements;
-using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Items;
 using System.Numerics;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Snowlight.Game.Misc
 {
@@ -23,17 +23,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            {
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Description
         {
-            get { return "Test"; }
+            get
+            {
+                return "Test";
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

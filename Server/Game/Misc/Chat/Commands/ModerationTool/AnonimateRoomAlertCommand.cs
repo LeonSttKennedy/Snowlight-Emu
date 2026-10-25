@@ -16,17 +16,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "moderation_tool"; }
+            get
+            {
+                return "moderation_tool";
+            }
         }
 
         public string Parameters
         {
-            get { return "<message>"; }
+            get
+            {
+                return "<message>";
+            }
         }
 
         public string Description
         {
-            get { return "Sends an anonimate alert to all users in current room."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_ara_description");
+            }
         }
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)
         {

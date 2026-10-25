@@ -23,7 +23,7 @@ namespace Snowlight.Communication.Outgoing
             Message.AppendStringWithBreak(Info.Description);
             Message.AppendInt32(0); // Nothing else has ever been logged
             Message.AppendBoolean(Info.CanTrade); // Allow trading
-            Message.AppendInt32(0); // Nothing else has ever been logged
+            Message.AppendInt32(Info.Score); // Nothing else has ever been logged
             Message.AppendInt32(Info.CategoryId);
             Message.AppendStringWithBreak(string.Empty); // Nothing else has ever been logged
             Message.AppendInt32(Info.Tags.Count);

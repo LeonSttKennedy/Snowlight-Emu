@@ -154,7 +154,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                             Item.Flags = "-1";
                             Item.DisplayFlags = "-1";
 
-                            //Item.BroadcastStateUpdate(Instance);
                             Instance.BroadcastMessage(DiceStatusComposer.Compose(Item.Id, int.Parse(Item.DisplayFlags)));
                             Item.RequestUpdate(3);
                         }
@@ -172,7 +171,6 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                     Item.Flags = RandomGenerator.GetNext(1, 6).ToString();
                     Item.DisplayFlags = Item.Flags;
 
-                    //Item.BroadcastStateUpdate(Instance);
                     Instance.BroadcastMessage(DiceStatusComposer.Compose(Item.Id, int.Parse(Item.DisplayFlags)));
 
                     RoomManager.MarkWriteback(Item, true);

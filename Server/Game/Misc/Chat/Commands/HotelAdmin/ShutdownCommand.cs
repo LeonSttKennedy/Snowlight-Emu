@@ -1,14 +1,11 @@
-﻿using Snowlight.Communication.Outgoing;
-using Snowlight.Game.Moderation;
+﻿using System;
+
+using Snowlight.Util;
+using Snowlight.Storage;
 using Snowlight.Game.Rooms;
 using Snowlight.Game.Sessions;
-using Snowlight.Storage;
-using Snowlight.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Snowlight.Game.Moderation;
+using Snowlight.Communication.Outgoing;
 
 namespace Snowlight.Game.Misc
 {
@@ -16,17 +13,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return "hotel_admin"; }
+            get
+            {
+                return "hotel_admin";
+            }
         }
 
         public string Parameters
         {
-            get { return "<hour>"; }
+            get
+            {
+                return "<hour>";
+            }
         }
 
         public string Description
         {
-            get { return "Shutdown schedule command."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_shutdown_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

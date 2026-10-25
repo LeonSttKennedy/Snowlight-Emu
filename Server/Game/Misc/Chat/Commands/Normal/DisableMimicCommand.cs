@@ -15,17 +15,26 @@ namespace Snowlight.Game.Misc
     {
         public string PermissionRequired
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Parameters
         {
-            get { return ""; }
+            get
+            {
+                return "";
+            }
         }
 
         public string Description
         {
-            get { return "Disable the ability to be mimicked or enable it again."; }
+            get
+            {
+                return ExternalTexts.GetValue("command_disablemimic_description");
+            }
         }
 
         public void Execute(Session Session, RoomInstance Instance, RoomActor Actor, string[] Params)

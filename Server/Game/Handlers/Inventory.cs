@@ -117,7 +117,7 @@ namespace Snowlight.Game.Handlers
                 return;
             }
 
-            if (!AntiMutant.ValidateLook(NewFigure, NewGender))
+            if (!UserFigureHelper.ValidateLook(NewFigure, NewGender))
             {
                 return;
             }

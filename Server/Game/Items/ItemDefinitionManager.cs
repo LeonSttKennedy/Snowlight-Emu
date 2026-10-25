@@ -74,9 +74,9 @@ namespace Snowlight.Game.Items
 
                 ItemDefinition Definition = new ItemDefinition(DefinitionId, (uint)Row["sprite_id"],
                     (string)Row["name"], (string)Row["public_name"], GetTypeFromString(Row["type"].ToString()),
-                    ItemBehaviorUtil.FromString(Behavior), (int)Row["behavior_data"], StackingBehavior,
-                    WMode, (int)Row["room_limit"], (int)Row["size_x"], (int)Row["size_y"], (float)Row["height"],
-                    (string)Row["height_adjustable"], (Row["allow_recycling"].ToString() == "1"),
+                    ItemBehaviorUtil.FromString(Behavior), (int)Row["behavior_data"], (string)Row["clothe_switch"],
+                    StackingBehavior, WMode, (int)Row["room_limit"], (int)Row["size_x"], (int)Row["size_y"],
+                    (float)Row["height"], (string)Row["height_adjustable"], (Row["allow_recycling"].ToString() == "1"),
                     (Row["allow_trading"].ToString() == "1"), (Row["allow_selling"].ToString() == "1"),
                     (Row["allow_gifting"].ToString() == "1"), (Row["allow_inventory_stacking"].ToString() == "1"),
                     (Row["show_use_button"].ToString() == "1"));

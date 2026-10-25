@@ -321,6 +321,10 @@
     <Compile Include="Game\Items\DefaultBehaviorHandlers\WaterPatchHandler .cs" />
     <Compile Include="Game\Items\ItemAchievements.cs" />
     <Compile Include="Game\Items\ItemFactory.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\Normal\CommandsCommand.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\ClubRegular\ChooserCommand.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\ClubRegular\FurniCommand.cs" />
+    <Compile Include="Game\Misc\Chat\Commands\ClubVip\FacelessCommand.cs" />
     <Compile Include="Game\Misc\Chat\Commands\HotelAdmin\SpectatorCommand.cs" />
     <Compile Include="Game\Misc\HolidayGifts\HolidayGift.cs" />
     <Compile Include="Game\Misc\HolidayGifts\HolidayGiftManager.cs" />
@@ -331,7 +335,7 @@
     <Compile Include="Game\Rooms\GamesManager\Banzai.cs" />
     <Compile Include="Game\Rooms\GamesManager\Freeze.cs" />
     <Compile Include="Game\Rooms\GamesManager\Main.cs" />
-    <Compile Include="Game\Misc\AntiMutant.cs" />
+    <Compile Include="Game\Misc\UserFigureHelper.cs" />
     <Compile Include="Game\Misc\Caches\MarketplaceFiltersCache.cs" />
     <Compile Include="Game\Misc\Chat\Commands\Normal\BuyTokensCommand .cs" />
     <Compile Include="Game\Misc\Items\RollerEvents.cs" />

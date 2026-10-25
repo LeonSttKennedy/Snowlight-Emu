@@ -88,6 +88,7 @@ namespace Snowlight.Game.Items.DefaultBehaviorHandlers
                         }
 
                         RoomActor InteractingActor = Instance.GetActor(Item.TemporaryInteractionReferenceIds[0]);
+
                         Item.TemporaryInteractionReferenceIds.Clear();
 
                         if (InteractingActor == null)
